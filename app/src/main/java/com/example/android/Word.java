@@ -1,8 +1,11 @@
 package com.example.android;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+@Entity(foreignKeys = @ForeignKey(entity = Pinyin.class, parentColumns = "id", childColumns = "pinyin_id"))
 public class Word {
     @PrimaryKey(autoGenerate = true)
     @NonNull
@@ -10,8 +13,11 @@ public class Word {
 
     private String word;
 
-    public Word(@NonNull String word) {
+    private int pinyin_id;
+
+    public Word(@NonNull String word, @NonNull int pinyin_id) {
         this.word = word;
+        this.pinyin_id = pinyin_id;
     }
 
     @NonNull
@@ -23,4 +29,10 @@ public class Word {
     public String getWord() {
         return word;
     }
+
+    @NonNull
+    public int getPinyin_id() {
+        return pinyin_id;
+    }
+
 }
