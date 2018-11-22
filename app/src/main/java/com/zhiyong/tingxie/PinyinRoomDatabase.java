@@ -9,9 +9,10 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 // todo: exportSchema should be changed to true after 1st release.
-@Database(entities = {Question.class, Test.class, Pinyin.class, Word.class}, version = 1, exportSchema = false)
+@Database(entities = {Question.class, Test.class, Pinyin.class, Word.class, TestPinyin.class},
+        version = 1, exportSchema = false)
 public abstract class PinyinRoomDatabase extends RoomDatabase {
-    public abstract PinyinDao pinyinDao();
+    public abstract TestDao pinyinDao();
     private static PinyinRoomDatabase INSTANCE;
 
     private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
@@ -40,7 +41,7 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
      * Populate the database in the background.
      */
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
-        private final PinyinDao mDao;
+        private final TestDao mDao;
         String[] dates = {"20190103", "20190201", "20190221"};
 
         PopulateDbAsync(PinyinRoomDatabase db) {
@@ -57,7 +58,10 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
 
             for (String date : dates) {
                 Test test = new Test(date);
-                mDao.insert(test);
+                long testId = mDao.insert(test);
+                // Insert pinyin with this test ID.
+
+
             }
             return null;
         }

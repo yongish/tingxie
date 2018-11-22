@@ -2,12 +2,13 @@ package com.zhiyong.tingxie;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
-@Entity(foreignKeys = @ForeignKey(entity = Test.class, parentColumns = "id",
+@Entity(indices = {@Index("test_id")}, foreignKeys = @ForeignKey(entity = Test.class, parentColumns = "id",
         childColumns = "test_id", onDelete = CASCADE))
 public class Question {
     @PrimaryKey

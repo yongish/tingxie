@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Locale;
 
 public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.TestViewHolder> {
     private final LayoutInflater mInflater;
@@ -29,9 +30,13 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.TestVi
     public void onBindViewHolder(TestViewHolder holder, int i) {
         if (mTests != null) {
             Test current = mTests.get(i);
-            holder.testItemView.setText(String.valueOf(current.getDate()));
+            holder.tvDate.setText(String.valueOf(current.getDate()));
+//            holder.tvWordsLeft.setText(String.format(Locale.US,
+//                    "%d/%d words left on %d round",
+//                    current.getNotLearned(), current.getTotalWords(), current.getRound()));
         } else {
-            holder.testItemView.setText("No Date");
+            holder.tvDate.setText("No Date");
+//            holder.tvWordsLeft.setText("No info on progress.");
         }
     }
 
@@ -47,11 +52,13 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.TestVi
     }
 
     class TestViewHolder extends RecyclerView.ViewHolder {
-        private final TextView testItemView;
+        private final TextView tvDate;
+        private final TextView tvWordsLeft;
 
         private TestViewHolder(View itemView) {
             super(itemView);
-            testItemView = itemView.findViewById(R.id.textView);
+            tvDate = itemView.findViewById(R.id.tvDate);
+            tvWordsLeft = itemView.findViewById(R.id.tvWordsLeft);
         }
     }
 }

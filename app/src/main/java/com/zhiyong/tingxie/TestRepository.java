@@ -3,6 +3,7 @@ package com.zhiyong.tingxie;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.util.List;
 
@@ -11,13 +12,17 @@ A Repository manages query threads and allows you to use multiple backends.
 In the most common example, the Repository implements the logic for deciding whether to fetch data
 from a network or use results cached in the local database. */
 public class TestRepository {
-    private PinyinDao mPinyinDao;
+
+    private static final String TAG = "TestRepository";
+
+    private TestDao mTestDao;
     private LiveData<List<Test>> mAllTests;
 
     TestRepository(Application application) {
         PinyinRoomDatabase db = PinyinRoomDatabase.getDatabase(application);
-        mPinyinDao = db.pinyinDao();
-        mAllTests = mPinyinDao.getAllTests();
+        mTestDao = db.pinyinDao();
+        mAllTests = mTestDao.getAllTests();
+        Log.d(TAG, "TestRepository: ");
     }
 
     LiveData<List<Test>> getAllTests() {
@@ -25,14 +30,14 @@ public class TestRepository {
     }
 
     public void insert (Test test) {
-        new insertAsyncTask(mPinyinDao).execute(test);
+        new insertAsyncTask(mTestDao).execute(test);
     }
 
     private static class insertAsyncTask extends AsyncTask<Test, Void, Void> {
 
-        private PinyinDao mAsyncTaskDao;
+        private TestDao mAsyncTaskDao;
 
-        insertAsyncTask(PinyinDao dao) {
+        insertAsyncTask(TestDao dao) {
             mAsyncTaskDao = dao;
         }
 
