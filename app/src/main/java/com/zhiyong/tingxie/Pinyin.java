@@ -30,4 +30,6 @@ public class Pinyin {
     public String getPinyin() {
         return pinyin;
     }
+
+    // Pinyin instances should be immutable.
 }

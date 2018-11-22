@@ -5,7 +5,10 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-@Entity(foreignKeys = @ForeignKey(entity = Test.class, parentColumns = "id", childColumns = "test_id"))
+import static android.arch.persistence.room.ForeignKey.CASCADE;
+
+@Entity(foreignKeys = @ForeignKey(entity = Test.class, parentColumns = "id",
+        childColumns = "test_id", onDelete = CASCADE))
 public class Question {
     @PrimaryKey
     @NonNull

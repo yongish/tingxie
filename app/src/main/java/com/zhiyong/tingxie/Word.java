@@ -39,4 +39,5 @@ public class Word {
         return pinyin_id;
     }
 
+    // Word instances should be immutable.
 }
