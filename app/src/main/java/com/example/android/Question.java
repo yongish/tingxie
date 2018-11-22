@@ -5,8 +5,7 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-@Entity(foreignKeys = @ForeignKey(entity = Test_Pinyin.class,
-        parentColumns = "pinyin_id", childColumns = "pinyin_id"))
+@Entity(foreignKeys = @ForeignKey(entity = Test.class, parentColumns = "id", childColumns = "test_id"))
 public class Question {
     @PrimaryKey
     @NonNull
@@ -18,10 +17,18 @@ public class Question {
 
     private boolean correct;
 
-    public Question(@NonNull long timestamp, @NonNull int pinyin_id, @NonNull boolean correct) {
+    private int test_id;
+
+    public Question(@NonNull long timestamp, @NonNull int pinyin_id, @NonNull boolean correct,
+                    @NonNull int test_id) {
         this.timestamp = timestamp;
         this.pinyin_id = pinyin_id;
         this.correct = correct;
+        this.test_id = test_id;
+    }
+
+    public void setId(@NonNull int id) {
+        this.id = id;
     }
 
     @NonNull
@@ -43,4 +50,10 @@ public class Question {
     public boolean isCorrect() {
         return correct;
     }
+
+    @NonNull
+    public int getTest_id() {
+        return test_id;
+    }
+
 }

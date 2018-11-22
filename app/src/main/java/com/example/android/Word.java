@@ -20,6 +20,10 @@ public class Word {
         this.pinyin_id = pinyin_id;
     }
 
+    public void setId(@NonNull int id) {
+        this.id = id;
+    }
+
     @NonNull
     public int getId() {
         return id;

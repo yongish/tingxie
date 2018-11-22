@@ -1,8 +1,11 @@
 package com.example.android;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+@Entity(indices = {@Index("id")})
 public class Pinyin {
     @PrimaryKey(autoGenerate = true)
     @NonNull
@@ -12,6 +15,10 @@ public class Pinyin {
 
     public Pinyin(@NonNull String pinyin) {
         this.pinyin = pinyin;
+    }
+
+    public void setId(@NonNull int id) {
+        this.id = id;
     }
 
     @NonNull
