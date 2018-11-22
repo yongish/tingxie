@@ -1,23 +1,24 @@
-package com.example.android;
+package com.zhiyong.tingxie;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 @Entity(indices = {@Index("id")})
-public class Pinyin {
+public class Test {
     @PrimaryKey(autoGenerate = true)
-    @NonNull
+    @ColumnInfo(name = "id")
     private int id;
 
-    private String pinyin;
+    private String date;
 
-    public Pinyin(@NonNull String pinyin) {
-        this.pinyin = pinyin;
+    public Test(@NonNull String date) {
+        this.date = date;
     }
 
-    public void setId(@NonNull int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -27,7 +28,7 @@ public class Pinyin {
     }
 
     @NonNull
-    public String getPinyin() {
-        return pinyin;
+    public String getDate() {
+        return date;
     }
 }

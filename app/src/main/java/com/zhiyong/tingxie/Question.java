@@ -1,4 +1,4 @@
-package com.example.android;
+package com.zhiyong.tingxie;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;

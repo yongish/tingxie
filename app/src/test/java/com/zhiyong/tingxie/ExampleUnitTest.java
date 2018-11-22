@@ -1,4 +1,4 @@
-package com.example.android;
+package com.zhiyong.tingxie;
 
 import org.junit.Test;
 
