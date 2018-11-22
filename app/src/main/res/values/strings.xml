@@ -5,4 +5,9 @@
     <string name="button_save">Save</string>
     <string name="empty_not_saved">Word not saved because it is empty.</string>
     <string name="enter_date">Enter date</string>
+    <string name="x_not_learned">X not learned</string>
+    <string name="view_or_add">View all/Add</string>
+    <string name="delete">Delete</string>
+    <string name="x_words">X words</string>
+    <string name="n_rounds_completed">n rounds completed</string>
 </resources>
