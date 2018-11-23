@@ -7,7 +7,6 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.zhiyong.tingxie.db.Pinyin;
 import com.zhiyong.tingxie.db.Question;
@@ -15,7 +14,6 @@ import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.db.Word;
 
-import java.nio.charset.Charset;
 import java.util.Random;
 
 // todo: exportSchema should be changed to true after 1st release.
@@ -71,7 +69,7 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
             mDao.deleteAllQuestions();
 
             // Add a quiz.
-            long quizId = mDao.insert(new Quiz(new Random().nextInt()));
+            long quizId = mDao.insert(new Quiz(20190101));
 
             // Add 4 pinyins with 5 words.
             long p0Id = mDao.insert(new Pinyin("p0"));
@@ -90,41 +88,6 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
             mDao.insert(new QuizPinyin(quizId, p2Id));
             mDao.insert(new QuizPinyin(quizId, p3Id));
 
-            // Start unit tests here.
-            // date, totalWords, notLearned, round
-            // rand, 4, 4, 1
-
-
-
-
-
-            /*for (int date : dates) {
-                Quiz quiz = new Quiz(date);
-                long quizId = mDao.insert(quiz);
-
-                byte[] array = new byte[7]; // length is bounded by 7
-                new Random().nextBytes(array);
-                String generatedString = new String(array, Charset.forName("UTF-8"));
-                Pinyin pinyin = new Pinyin(generatedString);
-                long pinyinId = mDao.insert(pinyin);
-
-                // Insert quizPinyin with this quiz ID and pinyin ID.
-                Log.d("DATAAAAAAAAAAAAAAAAAAAA", String.valueOf(quizId));
-                QuizPinyin quizPinyin = new QuizPinyin(quizId, pinyinId);
-                long qpId = mDao.insert(quizPinyin);
-
-                Word word = new Word(generatedString, pinyinId);
-                mDao.insert(word);
-
-                Question question = new Question(
-                        new Random().nextInt(),
-                        pinyinId,
-                        new Random().nextBoolean(),
-                        quizId
-                );
-                mDao.insert(question);
-
-            }*/
             return null;
         }
     }

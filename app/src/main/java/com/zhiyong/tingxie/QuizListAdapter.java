@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -30,7 +32,17 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
     public void onBindViewHolder(QuizViewHolder holder, int i) {
         if (mQuizItems != null) {
             QuizItem current = mQuizItems.get(i);
-            holder.tvDate.setText(String.valueOf(current.getDate()));
+
+            String displayDate = String.valueOf(current.getDate());
+            SimpleDateFormat fromDB = new SimpleDateFormat("yyyymmdd");
+            SimpleDateFormat newDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy");
+            try {
+                displayDate = newDateFormat.format(fromDB.parse(displayDate));
+            } catch (ParseException e) {
+                // todo: Error log API in future.
+            }
+
+            holder.tvDate.setText(displayDate);
             holder.tvWordsLeft.setText(String.format(Locale.US,
                     "%d/%d words left on %d round",
                     current.getNotLearned(), current.getTotalWords(), current.getRound()));
