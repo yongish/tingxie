@@ -28,7 +28,7 @@ public class NewTestActivity extends AppCompatActivity {
                 if (TextUtils.isEmpty(mEditTestView.getText())) {
                     setResult(RESULT_CANCELED, replyIntent);
                 } else {
-                    String date = mEditTestView.getText().toString();
+                    int date = Integer.valueOf(mEditTestView.getText().toString());
                     replyIntent.putExtra(EXTRA_REPLY, date);
                     setResult(RESULT_OK, replyIntent);
                 }

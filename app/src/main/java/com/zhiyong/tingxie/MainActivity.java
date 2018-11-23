@@ -45,9 +45,10 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         mTestViewModel = ViewModelProviders.of(this).get(TestViewModel.class);
-        mTestViewModel.getAllTests().observe(this, new Observer<List<Test>>() {
+//        mTestViewModel.getAllTests().observe(this, new Observer<List<Test>>() {
+        mTestViewModel.getAllTests().observe(this, new Observer<List<TestItem>>() {
             @Override
-            public void onChanged(@Nullable List<Test> tests) {
+            public void onChanged(@Nullable List<TestItem> tests) {
                 adapter.setTests(tests);
             }
         });
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == NEW_TEST_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            Test test = new Test(data.getStringExtra(NewTestActivity.EXTRA_REPLY));
+            Test test = new Test(data.getIntExtra(NewTestActivity.EXTRA_REPLY, 0));
             mTestViewModel.insert(test);
         } else {
             Toast.makeText(getApplicationContext(), R.string.empty_not_saved, Toast.LENGTH_LONG)

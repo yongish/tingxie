@@ -12,9 +12,9 @@ public class Test {
     @ColumnInfo(name = "id")
     private int id;
 
-    private String date;
+    private int date;
 
-    public Test(@NonNull String date) {
+    public Test(@NonNull int date) {
         this.date = date;
     }
 
@@ -28,7 +28,7 @@ public class Test {
     }
 
     @NonNull
-    public String getDate() {
+    public int getDate() {
         return date;
     }
 }

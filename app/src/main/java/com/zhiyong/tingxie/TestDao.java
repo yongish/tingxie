@@ -30,28 +30,27 @@ public interface TestDao {
     @Query("SELECT * FROM test")
     LiveData<List<Test>> getAllTests();
 
-    // Overkill. Keeping here for archival purposes.
-    /*@Query("WITH tpc AS\n" +
-            "  (SELECT tp.test_id,\n" +
+    @Query("WITH tpc AS\n" +
+            "  (SELECT test.id AS test_id,\n" +
             "          tp.pinyin_id,\n" +
             "          Count(correct) AS correct_count\n" +
-            "   FROM test_pinyin tp\n" +
-            "   JOIN question q ON tp.test_id = q.test_id\n" +
-            "   GROUP BY tp.test_id,\n" +
+            "   FROM test LEFT JOIN test_pinyin tp ON test.id = tp.test_id\n" +
+            "   LEFT JOIN question q ON tp.test_id = q.test_id\n" +
+            "   GROUP BY test.id,\n" +
             "            tp.pinyin_id),\n" +
             "     tp2 AS\n" +
             "  (SELECT tpc.test_id,\n" +
-            "          Count(*) AS total,\n" +
+            "          Count(pinyin_id) AS total,\n" +
             "          Min(correct_count) AS rounds_completed\n" +
             "   FROM tpc\n" +
             "   GROUP BY tpc.test_id)\n" +
             "SELECT t.date,\n" +
             "       tp2.total AS totalWords,\n" +
-            "       Count(tp2.rounds_completed = tpc.correct_count) AS notLearned,\n" +
+            "       Sum(tp2.rounds_completed > 0 AND tp2.rounds_completed = tpc.correct_count) AS notLearned,\n" +
             "       tp2.rounds_completed + 1 AS round\n" +
             "FROM tpc\n" +
             "LEFT JOIN tp2 ON tp2.test_id = tpc.test_id\n" +
             "JOIN test t ON t.id = tp2.test_id\n" +
-            "GROUP BY tp2.test_id\n")
-    LiveData<List<TestItem>> getAllTestItems();*/
+            "GROUP BY tp2.test_id;\n")
+    LiveData<List<TestItem>> getAllTestItems();
 }

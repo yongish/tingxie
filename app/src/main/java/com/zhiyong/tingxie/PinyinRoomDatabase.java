@@ -42,7 +42,7 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
      */
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
         private final TestDao mDao;
-        String[] dates = {"20190103", "20190201", "20190221"};
+        int[] dates = {20190103, 20190201, 20190221};
 
         PopulateDbAsync(PinyinRoomDatabase db) {
             mDao = db.pinyinDao();
@@ -56,7 +56,7 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
             // when it is first created
             mDao.deleteAll();
 
-            for (String date : dates) {
+            for (int date : dates) {
                 Test test = new Test(date);
                 long testId = mDao.insert(test);
                 // Insert pinyin with this test ID.
