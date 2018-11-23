@@ -11,26 +11,25 @@ import android.widget.TextView;
 import java.util.List;
 import java.util.Locale;
 
-public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.TestViewHolder> {
+public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizViewHolder> {
     private final LayoutInflater mInflater;
-//    private List<Test> mTests;  // Cached copy of tests
-    private List<TestItem> mTests;
+    private List<QuizItem> mQuizItems;
 
-    TestListAdapter(Context context) {
+    QuizListAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
     }
 
     @NonNull
     @Override
-    public TestViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public QuizViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = mInflater.inflate(R.layout.recyclerview_item, viewGroup, false);
-        return new TestViewHolder(itemView);
+        return new QuizViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(TestViewHolder holder, int i) {
-        if (mTests != null) {
-            TestItem current = mTests.get(i);
+    public void onBindViewHolder(QuizViewHolder holder, int i) {
+        if (mQuizItems != null) {
+            QuizItem current = mQuizItems.get(i);
             holder.tvDate.setText(String.valueOf(current.getDate()));
             holder.tvWordsLeft.setText(String.format(Locale.US,
                     "%d/%d words left on %d round",
@@ -41,22 +40,22 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.TestVi
         }
     }
 
-    void setTests(List<TestItem> tests) {
-        mTests = tests;
+    void setQuizItems(List<QuizItem> quizItems) {
+        mQuizItems = quizItems;
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        if (mTests != null) return mTests.size();
+        if (mQuizItems != null) return mQuizItems.size();
         return 0;
     }
 
-    class TestViewHolder extends RecyclerView.ViewHolder {
+    class QuizViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvDate;
         private final TextView tvWordsLeft;
 
-        private TestViewHolder(View itemView) {
+        private QuizViewHolder(View itemView) {
             super(itemView);
             tvDate = itemView.findViewById(R.id.tvDate);
             tvWordsLeft = itemView.findViewById(R.id.tvWordsLeft);

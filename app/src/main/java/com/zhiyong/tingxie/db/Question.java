@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie;
+package com.zhiyong.tingxie.db;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
@@ -8,35 +8,35 @@ import android.support.annotation.NonNull;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
-@Entity(indices = {@Index("test_id")}, foreignKeys = @ForeignKey(entity = Test.class, parentColumns = "id",
-        childColumns = "test_id", onDelete = CASCADE))
+@Entity(indices = {@Index("quiz_id")}, foreignKeys = @ForeignKey(entity = Quiz.class, parentColumns = "id",
+        childColumns = "quiz_id", onDelete = CASCADE))
 public class Question {
     @PrimaryKey
     @NonNull
-    private int id;
+    private long id;
 
     private long timestamp;
 
-    private int pinyin_id;
+    private long pinyin_id;
 
     private boolean correct;
 
-    private int test_id;
+    private long quiz_id;
 
-    public Question(@NonNull long timestamp, @NonNull int pinyin_id, @NonNull boolean correct,
-                    @NonNull int test_id) {
+    public Question(@NonNull long timestamp, @NonNull long pinyin_id, @NonNull boolean correct,
+                    @NonNull long quiz_id) {
         this.timestamp = timestamp;
         this.pinyin_id = pinyin_id;
         this.correct = correct;
-        this.test_id = test_id;
+        this.quiz_id = quiz_id;
     }
 
-    public void setId(@NonNull int id) {
+    public void setId(@NonNull long id) {
         this.id = id;
     }
 
     @NonNull
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -46,7 +46,7 @@ public class Question {
     }
 
     @NonNull
-    public int getPinyin_id() {
+    public long getPinyin_id() {
         return pinyin_id;
     }
 
@@ -56,8 +56,8 @@ public class Question {
     }
 
     @NonNull
-    public int getTest_id() {
-        return test_id;
+    public long getQuiz_id() {
+        return quiz_id;
     }
 
 }

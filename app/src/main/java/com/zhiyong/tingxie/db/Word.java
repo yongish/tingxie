@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie;
+package com.zhiyong.tingxie.db;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
@@ -11,23 +11,23 @@ import android.support.annotation.NonNull;
 public class Word {
     @PrimaryKey(autoGenerate = true)
     @NonNull
-    private int id;
+    private long id;
 
     private String word;
 
-    private int pinyin_id;
+    private long pinyin_id;
 
     public Word(@NonNull String word, @NonNull int pinyin_id) {
         this.word = word;
         this.pinyin_id = pinyin_id;
     }
 
-    public void setId(@NonNull int id) {
+    public void setId(@NonNull long id) {
         this.id = id;
     }
 
     @NonNull
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -37,7 +37,7 @@ public class Word {
     }
 
     @NonNull
-    public int getPinyin_id() {
+    public long getPinyin_id() {
         return pinyin_id;
     }
 

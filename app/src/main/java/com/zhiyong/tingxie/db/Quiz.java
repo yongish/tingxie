@@ -1,35 +1,34 @@
-package com.zhiyong.tingxie;
+package com.zhiyong.tingxie.db;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 @Entity(indices = {@Index("id")})
-public class Pinyin {
+public class Quiz {
     @PrimaryKey(autoGenerate = true)
-    @NonNull
-    private int id;
+    @ColumnInfo(name = "id")
+    private long id;
 
-    private String pinyin;
+    private int date;
 
-    public Pinyin(@NonNull String pinyin) {
-        this.pinyin = pinyin;
+    public Quiz(@NonNull int date) {
+        this.date = date;
     }
 
-    public void setId(@NonNull int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
     @NonNull
-    public int getId() {
+    public long getId() {
         return id;
     }
 
     @NonNull
-    public String getPinyin() {
-        return pinyin;
+    public int getDate() {
+        return date;
     }
-
-    // Pinyin instances should be immutable.
 }

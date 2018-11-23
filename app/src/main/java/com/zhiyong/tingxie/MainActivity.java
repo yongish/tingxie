@@ -15,13 +15,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.zhiyong.tingxie.db.Quiz;
+
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final int NEW_TEST_ACTIVITY_REQUEST_CODE = 1;
 
-    private TestViewModel mTestViewModel;
+    private QuizViewModel mQuizViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,21 +36,21 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, NewTestActivity.class);
+                Intent intent = new Intent(MainActivity.this, NewQuizActivity.class);
                 startActivityForResult(intent, NEW_TEST_ACTIVITY_REQUEST_CODE);
             }
         });
 
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
-        final TestListAdapter adapter = new TestListAdapter(this);
+        final QuizListAdapter adapter = new QuizListAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        mTestViewModel = ViewModelProviders.of(this).get(TestViewModel.class);
-        mTestViewModel.getAllTestItems().observe(this, new Observer<List<TestItem>>() {
+        mQuizViewModel = ViewModelProviders.of(this).get(QuizViewModel.class);
+        mQuizViewModel.getAllTestItems().observe(this, new Observer<List<QuizItem>>() {
             @Override
-            public void onChanged(@Nullable List<TestItem> tests) {
-                adapter.setTests(tests);
+            public void onChanged(@Nullable List<QuizItem> tests) {
+                adapter.setQuizItems(tests);
             }
         });
     }
@@ -80,8 +82,8 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == NEW_TEST_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            Test test = new Test(data.getIntExtra(NewTestActivity.EXTRA_REPLY, 0));
-            mTestViewModel.insert(test);
+            Quiz quiz = new Quiz(data.getIntExtra(NewQuizActivity.EXTRA_REPLY, 0));
+            mQuizViewModel.insert(quiz);
         } else {
             Toast.makeText(getApplicationContext(), R.string.empty_not_saved, Toast.LENGTH_LONG)
                     .show();
