@@ -1,26 +1,30 @@
 package com.zhiyong.tingxie;
 
-import java.util.Date;
-
 public class QuizItem {
-//    private Date date;
+    private int id;
     private int date;
     private int totalWords;
     private int notLearned;
     private int round;
 
-    public QuizItem(int date, int totalWords, int notLearned, int round) {
+    public QuizItem(int id, int date, int totalWords, int notLearned, int round) {
+        this.id = id;
         this.date = date;
         this.totalWords = totalWords;
         this.notLearned = notLearned;
         this.round = round;
     }
 
-//    public Date getDate() {
-//        return date;
-//    }
+    public int getId() {
+        return id;
+    }
+
     public int getDate() {
         return date;
+    }
+
+    public void setDate(int date) {
+        this.date = date;
     }
 
     public int getTotalWords() {

@@ -14,8 +14,6 @@ import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.db.Word;
 
-import java.util.Random;
-
 // todo: exportSchema should be changed to true after 1st release.
 @Database(entities = {Question.class, Quiz.class, Pinyin.class, Word.class, QuizPinyin.class},
         version = 1, exportSchema = false)

@@ -73,7 +73,8 @@ public interface QuizDao {
             "          Min(correct_count) AS rounds_completed\n" +
             "   FROM tpc\n" +
             "   GROUP BY tpc.quiz_id)\n" +
-            "SELECT t.date,\n" +
+            "SELECT t.id,\n" +
+            "       t.date,\n" +
             "       tp2.total AS totalWords,\n" +
             "       Sum(tp2.rounds_completed = tpc.correct_count) AS notLearned,\n" +
             "       tp2.rounds_completed + 1 AS round\n" +
