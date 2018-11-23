@@ -14,7 +14,7 @@ import java.util.Locale;
 public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.TestViewHolder> {
     private final LayoutInflater mInflater;
 //    private List<Test> mTests;  // Cached copy of tests
-    private List<TestItem> mTests;  // Cached copy of tests
+    private List<TestItem> mTests;
 
     TestListAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
@@ -30,26 +30,17 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.TestVi
     @Override
     public void onBindViewHolder(TestViewHolder holder, int i) {
         if (mTests != null) {
-            // todo: TestItem list should be available here.
-            // Construct in TestRepository.
-
-//            Test current = mTests.get(i);
-            Test current = new Test(mTests.get(i).getDate());
+            TestItem current = mTests.get(i);
             holder.tvDate.setText(String.valueOf(current.getDate()));
-
-//            holder.tvWordsLeft.setText(String.format(Locale.US,
-//                    "%d/%d words left on %d round",
-//                    current.getNotLearned(), current.getTotalWords(), current.getRound()));
+            holder.tvWordsLeft.setText(String.format(Locale.US,
+                    "%d/%d words left on %d round",
+                    current.getNotLearned(), current.getTotalWords(), current.getRound()));
         } else {
             holder.tvDate.setText("No Date");
-//            holder.tvWordsLeft.setText("No info on progress.");
+            holder.tvWordsLeft.setText("No info on progress.");
         }
     }
 
-//    void setTests(List<Test> tests) {
-//        mTests = tests;
-//        notifyDataSetChanged();
-//    }
     void setTests(List<TestItem> tests) {
         mTests = tests;
         notifyDataSetChanged();

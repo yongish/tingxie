@@ -27,9 +27,6 @@ public interface TestDao {
     @Query("DELETE FROM test")
     void deleteAll();
 
-    @Query("SELECT * FROM test")
-    LiveData<List<Test>> getAllTests();
-
     @Query("WITH tpc AS\n" +
             "  (SELECT test.id AS test_id,\n" +
             "          tp.pinyin_id,\n" +
@@ -51,6 +48,6 @@ public interface TestDao {
             "FROM tpc\n" +
             "LEFT JOIN tp2 ON tp2.test_id = tpc.test_id\n" +
             "JOIN test t ON t.id = tp2.test_id\n" +
-            "GROUP BY tp2.test_id;\n")
+            "GROUP BY tp2.test_id;")
     LiveData<List<TestItem>> getAllTestItems();
 }

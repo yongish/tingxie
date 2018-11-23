@@ -45,8 +45,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         mTestViewModel = ViewModelProviders.of(this).get(TestViewModel.class);
-//        mTestViewModel.getAllTests().observe(this, new Observer<List<Test>>() {
-        mTestViewModel.getAllTests().observe(this, new Observer<List<TestItem>>() {
+        mTestViewModel.getAllTestItems().observe(this, new Observer<List<TestItem>>() {
             @Override
             public void onChanged(@Nullable List<TestItem> tests) {
                 adapter.setTests(tests);

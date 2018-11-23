@@ -16,7 +16,6 @@ public class TestRepository {
     private static final String TAG = "TestRepository";
 
     private TestDao mTestDao;
-//    private LiveData<List<Test>> mAllTests;
     private LiveData<List<TestItem>> mAllTestItems;
 
     TestRepository(Application application) {
@@ -25,19 +24,8 @@ public class TestRepository {
         Log.d(TAG, "TestRepository: ");
 
         // todo: Construct mAllTestItems here.
-//        mAllTests = mTestDao.getAllTests();
         mAllTestItems = mTestDao.getAllTestItems();
-
-        List<TestItem> testItems = mAllTestItems.getValue();
-        // Get count of pinyins for each test.
-
-
-
     }
-
-//    LiveData<List<Test>> getAllTests() {
-//        return mAllTests;
-//    }
 
     LiveData<List<TestItem>> getAllTestItems() {
         return mAllTestItems;
