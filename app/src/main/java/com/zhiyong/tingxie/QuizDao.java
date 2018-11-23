@@ -21,7 +21,7 @@ public interface QuizDao {
     long insert(Quiz quiz);
 
     @Insert
-    void insert(Pinyin pinyin);
+    long insert(Pinyin pinyin);
 
     @Insert
     long insert(QuizPinyin quizPinyin);
@@ -59,7 +59,7 @@ public interface QuizDao {
     @Query("WITH tpc AS\n" +
             "  (SELECT quiz.id AS quiz_id,\n" +
             "          tp.pinyin_id,\n" +
-            "          Count(correct) AS correct_count\n" +
+            "          Sum(correct) AS correct_count\n" +
             "   FROM quiz LEFT JOIN quiz_pinyin tp ON quiz.id = tp.quiz_id\n" +
             "   LEFT JOIN question q ON tp.quiz_id = q.quiz_id\n" +
             "   GROUP BY Quiz.id,\n" +

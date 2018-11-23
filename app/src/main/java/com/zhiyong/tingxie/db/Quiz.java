@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 @Entity(indices = {@Index("id")})
 public class Quiz {
     @PrimaryKey(autoGenerate = true)
+    @NonNull
     @ColumnInfo(name = "id")
     private long id;
 

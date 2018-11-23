@@ -17,7 +17,7 @@ public class Word {
 
     private long pinyin_id;
 
-    public Word(@NonNull String word, @NonNull int pinyin_id) {
+    public Word(@NonNull String word, @NonNull long pinyin_id) {
         this.word = word;
         this.pinyin_id = pinyin_id;
     }

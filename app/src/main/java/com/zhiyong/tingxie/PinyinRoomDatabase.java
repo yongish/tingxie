@@ -15,6 +15,7 @@ import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.db.Word;
 
+import java.nio.charset.Charset;
 import java.util.Random;
 
 // todo: exportSchema should be changed to true after 1st release.
@@ -51,7 +52,7 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
      */
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
         private final QuizDao mDao;
-        int[] dates = {20190103, 20190201, 20190221};
+        int[] dates = {20190103, 20190201, 20190221, 20190301, 20190502};
 
         PopulateDbAsync(PinyinRoomDatabase db) {
             mDao = db.pinyinDao();
@@ -71,15 +72,34 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
 
             for (int date : dates) {
                 Quiz quiz = new Quiz(date);
-                long testId = mDao.insert(quiz);
-                // Insert quizPinyin with this quiz ID.
-                Log.d("DATAAAAAAAAAAAAAAAAAAAA", String.valueOf(testId));
-                QuizPinyin quizPinyin = new QuizPinyin(testId, new Random().nextLong());
-//                long pinyinId = mDao.insert(quizPinyin);
+                long quizId = mDao.insert(quiz);
 
+                byte[] array = new byte[7]; // length is bounded by 7
+                new Random().nextBytes(array);
+                String generatedString = new String(array, Charset.forName("UTF-8"));
+                Pinyin pinyin = new Pinyin(generatedString);
+                long pinyinId = mDao.insert(pinyin);
 
+                // Insert quizPinyin with this quiz ID and pinyin ID.
+                Log.d("DATAAAAAAAAAAAAAAAAAAAA", String.valueOf(quizId));
+                QuizPinyin quizPinyin = new QuizPinyin(quizId, pinyinId);
+                long qpId = mDao.insert(quizPinyin);
+
+                Word word = new Word(generatedString, pinyinId);
+                mDao.insert(word);
+
+                Question question = new Question(
+                        new Random().nextInt(),
+                        pinyinId,
+                        new Random().nextBoolean(),
+                        quizId
+                );
+                mDao.insert(question);
 
             }
+
+            // Insert questions.
+
             return null;
         }
     }

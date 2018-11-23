@@ -11,7 +11,7 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 @Entity(indices = {@Index("quiz_id")}, foreignKeys = @ForeignKey(entity = Quiz.class, parentColumns = "id",
         childColumns = "quiz_id", onDelete = CASCADE))
 public class Question {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @NonNull
     private long id;
 
