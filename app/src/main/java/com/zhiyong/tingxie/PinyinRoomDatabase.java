@@ -50,7 +50,7 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
     /**
      * Populate the database in the background.
      */
-    private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
+    static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
         private final QuizDao mDao;
         int[] dates = {20190103, 20190201, 20190221, 20190301, 20190502};
 
@@ -70,7 +70,35 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
             mDao.deleteAllPinyins();
             mDao.deleteAllQuestions();
 
-            for (int date : dates) {
+            // Add a quiz.
+            long quizId = mDao.insert(new Quiz(new Random().nextInt()));
+
+            // Add 4 pinyins with 5 words.
+            long p0Id = mDao.insert(new Pinyin("p0"));
+            long p1Id = mDao.insert(new Pinyin("p1"));
+            long p2Id = mDao.insert(new Pinyin("p2"));
+            long p3Id = mDao.insert(new Pinyin("p3"));
+            mDao.insert(new Word("w0", p0Id));
+            mDao.insert(new Word("w1", p1Id));
+            mDao.insert(new Word("w2", p2Id));
+            mDao.insert(new Word("w3", p3Id));
+            mDao.insert(new Word("w4", p3Id));
+
+            // Connect all pinyin IDs to the test.
+            mDao.insert(new QuizPinyin(quizId, p0Id));
+            mDao.insert(new QuizPinyin(quizId, p1Id));
+            mDao.insert(new QuizPinyin(quizId, p2Id));
+            mDao.insert(new QuizPinyin(quizId, p3Id));
+
+            // Start unit tests here.
+            // date, totalWords, notLearned, round
+            // rand, 4, 4, 1
+
+
+
+
+
+            /*for (int date : dates) {
                 Quiz quiz = new Quiz(date);
                 long quizId = mDao.insert(quiz);
 
@@ -96,10 +124,7 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
                 );
                 mDao.insert(question);
 
-            }
-
-            // Insert questions.
-
+            }*/
             return null;
         }
     }

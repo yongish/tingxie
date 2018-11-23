@@ -16,10 +16,10 @@ public class QuizViewModel extends AndroidViewModel {
     public QuizViewModel(@NonNull Application application) {
         super(application);
         mRepository = new QuizRepository(application);
-        mAllQuizItems = mRepository.getAllTestItems();
+        mAllQuizItems = mRepository.getAllQuizItems();
     }
 
-    LiveData<List<QuizItem>> getAllTestItems() {
+    LiveData<List<QuizItem>> getAllQuizItems() {
         return mAllQuizItems;
     }
 

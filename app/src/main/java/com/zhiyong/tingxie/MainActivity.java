@@ -21,7 +21,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final int NEW_TEST_ACTIVITY_REQUEST_CODE = 1;
+    public static final int NEW_QUIZ_ACTIVITY_REQUEST_CODE = 1;
 
     private QuizViewModel mQuizViewModel;
 
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, NewQuizActivity.class);
-                startActivityForResult(intent, NEW_TEST_ACTIVITY_REQUEST_CODE);
+                startActivityForResult(intent, NEW_QUIZ_ACTIVITY_REQUEST_CODE);
             }
         });
 
@@ -47,10 +47,10 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         mQuizViewModel = ViewModelProviders.of(this).get(QuizViewModel.class);
-        mQuizViewModel.getAllTestItems().observe(this, new Observer<List<QuizItem>>() {
+        mQuizViewModel.getAllQuizItems().observe(this, new Observer<List<QuizItem>>() {
             @Override
-            public void onChanged(@Nullable List<QuizItem> tests) {
-                adapter.setQuizItems(tests);
+            public void onChanged(@Nullable List<QuizItem> quizItems) {
+                adapter.setQuizItems(quizItems);
             }
         });
     }
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == NEW_TEST_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+        if (requestCode == NEW_QUIZ_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             Quiz quiz = new Quiz(data.getIntExtra(NewQuizActivity.EXTRA_REPLY, 0));
             mQuizViewModel.insert(quiz);
         } else {

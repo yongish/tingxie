@@ -29,7 +29,7 @@ public class QuizRepository {
         mAllQuizItems = mQuizDao.getAllQuizItems();
     }
 
-    LiveData<List<QuizItem>> getAllTestItems() {
+    LiveData<List<QuizItem>> getAllQuizItems() {
         return mAllQuizItems;
     }
 

@@ -32,6 +32,9 @@ public interface QuizDao {
     @Insert
     void insert(Question question);
 
+    @Query("SELECT * FROM quiz")
+    List<Quiz> getQuizzes();
+
     @Update
     void markQuestionCorrect(Question question);
 
@@ -41,7 +44,7 @@ public interface QuizDao {
     @Delete
     void deleteQuiz(Quiz quiz);
 
-    @Query("DELETE FROM Quiz")
+    @Query("DELETE FROM quiz")
     void deleteAllQuizzes();
 
     @Query("DELETE FROM pinyin")
@@ -59,10 +62,10 @@ public interface QuizDao {
     @Query("WITH tpc AS\n" +
             "  (SELECT quiz.id AS quiz_id,\n" +
             "          tp.pinyin_id,\n" +
-            "          Sum(correct) AS correct_count\n" +
+            "          Count(correct) AS correct_count\n" +
             "   FROM quiz LEFT JOIN quiz_pinyin tp ON quiz.id = tp.quiz_id\n" +
             "   LEFT JOIN question q ON tp.quiz_id = q.quiz_id\n" +
-            "   GROUP BY Quiz.id,\n" +
+            "   GROUP BY quiz.id,\n" +
             "            tp.pinyin_id),\n" +
             "     tp2 AS\n" +
             "  (SELECT tpc.quiz_id,\n" +
@@ -72,11 +75,11 @@ public interface QuizDao {
             "   GROUP BY tpc.quiz_id)\n" +
             "SELECT t.date,\n" +
             "       tp2.total AS totalWords,\n" +
-            "       Sum(tp2.rounds_completed > 0 AND tp2.rounds_completed = tpc.correct_count) AS notLearned,\n" +
+            "       Sum(tp2.rounds_completed = tpc.correct_count) AS notLearned,\n" +
             "       tp2.rounds_completed + 1 AS round\n" +
             "FROM tpc\n" +
             "LEFT JOIN tp2 ON tp2.quiz_id = tpc.quiz_id\n" +
-            "JOIN Quiz t ON t.id = tp2.quiz_id\n" +
-            "GROUP BY tp2.quiz_id;")
+            "JOIN quiz t ON t.id = tp2.quiz_id\n" +
+            "GROUP BY tp2.quiz_id;\n")
     LiveData<List<QuizItem>> getAllQuizItems();
 }
