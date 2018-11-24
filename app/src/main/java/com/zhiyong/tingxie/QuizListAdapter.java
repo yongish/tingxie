@@ -1,7 +1,9 @@
 package com.zhiyong.tingxie;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -81,6 +83,24 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                     datePickerDialog.show();
                 }
             });
+            holder.ivDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new AlertDialog.Builder(context)
+                            .setTitle("Delete Quiz")
+                            .setMessage("Delete this quiz?")
+                            .setIconAttribute(android.R.attr.alertDialogIcon)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mQuizItems.remove(i);
+                                    notifyDataSetChanged();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, null)
+                            .show();
+                }
+            });
         } else {
             holder.tvDate.setText("No Date");
             holder.tvWordsLeft.setText("No info on progress.");
@@ -102,12 +122,14 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         private final TextView tvDate;
         private final TextView tvWordsLeft;
         private final ImageView ivEditDate;
+        private final ImageView ivDelete;
 
         private QuizViewHolder(View itemView) {
             super(itemView);
             tvDate = itemView.findViewById(R.id.tvDate);
             tvWordsLeft = itemView.findViewById(R.id.tvWordsLeft);
             ivEditDate = itemView.findViewById(R.id.ivEditDate);
+            ivDelete = itemView.findViewById(R.id.ivDelete);
         }
     }
 }
