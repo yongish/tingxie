@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.zhiyong.tingxie.db.Quiz;
+import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.ui.main.QuizItem;
 import com.zhiyong.tingxie.ui.word.WordItem;
 
@@ -23,9 +24,7 @@ public class QuizRepository {
     private LiveData<List<QuizItem>> mAllQuizItems;
     private LiveData<List<WordItem>> mAllWordItems;
 
-    private int quizId;
-
-    public QuizRepository(Application application) {
+    public QuizRepository(Application application, int quizId) {
         PinyinRoomDatabase db = PinyinRoomDatabase.getDatabase(application);
         mQuizDao = db.pinyinDao();
         Log.d(TAG, "QuizRepository: ");
@@ -38,7 +37,7 @@ public class QuizRepository {
         return mAllQuizItems;
     }
 
-    public LiveData<List<WordItem>> getWordItemsOfQuiz(int quizId) {
+    public LiveData<List<WordItem>> getWordItemsOfQuiz() {
         return mAllWordItems;
     }
 
@@ -57,6 +56,24 @@ public class QuizRepository {
         @Override
         protected Void doInBackground(final Quiz... params) {
             mAsyncTaskDao.insert(params[0]);
+            return null;
+        }
+    }
+
+    public void deleteWord(QuizPinyin quizPinyin) {
+        new deleteWordAsyncTask(mQuizDao).execute(quizPinyin);
+    }
+
+    private static class deleteWordAsyncTask extends AsyncTask<QuizPinyin, Void, Void> {
+        private QuizDao mAsyncTaskDao;
+
+        deleteWordAsyncTask(QuizDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(QuizPinyin... params) {
+            mAsyncTaskDao.deleteQuizPinyin(params[0].getQuiz_id(), params[0].getPinyin_id());
             return null;
         }
     }

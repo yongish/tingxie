@@ -61,7 +61,11 @@ public interface QuizDao {
     @Query("DELETE FROM question")
     void deleteAllQuestions();
 
-    @Query("SELECT w.id AS wordId,\n" +
+    @Query("DELETE FROM quiz_pinyin WHERE quiz_id = :quizId AND pinyin_id = :pinyinId")
+    void deleteQuizPinyin(long quizId, long pinyinId);
+
+    @Query("SELECT q.id AS quizId,\n" +
+            "       w.id AS wordId,\n" +
             "       w.word,\n" +
             "       p.id AS pinyinId,\n" +
             "       p.pinyin\n" +
@@ -70,7 +74,7 @@ public interface QuizDao {
             "JOIN pinyin p ON qp.pinyin_id = p.id\n" +
             "JOIN word w ON p.id = w.pinyin_id\n" +
             "WHERE q.id = :quizId\n" +
-            "ORDER BY pinyin\n")
+            "ORDER BY pinyin")
     LiveData<List<WordItem>> getWordItemsOfQuizId(int quizId);
 
     @Query("WITH tpc AS\n" +

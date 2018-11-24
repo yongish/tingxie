@@ -40,25 +40,6 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
             WordItem current = mWordItems.get(i);
             holder.tvWord.setText(current.getWord());
             holder.tvPinyin.setText(current.getPinyin());
-            holder.ivDeleteWord.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // todo: consider utility function. Same code in QuizListAdapter.
-                    new AlertDialog.Builder(context)
-                            .setTitle("Delete word")
-                            .setMessage("Delete this word?")
-                            .setIconAttribute(android.R.attr.alertDialogIcon)
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    mWordItems.remove(i);
-                                    notifyDataSetChanged();
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, null)
-                            .show();
-                }
-            });
         } else {
             holder.tvWord.setText("No Word");
             holder.tvPinyin.setText("No pinyin");
@@ -68,6 +49,10 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
     void setWordItems(List<WordItem> wordItems) {
         mWordItems = wordItems;
         notifyDataSetChanged();
+    }
+
+    public WordItem getWordItemAtPosition(int position) {
+        return mWordItems.get(position);
     }
 
     @Override
@@ -81,14 +66,12 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         private final TextView tvWord;
         private final TextView tvPinyin;
         private final ImageView ivPlay;
-        private final ImageView ivDeleteWord;
 
         private WordViewHolder(View itemView) {
             super(itemView);
             tvWord = itemView.findViewById(R.id.tvWord);
             tvPinyin = itemView.findViewById(R.id.tvPinyin);
             ivPlay = itemView.findViewById(R.id.ivPlay);
-            ivDeleteWord = itemView.findViewById(R.id.ivDeleteWord);
         }
     }
 }

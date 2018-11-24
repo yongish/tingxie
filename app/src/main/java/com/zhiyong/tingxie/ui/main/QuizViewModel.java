@@ -16,7 +16,7 @@ public class QuizViewModel extends AndroidViewModel {
 
     public QuizViewModel(@NonNull Application application) {
         super(application);
-        mRepository = new QuizRepository(application);
+        mRepository = new QuizRepository(application, 0);
         mAllQuizItems = mRepository.getAllQuizItems();
     }
 

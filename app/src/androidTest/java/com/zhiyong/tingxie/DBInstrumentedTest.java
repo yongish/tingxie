@@ -82,6 +82,10 @@ public class DBInstrumentedTest {
         assertEquals(4, result.getTotalWords());
         assertEquals(4, result.getNotLearned());
         assertEquals(1, result.getRound());
+
+        mDao.deleteQuizPinyin(quizId, p0Id);
+        result = LiveDataTestUtil.getValue(mDao.getAllQuizItems()).get(0);
+        assertEquals(3, result.getTotalWords());
     }
 
     @Test
