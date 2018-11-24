@@ -7,4 +7,5 @@
     <string name="add_view_words">Add/view words</string>
     <string name="start_resume">Start/Resume</string>
     <string name="datepicker">datePicker</string>
+    <string name="title_activity_quiz_new">New Quiz Activity</string>
 </resources>
