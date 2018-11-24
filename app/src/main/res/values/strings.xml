@@ -8,4 +8,5 @@
     <string name="start_resume">Start/Resume</string>
     <string name="datepicker">datePicker</string>
     <string name="title_activity_quiz_new">New Quiz Activity</string>
+    <string name="title_activity_word">WordActivity</string>
 </resources>
