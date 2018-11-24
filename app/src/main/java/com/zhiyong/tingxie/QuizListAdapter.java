@@ -15,8 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -59,7 +59,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
             holder.ivEditDate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Open date dialog. Pass in quiz ID.
+                    // Open date dialog. Pass in quiz ID and current date.
                     DatePickerDialog.OnDateSetListener dateListener = new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -73,9 +73,21 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                             notifyDataSetChanged();
                         }
                     };
-                    int year = c.get(Calendar.YEAR);
-                    int month = c.get(Calendar.MONTH);
-                    int day = c.get(Calendar.DAY_OF_MONTH);
+
+                    Date currDate;
+                    int year;
+                    int month;
+                    int day;
+                    try {
+                        currDate = Util.DB_FORMAT.parse(String.valueOf(current.getDate()));
+                        c.setTime(currDate);
+                    } catch (ParseException e) {
+                        // todo: Error logging API.
+                    }
+                    year = c.get(Calendar.YEAR);
+                    month = c.get(Calendar.MONTH);
+                    day = c.get(Calendar.DAY_OF_MONTH);
+
                     DatePickerDialog datePickerDialog =
                             new DatePickerDialog(context, dateListener, year, month, day);
                     datePickerDialog.show();
