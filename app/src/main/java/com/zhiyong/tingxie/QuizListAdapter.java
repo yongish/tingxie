@@ -1,15 +1,18 @@
 package com.zhiyong.tingxie;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,6 +24,9 @@ import java.util.List;
 import java.util.Locale;
 
 public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizViewHolder> {
+
+    public static final int WORD_ACTIVITY_REQUEST_CODE = 2;
+
     private final LayoutInflater mInflater;
     private List<QuizItem> mQuizItems;
     private final Context context;
@@ -111,6 +117,14 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                             .show();
                 }
             });
+            holder.btnAddViewWords.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((Activity) context).startActivityForResult(
+                            new Intent(context, WordActivity.class), WORD_ACTIVITY_REQUEST_CODE
+                    );
+                }
+            });
         } else {
             holder.tvDate.setText("No Date");
             holder.tvWordsLeft.setText("No info on progress.");
@@ -133,6 +147,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         private final TextView tvWordsLeft;
         private final ImageView ivEditDate;
         private final ImageView ivDelete;
+        private final Button btnAddViewWords;
 
         private QuizViewHolder(View itemView) {
             super(itemView);
@@ -140,6 +155,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
             tvWordsLeft = itemView.findViewById(R.id.tvWordsLeft);
             ivEditDate = itemView.findViewById(R.id.ivEditDate);
             ivDelete = itemView.findViewById(R.id.ivDelete);
+            btnAddViewWords = itemView.findViewById(R.id.btnAddViewWords);
         }
     }
 }

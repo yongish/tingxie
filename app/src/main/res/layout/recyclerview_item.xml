@@ -33,7 +33,7 @@
         tools:text="x/y words left on nth round" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnAddViewWords"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -42,13 +42,13 @@
         android:layout_marginBottom="8dp"
         android:text="@string/add_view_words"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button2"
+        app:layout_constraintEnd_toStartOf="@+id/btnStartResume"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvWordsLeft" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btnStartResume"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -58,7 +58,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/button" />
+        app:layout_constraintStart_toEndOf="@+id/btnAddViewWords" />
 
     <ImageView
         android:id="@+id/ivDelete"
