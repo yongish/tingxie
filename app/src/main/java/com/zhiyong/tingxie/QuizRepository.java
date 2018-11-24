@@ -1,13 +1,13 @@
-package com.zhiyong.tingxie.ui.main;
+package com.zhiyong.tingxie;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.zhiyong.tingxie.PinyinRoomDatabase;
-import com.zhiyong.tingxie.QuizDao;
 import com.zhiyong.tingxie.db.Quiz;
+import com.zhiyong.tingxie.ui.main.QuizItem;
+import com.zhiyong.tingxie.ui.word.WordItem;
 
 import java.util.List;
 
@@ -21,18 +21,25 @@ public class QuizRepository {
 
     private QuizDao mQuizDao;
     private LiveData<List<QuizItem>> mAllQuizItems;
+    private LiveData<List<WordItem>> mAllWordItems;
 
-    QuizRepository(Application application) {
+    private int quizId;
+
+    public QuizRepository(Application application) {
         PinyinRoomDatabase db = PinyinRoomDatabase.getDatabase(application);
         mQuizDao = db.pinyinDao();
         Log.d(TAG, "QuizRepository: ");
 
-        // todo: Construct mAllQuizItems here.
         mAllQuizItems = mQuizDao.getAllQuizItems();
+        mAllWordItems = mQuizDao.getWordItemsOfQuizId(quizId);
     }
 
-    LiveData<List<QuizItem>> getAllQuizItems() {
+    public LiveData<List<QuizItem>> getAllQuizItems() {
         return mAllQuizItems;
+    }
+
+    public LiveData<List<WordItem>> getWordItemsOfQuiz(int quizId) {
+        return mAllWordItems;
     }
 
     public void insert (Quiz quiz) {

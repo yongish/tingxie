@@ -70,15 +70,15 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
             long quizId = mDao.insert(new Quiz(20190101));
 
             // Add 4 pinyins with 5 words.
-            long p0Id = mDao.insert(new Pinyin("p0"));
-            long p1Id = mDao.insert(new Pinyin("p1"));
-            long p2Id = mDao.insert(new Pinyin("p2"));
-            long p3Id = mDao.insert(new Pinyin("p3"));
-            mDao.insert(new Word("w0", p0Id));
-            mDao.insert(new Word("w1", p1Id));
-            mDao.insert(new Word("w2", p2Id));
-            mDao.insert(new Word("w3", p3Id));
-            mDao.insert(new Word("w4", p3Id));
+            long p0Id = mDao.insert(new Pinyin("jiāo tà shí dì"));
+            long p1Id = mDao.insert(new Pinyin("jiǔ niú yì máo"));
+            long p2Id = mDao.insert(new Pinyin("yí jiàn zhōng qíng"));
+            long p3Id = mDao.insert(new Pinyin("guǐ jì"));
+            mDao.insert(new Word("脚踏实地", p0Id));
+            mDao.insert(new Word("九牛一毛", p1Id));
+            mDao.insert(new Word("一见钟情", p2Id));
+            mDao.insert(new Word("轨迹", p3Id));
+            mDao.insert(new Word("诡计", p3Id));
 
             // Connect all pinyin IDs to the test.
             mDao.insert(new QuizPinyin(quizId, p0Id));

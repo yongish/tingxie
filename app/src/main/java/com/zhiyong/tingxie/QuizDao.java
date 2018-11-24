@@ -13,6 +13,7 @@ import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.db.Word;
 import com.zhiyong.tingxie.ui.main.QuizItem;
+import com.zhiyong.tingxie.ui.word.WordItem;
 
 import java.util.List;
 
@@ -59,6 +60,18 @@ public interface QuizDao {
 
     @Query("DELETE FROM question")
     void deleteAllQuestions();
+
+    @Query("SELECT w.id AS wordId,\n" +
+            "       w.word,\n" +
+            "       p.id AS pinyinId,\n" +
+            "       p.pinyin\n" +
+            "FROM quiz q\n" +
+            "JOIN quiz_pinyin qp ON q.id = qp.quiz_id\n" +
+            "JOIN pinyin p ON qp.pinyin_id = p.id\n" +
+            "JOIN word w ON p.id = w.pinyin_id\n" +
+            "WHERE q.id = :quizId\n" +
+            "ORDER BY pinyin\n")
+    LiveData<List<WordItem>> getWordItemsOfQuizId(int quizId);
 
     @Query("WITH tpc AS\n" +
             "  (SELECT quiz.id AS quiz_id,\n" +

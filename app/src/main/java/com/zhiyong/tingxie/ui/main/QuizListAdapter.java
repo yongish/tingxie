@@ -30,11 +30,13 @@ import java.util.Locale;
 public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizViewHolder> {
 
     public static final int WORD_ACTIVITY_REQUEST_CODE = 2;
+    public static final String EXTRA_QUIZ_ID = "com.zhiyong.tingxie.ui.main.extra.QUIZ_ID";
 
-    private final LayoutInflater mInflater;
-    private List<QuizItem> mQuizItems;
-    private final Context context;
     private final Calendar c = Calendar.getInstance();
+    private final LayoutInflater mInflater;
+    private final Context context;
+
+    private List<QuizItem> mQuizItems;
 
     QuizListAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
@@ -103,7 +105,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                     datePickerDialog.show();
                 }
             });
-            holder.ivDelete.setOnClickListener(new View.OnClickListener() {
+            holder.ivDeleteQuiz.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     new AlertDialog.Builder(context)
@@ -124,8 +126,10 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
             holder.btnAddViewWords.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Intent intent = new Intent(context, WordActivity.class);
+                    intent.putExtra(EXTRA_QUIZ_ID, current.getId());
                     ((Activity) context).startActivityForResult(
-                            new Intent(context, WordActivity.class), WORD_ACTIVITY_REQUEST_CODE
+                            intent, WORD_ACTIVITY_REQUEST_CODE
                     );
                 }
             });
@@ -150,7 +154,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         private final TextView tvDate;
         private final TextView tvWordsLeft;
         private final ImageView ivEditDate;
-        private final ImageView ivDelete;
+        private final ImageView ivDeleteQuiz;
         private final Button btnAddViewWords;
 
         private QuizViewHolder(View itemView) {
@@ -158,7 +162,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
             tvDate = itemView.findViewById(R.id.tvDate);
             tvWordsLeft = itemView.findViewById(R.id.tvWordsLeft);
             ivEditDate = itemView.findViewById(R.id.ivEditDate);
-            ivDelete = itemView.findViewById(R.id.ivDelete);
+            ivDeleteQuiz = itemView.findViewById(R.id.ivDeleteQuiz);
             btnAddViewWords = itemView.findViewById(R.id.btnAddViewWords);
         }
     }
