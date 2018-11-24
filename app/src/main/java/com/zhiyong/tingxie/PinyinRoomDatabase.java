@@ -86,6 +86,8 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
             mDao.insert(new QuizPinyin(quizId, p2Id));
             mDao.insert(new QuizPinyin(quizId, p3Id));
 
+            mDao.insert(new Quiz(20190201));
+
             return null;
         }
     }

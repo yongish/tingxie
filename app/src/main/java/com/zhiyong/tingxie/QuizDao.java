@@ -63,7 +63,8 @@ public interface QuizDao {
             "  (SELECT quiz.id AS quiz_id,\n" +
             "          tp.pinyin_id,\n" +
             "          Count(correct) AS correct_count\n" +
-            "   FROM quiz LEFT JOIN quiz_pinyin tp ON quiz.id = tp.quiz_id\n" +
+            "   FROM quiz\n" +
+            "   LEFT JOIN quiz_pinyin tp ON quiz.id = tp.quiz_id\n" +
             "   LEFT JOIN question q ON tp.quiz_id = q.quiz_id\n" +
             "   GROUP BY quiz.id,\n" +
             "            tp.pinyin_id),\n" +
@@ -76,11 +77,11 @@ public interface QuizDao {
             "SELECT t.id,\n" +
             "       t.date,\n" +
             "       tp2.total AS totalWords,\n" +
-            "       Sum(tp2.rounds_completed = tpc.correct_count) AS notLearned,\n" +
+            "       Min(tp2.total, Count(tp2.rounds_completed = tpc.correct_count)) AS notLearned,\n" +
             "       tp2.rounds_completed + 1 AS round\n" +
             "FROM tpc\n" +
             "LEFT JOIN tp2 ON tp2.quiz_id = tpc.quiz_id\n" +
             "JOIN quiz t ON t.id = tp2.quiz_id\n" +
-            "GROUP BY tp2.quiz_id;\n")
+            "GROUP BY tp2.quiz_id;")
     LiveData<List<QuizItem>> getAllQuizItems();
 }

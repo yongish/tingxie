@@ -41,7 +41,20 @@ public class DBInstrumentedTest {
     }
 
     @Test
-    public void totalWords() throws Exception {
+    public void blankTest() throws InterruptedException {
+        // Add a quiz.
+        final int testDate = 20190101;
+        long quizId = mDao.insert(new Quiz(testDate));
+
+        QuizItem result = LiveDataTestUtil.getValue(mDao.getAllQuizItems()).get(0);
+        assertEquals(testDate, result.getDate());
+        assertEquals(0, result.getTotalWords());
+        assertEquals(0, result.getNotLearned());
+        assertEquals(1, result.getRound());
+    }
+
+    @Test
+    public void pinyin4words5() throws InterruptedException {
         // Add a quiz.
         final int testDate = 20190101;
         long quizId = mDao.insert(new Quiz(testDate));
