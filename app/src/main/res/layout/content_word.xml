@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorScreenBackground"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".WordActivity"
+    tools:context=".ui.word.WordActivity"
     tools:showIn="@layout/activity_word">
 
     <android.support.v7.widget.RecyclerView

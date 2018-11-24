@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie;
+package com.zhiyong.tingxie.ui.main;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;

@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie;
+package com.zhiyong.tingxie.ui.main;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -16,6 +16,10 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.zhiyong.tingxie.R;
+import com.zhiyong.tingxie.Util;
+import com.zhiyong.tingxie.ui.word.WordActivity;
 
 import java.text.ParseException;
 import java.util.Calendar;

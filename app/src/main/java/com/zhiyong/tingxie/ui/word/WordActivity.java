@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie;
+package com.zhiyong.tingxie.ui.word;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,9 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+
+import com.zhiyong.tingxie.R;
+import com.zhiyong.tingxie.ui.main.MainActivity;
 
 public class WordActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie;
+package com.zhiyong.tingxie.ui.main;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -15,6 +15,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.zhiyong.tingxie.ui.NewQuizActivity;
+import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.db.Quiz;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie;
+package com.zhiyong.tingxie.ui;
 
 import android.content.Intent;
 import android.support.v4.app.DialogFragment;
@@ -8,13 +8,12 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import com.zhiyong.tingxie.R;
+import com.zhiyong.tingxie.Util;
+import com.zhiyong.tingxie.ui.main.DatePickerFragment;
+
 import java.util.Calendar;
-import java.util.Date;
 
 public class NewQuizActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie;
+package com.zhiyong.tingxie.ui.main;
 
 public class QuizItem {
     private int id;

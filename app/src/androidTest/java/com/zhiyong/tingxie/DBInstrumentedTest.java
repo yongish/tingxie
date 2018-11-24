@@ -9,6 +9,7 @@ import com.zhiyong.tingxie.db.Pinyin;
 import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.db.Word;
+import com.zhiyong.tingxie.ui.main.QuizItem;
 
 import org.junit.After;
 import org.junit.Before;

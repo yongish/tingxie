@@ -29,7 +29,7 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
         }
     };
 
-    static PinyinRoomDatabase getDatabase(final Context context) {
+    public static PinyinRoomDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (PinyinRoomDatabase.class) {
                 if (INSTANCE == null) {

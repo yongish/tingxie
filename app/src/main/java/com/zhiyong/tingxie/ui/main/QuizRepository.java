@@ -1,10 +1,12 @@
-package com.zhiyong.tingxie;
+package com.zhiyong.tingxie.ui.main;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.zhiyong.tingxie.PinyinRoomDatabase;
+import com.zhiyong.tingxie.QuizDao;
 import com.zhiyong.tingxie.db.Quiz;
 
 import java.util.List;
