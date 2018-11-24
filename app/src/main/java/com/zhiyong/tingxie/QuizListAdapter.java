@@ -44,10 +44,8 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
             final QuizItem current = mQuizItems.get(i);
 
             String displayDate = String.valueOf(current.getDate());
-            SimpleDateFormat fromDB = new SimpleDateFormat("yyyyMMdd");
-            SimpleDateFormat newDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy");
             try {
-                displayDate = newDateFormat.format(fromDB.parse(displayDate));
+                displayDate = Util.DISPLAY_FORMAT.format(Util.DB_FORMAT.parse(displayDate));
             } catch (ParseException e) {
                 // todo: Error log API in future.
             }

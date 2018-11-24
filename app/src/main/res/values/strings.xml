@@ -6,4 +6,5 @@
     <string name="enter_date">Enter date</string>
     <string name="add_view_words">Add/view words</string>
     <string name="start_resume">Start/Resume</string>
+    <string name="datepicker">datePicker</string>
 </resources>
