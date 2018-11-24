@@ -40,7 +40,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
     @NonNull
     @Override
     public QuizViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View itemView = mInflater.inflate(R.layout.recyclerview_item, viewGroup, false);
+        View itemView = mInflater.inflate(R.layout.recyclerview_quiz, viewGroup, false);
         return new QuizViewHolder(itemView);
     }
 
