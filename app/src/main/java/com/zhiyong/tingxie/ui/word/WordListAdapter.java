@@ -1,9 +1,8 @@
 package com.zhiyong.tingxie.ui.word;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zhiyong.tingxie.R;
+import com.zhiyong.tingxie.db.QuizPinyin;
 
 import java.util.List;
 
@@ -51,8 +51,29 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         notifyDataSetChanged();
     }
 
-    public WordItem getWordItemAtPosition(int position) {
-        return mWordItems.get(position);
+    public void onItemRemove(final RecyclerView.ViewHolder viewHolder,
+                             final RecyclerView mRecyclerView,
+                             final WordViewModel wordViewModel) {
+        final int adapterPosition = viewHolder.getAdapterPosition();
+        final WordItem wordItem = mWordItems.get(adapterPosition);
+
+        final QuizPinyin quizPinyin = new QuizPinyin(wordItem.getQuizId(), wordItem.getPinyinId());
+
+        Snackbar snackbar = Snackbar
+                .make(mRecyclerView, "Removed word", Snackbar.LENGTH_LONG)
+                .setAction("Undo", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mWordItems.add(adapterPosition, wordItem);
+                        notifyItemInserted(adapterPosition);
+                        wordViewModel.addQuizPinyin(quizPinyin);
+                        mRecyclerView.scrollToPosition(adapterPosition);
+                    }
+                });
+        snackbar.show();
+        mWordItems.remove(adapterPosition);
+        wordViewModel.deleteWord(quizPinyin);
+        notifyItemRemoved(adapterPosition);
     }
 
     @Override

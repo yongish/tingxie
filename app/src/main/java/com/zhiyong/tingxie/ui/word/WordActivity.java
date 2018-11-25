@@ -16,7 +16,6 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
 import com.zhiyong.tingxie.R;
-import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.ui.main.MainActivity;
 
 import java.util.List;
@@ -52,12 +51,11 @@ public class WordActivity extends AppCompatActivity {
             }
         });
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerview_word);
+        final RecyclerView recyclerView = findViewById(R.id.recyclerview_word);
         final WordListAdapter adapter = new WordListAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-//        mWordViewModel = ViewModelProviders.of(this).get(WordViewModel.class);
         int quizId = getIntent().getIntExtra(EXTRA_QUIZ_ID, -1);
         mWordViewModel = ViewModelProviders
                 .of(this, new WordViewModelFactory(this.getApplication(), quizId))
@@ -66,8 +64,6 @@ public class WordActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable List<WordItem> wordItems) {
                 adapter.setWordItems(wordItems);
-
-                // Delete here?
             }
         });
 
@@ -82,10 +78,7 @@ public class WordActivity extends AppCompatActivity {
 
                     @Override
                     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-                        int position = viewHolder.getAdapterPosition();
-                        WordItem wordItem = adapter.getWordItemAtPosition(position);
-
-                        mWordViewModel.deleteWord(new QuizPinyin(wordItem.getQuizId(), wordItem.getPinyinId()));
+                        adapter.onItemRemove(viewHolder, recyclerView, mWordViewModel);
                     }
                 }
         );

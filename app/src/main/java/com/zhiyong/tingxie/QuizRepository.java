@@ -60,6 +60,7 @@ public class QuizRepository {
         }
     }
 
+    // Only delete QuizPinyin object.
     public void deleteWord(QuizPinyin quizPinyin) {
         new deleteWordAsyncTask(mQuizDao).execute(quizPinyin);
     }
@@ -73,8 +74,32 @@ public class QuizRepository {
 
         @Override
         protected Void doInBackground(QuizPinyin... params) {
+            // Word and Pinyin are immutable. Only QuizPinyin object is deleted.
             mAsyncTaskDao.deleteQuizPinyin(params[0].getQuiz_id(), params[0].getPinyin_id());
             return null;
         }
+    }
+
+    // Undo a just deleted word.
+    public void insertQuizPinyin(QuizPinyin quizPinyin) {
+        new insertQuizPinyinAsyncTask(mQuizDao).execute(quizPinyin);
+    }
+
+    private static class insertQuizPinyinAsyncTask extends AsyncTask<QuizPinyin, Void, Void> {
+        private QuizDao mAsyncTaskDao;
+
+        insertQuizPinyinAsyncTask(QuizDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(QuizPinyin... params) {
+            mAsyncTaskDao.insert(params[0]);
+            return null;
+        }
+    }
+
+    public void insertWord(WordItem wordItem) {
+
     }
 }
