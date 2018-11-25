@@ -34,17 +34,14 @@ public interface QuizDao {
     @Insert
     void insert(Question question);
 
-    @Query("SELECT * FROM quiz")
-    List<Quiz> getQuizzes();
-
     @Update
     void markQuestionCorrect(Question question);
 
     @Delete
     void deleteWord(Word word);
 
-    @Delete
-    void deleteQuiz(Quiz quiz);
+    @Query("DELETE FROM quiz WHERE id = :quizId")
+    void deleteQuiz(int quizId);
 
     @Query("DELETE FROM quiz")
     void deleteAllQuizzes();
@@ -63,6 +60,12 @@ public interface QuizDao {
 
     @Query("DELETE FROM quiz_pinyin WHERE quiz_id = :quizId AND pinyin_id = :pinyinId")
     void deleteQuizPinyin(long quizId, long pinyinId);
+
+    @Query("SELECT * FROM question WHERE quiz_id = :quizId")
+    List<Question> getQuestionsOfQuiz(int quizId);
+
+    @Query("SELECT * FROM quiz_pinyin WHERE quiz_id = :quizId")
+    List<QuizPinyin> getQuizPinyinsOfQuiz(int quizId);
 
     @Query("SELECT q.id AS quizId,\n" +
             "       w.id AS wordId,\n" +

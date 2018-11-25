@@ -1,12 +1,11 @@
 package com.zhiyong.tingxie.ui.main;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +18,7 @@ import android.widget.TextView;
 
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.Util;
+import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.ui.word.WordActivity;
 
 import java.text.ParseException;
@@ -105,24 +105,6 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                     datePickerDialog.show();
                 }
             });
-            holder.ivDeleteQuiz.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new AlertDialog.Builder(context)
-                            .setTitle("Delete Quiz")
-                            .setMessage("Delete this quiz?")
-                            .setIconAttribute(android.R.attr.alertDialogIcon)
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    mQuizItems.remove(i);
-                                    notifyDataSetChanged();
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, null)
-                            .show();
-                }
-            });
             holder.btnAddViewWords.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -144,6 +126,34 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         notifyDataSetChanged();
     }
 
+    void onItemRemove(RecyclerView.ViewHolder viewHolder,
+                      final RecyclerView mRecyclerView,
+                      final QuizViewModel viewModel) {
+        final int adapterPosition = viewHolder.getAdapterPosition();
+        final QuizItem quizItem = mQuizItems.get(adapterPosition);
+        // Get quiz, question, quiz_pinyin rows to be deleted.
+        final QuizDeletionUndoItem undoItem = viewModel.getUndoItem(quizItem.getId());
+
+        Snackbar snackbar = Snackbar
+                .make(mRecyclerView, "Removed quiz", Snackbar.LENGTH_LONG)
+                .setAction("Undo", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mQuizItems.add(adapterPosition, quizItem);
+                        notifyItemInserted(adapterPosition);
+
+                        // Reinsert deleted quiz, question, quiz_pinyin rows.
+                        viewModel.reinsertQuizItem(undoItem);
+
+                        mRecyclerView.scrollToPosition(adapterPosition);
+                    }
+                });
+        snackbar.show();
+        mQuizItems.remove(adapterPosition);
+        viewModel.deleteQuiz(quizItem.getId());
+        notifyItemRemoved(adapterPosition);
+    }
+
     @Override
     public int getItemCount() {
         if (mQuizItems != null) return mQuizItems.size();
@@ -154,7 +164,6 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         private final TextView tvDate;
         private final TextView tvWordsLeft;
         private final ImageView ivEditDate;
-        private final ImageView ivDeleteQuiz;
         private final Button btnAddViewWords;
 
         private QuizViewHolder(View itemView) {
@@ -162,7 +171,6 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
             tvDate = itemView.findViewById(R.id.tvDate);
             tvWordsLeft = itemView.findViewById(R.id.tvWordsLeft);
             ivEditDate = itemView.findViewById(R.id.ivEditDate);
-            ivDeleteQuiz = itemView.findViewById(R.id.ivDeleteQuiz);
             btnAddViewWords = itemView.findViewById(R.id.btnAddViewWords);
         }
     }

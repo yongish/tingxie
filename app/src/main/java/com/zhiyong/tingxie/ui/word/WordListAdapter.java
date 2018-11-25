@@ -18,13 +18,11 @@ import java.util.List;
 public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordViewHolder> {
 
     private final LayoutInflater mInflater;
-    private final Context context;
 
     private List<WordItem> mWordItems;
 
     WordListAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
-        this.context = context;
     }
 
     @NonNull
@@ -51,12 +49,11 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         notifyDataSetChanged();
     }
 
-    public void onItemRemove(final RecyclerView.ViewHolder viewHolder,
-                             final RecyclerView mRecyclerView,
-                             final WordViewModel wordViewModel) {
+    void onItemRemove(RecyclerView.ViewHolder viewHolder,
+                      final RecyclerView mRecyclerView,
+                      final WordViewModel viewModel) {
         final int adapterPosition = viewHolder.getAdapterPosition();
         final WordItem wordItem = mWordItems.get(adapterPosition);
-
         final QuizPinyin quizPinyin = new QuizPinyin(wordItem.getQuizId(), wordItem.getPinyinId());
 
         Snackbar snackbar = Snackbar
@@ -66,13 +63,13 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
                     public void onClick(View v) {
                         mWordItems.add(adapterPosition, wordItem);
                         notifyItemInserted(adapterPosition);
-                        wordViewModel.addQuizPinyin(quizPinyin);
+                        viewModel.addQuizPinyin(quizPinyin);
                         mRecyclerView.scrollToPosition(adapterPosition);
                     }
                 });
         snackbar.show();
         mWordItems.remove(adapterPosition);
-        wordViewModel.deleteWord(quizPinyin);
+        viewModel.deleteWord(quizPinyin);
         notifyItemRemoved(adapterPosition);
     }
 

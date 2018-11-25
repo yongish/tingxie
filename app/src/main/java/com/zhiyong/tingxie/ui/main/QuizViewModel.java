@@ -24,7 +24,19 @@ public class QuizViewModel extends AndroidViewModel {
         return mAllQuizItems;
     }
 
-    public void insert(Quiz quiz) {
-        mRepository.insert(quiz);
+    void insert(Quiz quiz) {
+        mRepository.insertQuiz(quiz);
+    }
+
+    void deleteQuiz(int quizId) {
+        mRepository.deleteQuiz(quizId);
+    }
+
+    void reinsertQuizItem(QuizDeletionUndoItem quizDeletionItem) {
+        mRepository.reinsertQuizItem(quizDeletionItem);
+    }
+
+    QuizDeletionUndoItem getUndoItem(int quizId) {
+        return mRepository.getUndoItem(quizId);
     }
 }

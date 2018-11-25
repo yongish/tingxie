@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.db.QuizPinyin;
+import com.zhiyong.tingxie.ui.main.QuizDeletionUndoItem;
 import com.zhiyong.tingxie.ui.main.QuizItem;
 import com.zhiyong.tingxie.ui.word.WordItem;
 
@@ -41,15 +42,15 @@ public class QuizRepository {
         return mAllWordItems;
     }
 
-    public void insert (Quiz quiz) {
-        new insertAsyncTask(mQuizDao).execute(quiz);
+    public void insertQuiz(Quiz quiz) {
+        new insertQuizAsyncTask(mQuizDao).execute(quiz);
     }
 
-    private static class insertAsyncTask extends AsyncTask<Quiz, Void, Void> {
+    private static class insertQuizAsyncTask extends AsyncTask<Quiz, Void, Void> {
 
         private QuizDao mAsyncTaskDao;
 
-        insertAsyncTask(QuizDao dao) {
+        insertQuizAsyncTask(QuizDao dao) {
             mAsyncTaskDao = dao;
         }
 
@@ -95,6 +96,60 @@ public class QuizRepository {
         @Override
         protected Void doInBackground(QuizPinyin... params) {
             mAsyncTaskDao.insert(params[0]);
+            return null;
+        }
+    }
+
+    public void deleteQuiz(int quizId) {
+        new deleteQuizItemAsyncTask(mQuizDao).execute(quizId);
+    }
+
+    private static class deleteQuizItemAsyncTask extends AsyncTask<Integer, Void, Void> {
+        private QuizDao mAsyncTaskDao;
+
+        deleteQuizItemAsyncTask(QuizDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(Integer... params) {
+            mAsyncTaskDao.deleteQuiz(params[0]);
+            return null;
+        }
+    }
+
+    public QuizDeletionUndoItem getUndoItem(int quizId) {
+        return new getQuizDeletionItemTask(mQuizDao).execute(quizId);
+    }
+
+    private static class getQuizDeletionItemTask extends AsyncTask<Integer, Void, Void> {
+        private QuizDao mAsyncTaskDao;
+
+        getQuizDeletionItemTask(QuizDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(Integer... integers) {
+            return null;
+        }
+    }
+
+    public void reinsertQuizItem(QuizDeletionUndoItem quizDeletionItem) {
+        new reinsertQuizItemAsyncTask(mQuizDao).execute(quizDeletionItem);
+    }
+
+    private static class reinsertQuizItemAsyncTask extends AsyncTask<QuizDeletionUndoItem, Void, Void> {
+        private QuizDao mAsyncTaskDao;
+
+        reinsertQuizItemAsyncTask(QuizDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(QuizDeletionUndoItem... params) {
+            mAsyncTaskDao.
+
             return null;
         }
     }
