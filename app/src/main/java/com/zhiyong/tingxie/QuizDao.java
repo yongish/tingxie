@@ -61,11 +61,11 @@ public interface QuizDao {
     @Query("DELETE FROM quiz_pinyin WHERE quiz_id = :quizId AND pinyin_id = :pinyinId")
     void deleteQuizPinyin(long quizId, long pinyinId);
 
-    @Query("SELECT * FROM question WHERE quiz_id = :quizId")
-    List<Question> getQuestionsOfQuiz(int quizId);
+    @Query("SELECT * FROM quiz_pinyin")
+    LiveData<List<QuizPinyin>> getAllQuizPinyins();
 
-    @Query("SELECT * FROM quiz_pinyin WHERE quiz_id = :quizId")
-    List<QuizPinyin> getQuizPinyinsOfQuiz(int quizId);
+    @Query("SELECT * FROM question")
+    LiveData<List<Question>> getAllQuestions();
 
     @Query("SELECT q.id AS quizId,\n" +
             "       w.id AS wordId,\n" +
@@ -78,7 +78,7 @@ public interface QuizDao {
             "JOIN word w ON p.id = w.pinyin_id\n" +
             "WHERE q.id = :quizId\n" +
             "ORDER BY pinyin")
-    LiveData<List<WordItem>> getWordItemsOfQuizId(int quizId);
+    LiveData<List<WordItem>> getWordItemsOfQuiz(int quizId);
 
     @Query("WITH tpc AS\n" +
             "  (SELECT quiz.id AS quiz_id,\n" +

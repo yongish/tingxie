@@ -2,6 +2,7 @@ package com.zhiyong.tingxie.ui.main;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -18,10 +19,13 @@ import android.widget.TextView;
 
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.Util;
+import com.zhiyong.tingxie.db.Question;
 import com.zhiyong.tingxie.db.Quiz;
+import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.ui.word.WordActivity;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -37,6 +41,11 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
     private final Context context;
 
     private List<QuizItem> mQuizItems;
+
+    // All question and quiz_pinyin rows (for undo deletes). May be suboptimal to get all rows, but
+    // getting only question and quiz_pinyin is tricky and may be overengineering.
+    private List<Question> mQuestions;
+    private List<QuizPinyin> mQuizPinyins;
 
     QuizListAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
@@ -126,13 +135,23 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         notifyDataSetChanged();
     }
 
+    void setQuestions(List<Question> questions) {
+        mQuestions = questions;
+    }
+
+    void setQuizPinyins(List<QuizPinyin> quizPinyins) {
+        mQuizPinyins = quizPinyins;
+    }
+
     void onItemRemove(RecyclerView.ViewHolder viewHolder,
                       final RecyclerView mRecyclerView,
                       final QuizViewModel viewModel) {
         final int adapterPosition = viewHolder.getAdapterPosition();
         final QuizItem quizItem = mQuizItems.get(adapterPosition);
-        // Get quiz, question, quiz_pinyin rows to be deleted.
-        final QuizDeletionUndoItem undoItem = viewModel.getUndoItem(quizItem.getId());
+        // Get question and quiz_pinyin rows to be deleted (from all question and quiz_pinyin rows).
+        final int quizId = quizItem.getId();
+        final List<Question> deletedQuestions = getQuestionsOfQuiz(quizId);
+        final List<QuizPinyin> deletedQuizPinyins = getQuizPinyinsOfQuiz(quizId);
 
         Snackbar snackbar = Snackbar
                 .make(mRecyclerView, "Removed quiz", Snackbar.LENGTH_LONG)
@@ -143,15 +162,38 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                         notifyItemInserted(adapterPosition);
 
                         // Reinsert deleted quiz, question, quiz_pinyin rows.
-                        viewModel.reinsertQuizItem(undoItem);
+                        Quiz quiz = new Quiz(quizId, quizItem.getDate());
+                        viewModel.insertQuiz(quiz);
+                        viewModel.insertQuestions(deletedQuestions);
+                        viewModel.insertQuizPinyins(deletedQuizPinyins);
 
                         mRecyclerView.scrollToPosition(adapterPosition);
                     }
                 });
         snackbar.show();
         mQuizItems.remove(adapterPosition);
-        viewModel.deleteQuiz(quizItem.getId());
+        viewModel.deleteQuiz(quizId);
         notifyItemRemoved(adapterPosition);
+    }
+
+    private List<Question> getQuestionsOfQuiz(int quizId) {
+        List<Question> result = new ArrayList<>();
+        for (Question question : mQuestions) {
+            if (question.getId() == quizId) {
+                result.add(question);
+            }
+        }
+        return result;
+    }
+
+    private List<QuizPinyin> getQuizPinyinsOfQuiz(int quizId) {
+        List<QuizPinyin> result = new ArrayList<>();
+        for (QuizPinyin quizPinyin : mQuizPinyins) {
+            if (quizPinyin.getQuiz_id() == quizId) {
+                result.add(quizPinyin);
+            }
+        }
+        return result;
     }
 
     @Override

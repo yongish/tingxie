@@ -17,6 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.zhiyong.tingxie.db.Question;
+import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.ui.NewQuizActivity;
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.db.Quiz;
@@ -55,6 +57,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable List<QuizItem> quizItems) {
                 adapter.setQuizItems(quizItems);
+            }
+        });
+        mQuizViewModel.getAllQuestions().observe(this, new Observer<List<Question>>() {
+            @Override
+            public void onChanged(@Nullable List<Question> questions) {
+                adapter.setQuestions(questions);
+            }
+        });
+        mQuizViewModel.getAllQuizPinyins().observe(this, new Observer<List<QuizPinyin>>() {
+            @Override
+            public void onChanged(@Nullable List<QuizPinyin> quizPinyins) {
+                adapter.setQuizPinyins(quizPinyins);
             }
         });
 
@@ -102,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == NEW_QUIZ_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             Quiz quiz = new Quiz(data.getIntExtra(NewQuizActivity.EXTRA_REPLY, 0));
-            mQuizViewModel.insert(quiz);
+            mQuizViewModel.insertQuiz(quiz);
         } else {
             Toast.makeText(getApplicationContext(), R.string.empty_not_saved, Toast.LENGTH_LONG)
                     .show();

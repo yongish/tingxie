@@ -6,25 +6,39 @@ import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
 import com.zhiyong.tingxie.QuizRepository;
+import com.zhiyong.tingxie.db.Question;
 import com.zhiyong.tingxie.db.Quiz;
+import com.zhiyong.tingxie.db.QuizPinyin;
 
 import java.util.List;
 
 public class QuizViewModel extends AndroidViewModel {
     private QuizRepository mRepository;
     private LiveData<List<QuizItem>> mAllQuizItems;
+    private LiveData<List<QuizPinyin>> mQuizPinyins;
+    private LiveData<List<Question>> mQuestions;
 
     public QuizViewModel(@NonNull Application application) {
         super(application);
-        mRepository = new QuizRepository(application, 0);
+        mRepository = new QuizRepository(application, -1);
         mAllQuizItems = mRepository.getAllQuizItems();
+        mQuizPinyins = mRepository.getAllQuizPinyins();
+        mQuestions = mRepository.getAllQuestions();
     }
 
     LiveData<List<QuizItem>> getAllQuizItems() {
         return mAllQuizItems;
     }
 
-    void insert(Quiz quiz) {
+    LiveData<List<QuizPinyin>> getAllQuizPinyins() {
+        return mQuizPinyins;
+    }
+
+    LiveData<List<Question>> getAllQuestions() {
+        return mQuestions;
+    }
+
+    void insertQuiz(Quiz quiz) {
         mRepository.insertQuiz(quiz);
     }
 
@@ -32,11 +46,15 @@ public class QuizViewModel extends AndroidViewModel {
         mRepository.deleteQuiz(quizId);
     }
 
-    void reinsertQuizItem(QuizDeletionUndoItem quizDeletionItem) {
-        mRepository.reinsertQuizItem(quizDeletionItem);
+    void insertQuestions(List<Question> questions) {
+        for (Question question : questions) {
+            mRepository.insertQuestion(question);
+        }
     }
 
-    QuizDeletionUndoItem getUndoItem(int quizId) {
-        return mRepository.getUndoItem(quizId);
+    void insertQuizPinyins(List<QuizPinyin> quizPinyins) {
+        for (QuizPinyin quizPinyin : quizPinyins) {
+            mRepository.insertQuizPinyin(quizPinyin);
+        }
     }
 }

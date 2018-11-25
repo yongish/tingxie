@@ -2,6 +2,7 @@ package com.zhiyong.tingxie.db;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
@@ -16,6 +17,12 @@ public class Quiz {
     private int date;
 
     public Quiz(@NonNull int date) {
+        this.date = date;
+    }
+
+    @Ignore
+    public Quiz(int id, @NonNull int date) {
+        this.id = id;
         this.date = date;
     }
 
