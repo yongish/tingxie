@@ -8,7 +8,7 @@
     android:background="@color/colorPrimaryLight">
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout"
+        android:id="@+id/wordLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -58,9 +58,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
-        app:layout_constraintStart_toEndOf="@+id/constraintLayout"
-        app:layout_constraintTop_toTopOf="@+id/constraintLayout"
+        app:layout_constraintBottom_toBottomOf="@+id/wordLayout"
+        app:layout_constraintStart_toEndOf="@+id/wordLayout"
+        app:layout_constraintTop_toTopOf="@+id/wordLayout"
         app:srcCompat="@drawable/ic_play_circle_outline_black_36dp" />
 
 </android.support.constraint.ConstraintLayout>
