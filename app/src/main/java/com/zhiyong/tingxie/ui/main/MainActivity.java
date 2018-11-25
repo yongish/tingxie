@@ -117,9 +117,9 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == NEW_QUIZ_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             Quiz quiz = new Quiz(data.getIntExtra(NewQuizActivity.EXTRA_REPLY, 0));
             mQuizViewModel.insertQuiz(quiz);
-        } else {
-            Toast.makeText(getApplicationContext(), R.string.empty_not_saved, Toast.LENGTH_LONG)
-                    .show();
+//        } else {
+//            Toast.makeText(getApplicationContext(), R.string.empty_not_saved, Toast.LENGTH_LONG)
+//                    .show();
         }
     }
 }
