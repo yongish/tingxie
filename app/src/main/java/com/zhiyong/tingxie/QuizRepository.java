@@ -8,6 +8,7 @@ import android.util.Log;
 import com.zhiyong.tingxie.db.Question;
 import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.db.QuizPinyin;
+import com.zhiyong.tingxie.db.Word;
 import com.zhiyong.tingxie.ui.main.QuizItem;
 import com.zhiyong.tingxie.ui.word.WordItem;
 
@@ -27,6 +28,8 @@ public class QuizRepository {
     private LiveData<List<QuizPinyin>> mAllQuizPinyins;
     private LiveData<List<Question>> mAllQuestions;
 
+    private final int quizId;
+
     public QuizRepository(Application application, int quizId) {
         PinyinRoomDatabase db = PinyinRoomDatabase.getDatabase(application);
         mQuizDao = db.pinyinDao();
@@ -36,6 +39,8 @@ public class QuizRepository {
         mWordItems = mQuizDao.getWordItemsOfQuiz(quizId);
         mAllQuizPinyins = mQuizDao.getAllQuizPinyins();
         mAllQuestions = mQuizDao.getAllQuestions();
+
+        this.quizId = quizId;
     }
 
     public LiveData<List<QuizItem>> getAllQuizItems() {
@@ -88,6 +93,10 @@ public class QuizRepository {
             mAsyncTaskDao.insert(params[0]);
             return null;
         }
+    }
+
+    public void addWord(int quizId, String word) {
+
     }
 
     // Only delete QuizPinyin object.
