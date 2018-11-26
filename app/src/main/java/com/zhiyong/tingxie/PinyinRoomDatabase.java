@@ -7,12 +7,16 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.zhiyong.tingxie.db.Pinyin;
 import com.zhiyong.tingxie.db.Question;
 import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.db.Word;
+
+import java.util.HashMap;
+import java.util.Map;
 
 // todo: exportSchema should be changed to true after 1st release.
 @Database(entities = {Question.class, Quiz.class, Pinyin.class, Word.class, QuizPinyin.class},
@@ -48,7 +52,6 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
      */
     static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
         private final QuizDao mDao;
-        int[] dates = {20190103, 20190201, 20190221, 20190301, 20190502};
 
         PopulateDbAsync(PinyinRoomDatabase db) {
             mDao = db.pinyinDao();
@@ -67,34 +70,35 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
             mDao.deleteAllQuestions();
 
             // Add a quiz.
-            long quizId = mDao.insert(new Quiz(20190101));
+            long quizId = mDao.insert(new Quiz(20180101));
 
-            // Add 4 pinyins with 5 words.
-            String s0 = "jiāo tà shí dì";
-            String s1 = "jiǔ niú yì máo";
-            String s2 = "yí jiàn zhōng qíng";
-            String s3 = "guǐ jì";
-            Pinyin p0 = new Pinyin(s0);
-            Pinyin p1 = new Pinyin(s1);
-            Pinyin p2 = new Pinyin(s2);
-            Pinyin p3 = new Pinyin(s3);
-            mDao.insert(p0);
-            mDao.insert(p1);
-            mDao.insert(p2);
-            mDao.insert(p3);
-            mDao.insert(new Word("脚踏实地", s0));
-            mDao.insert(new Word("九牛一毛", s1));
-            mDao.insert(new Word("一见钟情", s2));
-            mDao.insert(new Word("轨迹", s3));
-            mDao.insert(new Word("诡计", s3));
+            Map<String, String> examples = new HashMap<>();
+            examples.put("脚踏实地", "jiāo dà shí dì");
+            examples.put("九牛一毛", "jǐu níu yī máo");
+            examples.put("一见钟情", "yí jiàn zhōng qíng");
+            examples.put("轨迹", "guǐ jì");
+            examples.put("诡计", "guǐ jì");
+            examples.put("了不起", "liǎo bù qǐ");
+            examples.put("破釜成舟", "pò fǔ chén zhōu");
+            examples.put("指鹿为马", "zhǐ lù wéi mǎ");
+            examples.put("乐不思蜀", "lè bù sī shǔ");
+            examples.put("朝三暮四", "zhǎo sān mù sì");
+            examples.put("井底之蛙", "jǐng dǐ zhī wā");
+            for (Map.Entry<String, String> entry : examples.entrySet()) {
+                String wordString = entry.getKey();
+                String pinyinString = entry.getValue();
+                mDao.insert(new Pinyin(pinyinString));
+                mDao.insert(new Word(wordString, pinyinString));
+                // Connect all pinyin IDs to the test.
+                mDao.insert(new QuizPinyin(quizId, pinyinString));
+            }
 
-            // Connect all pinyin IDs to the test.
-            mDao.insert(new QuizPinyin(quizId, s0));
-            mDao.insert(new QuizPinyin(quizId, s1));
-            mDao.insert(new QuizPinyin(quizId, s2));
-            mDao.insert(new QuizPinyin(quizId, s3));
-
-            mDao.insert(new Quiz(20190201));
+            for (int quizDate = 20180201; quizDate < 20181202; quizDate += 100) {
+                mDao.insert(new Quiz(quizDate));
+            }
+            for (int quizDate = 20190101; quizDate < 20191202; quizDate += 100) {
+                mDao.insert(new Quiz(quizDate));
+            }
 
             return null;
         }

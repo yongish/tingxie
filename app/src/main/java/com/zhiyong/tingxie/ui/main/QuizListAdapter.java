@@ -130,9 +130,32 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         }
     }
 
-    void setQuizItems(List<QuizItem> quizItems) {
+    void setQuizItems(List<QuizItem> quizItems, final RecyclerView mRecyclerView) {
         mQuizItems = quizItems;
+        // Scroll to 1 position before next quiz.
+        int scrollPosition = 0;
+        Date today = new Date();
+        for (int i = 0; i < quizItems.size(); i++) {
+            try {
+                Date quizDate = Util.DB_FORMAT.parse(String.valueOf(quizItems.get(i).getDate()));
+                if (quizDate.compareTo(today) >= 0) {
+                    scrollPosition = i;
+                    break;
+                }
+            } catch (ParseException e) {
+                // todo: Error logging API.
+            }
+        }
+
+        final int position = scrollPosition;
+        Log.d("SCROLL POSITION: ", String.valueOf(scrollPosition));
         notifyDataSetChanged();
+        mRecyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                mRecyclerView.smoothScrollToPosition(position);
+            }
+        });
     }
 
     void setQuestions(List<Question> questions) {

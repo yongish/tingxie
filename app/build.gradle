@@ -42,6 +42,6 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:$rootProject.archLifecycleVersion"
     annotationProcessor "android.arch.lifecycle:compiler:$rootProject.archLifecycleVersion"
 
-    // https://mvnrepository.com/artifact/com.github.promeg/tinypinyin
-    implementation group: 'com.github.promeg', name: 'tinypinyin', version: '2.0.3'
+    // https://mvnrepository.com/artifact/org.jsoup/jsoup
+    implementation group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
 }

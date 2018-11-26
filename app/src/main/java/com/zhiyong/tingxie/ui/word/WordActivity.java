@@ -20,8 +20,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
-import com.github.promeg.pinyinhelper.Pinyin;
 import com.zhiyong.tingxie.R;
+import com.zhiyong.tingxie.Util;
 import com.zhiyong.tingxie.ui.main.MainActivity;
 
 import java.util.List;
@@ -72,20 +72,13 @@ public class WordActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 // Only keep Chinese characters and punctuation.
                                 String inputWord = input.getText().toString().replaceAll("\\s", "");
-                                StringBuilder sb = new StringBuilder();
-                                StringBuilder sbPinyin = new StringBuilder();
-                                for (char c : inputWord.toCharArray()) {
-                                    if (Pinyin.isChinese(c)) {
-                                        sb.append(c);
-                                        sbPinyin.append(Pinyin.toPinyin(c));
-                                    }
+                                String pinyin = Util.lookupPinyin(inputWord);
+                                if (pinyin.length() > 0) {
+                                    // Add word to current quizId.
+                                    mWordViewModel.addWord(quizId, inputWord, pinyin);
+                                } else {
+                                    dialog.cancel();
                                 }
-
-                                String word = sb.toString();
-                                String pinyin = sbPinyin.toString();
-
-                                // Add word to current quizId.
-                                mWordViewModel.addWord(quizId, word, pinyin);
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

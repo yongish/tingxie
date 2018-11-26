@@ -17,12 +17,14 @@ import com.zhiyong.tingxie.ui.word.WordItem;
 
 import java.util.List;
 
+import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
+
 @Dao
 public interface QuizDao {
     @Insert
     long insert(Quiz quiz);
 
-    @Insert
+    @Insert(onConflict = IGNORE)
     long insert(Pinyin pinyin);
 
     @Insert
@@ -67,9 +69,9 @@ public interface QuizDao {
     @Query("SELECT * FROM question")
     LiveData<List<Question>> getAllQuestions();
 
-    @Query("SELECT q.id AS quizId,\n" +
-            "       w.word_string AS wordString,\n" +
-            "       p.pinyin_string AS pinyinString\n" +
+    @Query("SELECT DISTINCT q.id AS quizId,\n" +
+            "                w.word_string AS wordString,\n" +
+            "                p.pinyin_string AS pinyinString\n" +
             "FROM quiz q\n" +
             "JOIN quiz_pinyin qp ON q.id = qp.quiz_id\n" +
             "JOIN pinyin p ON qp.pinyin_string = p.pinyin_string\n" +

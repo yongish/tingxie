@@ -174,8 +174,4 @@ public class QuizRepository {
             return null;
         }
     }
-
-    public void insertWord(WordItem wordItem) {
-
-    }
 }

@@ -27,6 +27,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private QuizViewModel mQuizViewModel;
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final RecyclerView recyclerView = findViewById(R.id.recyclerview_main);
+//        final RecyclerView recyclerView = findViewById(R.id.recyclerview_main);
+        recyclerView = findViewById(R.id.recyclerview_main);
         final QuizListAdapter adapter = new QuizListAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         mQuizViewModel.getAllQuizItems().observe(this, new Observer<List<QuizItem>>() {
             @Override
             public void onChanged(@Nullable List<QuizItem> quizItems) {
-                adapter.setQuizItems(quizItems);
+                adapter.setQuizItems(quizItems, recyclerView);
             }
         });
         mQuizViewModel.getAllQuestions().observe(this, new Observer<List<Question>>() {
