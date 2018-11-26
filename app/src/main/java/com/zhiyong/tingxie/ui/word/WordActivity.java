@@ -83,8 +83,8 @@ public class WordActivity extends AppCompatActivity {
                                 String word = sb.toString();
                                 String pinyin = sbPinyin.toString();
 
-                                // Add word to current quizId (already set in WordViewModel).
-                                mWordViewModel.addWord(word, pinyin);
+                                // Add word to current quizId.
+//                                mWordViewModel.addWord(quizId, word, pinyin);
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

@@ -95,8 +95,23 @@ public class QuizRepository {
         }
     }
 
-    public void addWord(int quizId, String word) {
+    public void addWord(WordItem wordItem) {
+        new addWordAsyncTask(mQuizDao).execute(wordItem);
+    }
 
+    private static class addWordAsyncTask extends AsyncTask<WordItem, Void, Void> {
+        private QuizDao mAsyncTaskDao;
+
+        addWordAsyncTask(QuizDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(WordItem... params) {
+            // todo: insert to word, pinyin, and quiz_pinyin tables.
+//            mAsyncTaskDao.insert
+            return null;
+        }
     }
 
     // Only delete QuizPinyin object.
