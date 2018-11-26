@@ -61,21 +61,25 @@ public class DBInstrumentedTest {
         long quizId = mDao.insert(new Quiz(testDate));
 
         // Add 4 pinyins with 5 words.
-        long p0Id = mDao.insert(new Pinyin("p0"));
-        long p1Id = mDao.insert(new Pinyin("p1"));
-        long p2Id = mDao.insert(new Pinyin("p2"));
-        long p3Id = mDao.insert(new Pinyin("p3"));
-        mDao.insert(new Word("w0", p0Id));
-        mDao.insert(new Word("w1", p1Id));
-        mDao.insert(new Word("w2", p2Id));
-        mDao.insert(new Word("w3", p3Id));
-        mDao.insert(new Word("w4", p3Id));
+        Pinyin p0 = new Pinyin("p0");
+        Pinyin p1 = new Pinyin("p1");
+        Pinyin p2 = new Pinyin("p2");
+        Pinyin p3 = new Pinyin("p3");
+        mDao.insert(p0);
+        mDao.insert(p1);
+        mDao.insert(p2);
+        mDao.insert(p3);
+        mDao.insert(new Word("w0", "p0"));
+        mDao.insert(new Word("w1", "p1"));
+        mDao.insert(new Word("w2", "p2"));
+        mDao.insert(new Word("w3", "p3"));
+        mDao.insert(new Word("w4", "p3"));
 
         // Connect all pinyin IDs to the test.
-        mDao.insert(new QuizPinyin(quizId, p0Id));
-        mDao.insert(new QuizPinyin(quizId, p1Id));
-        mDao.insert(new QuizPinyin(quizId, p2Id));
-        mDao.insert(new QuizPinyin(quizId, p3Id));
+        mDao.insert(new QuizPinyin(quizId, "p0"));
+        mDao.insert(new QuizPinyin(quizId, "p1"));
+        mDao.insert(new QuizPinyin(quizId, "p2"));
+        mDao.insert(new QuizPinyin(quizId, "p3"));
 
         QuizItem result = LiveDataTestUtil.getValue(mDao.getAllQuizItems()).get(0);
         assertEquals(testDate, result.getDate());
@@ -83,7 +87,7 @@ public class DBInstrumentedTest {
         assertEquals(4, result.getNotLearned());
         assertEquals(1, result.getRound());
 
-        mDao.deleteQuizPinyin(quizId, p0Id);
+        mDao.deleteQuizPinyin(quizId, "p0");
         result = LiveDataTestUtil.getValue(mDao.getAllQuizItems()).get(0);
         assertEquals(3, result.getTotalWords());
     }

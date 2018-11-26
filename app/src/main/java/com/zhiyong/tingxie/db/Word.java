@@ -6,29 +6,18 @@ import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-@Entity(indices = {@Index("pinyin_id")},
-        foreignKeys = @ForeignKey(entity = Pinyin.class, parentColumns = "id", childColumns = "pinyin_id"))
+@Entity(indices = {@Index("pinyin")},
+        foreignKeys = @ForeignKey(entity = Pinyin.class, parentColumns = "pinyin", childColumns = "pinyin"))
 public class Word {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @NonNull
-    private long id;
-
     private String word;
 
-    private long pinyin_id;
+    private String pinyin;
 
-    public Word(@NonNull String word, @NonNull long pinyin_id) {
+    public Word(@NonNull String word, @NonNull String pinyin) {
         this.word = word;
-        this.pinyin_id = pinyin_id;
-    }
-
-    public void setId(@NonNull long id) {
-        this.id = id;
-    }
-
-    @NonNull
-    public long getId() {
-        return id;
+        this.pinyin = pinyin;
     }
 
     @NonNull
@@ -37,8 +26,8 @@ public class Word {
     }
 
     @NonNull
-    public long getPinyin_id() {
-        return pinyin_id;
+    public String getPinyin() {
+        return pinyin;
     }
 
     // Word instances should be immutable.

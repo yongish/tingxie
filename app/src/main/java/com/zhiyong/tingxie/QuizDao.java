@@ -58,8 +58,8 @@ public interface QuizDao {
     @Query("DELETE FROM question")
     void deleteAllQuestions();
 
-    @Query("DELETE FROM quiz_pinyin WHERE quiz_id = :quizId AND pinyin_id = :pinyinId")
-    void deleteQuizPinyin(long quizId, long pinyinId);
+    @Query("DELETE FROM quiz_pinyin WHERE quiz_id = :quizId AND pinyin = :pinyin")
+    void deleteQuizPinyin(long quizId, String pinyin);
 
     @Query("SELECT * FROM quiz_pinyin")
     LiveData<List<QuizPinyin>> getAllQuizPinyins();
@@ -68,30 +68,28 @@ public interface QuizDao {
     LiveData<List<Question>> getAllQuestions();
 
     @Query("SELECT q.id AS quizId,\n" +
-            "       w.id AS wordId,\n" +
             "       w.word,\n" +
-            "       p.id AS pinyinId,\n" +
             "       p.pinyin\n" +
             "FROM quiz q\n" +
             "JOIN quiz_pinyin qp ON q.id = qp.quiz_id\n" +
-            "JOIN pinyin p ON qp.pinyin_id = p.id\n" +
-            "JOIN word w ON p.id = w.pinyin_id\n" +
+            "JOIN pinyin p ON qp.pinyin = p.pinyin\n" +
+            "JOIN word w ON p.pinyin = w.pinyin\n" +
             "WHERE q.id = :quizId\n" +
-            "ORDER BY pinyin")
+            "ORDER BY p.pinyin")
     LiveData<List<WordItem>> getWordItemsOfQuiz(int quizId);
 
     @Query("WITH tpc AS\n" +
             "  (SELECT quiz.id AS quiz_id,\n" +
-            "          tp.pinyin_id,\n" +
+            "          tp.pinyin,\n" +
             "          Count(correct) AS correct_count\n" +
             "   FROM quiz\n" +
             "   LEFT JOIN quiz_pinyin tp ON quiz.id = tp.quiz_id\n" +
             "   LEFT JOIN question q ON tp.quiz_id = q.quiz_id\n" +
             "   GROUP BY quiz.id,\n" +
-            "            tp.pinyin_id),\n" +
+            "            tp.pinyin),\n" +
             "     tp2 AS\n" +
             "  (SELECT tpc.quiz_id,\n" +
-            "          Count(pinyin_id) AS total,\n" +
+            "          Count(tpc.pinyin) AS total,\n" +
             "          Min(correct_count) AS rounds_completed\n" +
             "   FROM tpc\n" +
             "   GROUP BY tpc.quiz_id)\n" +
