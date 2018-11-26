@@ -74,7 +74,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
 
             holder.tvDate.setText(displayDate);
             holder.tvWordsLeft.setText(String.format(Locale.US,
-                    "%d/%d remaining on %d round",
+                    "%d/%d remaining on round %d",
                     current.getNotLearned(), current.getTotalWords(), current.getRound()));
 
             holder.ivEditDate.setOnClickListener(new View.OnClickListener() {
