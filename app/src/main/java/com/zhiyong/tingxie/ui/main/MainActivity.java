@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        final RecyclerView recyclerView = findViewById(R.id.recyclerview_main);
         recyclerView = findViewById(R.id.recyclerview_main);
         final QuizListAdapter adapter = new QuizListAdapter(this);
         recyclerView.setAdapter(adapter);
