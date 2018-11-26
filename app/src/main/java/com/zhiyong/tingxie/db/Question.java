@@ -18,16 +18,16 @@ public class Question {
 
     private long timestamp;
 
-    private String pinyin;
+    private String pinyin_string;
 
     private boolean correct;
 
     private long quiz_id;
 
-    public Question(@NonNull long timestamp, @NonNull String pinyin, @NonNull boolean correct,
+    public Question(@NonNull long timestamp, @NonNull String pinyin_string, @NonNull boolean correct,
                     @NonNull long quiz_id) {
         this.timestamp = timestamp;
-        this.pinyin = pinyin;
+        this.pinyin_string = pinyin_string;
         this.correct = correct;
         this.quiz_id = quiz_id;
     }
@@ -47,8 +47,8 @@ public class Question {
     }
 
     @NonNull
-    public String getPinyin() {
-        return pinyin;
+    public String getPinyin_string() {
+        return pinyin_string;
     }
 
     @NonNull

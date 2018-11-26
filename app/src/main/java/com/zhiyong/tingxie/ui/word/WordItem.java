@@ -3,12 +3,12 @@ package com.zhiyong.tingxie.ui.word;
 public class WordItem {
     private int quizId;
     private String wordString;
-    private String pinyin;
+    private String pinyinString;
 
-    public WordItem(int quizId, String wordString, String pinyin) {
+    public WordItem(int quizId, String wordString, String pinyinString) {
         this.quizId = quizId;
         this.wordString = wordString;
-        this.pinyin = pinyin;
+        this.pinyinString = pinyinString;
     }
 
     public int getQuizId() {
@@ -19,7 +19,7 @@ public class WordItem {
         return wordString;
     }
 
-    public String getPinyin() {
-        return pinyin;
+    public String getPinyinString() {
+        return pinyinString;
     }
 }

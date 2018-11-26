@@ -58,7 +58,7 @@ public interface QuizDao {
     @Query("DELETE FROM question")
     void deleteAllQuestions();
 
-    @Query("DELETE FROM quiz_pinyin WHERE quiz_id = :quizId AND pinyin = :pinyin")
+    @Query("DELETE FROM quiz_pinyin WHERE quiz_id = :quizId AND pinyin_string = :pinyin")
     void deleteQuizPinyin(long quizId, String pinyin);
 
     @Query("SELECT * FROM quiz_pinyin")
@@ -69,27 +69,27 @@ public interface QuizDao {
 
     @Query("SELECT q.id AS quizId,\n" +
             "       w.word_string AS wordString,\n" +
-            "       p.pinyin\n" +
+            "       p.pinyin_string AS pinyinString\n" +
             "FROM quiz q\n" +
             "JOIN quiz_pinyin qp ON q.id = qp.quiz_id\n" +
-            "JOIN pinyin p ON qp.pinyin = p.pinyin\n" +
-            "JOIN word w ON p.pinyin = w.pinyin\n" +
+            "JOIN pinyin p ON qp.pinyin_string = p.pinyin_string\n" +
+            "JOIN word w ON p.pinyin_string = w.pinyin_string\n" +
             "WHERE q.id = :quizId\n" +
-            "ORDER BY p.pinyin")
+            "ORDER BY p.pinyin_string")
     LiveData<List<WordItem>> getWordItemsOfQuiz(int quizId);
 
     @Query("WITH tpc AS\n" +
             "  (SELECT quiz.id AS quiz_id,\n" +
-            "          tp.pinyin,\n" +
+            "          tp.pinyin_string,\n" +
             "          Count(correct) AS correct_count\n" +
             "   FROM quiz\n" +
             "   LEFT JOIN quiz_pinyin tp ON quiz.id = tp.quiz_id\n" +
             "   LEFT JOIN question q ON tp.quiz_id = q.quiz_id\n" +
             "   GROUP BY quiz.id,\n" +
-            "            tp.pinyin),\n" +
+            "            tp.pinyin_string),\n" +
             "     tp2 AS\n" +
             "  (SELECT tpc.quiz_id,\n" +
-            "          Count(tpc.pinyin) AS total,\n" +
+            "          Count(tpc.pinyin_string) AS total,\n" +
             "          Min(correct_count) AS rounds_completed\n" +
             "   FROM tpc\n" +
             "   GROUP BY tpc.quiz_id)\n" +

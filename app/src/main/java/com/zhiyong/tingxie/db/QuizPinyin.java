@@ -9,10 +9,10 @@ import android.support.annotation.NonNull;
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "quiz_pinyin",
-        indices = {@Index("quiz_id"), @Index("pinyin")},
+        indices = {@Index("quiz_id"), @Index("pinyin_string")},
         foreignKeys = {
         @ForeignKey(entity = Quiz.class, parentColumns = "id", childColumns = "quiz_id", onDelete = CASCADE),
-                @ForeignKey(entity = Pinyin.class, parentColumns = "pinyin", childColumns = "pinyin")
+                @ForeignKey(entity = Pinyin.class, parentColumns = "pinyin_string", childColumns = "pinyin_string")
 })
 public class QuizPinyin {
     @PrimaryKey(autoGenerate = true)
@@ -20,11 +20,11 @@ public class QuizPinyin {
     private long id;
 
     private long quiz_id;
-    private String pinyin;
+    private String pinyin_string;
 
-    public QuizPinyin(@NonNull long quiz_id, @NonNull String pinyin) {
+    public QuizPinyin(@NonNull long quiz_id, @NonNull String pinyin_string) {
         this.quiz_id = quiz_id;
-        this.pinyin = pinyin;
+        this.pinyin_string = pinyin_string;
     }
 
     public long getId() {
@@ -45,11 +45,11 @@ public class QuizPinyin {
     }
 
     @NonNull
-    public String getPinyin() {
-        return pinyin;
+    public String getPinyin_string() {
+        return pinyin_string;
     }
 
-    public void setPinyin(String pinyin) {
-        this.pinyin = pinyin;
+    public void setPinyin_string(String pinyin_string) {
+        this.pinyin_string = pinyin_string;
     }
 }

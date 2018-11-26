@@ -94,8 +94,8 @@ public class QuizRepository {
         }
     }
 
-    public void addWord(int quizId, String word, String pinyin) {
-        WordItem wordItem = new WordItem(quizId, word, pinyin);
+    public void addWord(int quizId, String wordString, String pinyinString) {
+        WordItem wordItem = new WordItem(quizId, wordString, pinyinString);
         new addWordAsyncTask(mQuizDao).execute(wordItem);
     }
 
@@ -132,7 +132,7 @@ public class QuizRepository {
         @Override
         protected Void doInBackground(QuizPinyin... params) {
             // Word and Pinyin are immutable. Only QuizPinyin object is deleted.
-            mAsyncTaskDao.deleteQuizPinyin(params[0].getQuiz_id(), params[0].getPinyin());
+            mAsyncTaskDao.deleteQuizPinyin(params[0].getQuiz_id(), params[0].getPinyin_string());
             return null;
         }
     }
