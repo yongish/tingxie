@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie.ui;
+/*package com.zhiyong.tingxie.ui;
 
 import android.content.Intent;
 import android.support.v4.app.DialogFragment;
@@ -62,4 +62,4 @@ public class NewQuizActivity extends AppCompatActivity {
         this.dayOfMonth = day;
         mEditQuizView.setText(Util.DISPLAY_FORMAT.format(c.getTime()));
     }
-}
+}*/

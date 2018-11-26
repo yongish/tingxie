@@ -8,8 +8,6 @@ import android.support.v4.app.DialogFragment;
 import android.app.DatePickerDialog;
 import android.widget.DatePicker;
 
-import com.zhiyong.tingxie.ui.NewQuizActivity;
-
 import java.util.Calendar;
 
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
@@ -28,7 +26,8 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        NewQuizActivity activity = (NewQuizActivity) getActivity();
+//        NewQuizActivity activity = (NewQuizActivity) getActivity();
+        MainActivity activity = (MainActivity) getActivity();
         activity.processDatePickerResult(year, month, dayOfMonth);
     }
 }
