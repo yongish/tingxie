@@ -70,7 +70,7 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
             mDao.deleteAllQuestions();
 
             // Add a quiz.
-            long quizId = mDao.insert(new Quiz(20180101));
+            long quizId = mDao.insert(new Quiz(20181201));
 
             Map<String, String> examples = new HashMap<>();
             examples.put("脚踏实地", "jiāo dà shí dì");
@@ -93,9 +93,10 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
                 mDao.insert(new QuizPinyin(quizId, pinyinString));
             }
 
-            for (int quizDate = 20180201; quizDate < 20181202; quizDate += 100) {
+            for (int quizDate = 20180201; quizDate < 20181102; quizDate += 100) {
                 mDao.insert(new Quiz(quizDate));
             }
+
             for (int quizDate = 20190101; quizDate < 20191202; quizDate += 100) {
                 mDao.insert(new Quiz(quizDate));
             }

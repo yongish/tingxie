@@ -103,6 +103,7 @@ public interface QuizDao {
             "FROM tpc\n" +
             "LEFT JOIN tp2 ON tp2.quiz_id = tpc.quiz_id\n" +
             "JOIN quiz t ON t.id = tp2.quiz_id\n" +
-            "GROUP BY tp2.quiz_id;")
+            "GROUP BY tp2.quiz_id\n" +
+            "ORDER BY t.date")
     LiveData<List<QuizItem>> getAllQuizItems();
 }
