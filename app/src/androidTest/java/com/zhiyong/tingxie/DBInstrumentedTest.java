@@ -61,25 +61,29 @@ public class DBInstrumentedTest {
         long quizId = mDao.insert(new Quiz(testDate));
 
         // Add 4 pinyins with 5 words.
-        Pinyin p0 = new Pinyin("p0");
-        Pinyin p1 = new Pinyin("p1");
-        Pinyin p2 = new Pinyin("p2");
-        Pinyin p3 = new Pinyin("p3");
+        String s0 = "jiāo tà shí dì";
+        String s1 = "jiǔ niú yì máo";
+        String s2 = "yí jiàn zhōng qíng";
+        String s3 = "guǐ jì";
+        Pinyin p0 = new Pinyin(s0);
+        Pinyin p1 = new Pinyin(s1);
+        Pinyin p2 = new Pinyin(s2);
+        Pinyin p3 = new Pinyin(s3);
         mDao.insert(p0);
         mDao.insert(p1);
         mDao.insert(p2);
         mDao.insert(p3);
-        mDao.insert(new Word("w0", "p0"));
-        mDao.insert(new Word("w1", "p1"));
-        mDao.insert(new Word("w2", "p2"));
-        mDao.insert(new Word("w3", "p3"));
-        mDao.insert(new Word("w4", "p3"));
+        mDao.insert(new Word("脚踏实地", s0));
+        mDao.insert(new Word("九牛一毛", s1));
+        mDao.insert(new Word("一见钟情", s2));
+        mDao.insert(new Word("轨迹", s3));
+        mDao.insert(new Word("诡计", s3));
 
         // Connect all pinyin IDs to the test.
-        mDao.insert(new QuizPinyin(quizId, "p0"));
-        mDao.insert(new QuizPinyin(quizId, "p1"));
-        mDao.insert(new QuizPinyin(quizId, "p2"));
-        mDao.insert(new QuizPinyin(quizId, "p3"));
+        mDao.insert(new QuizPinyin(quizId, s0));
+        mDao.insert(new QuizPinyin(quizId, s1));
+        mDao.insert(new QuizPinyin(quizId, s2));
+        mDao.insert(new QuizPinyin(quizId, s3));
 
         QuizItem result = LiveDataTestUtil.getValue(mDao.getAllQuizItems()).get(0);
         assertEquals(testDate, result.getDate());
@@ -87,7 +91,7 @@ public class DBInstrumentedTest {
         assertEquals(4, result.getNotLearned());
         assertEquals(1, result.getRound());
 
-        mDao.deleteQuizPinyin(quizId, "p0");
+        mDao.deleteQuizPinyin(quizId, s0);
         result = LiveDataTestUtil.getValue(mDao.getAllQuizItems()).get(0);
         assertEquals(3, result.getTotalWords());
     }
