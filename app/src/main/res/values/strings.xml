@@ -9,4 +9,5 @@
     <string name="datepicker">datePicker</string>
     <string name="title_activity_quiz_new">Add new quiz</string>
     <string name="title_activity_word">Quiz words</string>
+    <string name="speech_settings">Speech settings</string>
 </resources>
