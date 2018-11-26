@@ -4,8 +4,6 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -18,20 +16,15 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.zhiyong.tingxie.Util;
 import com.zhiyong.tingxie.db.Question;
 import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.db.Quiz;
 
-import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
-//    public static final int NEW_QUIZ_ACTIVITY_REQUEST_CODE = 1;
 
     private QuizViewModel mQuizViewModel;
 
@@ -46,8 +39,6 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(MainActivity.this, NewQuizActivity.class);
-//                startActivityForResult(intent, NEW_QUIZ_ACTIVITY_REQUEST_CODE);
                 DialogFragment newFragment = new DatePickerFragment();
                 newFragment.show(getSupportFragmentManager(), getString(R.string.datepicker));
             }
@@ -115,33 +106,15 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-/*
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == NEW_QUIZ_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            Quiz quiz = new Quiz(data.getIntExtra(NewQuizActivity.EXTRA_REPLY, 0));
-            mQuizViewModel.insertQuiz(quiz);
-//        } else {
-//            Toast.makeText(getApplicationContext(), R.string.empty_not_saved, Toast.LENGTH_LONG)
-//                    .show();
-        }
-    }
-*/
     public void openSpeechSettings(MenuItem item) {
-//        startActivityForResult(new Intent(Settings.ACTION_SETTINGS), 0);
         Intent intent = new Intent();
         intent.setAction("com.android.settings.TTS_SETTINGS");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         this.startActivity(intent);
-//        checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-//        startActivityForResult(checkIntent, 0);
     }
 
     public void processDatePickerResult(int year, int month, int day) {
-//        Calendar c = Calendar.getInstance();
-//        c.set(year, month, day);
         int date = Integer.valueOf(String.valueOf(year) +
                 String.format("%02d", ++month) + String.valueOf(day));
         Quiz quiz = new Quiz(date);

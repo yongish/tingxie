@@ -20,14 +20,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.NewQuizActivity"
-            android:label="@string/title_activity_quiz_new"
-            android:parentActivityName=".ui.main.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.main.MainActivity" />
-        </activity>
-        <activity
             android:name=".ui.word.WordActivity"
             android:label="@string/title_activity_word"
             android:theme="@style/AppTheme.NoActionBar"></activity>
