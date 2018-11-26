@@ -65,6 +65,7 @@ public class WordActivity extends AppCompatActivity {
                 container.addView(input);
                 new AlertDialog.Builder(WordActivity.this)
                         .setTitle("Add Chinese words or phase")
+                        .setMessage("No punctuation allowed.")
                         .setView(container)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
