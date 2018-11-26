@@ -52,7 +52,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
     public void onBindViewHolder(@NonNull WordViewHolder holder, final int i) {
         if (mWordItems != null) {
             final WordItem current = mWordItems.get(i);
-            final String word = current.getWord();
+            final String word = current.getWordString();
             holder.tvWord.setText(word);
             holder.tvPinyin.setText(current.getPinyin());
             holder.ivPlay.setOnClickListener(new View.OnClickListener() {

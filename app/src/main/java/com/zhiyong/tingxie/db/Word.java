@@ -11,18 +11,18 @@ import android.support.annotation.NonNull;
 public class Word {
     @PrimaryKey
     @NonNull
-    private String word;
+    private String word_string;
 
     private String pinyin;
 
-    public Word(@NonNull String word, @NonNull String pinyin) {
-        this.word = word;
+    public Word(@NonNull String word_string, @NonNull String pinyin) {
+        this.word_string = word_string;
         this.pinyin = pinyin;
     }
 
     @NonNull
-    public String getWord() {
-        return word;
+    public String getWord_string() {
+        return word_string;
     }
 
     @NonNull

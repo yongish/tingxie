@@ -68,7 +68,7 @@ public interface QuizDao {
     LiveData<List<Question>> getAllQuestions();
 
     @Query("SELECT q.id AS quizId,\n" +
-            "       w.word,\n" +
+            "       w.word_string AS wordString,\n" +
             "       p.pinyin\n" +
             "FROM quiz q\n" +
             "JOIN quiz_pinyin qp ON q.id = qp.quiz_id\n" +

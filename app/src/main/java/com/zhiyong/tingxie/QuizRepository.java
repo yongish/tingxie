@@ -8,7 +8,6 @@ import android.util.Log;
 import com.zhiyong.tingxie.db.Question;
 import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.db.QuizPinyin;
-import com.zhiyong.tingxie.db.Word;
 import com.zhiyong.tingxie.ui.main.QuizItem;
 import com.zhiyong.tingxie.ui.word.WordItem;
 
@@ -95,7 +94,8 @@ public class QuizRepository {
         }
     }
 
-    public void addWord(WordItem wordItem) {
+    public void addWord(int quizId, String word, String pinyin) {
+        WordItem wordItem = new WordItem(quizId, word, pinyin);
         new addWordAsyncTask(mQuizDao).execute(wordItem);
     }
 
@@ -110,6 +110,9 @@ public class QuizRepository {
         protected Void doInBackground(WordItem... params) {
             // todo: insert to word, pinyin, and quiz_pinyin tables.
 //            mAsyncTaskDao.insert
+            String wordStr = params[0].getWordString();
+//            Word word = new Word(params[0])
+//            mAsyncTaskDao.insert()
             return null;
         }
     }

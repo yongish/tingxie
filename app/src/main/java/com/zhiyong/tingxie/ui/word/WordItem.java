@@ -2,12 +2,12 @@ package com.zhiyong.tingxie.ui.word;
 
 public class WordItem {
     private int quizId;
-    private String word;
+    private String wordString;
     private String pinyin;
 
-    public WordItem(int quizId, String word, String pinyin) {
+    public WordItem(int quizId, String wordString, String pinyin) {
         this.quizId = quizId;
-        this.word = word;
+        this.wordString = wordString;
         this.pinyin = pinyin;
     }
 
@@ -15,8 +15,8 @@ public class WordItem {
         return quizId;
     }
 
-    public String getWord() {
-        return word;
+    public String getWordString() {
+        return wordString;
     }
 
     public String getPinyin() {

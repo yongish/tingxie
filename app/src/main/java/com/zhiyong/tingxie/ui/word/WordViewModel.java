@@ -24,7 +24,7 @@ class WordViewModel extends AndroidViewModel {
     }
 
     void addWord(int quizId, String word, String pinyin) {
-//        mRepository.addWord(quizId, word, pinyin);
+        mRepository.addWord(quizId, word, pinyin);
     }
 
     void deleteWord(QuizPinyin quizPinyin) {
