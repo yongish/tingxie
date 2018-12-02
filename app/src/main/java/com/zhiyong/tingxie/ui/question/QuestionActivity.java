@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.zhiyong.tingxie.R;
+import com.zhiyong.tingxie.ui.main.MainActivity;
 import com.zhiyong.tingxie.ui.word.WordItem;
 
 import java.util.List;
@@ -23,6 +24,8 @@ import java.util.Locale;
 import static com.zhiyong.tingxie.ui.main.QuizListAdapter.EXTRA_QUIZ_ID;
 
 public class QuestionActivity extends AppCompatActivity {
+
+    public static final String EXTRA_PINYIN_STRING = "com.zhiyong.tingxie.ui.question.extra.PINYIN_STRING";
 
     private TextToSpeech textToSpeech;
     private QuestionViewModel mQuestionViewModel;
@@ -36,14 +39,23 @@ public class QuestionActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onClick(View v) {
+                // todo: Scroll to same quiz.
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         });
+
+//        FloatingActionButton fab = findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
 
         final int quizId = getIntent().getIntExtra(EXTRA_QUIZ_ID, -1);
 
@@ -64,20 +76,24 @@ public class QuestionActivity extends AppCompatActivity {
         mQuestionViewModel.getRandomQuestion().observe(this, new Observer<List<WordItem>>() {
             @Override
             public void onChanged(@Nullable final List<WordItem> wordItems) {
+                final WordItem wordItem = wordItems.get(0);
+
                 ivPlay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        textToSpeech.speak(wordItems.get(0).getWordString(), TextToSpeech.QUEUE_FLUSH, null);
+                        textToSpeech.speak(wordItem.getWordString(), TextToSpeech.QUEUE_FLUSH, null);
                     }
                 });
 
                 // Intent to AnswerActivity.
-//                btnShowAnswer.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Intent intent = new
-//                    }
-//                });
+                btnShowAnswer.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                        Intent intent = new Intent(getApplicationContext(), );
+//                        intent.putExtra(EXTRA_PINYIN_STRING, wordItem.getPinyinString());
+//                        startActivity(intent);
+                    }
+                });
 
             }
         });
