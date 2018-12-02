@@ -106,4 +106,30 @@ public interface QuizDao {
             "GROUP BY tp2.quiz_id\n" +
             "ORDER BY t.date")
     LiveData<List<QuizItem>> getAllQuizItems();
+
+    @Query("WITH tpc AS\n" +
+            "  (SELECT tp.pinyin_string,\n" +
+            "          Count(correct) AS correct_count\n" +
+            "   FROM quiz\n" +
+            "   JOIN quiz_pinyin tp ON quiz.id = tp.quiz_id\n" +
+            "   LEFT JOIN question q ON tp.quiz_id = q.quiz_id\n" +
+            "   WHERE quiz.id = :quizId\n" +
+            "   GROUP BY tp.pinyin_string),\n" +
+            "     tp2 AS\n" +
+            "  (SELECT Min(correct_count) AS rounds_completed\n" +
+            "   FROM tpc),\n" +
+            "     tp3 AS\n" +
+            "  (SELECT tpc.pinyin_string\n" +
+            "   FROM tpc\n" +
+            "   WHERE tpc.correct_count =\n" +
+            "       (SELECT rounds_completed\n" +
+            "        FROM tp2)\n" +
+            "   ORDER BY RANDOM()\n" +
+            "   LIMIT 1)\n" +
+            "SELECT :quizId AS quizId,\n" +
+            "       w.word_string AS wordString," +
+            "       tp3.pinyin_string AS pinyinString\n" +
+            "FROM tp3\n" +
+            "JOIN word w ON tp3.pinyin_string = w.pinyin_string")
+    LiveData<List<WordItem>> getRandomQuestion(int quizId);
 }

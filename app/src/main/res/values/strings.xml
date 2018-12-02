@@ -11,4 +11,6 @@
     <string name="title_activity_word">Quiz words</string>
     <string name="speech_settings">Speech settings</string>
     <string name="title_activity_question">Question</string>
+    <string name="show_answer">Show Answer</string>
+    <string name="question_instructions">Write down your answer on paper, then tap Show Answer. Number of quiz words with this pinyin: 1</string>
 </resources>
