@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -15,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.zhiyong.tingxie.R;
+import com.zhiyong.tingxie.ui.answer.AnswerActivity;
 import com.zhiyong.tingxie.ui.main.MainActivity;
 import com.zhiyong.tingxie.ui.word.WordItem;
 
@@ -25,7 +24,7 @@ import static com.zhiyong.tingxie.ui.main.QuizListAdapter.EXTRA_QUIZ_ID;
 
 public class QuestionActivity extends AppCompatActivity {
 
-    public static final String EXTRA_PINYIN_STRING = "com.zhiyong.tingxie.ui.question.extra.PINYIN_STRING";
+    public static final String EXTRA_WORDS_STRING = "com.zhiyong.tingxie.ui.question.extra.PINYIN_STRING";
 
     private TextToSpeech textToSpeech;
     private QuestionViewModel mQuestionViewModel;
@@ -76,22 +75,26 @@ public class QuestionActivity extends AppCompatActivity {
         mQuestionViewModel.getRandomQuestion().observe(this, new Observer<List<WordItem>>() {
             @Override
             public void onChanged(@Nullable final List<WordItem> wordItems) {
-                final WordItem wordItem = wordItems.get(0);
-
                 ivPlay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        textToSpeech.speak(wordItem.getWordString(), TextToSpeech.QUEUE_FLUSH, null);
+                        textToSpeech.speak(wordItems.get(0).getWordString(), TextToSpeech.QUEUE_FLUSH, null);
                     }
                 });
 
-                // Intent to AnswerActivity.
                 btnShowAnswer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        Intent intent = new Intent(getApplicationContext(), );
-//                        intent.putExtra(EXTRA_PINYIN_STRING, wordItem.getPinyinString());
-//                        startActivity(intent);
+                        Intent intent = new Intent(getApplicationContext(), AnswerActivity.class);
+                        StringBuilder sb = new StringBuilder();
+                        for (WordItem item : wordItems) {
+                            sb.append("\n");
+                            sb.append(item.getWordString());
+                        }
+                        intent.putExtra(EXTRA_WORDS_STRING, sb.deleteCharAt(0).toString());
+
+                        intent.putExtra(EXTRA_QUIZ_ID, quizId);
+                        startActivity(intent);
                     }
                 });
 

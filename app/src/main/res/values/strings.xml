@@ -13,4 +13,8 @@
     <string name="title_activity_question">Question</string>
     <string name="show_answer">Show Answer</string>
     <string name="question_instructions">Write down your answer on paper, then tap Show Answer.\nNumber of quiz words with this pinyin: 1</string>
+    <string name="answer">Answer</string>
+    <string name="answer_query">Did you write these correctly?</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
 </resources>
