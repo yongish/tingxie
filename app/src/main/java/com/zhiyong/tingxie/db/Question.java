@@ -61,4 +61,34 @@ public class Question {
         return quiz_id;
     }
 
+    public static class QuestionBuilder {
+        private long nestedTimestamp;
+        private String nestedPinyinString;
+        private boolean nestedCorrect;
+        private long nestedQuizId;
+
+        public QuestionBuilder timestamp(long timestamp) {
+            this.nestedTimestamp = timestamp;
+            return this;
+        }
+
+        public QuestionBuilder pinyinString(String pinyinString) {
+            this.nestedPinyinString = pinyinString;
+            return this;
+        }
+
+        public QuestionBuilder correct(boolean correct) {
+            this.nestedCorrect = correct;
+            return this;
+        }
+
+        public QuestionBuilder quizId(long quizId) {
+            this.nestedQuizId = quizId;
+            return this;
+        }
+
+        public Question build() {
+            return new Question(nestedTimestamp, nestedPinyinString, nestedCorrect, nestedQuizId);
+        }
+    }
 }
