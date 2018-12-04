@@ -32,8 +32,6 @@ public class QuestionActivity extends AppCompatActivity {
     private ImageView ivPlay;
     private Button btnShowAnswer;
 
-    private String firstWord;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
