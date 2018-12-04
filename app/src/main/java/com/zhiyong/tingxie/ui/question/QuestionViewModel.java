@@ -17,10 +17,10 @@ public class QuestionViewModel extends AndroidViewModel {
     public QuestionViewModel(@NonNull Application application, int quizId) {
         super(application);
         mRepository = new QuizRepository(application, quizId);
-        mQuestionItems = mRepository.getRandomQuestionOfQuiz();
+        mQuestionItems = mRepository.getRemainingQuestionsOfQuiz();
     }
 
-    LiveData<List<WordItem>> getRandomQuestion() {
+    LiveData<List<WordItem>> getRemainingQuestions() {
         return mQuestionItems;
     }
 }

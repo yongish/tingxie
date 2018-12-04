@@ -29,6 +29,7 @@ public class QuizRepository {
     private LiveData<List<QuizPinyin>> mAllQuizPinyins;
     private LiveData<List<Question>> mAllQuestions;
     private LiveData<List<WordItem>> mRandomQuestion;
+    private LiveData<List<WordItem>> mRemainingQuestions;
 
     private final int quizId;
 
@@ -42,6 +43,7 @@ public class QuizRepository {
         mAllQuizPinyins = mQuizDao.getAllQuizPinyins();
         mAllQuestions = mQuizDao.getAllQuestions();
         mRandomQuestion = mQuizDao.getRandomQuestion(quizId);
+        mRemainingQuestions = mQuizDao.getRemainingQuestions(quizId);
 
         this.quizId = quizId;
     }
@@ -64,6 +66,10 @@ public class QuizRepository {
 
     public LiveData<List<WordItem>> getRandomQuestionOfQuiz() {
         return mRandomQuestion;
+    }
+
+    public LiveData<List<WordItem>> getRemainingQuestionsOfQuiz() {
+        return mRemainingQuestions;
     }
 
     public void insertQuiz(Quiz quiz) {

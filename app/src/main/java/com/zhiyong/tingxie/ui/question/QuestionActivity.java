@@ -26,6 +26,7 @@ public class QuestionActivity extends AppCompatActivity {
 
     public static final String EXTRA_WORDS_STRING = "com.zhiyong.tingxie.ui.question.extra.WORDS_STRING";
     public static final String EXTRA_PINYIN_STRING = "com.zhiyong.tingxie.ui.question.extra.PINYIN_STRING";
+    public static final String EXTRA_REMAINING_QUESTION_COUNT = "com.zhiyong.tingxie.ui.question.extra.REMAINING_QUESTION_COUNT";
 
     private TextToSpeech textToSpeech;
     private QuestionViewModel mQuestionViewModel;
@@ -65,7 +66,7 @@ public class QuestionActivity extends AppCompatActivity {
         mQuestionViewModel = ViewModelProviders
                 .of(this, new QuestionViewModelFactory(this.getApplication(), quizId))
                 .get(QuestionViewModel.class);
-        mQuestionViewModel.getRandomQuestion().observe(this, new Observer<List<WordItem>>() {
+        mQuestionViewModel.getRemainingQuestions().observe(this, new Observer<List<WordItem>>() {
             @Override
             public void onChanged(@Nullable final List<WordItem> wordItems) {
                 final WordItem wordItem = wordItems.get(0);
@@ -103,10 +104,10 @@ public class QuestionActivity extends AppCompatActivity {
                         intent.putExtra(EXTRA_WORDS_STRING, sb.deleteCharAt(0).toString());
                         intent.putExtra(EXTRA_PINYIN_STRING, wordItem.getPinyinString());
                         intent.putExtra(EXTRA_QUIZ_ID, quizId);
+                        intent.putExtra(EXTRA_REMAINING_QUESTION_COUNT, wordItems.size());
                         startActivity(intent);
                     }
                 });
-
             }
         });
     }

@@ -67,7 +67,7 @@ public class WordActivity extends AppCompatActivity {
                         .setTitle("Add Chinese words or phase")
                         .setMessage("No punctuation allowed.")
                         .setView(container)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // Only keep Chinese characters and punctuation.
@@ -81,7 +81,7 @@ public class WordActivity extends AppCompatActivity {
                                 }
                             }
                         })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();

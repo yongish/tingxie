@@ -17,4 +17,6 @@
     <string name="answer_query">Did you write these correctly?</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>
