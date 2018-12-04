@@ -24,7 +24,8 @@ import static com.zhiyong.tingxie.ui.main.QuizListAdapter.EXTRA_QUIZ_ID;
 
 public class QuestionActivity extends AppCompatActivity {
 
-    public static final String EXTRA_WORDS_STRING = "com.zhiyong.tingxie.ui.question.extra.PINYIN_STRING";
+    public static final String EXTRA_WORDS_STRING = "com.zhiyong.tingxie.ui.question.extra.WORDS_STRING";
+    public static final String EXTRA_PINYIN_STRING = "com.zhiyong.tingxie.ui.question.extra.PINYIN_STRING";
 
     private TextToSpeech textToSpeech;
     private QuestionViewModel mQuestionViewModel;
@@ -61,24 +62,32 @@ public class QuestionActivity extends AppCompatActivity {
         ivPlay = findViewById(R.id.ivPlay);
         btnShowAnswer = findViewById(R.id.btnShowAnswer);
 
-        textToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if (status != TextToSpeech.ERROR) {
-                    textToSpeech.setLanguage(Locale.SIMPLIFIED_CHINESE);
-                }
-            }
-        });
         mQuestionViewModel = ViewModelProviders
                 .of(this, new QuestionViewModelFactory(this.getApplication(), quizId))
                 .get(QuestionViewModel.class);
         mQuestionViewModel.getRandomQuestion().observe(this, new Observer<List<WordItem>>() {
             @Override
             public void onChanged(@Nullable final List<WordItem> wordItems) {
+                final WordItem wordItem = wordItems.get(0);
+                final String wordString = wordItem.getWordString();
+                if (textToSpeech == null) {
+                    textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+                        @Override
+                        public void onInit(int arg0) {
+                            if (arg0 == TextToSpeech.SUCCESS) {
+                                textToSpeech.setLanguage(Locale.SIMPLIFIED_CHINESE);
+                                textToSpeech.speak(wordString, TextToSpeech.QUEUE_FLUSH, null);
+                            }
+                        }
+                    });
+                } else {
+                    textToSpeech.speak(wordString, TextToSpeech.QUEUE_FLUSH, null);
+                }
+
                 ivPlay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        textToSpeech.speak(wordItems.get(0).getWordString(), TextToSpeech.QUEUE_FLUSH, null);
+                        textToSpeech.speak(wordString, TextToSpeech.QUEUE_FLUSH, null);
                     }
                 });
 
@@ -92,7 +101,7 @@ public class QuestionActivity extends AppCompatActivity {
                             sb.append(item.getWordString());
                         }
                         intent.putExtra(EXTRA_WORDS_STRING, sb.deleteCharAt(0).toString());
-
+                        intent.putExtra(EXTRA_PINYIN_STRING, wordItem.getPinyinString());
                         intent.putExtra(EXTRA_QUIZ_ID, quizId);
                         startActivity(intent);
                     }
@@ -101,5 +110,4 @@ public class QuestionActivity extends AppCompatActivity {
             }
         });
     }
-
 }
