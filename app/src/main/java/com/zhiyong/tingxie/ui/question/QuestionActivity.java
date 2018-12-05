@@ -71,6 +71,7 @@ public class QuestionActivity extends AppCompatActivity {
             public void onChanged(@Nullable final List<WordItem> wordItems) {
                 final WordItem wordItem = wordItems.get(0);
                 final String wordString = wordItem.getWordString();
+                final String pinyinString = wordItem.getPinyinString();
                 if (textToSpeech == null) {
                     textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
                         @Override
@@ -98,11 +99,13 @@ public class QuestionActivity extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(), AnswerActivity.class);
                         StringBuilder sb = new StringBuilder();
                         for (WordItem item : wordItems) {
-                            sb.append("\n");
-                            sb.append(item.getWordString());
+                            if (item.getPinyinString().equals(pinyinString)) {
+                                sb.append("\n");
+                                sb.append(item.getWordString());
+                            }
                         }
                         intent.putExtra(EXTRA_WORDS_STRING, sb.deleteCharAt(0).toString());
-                        intent.putExtra(EXTRA_PINYIN_STRING, wordItem.getPinyinString());
+                        intent.putExtra(EXTRA_PINYIN_STRING, pinyinString);
                         intent.putExtra(EXTRA_QUIZ_ID, quizId);
                         intent.putExtra(EXTRA_REMAINING_QUESTION_COUNT, wordItems.size());
                         startActivity(intent);

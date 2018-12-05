@@ -74,16 +74,16 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
 
             Map<String, String> examples = new HashMap<>();
             examples.put("脚踏实地", "jiāo dà shí dì");
-//            examples.put("九牛一毛", "jǐu níu yī máo");
-//            examples.put("一见钟情", "yí jiàn zhōng qíng");
-//            examples.put("轨迹", "guǐ jì");
-//            examples.put("诡计", "guǐ jì");
-//            examples.put("了不起", "liǎo bù qǐ");
-//            examples.put("破釜成舟", "pò fǔ chén zhōu");
-//            examples.put("指鹿为马", "zhǐ lù wéi mǎ");
-//            examples.put("乐不思蜀", "lè bù sī shǔ");
-//            examples.put("朝三暮四", "zhǎo sān mù sì");
-//            examples.put("井底之蛙", "jǐng dǐ zhī wā");
+            examples.put("九牛一毛", "jǐu níu yī máo");
+            examples.put("一见钟情", "yí jiàn zhōng qíng");
+            examples.put("轨迹", "guǐ jì");
+            examples.put("诡计", "guǐ jì");
+            examples.put("了不起", "liǎo bù qǐ");
+            examples.put("破釜成舟", "pò fǔ chén zhōu");
+            examples.put("指鹿为马", "zhǐ lù wéi mǎ");
+            examples.put("乐不思蜀", "lè bù sī shǔ");
+            examples.put("朝三暮四", "zhǎo sān mù sì");
+            examples.put("井底之蛙", "jǐng dǐ zhī wā");
             for (Map.Entry<String, String> entry : examples.entrySet()) {
                 String wordString = entry.getKey();
                 String pinyinString = entry.getValue();
