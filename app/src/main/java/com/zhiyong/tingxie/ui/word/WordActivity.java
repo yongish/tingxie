@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.Util;
@@ -72,7 +73,13 @@ public class WordActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 // Only keep Chinese characters and punctuation.
                                 String inputWord = input.getText().toString().replaceAll("\\s", "");
-                                String pinyin = Util.lookupPinyin(inputWord);
+                                String pinyin = null;
+                                try {
+                                    pinyin = new Util().lookupPinyin(inputWord);
+                                } catch (Exception e) {
+                                    // todo: Log to API.
+                                    Toast.makeText(WordActivity.this, "ERROR in pinyin lookup", Toast.LENGTH_LONG).show();
+                                }
                                 if (pinyin.length() > 0) {
                                     // Add word to current quizId.
                                     mWordViewModel.addWord(quizId, inputWord, pinyin);

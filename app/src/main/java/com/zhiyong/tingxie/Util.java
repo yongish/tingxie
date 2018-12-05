@@ -1,17 +1,13 @@
 package com.zhiyong.tingxie;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.Observer;
-import android.support.annotation.Nullable;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ExecutionException;
 
 public class Util {
     public static final SimpleDateFormat DB_FORMAT = new SimpleDateFormat("yyyyMMdd");
@@ -19,14 +15,18 @@ public class Util {
 
     private static final String BAIDU_DICT_URL_LOOKUP = "https://dict.baidu.com/s?wd=";
 
-    public static String lookupPinyin(String input) {
+    public String lookupPinyin(String input) throws ExecutionException, InterruptedException {
         String initialUrl = BAIDU_DICT_URL_LOOKUP + input;
-        Element pinyinWrapper = getPinyinWrapper(initialUrl);
+//        Element pinyinWrapper = getPinyinWrapper(initialUrl);
+        Element pinyinWrapper = new GetPinyin().execute(initialUrl).get();
         String result;
         if (pinyinWrapper == null) {
             StringBuilder sb = new StringBuilder();
             for (char c : input.toCharArray()) {
-                sb.append(processPinyin(getPinyinWrapper(BAIDU_DICT_URL_LOOKUP + String.valueOf(c))));
+//                sb.append(processPinyin(getPinyinWrapper(BAIDU_DICT_URL_LOOKUP + String.valueOf(c))));
+                sb.append(processPinyin(
+                        new GetPinyin().execute(BAIDU_DICT_URL_LOOKUP + String.valueOf(c)).get()
+                ));
             }
             result = sb.toString();
         } else {
@@ -35,15 +35,28 @@ public class Util {
         return result;
     }
 
-    private static Element getPinyinWrapper(String url) {
-        Element result = null;
-        try {
-            result = Jsoup.connect(url).get().getElementById("pinyin");
-        } catch (IOException e) {
-            // todo: Log to error API.
-            Log.d("getPinyinWrapper: ", e.getMessage());
+//    private static Element getPinyinWrapper(String url) {
+//        Element result = null;
+//        try {
+//            result = Jsoup.connect(url).get().getElementById("pinyin");
+//        } catch (IOException e) {
+//            // todo: Log to error API.
+//            Log.d("getPinyinWrapper: ", e.getMessage());
+//        }
+//        return result;
+//    }
+
+    public class GetPinyin extends AsyncTask<String, Void, Element> {
+
+        @Override
+        protected Element doInBackground(String... strings) {
+            return NetworkUtils.getPinyin(strings[0]);
         }
-        return result;
+
+        @Override
+        protected void onPostExecute(Element s) {
+            super.onPostExecute(s);
+        }
     }
 
     private static String processPinyin(Element pinyinWrapper) {
@@ -51,7 +64,7 @@ public class Util {
                 .replace("]", "").trim();
     }
 
-    private Util() {
-        throw new AssertionError();
-    }
+//    private Util() {
+//        throw new AssertionError();
+//    }
 }
