@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "100325664250",
+    "firebase_url": "https://tingxie-b1acb.firebaseio.com",
+    "project_id": "tingxie-b1acb",
+    "storage_bucket": "tingxie-b1acb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:100325664250:android:8673ea78f61629cb",
+        "android_client_info": {
+          "package_name": "com.zhiyong.tingxie"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "100325664250-tehh1r2t9buh9sl1mp10i58gl1u21b1g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zhiyong.tingxie",
+            "certificate_hash": "6d94a5d118942b3c88fae2dad3cdfa0b95dc74f2"
+          }
+        },
+        {
+          "client_id": "100325664250-2hups0vptqn0qvsef51fefe4e9pcih35.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhrcTx7QFg1X1MS9YFaZmQ6VwlncA4y5s"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "100325664250-2hups0vptqn0qvsef51fefe4e9pcih35.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
