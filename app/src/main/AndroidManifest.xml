@@ -32,6 +32,8 @@
         <activity
             android:name=".ui.answer.AnswerActivity"
             android:label="@string/answer" />
+        <activity android:name=".ui.authentication.SignupActivity">
+        </activity>
     </application>
 
 </manifest>
