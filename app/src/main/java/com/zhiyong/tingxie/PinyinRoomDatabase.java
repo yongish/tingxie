@@ -63,43 +63,43 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
             // Start the app with a clean database every time.
             // Not needed if you only populate the database
             // when it is first created
-            mDao.deleteAllQuizzes();
-            mDao.deleteAllQuizPinyins();
-            mDao.deleteAllWords();
-            mDao.deleteAllPinyins();
-            mDao.deleteAllQuestions();
+//            mDao.deleteAllQuizzes();
+//            mDao.deleteAllQuizPinyins();
+//            mDao.deleteAllWords();
+//            mDao.deleteAllPinyins();
+//            mDao.deleteAllQuestions();
 
             // Add a quiz.
-            long quizId = mDao.insert(new Quiz(20181201));
-
-            Map<String, String> examples = new HashMap<>();
-            examples.put("脚踏实地", "jiāo dà shí dì");
-            examples.put("九牛一毛", "jǐu níu yī máo");
-            examples.put("一见钟情", "yí jiàn zhōng qíng");
-            examples.put("轨迹", "guǐ jì");
-            examples.put("诡计", "guǐ jì");
-            examples.put("了不起", "liǎo bù qǐ");
-            examples.put("破釜成舟", "pò fǔ chén zhōu");
-            examples.put("指鹿为马", "zhǐ lù wéi mǎ");
-            examples.put("乐不思蜀", "lè bù sī shǔ");
-            examples.put("朝三暮四", "zhǎo sān mù sì");
-            examples.put("井底之蛙", "jǐng dǐ zhī wā");
-            for (Map.Entry<String, String> entry : examples.entrySet()) {
-                String wordString = entry.getKey();
-                String pinyinString = entry.getValue();
-                mDao.insert(new Pinyin(pinyinString));
-                mDao.insert(new Word(wordString, pinyinString));
-                // Connect all pinyin IDs to the test.
-                mDao.insert(new QuizPinyin(quizId, pinyinString));
-            }
-
-            for (int quizDate = 20180201; quizDate < 20181102; quizDate += 100) {
-                mDao.insert(new Quiz(quizDate));
-            }
-
-            for (int quizDate = 20190101; quizDate < 20191202; quizDate += 100) {
-                mDao.insert(new Quiz(quizDate));
-            }
+//            long quizId = mDao.insert(new Quiz(20181201));
+//
+//            Map<String, String> examples = new HashMap<>();
+//            examples.put("脚踏实地", "jiāo dà shí dì");
+//            examples.put("九牛一毛", "jǐu níu yī máo");
+//            examples.put("一见钟情", "yí jiàn zhōng qíng");
+//            examples.put("轨迹", "guǐ jì");
+//            examples.put("诡计", "guǐ jì");
+//            examples.put("了不起", "liǎo bù qǐ");
+//            examples.put("破釜成舟", "pò fǔ chén zhōu");
+//            examples.put("指鹿为马", "zhǐ lù wéi mǎ");
+//            examples.put("乐不思蜀", "lè bù sī shǔ");
+//            examples.put("朝三暮四", "zhǎo sān mù sì");
+//            examples.put("井底之蛙", "jǐng dǐ zhī wā");
+//            for (Map.Entry<String, String> entry : examples.entrySet()) {
+//                String wordString = entry.getKey();
+//                String pinyinString = entry.getValue();
+//                mDao.insert(new Pinyin(pinyinString));
+//                mDao.insert(new Word(wordString, pinyinString));
+//                // Connect all pinyin IDs to the test.
+//                mDao.insert(new QuizPinyin(quizId, pinyinString));
+//            }
+//
+//            for (int quizDate = 20180201; quizDate < 20181102; quizDate += 100) {
+//                mDao.insert(new Quiz(quizDate));
+//            }
+//
+//            for (int quizDate = 20190101; quizDate < 20191202; quizDate += 100) {
+//                mDao.insert(new Quiz(quizDate));
+//            }
 
             return null;
         }
