@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie.ui.authentication;
+package com.zhiyong.tingxie.ui.signup;
 
 import android.content.Intent;
 import android.os.Bundle;
