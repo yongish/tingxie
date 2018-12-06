@@ -18,9 +18,8 @@ import com.zhiyong.tingxie.db.Word;
 import java.util.HashMap;
 import java.util.Map;
 
-// todo: exportSchema should be changed to true after 1st release.
 @Database(entities = {Question.class, Quiz.class, Pinyin.class, Word.class, QuizPinyin.class},
-        version = 1, exportSchema = false)
+        version = 1)
 public abstract class PinyinRoomDatabase extends RoomDatabase {
     public abstract QuizDao pinyinDao();
     private static PinyinRoomDatabase INSTANCE;
@@ -71,7 +70,6 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
 
             // Add a quiz.
 //            long quizId = mDao.insert(new Quiz(20181201));
-//
 //            Map<String, String> examples = new HashMap<>();
 //            examples.put("脚踏实地", "jiāo dà shí dì");
 //            examples.put("九牛一毛", "jǐu níu yī máo");
@@ -84,6 +82,7 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
 //            examples.put("乐不思蜀", "lè bù sī shǔ");
 //            examples.put("朝三暮四", "zhǎo sān mù sì");
 //            examples.put("井底之蛙", "jǐng dǐ zhī wā");
+
 //            for (Map.Entry<String, String> entry : examples.entrySet()) {
 //                String wordString = entry.getKey();
 //                String pinyinString = entry.getValue();
@@ -92,7 +91,7 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
 //                // Connect all pinyin IDs to the test.
 //                mDao.insert(new QuizPinyin(quizId, pinyinString));
 //            }
-//
+
 //            for (int quizDate = 20180201; quizDate < 20181102; quizDate += 100) {
 //                mDao.insert(new Quiz(quizDate));
 //            }

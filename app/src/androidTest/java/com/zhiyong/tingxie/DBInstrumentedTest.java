@@ -6,6 +6,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.zhiyong.tingxie.db.Pinyin;
+import com.zhiyong.tingxie.db.Question;
 import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.db.Word;
@@ -29,11 +30,16 @@ import static org.junit.Assert.assertEquals;
 public class DBInstrumentedTest {
     private QuizDao mDao;
     private PinyinRoomDatabase mDb;
+    final int testDate = 20190101;
+    long quizId;
 
     @Before
     public void createDb() {
         mDb = Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getContext(), PinyinRoomDatabase.class).build();
         mDao = mDb.pinyinDao();
+
+        // Add a quiz.
+        quizId = mDao.insert(new Quiz(testDate));
     }
 
     @After
@@ -43,10 +49,6 @@ public class DBInstrumentedTest {
 
     @Test
     public void blankTest() throws InterruptedException {
-        // Add a quiz.
-        final int testDate = 20190101;
-        long quizId = mDao.insert(new Quiz(testDate));
-
         QuizItem result = LiveDataTestUtil.getValue(mDao.getAllQuizItems()).get(0);
         assertEquals(testDate, result.getDate());
         assertEquals(0, result.getTotalWords());
@@ -56,10 +58,6 @@ public class DBInstrumentedTest {
 
     @Test
     public void pinyin4words5() throws InterruptedException {
-        // Add a quiz.
-        final int testDate = 20190101;
-        long quizId = mDao.insert(new Quiz(testDate));
-
         // Add 4 pinyins with 5 words.
         String s0 = "jiāo tà shí dì";
         String s1 = "jiǔ niú yì máo";
@@ -94,6 +92,42 @@ public class DBInstrumentedTest {
         mDao.deleteQuizPinyin(quizId, s0);
         result = LiveDataTestUtil.getValue(mDao.getAllQuizItems()).get(0);
         assertEquals(3, result.getTotalWords());
+    }
+
+    @Test
+    public void getRemainingQuestions1PinyinQuiz() throws InterruptedException {
+        String s0 = "jiāo tà shí dì";
+        Pinyin p0 = new Pinyin(s0);
+        mDao.insert(p0);
+        mDao.insert(new Word("脚踏实地", s0));
+        mDao.insert(new QuizPinyin(quizId, s0));
+
+        // Answer question correctly.
+        mDao.insert(new Question(System.currentTimeMillis(), s0, true, quizId));
+        int numberLeft = LiveDataTestUtil.getValue(mDao.getRemainingQuestions(quizId)).size();
+        assertEquals(1, numberLeft);
+    }
+
+    @Test
+    public void getRemainingQuestions2PinyinQuiz() throws InterruptedException {
+        String s0 = "jiāo tà shí dì";
+        Pinyin p0 = new Pinyin(s0);
+        String s1 = "jǐu níu yī máo";
+        Pinyin p1 = new Pinyin(s1);
+        mDao.insert(p0);
+        mDao.insert(p1);
+        mDao.insert(new Word("脚踏实地", s0));
+        mDao.insert(new Word("九牛一毛", s1));
+        mDao.insert(new QuizPinyin(quizId, s0));
+        mDao.insert(new QuizPinyin(quizId, s1));
+
+        // Answer question correctly.
+        int numberLeftBefore = LiveDataTestUtil.getValue(mDao.getRemainingQuestions(quizId)).size();
+        assertEquals(2, numberLeftBefore);
+        mDao.insert(new Question(System.currentTimeMillis(), s0, true, quizId));
+
+        int numberLeft = LiveDataTestUtil.getValue(mDao.getRemainingQuestions(quizId)).size();
+        assertEquals(1, numberLeft);
     }
 
     @Test

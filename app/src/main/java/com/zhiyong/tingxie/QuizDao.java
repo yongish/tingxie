@@ -110,10 +110,8 @@ public interface QuizDao {
     @Query("WITH tpc AS\n" +
             "  (SELECT tp.pinyin_string,\n" +
             "          Count(correct) AS correct_count\n" +
-            "   FROM quiz\n" +
-            "   JOIN quiz_pinyin tp ON quiz.id = tp.quiz_id\n" +
-            "   LEFT JOIN question q ON tp.quiz_id = q.quiz_id\n" +
-            "   WHERE quiz.id = :quizId\n" +
+            "   FROM quiz_pinyin tp LEFT JOIN question q ON tp.quiz_id = q.quiz_id\n" +
+            "   WHERE tp.quiz_id = :quizId\n" +
             "   GROUP BY tp.pinyin_string),\n" +
             "     tp2 AS\n" +
             "  (SELECT Min(correct_count) AS rounds_completed\n" +
@@ -124,24 +122,23 @@ public interface QuizDao {
             "   WHERE tpc.correct_count =\n" +
             "       (SELECT rounds_completed\n" +
             "        FROM tp2)\n" +
-            "   ORDER BY RANDOM()\n" +
-            "   LIMIT 1)\n" +
+            "   )\n" +
             "SELECT :quizId AS quizId,\n" +
             "       w.word_string AS wordString," +
             "       tp3.pinyin_string AS pinyinString\n" +
             "FROM tp3\n" +
             "JOIN word w ON tp3.pinyin_string = w.pinyin_string")
-    LiveData<List<WordItem>> getRandomQuestion(int quizId);
-
+    LiveData<List<WordItem>> getPossibleQuestions(int quizId);
 
     @Query("WITH tpc AS\n" +
-            "  (SELECT tp.pinyin_string,\n" +
+            "  (SELECT qp.pinyin_string,\n" +
+            "          qn.pinyin_string,\n" +
             "          Count(correct) AS correct_count\n" +
-            "   FROM quiz\n" +
-            "   JOIN quiz_pinyin tp ON quiz.id = tp.quiz_id\n" +
-            "   LEFT JOIN question q ON tp.quiz_id = q.quiz_id\n" +
-            "   WHERE quiz.id = :quizId\n" +
-            "   GROUP BY tp.pinyin_string),\n" +
+            "   FROM quiz_pinyin qp\n" +
+            "   LEFT JOIN question qn ON qp.quiz_id = qn.quiz_id\n" +
+            "   AND qp.pinyin_string = qn.pinyin_string\n" +
+            "   WHERE qp.quiz_id = :quizId\n" +
+            "   GROUP BY qp.pinyin_string),\n" +
             "     tp2 AS\n" +
             "  (SELECT Min(correct_count) AS rounds_completed\n" +
             "   FROM tpc),\n" +
@@ -150,12 +147,11 @@ public interface QuizDao {
             "   FROM tpc\n" +
             "   WHERE tpc.correct_count =\n" +
             "       (SELECT rounds_completed\n" +
-            "        FROM tp2)\n" +
-            "   ORDER BY RANDOM())\n" +
+            "        FROM tp2) )\n" +
             "SELECT :quizId AS quizId,\n" +
-            "       w.word_string AS wordString," +
+            "       w.word_string AS wordString,\n" +
             "       tp3.pinyin_string AS pinyinString\n" +
             "FROM tp3\n" +
             "JOIN word w ON tp3.pinyin_string = w.pinyin_string")
-    LiveData<List<WordItem>> getRemainingQuestions(int quizId);
+    LiveData<List<WordItem>> getRemainingQuestions(long quizId);
 }

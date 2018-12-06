@@ -58,7 +58,8 @@ public class AnswerActivity extends AppCompatActivity {
 
                 // Go to Completed Alert Dialog or QuestionActivity.
                 // Was this the last word in current round?
-                if (getIntent().getIntExtra(EXTRA_REMAINING_QUESTION_COUNT, -1) < 1) {
+                int remainingQuestionCount = getIntent().getIntExtra(EXTRA_REMAINING_QUESTION_COUNT, -1);
+                if (remainingQuestionCount < 2) {
                     new AlertDialog.Builder(AnswerActivity.this)
                             .setTitle("Round Completed.")
                             .setMessage("Great. You completed a round with all questions correct.")

@@ -28,10 +28,8 @@ public class QuizRepository {
     private LiveData<List<WordItem>> mWordItems;
     private LiveData<List<QuizPinyin>> mAllQuizPinyins;
     private LiveData<List<Question>> mAllQuestions;
-    private LiveData<List<WordItem>> mRandomQuestion;
+    private LiveData<List<WordItem>> mPossibleQuestions;
     private LiveData<List<WordItem>> mRemainingQuestions;
-
-    private final int quizId;
 
     public QuizRepository(Application application, int quizId) {
         PinyinRoomDatabase db = PinyinRoomDatabase.getDatabase(application);
@@ -42,10 +40,8 @@ public class QuizRepository {
         mWordItems = mQuizDao.getWordItemsOfQuiz(quizId);
         mAllQuizPinyins = mQuizDao.getAllQuizPinyins();
         mAllQuestions = mQuizDao.getAllQuestions();
-        mRandomQuestion = mQuizDao.getRandomQuestion(quizId);
+        mPossibleQuestions = mQuizDao.getPossibleQuestions(quizId);
         mRemainingQuestions = mQuizDao.getRemainingQuestions(quizId);
-
-        this.quizId = quizId;
     }
 
     public LiveData<List<QuizItem>> getAllQuizItems() {
@@ -64,8 +60,8 @@ public class QuizRepository {
         return mAllQuestions;
     }
 
-    public LiveData<List<WordItem>> getRandomQuestionOfQuiz() {
-        return mRandomQuestion;
+    public LiveData<List<WordItem>> getPossibleQuestionsOfQuiz() {
+        return mPossibleQuestions;
     }
 
     public LiveData<List<WordItem>> getRemainingQuestionsOfQuiz() {
