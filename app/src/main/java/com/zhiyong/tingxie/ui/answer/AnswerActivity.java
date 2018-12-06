@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -59,25 +60,27 @@ public class AnswerActivity extends AppCompatActivity {
                 // Go to Completed Alert Dialog or QuestionActivity.
                 // Was this the last word in current round?
                 int remainingQuestionCount = getIntent().getIntExtra(EXTRA_REMAINING_QUESTION_COUNT, -1);
+                Log.d("REMAINING_QN", String.valueOf(remainingQuestionCount));
                 if (remainingQuestionCount < 2) {
-                    new AlertDialog.Builder(AnswerActivity.this)
-                            .setTitle("Round Completed.")
-                            .setMessage("Great. You completed a round with all questions correct.")
-                            .setPositiveButton("Next round", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent = new Intent(getApplicationContext(), QuestionActivity.class);
-                                    intent.putExtra(EXTRA_QUIZ_ID, quizId);
-                                    startActivity(intent);
-                                }
-                            })
-                            .setNegativeButton("Main menu", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                }
-                            })
-                            .show();
+                    // todo: Show AnswerActivity in future.
+//                    new AlertDialog.Builder(AnswerActivity.this)
+//                            .setTitle("Round Completed.")
+//                            .setMessage("Great. You completed a round with all questions correct.")
+//                            .setPositiveButton("Next round", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    Intent intent = new Intent(getApplicationContext(), QuestionActivity.class);
+//                                    intent.putExtra(EXTRA_QUIZ_ID, quizId);
+//                                    startActivity(intent);
+//                                }
+//                            })
+//                            .setNegativeButton("Main menu", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+//                                }
+//                            })
+//                            .show();
                 } else {
                     startActivity(intentQuestion);
                 }

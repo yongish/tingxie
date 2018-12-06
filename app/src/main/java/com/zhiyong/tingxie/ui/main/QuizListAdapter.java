@@ -75,8 +75,11 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
 
             holder.tvDate.setText(displayDate);
             holder.tvWordsLeft.setText(String.format(Locale.US,
-                    "%d/%d remaining on round %d",
-                    current.getNotLearned(), current.getTotalWords(), current.getRound()));
+                    "%d words",
+                    current.getTotalWords()));
+            // todo: Bug. Adding new word does not reset number of rounds to 0. Fix this in future.
+//                    "%d/%d remaining on round %d",
+//                    current.getNotLearned(), current.getTotalWords(), current.getRound()));
 
             holder.ivEditDate.setOnClickListener(new View.OnClickListener() {
                 @Override
