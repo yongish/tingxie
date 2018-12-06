@@ -87,6 +87,7 @@ public interface QuizDao {
             "   FROM quiz\n" +
             "   LEFT JOIN quiz_pinyin tp ON quiz.id = tp.quiz_id\n" +
             "   LEFT JOIN question q ON tp.quiz_id = q.quiz_id\n" +
+            "   AND tp.pinyin_string = q.pinyin_string\n" +
             "   GROUP BY quiz.id,\n" +
             "            tp.pinyin_string),\n" +
             "     tp2 AS\n" +
