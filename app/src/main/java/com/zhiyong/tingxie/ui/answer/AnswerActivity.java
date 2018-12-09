@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -42,6 +43,15 @@ public class AnswerActivity extends AppCompatActivity {
 
         tvAnswerWords = findViewById(R.id.tvAnswerWords);
         tvAnswerWords.setText(wordsString);
+        tvAnswerWords.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "https://baike.baidu.com/item/" + wordsString;
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url));
+                startActivity(intent);
+            }
+        });
 
         btnAnswerCorrect = findViewById(R.id.btnAnswerCorrect);
         final Question.QuestionBuilder questionBuilder = new Question.QuestionBuilder()
