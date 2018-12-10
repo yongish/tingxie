@@ -10,8 +10,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.db.Question;
@@ -73,25 +73,26 @@ public class AnswerActivity extends AppCompatActivity {
                 Log.d("REMAINING_QN", String.valueOf(remainingQuestionCount));
                 if (remainingQuestionCount < 2) {
                     // todo: Show AnswerActivity in future.
-//                    new AlertDialog.Builder(AnswerActivity.this)
-//                            .setTitle("Round Completed.")
-//                            .setMessage("Great. You completed a round with all questions correct.")
-//                            .setPositiveButton("Next round", new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                    Intent intent = new Intent(getApplicationContext(), QuestionActivity.class);
-//                                    intent.putExtra(EXTRA_QUIZ_ID, quizId);
-//                                    startActivity(intent);
-//                                }
-//                            })
-//                            .setNegativeButton("Main menu", new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-//                                }
-//                            })
-//                            .show();
+                    new AlertDialog.Builder(AnswerActivity.this)
+                            .setTitle("Round Completed.")
+                            .setMessage("Great. You completed a round with all questions correct.")
+                            .setPositiveButton("Next round", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(getApplicationContext(), QuestionActivity.class);
+                                    intent.putExtra(EXTRA_QUIZ_ID, quizId);
+                                    startActivity(intent);
+                                }
+                            })
+                            .setNegativeButton("Main menu", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                }
+                            })
+                            .show();
                 } else {
+                    Toast.makeText(AnswerActivity.this, "Good", Toast.LENGTH_SHORT).show();
                     startActivity(intentQuestion);
                 }
             }
@@ -103,6 +104,8 @@ public class AnswerActivity extends AppCompatActivity {
                 // Insert new question with boolean wrong.
                 Question question = questionBuilder.correct(false).build();
                 mAnswerViewModel.insertQuestion(question);
+
+                Toast.makeText(AnswerActivity.this, "Keep going.", Toast.LENGTH_SHORT).show();
 
                 // Go to QuestionActivity.
                 startActivity(intentQuestion);
