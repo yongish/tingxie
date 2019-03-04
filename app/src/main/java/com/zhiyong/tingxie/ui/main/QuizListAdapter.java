@@ -152,7 +152,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         for (int i = 0; i < quizItems.size(); i++) {
             try {
                 Date quizDate = Util.DB_FORMAT.parse(String.valueOf(quizItems.get(i).getDate()));
-                if (quizDate.compareTo(today) >= 0) {
+                if (quizDate.compareTo(today) >= 0 && i > 0) {
                     scrollPosition = i - 1;
                     break;
                 }

@@ -3,6 +3,7 @@ package com.zhiyong.tingxie;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.filters.MediumTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.zhiyong.tingxie.db.Pinyin;
@@ -26,6 +27,7 @@ import static org.junit.Assert.assertEquals;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
+@MediumTest
 @RunWith(AndroidJUnit4.class)
 public class DBInstrumentedTest {
     private QuizDao mDao;
