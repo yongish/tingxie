@@ -15,7 +15,6 @@ import android.view.ViewParent;
 import android.widget.DatePicker;
 
 import com.zhiyong.tingxie.ui.main.MainActivity;
-import com.zhiyong.tingxie.ui.main.QuizListAdapter;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -42,7 +41,7 @@ import static org.hamcrest.Matchers.allOf;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class RecyclerViewTest {
+public class RecyclerViewPastTest {
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
@@ -52,12 +51,12 @@ public class RecyclerViewTest {
     }
 
     @Test
-    public void addQuizInFuture() {
+    public void quizzesOnlyInPast() {
         ViewInteraction floatingActionButton = getFAB();
         floatingActionButton.perform(click());
 
         Calendar c = Calendar.getInstance();
-        c.add(Calendar.DATE, 1);
+        c.add(Calendar.DATE, -1);
         int year = c.get(Calendar.YEAR);
         int monthOfYear = c.get(Calendar.MONTH);
         int dayOfMonth = c.get(Calendar.DATE);
@@ -82,21 +81,6 @@ public class RecyclerViewTest {
                         isDisplayed()));
         return floatingActionButton;
     }
-
-    // Add a new quiz.
-    // Must be sorted.
-
-//        ViewInteraction textView = onView(
-//                allOf(withId(R.id.word), withText("+ Word 20"),
-//                        childAtPosition(
-//                                childAtPosition(
-//                                        withId(R.id.recyclerview_main),
-//                                        13),
-//                                0),
-//                        isDisplayed()));
-//        textView.check(matches(withText("+ Word 20")));
-//    MainActivity activity = mActivityTestRule.getActivity();
-//    RecyclerView recyclerView = activity.findViewById(R.id.recyclerview_main);
 
     private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
