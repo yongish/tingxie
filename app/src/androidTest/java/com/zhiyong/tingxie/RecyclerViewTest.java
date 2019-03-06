@@ -73,7 +73,7 @@ public class RecyclerViewTest {
     }
 
     @Test
-    public void quizzesAreSorted() {
+    public void quizzesSortedAfterAdd() {
         addQuiz(2019, 3, 1);
         addQuiz(2019, 2, 28);
         onView(withId(R.id.recyclerview_main))
@@ -82,6 +82,29 @@ public class RecyclerViewTest {
         onView(withId(R.id.recyclerview_main))
                 .check(matches(atPosition(1, hasDescendant(withText(containsString(
                         "01 Mar 2019"))))));
+        removeQuiz(0);
+        removeQuiz(0);
+    }
+
+    @Test
+    public void quizzesSortedAfterEdit() {
+        addQuiz(2019, 3, 1);
+        onView(withId(R.id.recyclerview_main)).perform(
+                RecyclerViewActions.actionOnItemAtPosition(
+                        0, MyViewAction.clickChildViewWithId(R.id.ivEditDate)
+                )
+        );
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName())))
+                .perform(PickerActions.setDate(2019, 4, 2));
+        onView(withId(android.R.id.button1)).perform(click());
+        addQuiz(2019, 3, 2);
+
+        onView(withId(R.id.recyclerview_main))
+                .check(matches(atPosition(0, hasDescendant(withText(containsString(
+                        "01 Mar 2019"))))));
+        onView(withId(R.id.recyclerview_main))
+                .check(matches(atPosition(1, hasDescendant(withText(containsString(
+                        "02 Apr 2019"))))));
         removeQuiz(0);
         removeQuiz(0);
     }

@@ -1,5 +1,6 @@
 package com.zhiyong.tingxie.ui.main;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,11 +22,17 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         int day = c.get(Calendar.DAY_OF_MONTH);
 
         // Create a new instance of DatePickerDialog and return it.
+
+        Activity activity = getActivity();
+
         return new DatePickerDialog(getActivity(), this, year, month, day);
     }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
+        // todo: Need to get quiz.
+
         MainActivity activity = (MainActivity) getActivity();
         activity.processDatePickerResult(year, month, dayOfMonth);
     }

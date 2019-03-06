@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -112,9 +114,13 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                     month = c.get(Calendar.MONTH);
                     day = c.get(Calendar.DAY_OF_MONTH);
 
-                    DatePickerDialog datePickerDialog =
-                            new DatePickerDialog(context, dateListener, year, month, day);
-                    datePickerDialog.show();
+//                    DatePickerDialog datePickerDialog =
+//                            new DatePickerDialog(context, dateListener, year, month, day);
+//                    datePickerDialog.show();
+                    DialogFragment newFragment = new DatePickerFragment();
+                    newFragment.show(
+                            ((FragmentActivity)context).getSupportFragmentManager(), "datePicker"
+                    );
                 }
             });
             holder.btnAddViewWords.setOnClickListener(new View.OnClickListener() {
