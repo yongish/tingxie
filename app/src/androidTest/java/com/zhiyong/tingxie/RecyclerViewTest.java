@@ -15,7 +15,6 @@ import android.view.ViewParent;
 import android.widget.DatePicker;
 
 import com.zhiyong.tingxie.ui.main.MainActivity;
-import com.zhiyong.tingxie.ui.main.QuizListAdapter;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;

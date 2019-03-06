@@ -149,10 +149,10 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         // Scroll to 1 position before next quiz.
         int scrollPosition = 0;
         Date today = new Date();
-        for (int i = 0; i < quizItems.size(); i++) {
+        for (int i = 1; i < quizItems.size(); i++) {
             try {
                 Date quizDate = Util.DB_FORMAT.parse(String.valueOf(quizItems.get(i).getDate()));
-                if (quizDate.compareTo(today) >= 0 && i > 0) {
+                if (quizDate.compareTo(today) >= 0) {
                     scrollPosition = i - 1;
                     break;
                 }
