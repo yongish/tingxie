@@ -1,13 +1,13 @@
 package com.zhiyong.tingxie.ui.main;
 
 public class QuizItem {
-    private int id;
+    private long id;
     private int date;
     private int totalWords;
     private int notLearned;
     private int round;
 
-    public QuizItem(int id, int date, int totalWords, int notLearned, int round) {
+    public QuizItem(long id, int date, int totalWords, int notLearned, int round) {
         this.id = id;
         this.date = date;
         this.totalWords = totalWords;
@@ -15,7 +15,7 @@ public class QuizItem {
         this.round = round;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

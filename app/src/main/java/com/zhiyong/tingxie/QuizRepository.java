@@ -86,6 +86,24 @@ public class QuizRepository {
         }
     }
 
+    public void updateQuiz(Quiz quiz) {
+        new updateQuizAsyncTask(mQuizDao).execute(quiz);
+    }
+
+    private static class updateQuizAsyncTask extends AsyncTask<Quiz, Void, Void> {
+        private QuizDao mAsyncTaskDao;
+
+        updateQuizAsyncTask(QuizDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(Quiz... quizzes) {
+            mAsyncTaskDao.update(quizzes[0]);
+            return null;
+        }
+    }
+
     public void insertQuestion(Question question) {
         new insertQuestionAsyncTask(mQuizDao).execute(question);
     }
@@ -165,11 +183,11 @@ public class QuizRepository {
         }
     }
 
-    public void deleteQuiz(int quizId) {
+    public void deleteQuiz(long quizId) {
         new deleteQuizItemAsyncTask(mQuizDao).execute(quizId);
     }
 
-    private static class deleteQuizItemAsyncTask extends AsyncTask<Integer, Void, Void> {
+    private static class deleteQuizItemAsyncTask extends AsyncTask<Long, Void, Void> {
         private QuizDao mAsyncTaskDao;
 
         deleteQuizItemAsyncTask(QuizDao dao) {
@@ -177,7 +195,7 @@ public class QuizRepository {
         }
 
         @Override
-        protected Void doInBackground(Integer... params) {
+        protected Void doInBackground(Long... params) {
             mAsyncTaskDao.deleteQuiz(params[0]);
             return null;
         }

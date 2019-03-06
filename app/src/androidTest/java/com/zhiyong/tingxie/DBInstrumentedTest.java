@@ -177,6 +177,18 @@ public class DBInstrumentedTest {
     }
 
     @Test
+    public void updateQuizDate() throws InterruptedException {
+        QuizItem quizItem = LiveDataTestUtil.getValue(mDao.getAllQuizItems()).get(0);
+        assertEquals(testDate, quizItem.getDate());
+        int updatedDate = 20190501;
+        Quiz updatedQuiz = new Quiz(updatedDate);
+        updatedQuiz.setId(quizId);
+        mDao.update(updatedQuiz);
+        quizItem = LiveDataTestUtil.getValue(mDao.getAllQuizItems()).get(0);
+        assertEquals(updatedDate, quizItem.getDate());
+    }
+
+    @Test
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();

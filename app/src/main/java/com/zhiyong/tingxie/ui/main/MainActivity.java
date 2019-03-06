@@ -117,10 +117,15 @@ public class MainActivity extends AppCompatActivity {
         this.startActivity(intent);
     }
 
-    public void processDatePickerResult(int year, int month, int day) {
+    public void processDatePickerResult(long quizId, int year, int month, int day) {
         int date = Integer.valueOf(String.valueOf(year) +
                 String.format("%02d", ++month) + String.format("%02d", day));
         Quiz quiz = new Quiz(date);
+        if (quizId != -1) {
+            quiz.setId(quizId);
+            mQuizViewModel.updateQuiz(quiz);
+            return;
+        }
         mQuizViewModel.insertQuiz(quiz);
     }
 }

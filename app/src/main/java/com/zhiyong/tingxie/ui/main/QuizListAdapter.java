@@ -101,23 +101,19 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                     };
 
                     Date currDate;
-                    int year;
-                    int month;
-                    int day;
                     try {
                         currDate = Util.DB_FORMAT.parse(String.valueOf(current.getDate()));
                         c.setTime(currDate);
                     } catch (ParseException e) {
                         // todo: Error logging API.
                     }
-                    year = c.get(Calendar.YEAR);
-                    month = c.get(Calendar.MONTH);
-                    day = c.get(Calendar.DAY_OF_MONTH);
 
-//                    DatePickerDialog datePickerDialog =
-//                            new DatePickerDialog(context, dateListener, year, month, day);
-//                    datePickerDialog.show();
-                    DialogFragment newFragment = new DatePickerFragment();
+                    DialogFragment newFragment = DatePickerFragment.newInstance(
+                            current.getId(),
+                            c.get(Calendar.YEAR),
+                            c.get(Calendar.MONTH),
+                            c.get(Calendar.DAY_OF_MONTH)
+                    );
                     newFragment.show(
                             ((FragmentActivity)context).getSupportFragmentManager(), "datePicker"
                     );
@@ -192,7 +188,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         final int adapterPosition = viewHolder.getAdapterPosition();
         final QuizItem quizItem = mQuizItems.get(adapterPosition);
         // Get question and quiz_pinyin rows to be deleted (from all question and quiz_pinyin rows).
-        final int quizId = quizItem.getId();
+        final long quizId = quizItem.getId();
         final List<Question> deletedQuestions = getQuestionsOfQuiz(quizId);
         final List<QuizPinyin> deletedQuizPinyins = getQuizPinyinsOfQuiz(quizId);
 
@@ -219,7 +215,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         notifyItemRemoved(adapterPosition);
     }
 
-    private List<Question> getQuestionsOfQuiz(int quizId) {
+    private List<Question> getQuestionsOfQuiz(long quizId) {
         List<Question> result = new ArrayList<>();
         for (Question question : mQuestions) {
             if (question.getId() == quizId) {
@@ -229,7 +225,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         return result;
     }
 
-    private List<QuizPinyin> getQuizPinyinsOfQuiz(int quizId) {
+    private List<QuizPinyin> getQuizPinyinsOfQuiz(long quizId) {
         List<QuizPinyin> result = new ArrayList<>();
         for (QuizPinyin quizPinyin : mQuizPinyins) {
             if (quizPinyin.getQuiz_id() == quizId) {

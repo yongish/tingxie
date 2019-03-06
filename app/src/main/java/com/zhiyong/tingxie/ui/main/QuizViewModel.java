@@ -42,7 +42,11 @@ public class QuizViewModel extends AndroidViewModel {
         mRepository.insertQuiz(quiz);
     }
 
-    void deleteQuiz(int quizId) {
+    void updateQuiz(Quiz quiz) {
+        mRepository.updateQuiz(quiz);
+    }
+
+    void deleteQuiz(long quizId) {
         mRepository.deleteQuiz(quizId);
     }
 

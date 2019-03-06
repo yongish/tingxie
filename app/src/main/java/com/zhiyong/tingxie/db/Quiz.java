@@ -21,7 +21,7 @@ public class Quiz {
     }
 
     @Ignore
-    public Quiz(int id, @NonNull int date) {
+    public Quiz(long id, @NonNull int date) {
         this.id = id;
         this.date = date;
     }

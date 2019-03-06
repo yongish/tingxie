@@ -24,6 +24,9 @@ public interface QuizDao {
     @Insert
     long insert(Quiz quiz);
 
+    @Update
+    void update(Quiz quiz);
+
     @Insert(onConflict = IGNORE)
     long insert(Pinyin pinyin);
 
@@ -43,7 +46,7 @@ public interface QuizDao {
     void deleteWord(Word word);
 
     @Query("DELETE FROM quiz WHERE id = :quizId")
-    void deleteQuiz(int quizId);
+    void deleteQuiz(long quizId);
 
     @Query("DELETE FROM quiz")
     void deleteAllQuizzes();
