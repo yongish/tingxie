@@ -74,7 +74,9 @@ public class MainActivity extends AppCompatActivity {
                 0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT
         ) {
             @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
+            public boolean onMove(@NonNull RecyclerView recyclerView,
+                                  @NonNull RecyclerView.ViewHolder viewHolder,
+                                  @NonNull RecyclerView.ViewHolder viewHolder1) {
                 return false;
             }
 
@@ -117,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void processDatePickerResult(int year, int month, int day) {
         int date = Integer.valueOf(String.valueOf(year) +
-                String.format("%02d", ++month) + String.valueOf(day));
+                String.format("%02d", ++month) + String.format("%02d", day));
         Quiz quiz = new Quiz(date);
         mQuizViewModel.insertQuiz(quiz);
     }

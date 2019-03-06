@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.contrib.PickerActions;
+import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
@@ -29,6 +30,7 @@ import java.util.Calendar;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.swipeLeft;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.core.internal.deps.guava.base.Preconditions.checkNotNull;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
@@ -45,6 +47,8 @@ public class RecyclerViewTest {
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
+    private ViewInteraction floatingActionButton = getFAB();
+
     @Before
     public void before() {
         InstrumentationRegistry.getTargetContext().deleteDatabase("pinyin_database");
@@ -52,23 +56,47 @@ public class RecyclerViewTest {
 
     @Test
     public void addQuizInFuture() {
-        ViewInteraction floatingActionButton = getFAB();
-        floatingActionButton.perform(click());
-
         Calendar c = Calendar.getInstance();
         c.add(Calendar.DATE, 1);
         int year = c.get(Calendar.YEAR);
         int monthOfYear = c.get(Calendar.MONTH);
         int dayOfMonth = c.get(Calendar.DATE);
+        addQuiz(year, monthOfYear, dayOfMonth);
 
+        onView(withId(R.id.recyclerview_main))
+                .check(matches(atPosition(0, hasDescendant(withText(containsString(
+                        String.valueOf(dayOfMonth)
+                ))))));
+
+        onView(withId(R.id.recyclerview_main)).perform(
+                RecyclerViewActions.actionOnItemAtPosition(0, swipeLeft()));
+    }
+
+    @Test
+    public void quizzesAreSorted() {
+        addQuiz(2019, 3, 1);
+        addQuiz(2019, 2, 28);
+        onView(withId(R.id.recyclerview_main))
+                .check(matches(atPosition(0, hasDescendant(withText(containsString(
+                        "28 Feb 2019"))))));
+        onView(withId(R.id.recyclerview_main))
+                .check(matches(atPosition(1, hasDescendant(withText(containsString(
+                        "01 Mar 2019"))))));
+        removeQuiz(0);
+        removeQuiz(0);
+    }
+
+    private void addQuiz(int year, int monthOfYear, int dayOfMonth) {
+        floatingActionButton.perform(click());
         onView(withClassName(Matchers.equalTo(DatePicker.class.getName())))
                 .perform(PickerActions.setDate(year, monthOfYear, dayOfMonth));
         onView(withId(android.R.id.button1)).perform(click());
-
-        onView(withId(R.id.recyclerview_main))
-                .check(matches(atPosition(0, hasDescendant(withText(containsString(String.valueOf(dayOfMonth)))))));
     }
 
+    private void removeQuiz(int position) {
+        onView(withId(R.id.recyclerview_main)).perform(
+                RecyclerViewActions.actionOnItemAtPosition(position, swipeLeft()));
+    }
 
     private ViewInteraction getFAB() {
         ViewInteraction floatingActionButton = onView(
@@ -81,21 +109,6 @@ public class RecyclerViewTest {
                         isDisplayed()));
         return floatingActionButton;
     }
-
-    // Add a new quiz.
-    // Must be sorted.
-
-//        ViewInteraction textView = onView(
-//                allOf(withId(R.id.word), withText("+ Word 20"),
-//                        childAtPosition(
-//                                childAtPosition(
-//                                        withId(R.id.recyclerview_main),
-//                                        13),
-//                                0),
-//                        isDisplayed()));
-//        textView.check(matches(withText("+ Word 20")));
-//    MainActivity activity = mActivityTestRule.getActivity();
-//    RecyclerView recyclerView = activity.findViewById(R.id.recyclerview_main);
 
     private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
@@ -138,4 +151,16 @@ public class RecyclerViewTest {
             }
         };
     }
+
+//        ViewInteraction textView = onView(
+//                allOf(withId(R.id.word), withText("+ Word 20"),
+//                        childAtPosition(
+//                                childAtPosition(
+//                                        withId(R.id.recyclerview_main),
+//                                        13),
+//                                0),
+//                        isDisplayed()));
+//        textView.check(matches(withText("+ Word 20")));
+//    MainActivity activity = mActivityTestRule.getActivity();
+//    RecyclerView recyclerView = activity.findViewById(R.id.recyclerview_main);
 }
