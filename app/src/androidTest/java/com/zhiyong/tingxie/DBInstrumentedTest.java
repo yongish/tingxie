@@ -32,8 +32,8 @@ import static org.junit.Assert.assertEquals;
 public class DBInstrumentedTest {
     private QuizDao mDao;
     private PinyinRoomDatabase mDb;
-    final int testDate = 20190101;
-    long quizId;
+    private final int testDate = 20190101;
+    private long quizId;
 
     @Before
     public void createDb() {
