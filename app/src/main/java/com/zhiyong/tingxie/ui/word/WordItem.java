@@ -1,17 +1,17 @@
 package com.zhiyong.tingxie.ui.word;
 
 public class WordItem {
-    private int quizId;
+    private long quizId;
     private String wordString;
     private String pinyinString;
 
-    public WordItem(int quizId, String wordString, String pinyinString) {
+    public WordItem(long quizId, String wordString, String pinyinString) {
         this.quizId = quizId;
         this.wordString = wordString;
         this.pinyinString = pinyinString;
     }
 
-    public int getQuizId() {
+    public long getQuizId() {
         return quizId;
     }
 

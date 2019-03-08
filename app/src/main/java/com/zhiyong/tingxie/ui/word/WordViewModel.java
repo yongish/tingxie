@@ -13,7 +13,7 @@ class WordViewModel extends AndroidViewModel {
     private LiveData<List<WordItem>> mWordItems;
     private QuizRepository mRepository;
 
-    WordViewModel(Application application, int quizId) {
+    WordViewModel(Application application, long quizId) {
         super(application);
         mRepository = new QuizRepository(application, quizId);
         mWordItems = mRepository.getWordItemsOfQuiz();
@@ -23,7 +23,7 @@ class WordViewModel extends AndroidViewModel {
         return mWordItems;
     }
 
-    void addWord(int quizId, String word, String pinyin) {
+    void addWord(long quizId, String word, String pinyin) {
         mRepository.addWord(quizId, word, pinyin);
     }
 

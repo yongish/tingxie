@@ -7,9 +7,9 @@ import android.support.annotation.NonNull;
 
 public class QuestionViewModelFactory implements ViewModelProvider.Factory {
     private Application mApplication;
-    private int mQuizId;
+    private long mQuizId;
 
-    public QuestionViewModelFactory(Application application, int quizId) {
+    public QuestionViewModelFactory(Application application, long quizId) {
         mApplication = application;
         mQuizId = quizId;
     }

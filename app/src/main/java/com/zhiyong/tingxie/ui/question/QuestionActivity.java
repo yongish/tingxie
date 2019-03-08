@@ -58,7 +58,7 @@ public class QuestionActivity extends AppCompatActivity {
 //            }
 //        });
 
-        final int quizId = getIntent().getIntExtra(EXTRA_QUIZ_ID, -1);
+        final long quizId = getIntent().getLongExtra(EXTRA_QUIZ_ID, -1);
 
         ivPlay = findViewById(R.id.ivPlay);
         btnShowAnswer = findViewById(R.id.btnShowAnswer);

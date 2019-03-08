@@ -14,7 +14,7 @@ public class QuestionViewModel extends AndroidViewModel {
     private QuizRepository mRepository;
     private LiveData<List<WordItem>>  mQuestionItems;
 
-    public QuestionViewModel(@NonNull Application application, int quizId) {
+    public QuestionViewModel(@NonNull Application application, long quizId) {
         super(application);
         mRepository = new QuizRepository(application, quizId);
         mQuestionItems = mRepository.getRemainingQuestionsOfQuiz();

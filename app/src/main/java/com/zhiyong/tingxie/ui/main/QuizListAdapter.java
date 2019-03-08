@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.Util;
@@ -132,12 +133,15 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
             holder.btnStartResume.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, QuestionActivity.class);
-                    intent.putExtra(EXTRA_QUIZ_ID, current.getId());
-                    ((Activity) context).startActivityForResult(
-                            intent, QUESTION_ACTIVITY_REQUEST_CODE
-                    );
-
+                    if (current.getTotalWords() > 0) {
+                        Intent intent = new Intent(context, QuestionActivity.class);
+                        intent.putExtra(EXTRA_QUIZ_ID, current.getId());
+                        ((Activity) context).startActivityForResult(
+                                intent, QUESTION_ACTIVITY_REQUEST_CODE
+                        );
+                    } else {
+                        Toast.makeText(context, "No words in quiz", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         } else {

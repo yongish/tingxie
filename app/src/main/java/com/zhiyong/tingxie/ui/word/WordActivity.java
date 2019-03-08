@@ -49,7 +49,7 @@ public class WordActivity extends AppCompatActivity {
             }
         });
 
-        final int quizId = getIntent().getIntExtra(EXTRA_QUIZ_ID, -1);
+        final long quizId = getIntent().getLongExtra(EXTRA_QUIZ_ID, -1);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +83,11 @@ public class WordActivity extends AppCompatActivity {
                                 if (pinyin.length() > 0) {
                                     // Add word to current quizId.
                                     mWordViewModel.addWord(quizId, inputWord, pinyin);
+
+
+                                    // todo: Reset correct counters of all quiz words to 0.
+
+
                                 } else {
                                     dialog.cancel();
                                 }

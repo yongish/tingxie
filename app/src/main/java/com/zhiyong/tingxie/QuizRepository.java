@@ -31,7 +31,7 @@ public class QuizRepository {
     private LiveData<List<WordItem>> mPossibleQuestions;
     private LiveData<List<WordItem>> mRemainingQuestions;
 
-    public QuizRepository(Application application, int quizId) {
+    public QuizRepository(Application application, long quizId) {
         PinyinRoomDatabase db = PinyinRoomDatabase.getDatabase(application);
         mQuizDao = db.pinyinDao();
         Log.d(TAG, "QuizRepository: ");
@@ -122,7 +122,7 @@ public class QuizRepository {
         }
     }
 
-    public void addWord(int quizId, String wordString, String pinyinString) {
+    public void addWord(long quizId, String wordString, String pinyinString) {
         WordItem wordItem = new WordItem(quizId, wordString, pinyinString);
         new addWordAsyncTask(mQuizDao).execute(wordItem);
     }

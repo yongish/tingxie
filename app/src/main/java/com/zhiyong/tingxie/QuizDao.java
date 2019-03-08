@@ -72,6 +72,9 @@ public interface QuizDao {
     @Query("SELECT * FROM question")
     LiveData<List<Question>> getAllQuestions();
 
+    @Query("SELECT Count(correct) FROM question WHERE quiz_id = :quizId AND pinyin_string = :pinyin")
+    LiveData<Integer> getCorrectCount(long quizId, String pinyin);
+
     @Query("SELECT DISTINCT q.id AS quizId,\n" +
             "                w.word_string AS wordString,\n" +
             "                p.pinyin_string AS pinyinString\n" +
@@ -81,7 +84,7 @@ public interface QuizDao {
             "JOIN word w ON p.pinyin_string = w.pinyin_string\n" +
             "WHERE q.id = :quizId\n" +
             "ORDER BY p.pinyin_string")
-    LiveData<List<WordItem>> getWordItemsOfQuiz(int quizId);
+    LiveData<List<WordItem>> getWordItemsOfQuiz(long quizId);
 
     @Query("WITH tpc AS\n" +
             "  (SELECT quiz.id AS quiz_id,\n" +
@@ -132,7 +135,7 @@ public interface QuizDao {
             "       tp3.pinyin_string AS pinyinString\n" +
             "FROM tp3\n" +
             "JOIN word w ON tp3.pinyin_string = w.pinyin_string")
-    LiveData<List<WordItem>> getPossibleQuestions(int quizId);
+    LiveData<List<WordItem>> getPossibleQuestions(long quizId);
 
     @Query("WITH tpc AS\n" +
             "  (SELECT qp.pinyin_string,\n" +

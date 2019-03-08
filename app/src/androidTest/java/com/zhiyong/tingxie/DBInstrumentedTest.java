@@ -107,6 +107,8 @@ public class DBInstrumentedTest {
         // Answer question correctly.
         mDao.insert(new Question(System.currentTimeMillis(), s0, true, quizId));
         int numberLeft = LiveDataTestUtil.getValue(mDao.getRemainingQuestions(quizId)).size();
+
+        // todo: SHOULD BE 0!!!
         assertEquals(1, numberLeft);
     }
 
@@ -174,6 +176,25 @@ public class DBInstrumentedTest {
         mDao.insert(new QuizPinyin(quizId, s1));
         QuizItem quizItem1 = LiveDataTestUtil.getValue(mDao.getAllQuizItems()).get(0);
         assertEquals(1, quizItem1.getRound());
+    }
+
+    @Test
+    public void addWordResetsCorrectCounters() throws InterruptedException {
+        String s0 = "jiāo tà shí dì";
+        Pinyin p0 = new Pinyin(s0);
+        mDao.insert(p0);
+        mDao.insert(new Word("脚踏实地", s0));
+        mDao.insert(new QuizPinyin(quizId, s0));
+
+        mDao.insert(new Question(System.currentTimeMillis(), s0, true, quizId));
+        assertEquals(1, (int)LiveDataTestUtil.getValue(mDao.getCorrectCount(quizId, s0)));
+
+        String s1 = "jǐu níu yī máo";
+        Pinyin p1 = new Pinyin(s1);
+        mDao.insert(p1);
+        mDao.insert(new Word("九牛一毛", s1));
+        mDao.insert(new QuizPinyin(quizId, s1));
+//        assertEquals(0, (int)LiveDataTestUtil.getValue(mDao.getCorrectCount(quizId, s0)));
     }
 
     @Test
