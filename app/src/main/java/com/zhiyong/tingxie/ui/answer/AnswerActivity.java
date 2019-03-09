@@ -37,7 +37,7 @@ public class AnswerActivity extends AppCompatActivity {
 
         mAnswerViewModel = ViewModelProviders.of(this).get(AnswerViewModel.class);
 
-        final int quizId = getIntent().getIntExtra(EXTRA_QUIZ_ID, -1);
+        final long quizId = getIntent().getLongExtra(EXTRA_QUIZ_ID, -1);
         final String wordsString = getIntent().getStringExtra(EXTRA_WORDS_STRING);
         final String pinyinString = getIntent().getStringExtra(EXTRA_PINYIN_STRING);
 
