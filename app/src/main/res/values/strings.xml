@@ -55,4 +55,6 @@
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
     <string name="title_activity_login">Login</string>
     <string name="clone">Clone</string>
+    <string name="no_quizzes">You have not added any quizzes.\nTap the + button to add a quiz.</string>
+    <string name="no_words">You have not added any words.\nTap the + button to add a word.</string>
 </resources>

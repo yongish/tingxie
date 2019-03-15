@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zhiyong.tingxie.R;
@@ -108,6 +109,7 @@ public class WordActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        final TextView emptyView = findViewById(R.id.empty_view);
         mWordViewModel = ViewModelProviders
                 .of(this, new WordViewModelFactory(this.getApplication(), quizId))
                 .get(WordViewModel.class);
@@ -115,6 +117,11 @@ public class WordActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable List<WordItem> wordItems) {
                 adapter.setWordItems(wordItems);
+                if (wordItems == null || wordItems.isEmpty()) {
+                    emptyView.setVisibility(View.VISIBLE);
+                } else {
+                    emptyView.setVisibility(View.INVISIBLE);
+                }
             }
         });
 

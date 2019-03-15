@@ -16,6 +16,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.zhiyong.tingxie.db.Question;
 import com.zhiyong.tingxie.db.QuizPinyin;
@@ -50,11 +51,17 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        final TextView emptyView = findViewById(R.id.empty_view);
         mQuizViewModel = ViewModelProviders.of(this).get(QuizViewModel.class);
         mQuizViewModel.getAllQuizItems().observe(this, new Observer<List<QuizItem>>() {
             @Override
             public void onChanged(@Nullable List<QuizItem> quizItems) {
                 adapter.setQuizItems(quizItems, recyclerView);
+                if (quizItems == null || quizItems.isEmpty()) {
+                    emptyView.setVisibility(View.VISIBLE);
+                } else {
+                    emptyView.setVisibility(View.INVISIBLE);
+                }
             }
         });
         mQuizViewModel.getAllQuestions().observe(this, new Observer<List<Question>>() {
