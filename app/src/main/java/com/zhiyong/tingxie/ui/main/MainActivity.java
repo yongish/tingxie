@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -134,5 +135,11 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         mQuizViewModel.insertQuiz(quiz);
+    }
+
+    public void openHelp(MenuItem item) {
+        FragmentManager fm = getSupportFragmentManager();
+        HelpDialogFragment fragment = HelpDialogFragment.newInstance();
+        fragment.show(fm, "fragment_help");
     }
 }

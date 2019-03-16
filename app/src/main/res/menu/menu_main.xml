@@ -3,10 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.zhiyong.tingxie.com.zhiyong.tingxie.MainActivity">
     <item
+        android:id="@+id/action_help"
+        android:orderInCategory="100"
+        android:title="@string/help"
+        android:onClick="openHelp"
+        android:icon="@drawable/ic_help_outline_white_24dp"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/speech_settings"
         android:onClick="openSpeechSettings"
-        android:icon="@drawable/ic_audiotrack_black_24dp"
+        android:icon="@drawable/ic_audiotrack_white_24dp"
         app:showAsAction="ifRoom" />
 </menu>
