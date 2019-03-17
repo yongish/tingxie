@@ -112,6 +112,15 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         return 0;
     }
 
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        if (textToSpeech != null) {
+            textToSpeech.stop();
+            textToSpeech.shutdown();
+        }
+    }
+
     class WordViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvWord;
         private final TextView tvPinyin;

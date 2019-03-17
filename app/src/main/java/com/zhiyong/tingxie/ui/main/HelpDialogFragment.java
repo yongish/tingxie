@@ -40,7 +40,7 @@ public class HelpDialogFragment extends DialogFragment {
         btnDemo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("http://www.youtube.com/watch?v=Hxy8BZGQ5Jo")));
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/xqOFlM8_vak")));
             }
         });
         btnFacebook = getView().findViewById(R.id.btnFacebook);
