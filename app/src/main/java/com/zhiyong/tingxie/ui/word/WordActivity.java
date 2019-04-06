@@ -23,8 +23,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zhiyong.tingxie.R;
-import com.zhiyong.tingxie.Util;
 import com.zhiyong.tingxie.ui.main.MainActivity;
+
+import net.sourceforge.pinyin4j.PinyinHelper;
+import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
+import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
+import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 
 import java.util.List;
 
@@ -76,20 +80,27 @@ public class WordActivity extends AppCompatActivity {
                                 String inputWord = input.getText().toString().replaceAll("\\s", "");
                                 String pinyin = null;
                                 try {
-                                    pinyin = new Util().lookupPinyin(inputWord);
+                                    // Use Pinyin4J as backup.
+                                    HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
+                                    format.setVCharType(HanyuPinyinVCharType.WITH_U_UNICODE);
+                                    format.setToneType(HanyuPinyinToneType.WITH_TONE_MARK);
+                                    // Workaround as toHanyuPinyinString "separate" argument leaves last 2 strings concatenated.
+                                    String temp = PinyinHelper.toHanYuPinyinString(inputWord + "a", format, " ", true);
+                                    pinyin = temp.substring(0, temp.length() - 1);
+                                    // todo: Remove lookupPinyin when sure.
+//                                    pinyin = new Util().lookupPinyin(inputWord);
                                 } catch (Exception e) {
                                     // todo: Log to API.
-                                    Toast.makeText(WordActivity.this, "ERROR in pinyin lookup", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(WordActivity.this, "ERROR in local pinyin lookup", Toast.LENGTH_LONG).show();
                                 }
-                                if (pinyin.length() > 0) {
+
+                                if (pinyin != null && pinyin.length() > 0) {
                                     // Add word to current quizId.
                                     mWordViewModel.addWord(quizId, inputWord, pinyin);
-
-
                                     // todo: Reset correct counters of all quiz words to 0.
 
-
                                 } else {
+                                    Toast.makeText(WordActivity.this, "ERROR in pinyin lookup", Toast.LENGTH_LONG).show();
                                     dialog.cancel();
                                 }
                             }
