@@ -28,7 +28,10 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
 
     private List<WordItem> mWordItems;
 
-    WordListAdapter(final Context context) {
+    private WordViewModel viewModel;
+    private RecyclerView recyclerView;
+
+    WordListAdapter(final Context context, WordViewModel viewModel, RecyclerView recyclerView) {
         mInflater = LayoutInflater.from(context);
         textToSpeech = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
             @Override
@@ -39,6 +42,8 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
             }
         });
         this.context = context;
+        this.viewModel = viewModel;
+        this.recyclerView = recyclerView;
     }
 
     @NonNull
@@ -49,7 +54,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull WordViewHolder holder, final int i) {
+    public void onBindViewHolder(@NonNull final WordViewHolder holder, final int i) {
         if (mWordItems != null) {
             final WordItem current = mWordItems.get(i);
             final String word = current.getWordString();
@@ -70,6 +75,12 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
                     context.startActivity(intent);
                 }
             });
+            holder.ivDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemRemove(holder);
+                }
+            });
         } else {
             holder.tvWord.setText("No Word");
             holder.tvPinyin.setText("No pinyin");
@@ -81,32 +92,26 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         notifyDataSetChanged();
     }
 
-    void onItemRemove(RecyclerView.ViewHolder viewHolder,
-                      final RecyclerView mRecyclerView,
-                      final WordViewModel viewModel) {
+    void onItemRemove(RecyclerView.ViewHolder viewHolder) {
         final int adapterPosition = viewHolder.getAdapterPosition();
         final WordItem wordItem = mWordItems.get(adapterPosition);
         final QuizPinyin quizPinyin = new QuizPinyin(wordItem.getQuizId(), wordItem.getPinyinString());
 
         Snackbar snackbar = Snackbar
-                .make(mRecyclerView, "Removed word", Snackbar.LENGTH_LONG)
+                .make(recyclerView, "Removed word", Snackbar.LENGTH_LONG)
                 .setAction("Undo", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         mWordItems.add(adapterPosition, wordItem);
                         notifyItemInserted(adapterPosition);
                         viewModel.addQuizPinyin(quizPinyin);
-                        mRecyclerView.scrollToPosition(adapterPosition);
+                        recyclerView.scrollToPosition(adapterPosition);
                     }
                 });
         snackbar.show();
         mWordItems.remove(adapterPosition);
         viewModel.deleteWord(quizPinyin);
         notifyItemRemoved(adapterPosition);
-    }
-
-    void onItemRemoveHelper() {
-
     }
 
     @Override
@@ -130,6 +135,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         private final TextView tvPinyin;
         private final ImageView ivPlay;
         private final ConstraintLayout wordLayout;
+        private final ImageView ivDelete;
 
         private WordViewHolder(View itemView) {
             super(itemView);
@@ -137,6 +143,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
             tvPinyin = itemView.findViewById(R.id.tvPinyin);
             ivPlay = itemView.findViewById(R.id.ivPlay);
             wordLayout = itemView.findViewById(R.id.wordLayout);
+            ivDelete = itemView.findViewById(R.id.ivDelete);
         }
     }
 }

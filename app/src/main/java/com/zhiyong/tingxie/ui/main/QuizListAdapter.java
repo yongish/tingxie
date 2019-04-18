@@ -45,10 +45,10 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
     private final LayoutInflater mInflater;
     private final Context context;
 
+    private List<QuizItem> mQuizItems;
+
     private QuizViewModel viewModel;
     private RecyclerView recyclerView;
-
-    private List<QuizItem> mQuizItems;
 
     // All question and quiz_pinyin rows (for undo deletes). May be suboptimal to get all rows, but
     // getting only question and quiz_pinyin is tricky and may be overengineering.

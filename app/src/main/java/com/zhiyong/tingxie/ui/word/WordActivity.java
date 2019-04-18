@@ -115,15 +115,15 @@ public class WordActivity extends AppCompatActivity {
             }
         });
 
+        mWordViewModel = ViewModelProviders
+                .of(this, new WordViewModelFactory(this.getApplication(), quizId))
+                .get(WordViewModel.class);
         final RecyclerView recyclerView = findViewById(R.id.recyclerview_word);
-        final WordListAdapter adapter = new WordListAdapter(this);
+        final WordListAdapter adapter = new WordListAdapter(this, mWordViewModel, recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         final TextView emptyView = findViewById(R.id.empty_view);
-        mWordViewModel = ViewModelProviders
-                .of(this, new WordViewModelFactory(this.getApplication(), quizId))
-                .get(WordViewModel.class);
         mWordViewModel.getWordItemsOfQuiz().observe(this, new Observer<List<WordItem>>() {
             @Override
             public void onChanged(@Nullable List<WordItem> wordItems) {
@@ -147,8 +147,7 @@ public class WordActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-//                adapter.onItemRemove(viewHolder);
-                adapter.onItemRemove(viewHolder, recyclerView, mWordViewModel);
+                adapter.onItemRemove(viewHolder);
             }
         });
         helper.attachToRecyclerView(recyclerView);
