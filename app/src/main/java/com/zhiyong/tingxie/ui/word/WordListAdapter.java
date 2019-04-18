@@ -105,6 +105,10 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         notifyItemRemoved(adapterPosition);
     }
 
+    void onItemRemoveHelper() {
+
+    }
+
     @Override
     public int getItemCount() {
         if (mWordItems != null)

@@ -147,6 +147,7 @@ public class WordActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+//                adapter.onItemRemove(viewHolder);
                 adapter.onItemRemove(viewHolder, recyclerView, mWordViewModel);
             }
         });

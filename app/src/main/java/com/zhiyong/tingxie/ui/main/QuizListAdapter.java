@@ -2,6 +2,7 @@ package com.zhiyong.tingxie.ui.main;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -44,6 +45,9 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
     private final LayoutInflater mInflater;
     private final Context context;
 
+    private QuizViewModel viewModel;
+    private RecyclerView recyclerView;
+
     private List<QuizItem> mQuizItems;
 
     // All question and quiz_pinyin rows (for undo deletes). May be suboptimal to get all rows, but
@@ -51,9 +55,11 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
     private List<Question> mQuestions;
     private List<QuizPinyin> mQuizPinyins;
 
-    QuizListAdapter(Context context) {
+    QuizListAdapter(Context context, QuizViewModel viewModel, RecyclerView recyclerView) {
         mInflater = LayoutInflater.from(context);
         this.context = context;
+        this.viewModel = viewModel;
+        this.recyclerView = recyclerView;
     }
 
     @NonNull
@@ -64,7 +70,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
     }
 
     @Override
-    public void onBindViewHolder(QuizViewHolder holder, final int i) {
+    public void onBindViewHolder(final QuizViewHolder holder, final int i) {
         if (mQuizItems != null) {
             final QuizItem current = mQuizItems.get(i);
 
@@ -144,6 +150,12 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                     }
                 }
             });
+            holder.ivDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemRemove(holder);
+                }
+            });
         } else {
             holder.tvDate.setText("No Date");
             holder.tvWordsLeft.setText("No info on progress.");
@@ -186,18 +198,14 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         mQuizPinyins = quizPinyins;
     }
 
-    void onItemRemove(RecyclerView.ViewHolder viewHolder,
-                      final RecyclerView mRecyclerView,
-                      final QuizViewModel viewModel) {
+    void onItemRemove(RecyclerView.ViewHolder viewHolder) {
         final int adapterPosition = viewHolder.getAdapterPosition();
         final QuizItem quizItem = mQuizItems.get(adapterPosition);
         // Get question and quiz_pinyin rows to be deleted (from all question and quiz_pinyin rows).
         final long quizId = quizItem.getId();
-        final List<Question> deletedQuestions = getQuestionsOfQuiz(quizId);
-        final List<QuizPinyin> deletedQuizPinyins = getQuizPinyinsOfQuiz(quizId);
 
         Snackbar snackbar = Snackbar
-                .make(mRecyclerView, "Removed quiz", Snackbar.LENGTH_LONG)
+                .make(recyclerView, "Removed quiz", Snackbar.LENGTH_LONG)
                 .setAction("Undo", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -207,10 +215,10 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                         // Reinsert deleted quiz, question, quiz_pinyin rows.
                         Quiz quiz = new Quiz(quizId, quizItem.getDate());
                         viewModel.insertQuiz(quiz);
-                        viewModel.insertQuestions(deletedQuestions);
-                        viewModel.insertQuizPinyins(deletedQuizPinyins);
+                        viewModel.insertQuestions(getQuestionsOfQuiz(quizId));
+                        viewModel.insertQuizPinyins(getQuizPinyinsOfQuiz(quizId));
 
-                        mRecyclerView.scrollToPosition(adapterPosition);
+                        recyclerView.scrollToPosition(adapterPosition);
                     }
                 });
         snackbar.show();
@@ -251,6 +259,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         private final ImageView ivEditDate;
         private final Button btnAddViewWords;
         private final Button btnStartResume;
+        private final ImageView ivDelete;
 
         private QuizViewHolder(View itemView) {
             super(itemView);
@@ -259,6 +268,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
             ivEditDate = itemView.findViewById(R.id.ivEditDate);
             btnAddViewWords = itemView.findViewById(R.id.btnAddViewWords);
             btnStartResume = itemView.findViewById(R.id.btnStartResume);
+            ivDelete = itemView.findViewById(R.id.ivDelete);
         }
     }
 }

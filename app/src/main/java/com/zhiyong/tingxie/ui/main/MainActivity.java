@@ -48,12 +48,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         recyclerView = findViewById(R.id.recyclerview_main);
-        final QuizListAdapter adapter = new QuizListAdapter(this);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         final TextView emptyView = findViewById(R.id.empty_view);
         mQuizViewModel = ViewModelProviders.of(this).get(QuizViewModel.class);
+
+        final QuizListAdapter adapter = new QuizListAdapter(this, mQuizViewModel, recyclerView);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         mQuizViewModel.getAllQuizItems().observe(this, new Observer<List<QuizItem>>() {
             @Override
             public void onChanged(@Nullable List<QuizItem> quizItems) {
@@ -90,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-                adapter.onItemRemove(viewHolder, recyclerView, mQuizViewModel);
+                adapter.onItemRemove(viewHolder);
             }
         });
         helper.attachToRecyclerView(recyclerView);
