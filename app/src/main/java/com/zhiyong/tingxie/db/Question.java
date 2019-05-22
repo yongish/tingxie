@@ -50,6 +50,7 @@ public class Question {
         return timestamp;
     }
 
+    @NonNull
     public long getReset_time() {
         return reset_time;
     }
