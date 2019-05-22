@@ -1,0 +1,258 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "7117510539fc00a80a7dde5b942abc4d",
+    "entities": [
+      {
+        "tableName": "Question",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER NOT NULL, `reset_time` INTEGER NOT NULL, `pinyin_string` TEXT, `correct` INTEGER NOT NULL, `quiz_id` INTEGER NOT NULL, FOREIGN KEY(`quiz_id`) REFERENCES `Quiz`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reset_time",
+            "columnName": "reset_time",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pinyin_string",
+            "columnName": "pinyin_string",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "correct",
+            "columnName": "correct",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "quiz_id",
+            "columnName": "quiz_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_Question_quiz_id",
+            "unique": false,
+            "columnNames": [
+              "quiz_id"
+            ],
+            "createSql": "CREATE  INDEX `index_Question_quiz_id` ON `${TABLE_NAME}` (`quiz_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Quiz",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "quiz_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "Quiz",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_Quiz_id",
+            "unique": false,
+            "columnNames": [
+              "id"
+            ],
+            "createSql": "CREATE  INDEX `index_Quiz_id` ON `${TABLE_NAME}` (`id`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Pinyin",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`pinyin_string` TEXT NOT NULL, PRIMARY KEY(`pinyin_string`))",
+        "fields": [
+          {
+            "fieldPath": "pinyin_string",
+            "columnName": "pinyin_string",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "pinyin_string"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Word",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`word_string` TEXT NOT NULL, `pinyin_string` TEXT, PRIMARY KEY(`word_string`), FOREIGN KEY(`pinyin_string`) REFERENCES `Pinyin`(`pinyin_string`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "word_string",
+            "columnName": "word_string",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pinyin_string",
+            "columnName": "pinyin_string",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "word_string"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_Word_pinyin_string",
+            "unique": false,
+            "columnNames": [
+              "pinyin_string"
+            ],
+            "createSql": "CREATE  INDEX `index_Word_pinyin_string` ON `${TABLE_NAME}` (`pinyin_string`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Pinyin",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "pinyin_string"
+            ],
+            "referencedColumns": [
+              "pinyin_string"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "quiz_pinyin",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `quiz_id` INTEGER NOT NULL, `pinyin_string` TEXT, FOREIGN KEY(`quiz_id`) REFERENCES `Quiz`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`pinyin_string`) REFERENCES `Pinyin`(`pinyin_string`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "quiz_id",
+            "columnName": "quiz_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pinyin_string",
+            "columnName": "pinyin_string",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_quiz_pinyin_quiz_id",
+            "unique": false,
+            "columnNames": [
+              "quiz_id"
+            ],
+            "createSql": "CREATE  INDEX `index_quiz_pinyin_quiz_id` ON `${TABLE_NAME}` (`quiz_id`)"
+          },
+          {
+            "name": "index_quiz_pinyin_pinyin_string",
+            "unique": false,
+            "columnNames": [
+              "pinyin_string"
+            ],
+            "createSql": "CREATE  INDEX `index_quiz_pinyin_pinyin_string` ON `${TABLE_NAME}` (`pinyin_string`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Quiz",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "quiz_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Pinyin",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "pinyin_string"
+            ],
+            "referencedColumns": [
+              "pinyin_string"
+            ]
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"7117510539fc00a80a7dde5b942abc4d\")"
+    ]
+  }
+}
