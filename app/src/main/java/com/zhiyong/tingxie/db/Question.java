@@ -26,7 +26,7 @@ public class Question {
 
     private long quiz_id;
 
-    public Question(@NonNull long timestamp, @NonNull long reset_time,
+    public Question(@NonNull long timestamp, long reset_time,
                     @NonNull String pinyin_string, @NonNull boolean correct,
                     @NonNull long quiz_id) {
         this.timestamp = timestamp;
@@ -50,7 +50,6 @@ public class Question {
         return timestamp;
     }
 
-    @NonNull
     public long getReset_time() {
         return reset_time;
     }
