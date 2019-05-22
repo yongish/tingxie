@@ -18,6 +18,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.ui.main.MainActivity;
+import com.zhiyong.tingxie.ui.resetpassword.ResetPasswordActivity;
 import com.zhiyong.tingxie.ui.signup.SignupActivity;
 
 public class LoginActivity extends AppCompatActivity {
@@ -65,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(LoginActivity.this, ResetPasswordActivity.class));
+                startActivity(new Intent(LoginActivity.this, ResetPasswordActivity.class));
             }
         });
 
