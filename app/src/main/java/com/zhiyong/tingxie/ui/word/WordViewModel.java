@@ -34,4 +34,8 @@ class WordViewModel extends AndroidViewModel {
     void addQuizPinyin(QuizPinyin quizPinyin) {
         mRepository.insertQuizPinyin(quizPinyin);
     }
+
+    void updateQuestions(long quizId) {
+        mRepository.updateQuestions(quizId);
+    }
 }

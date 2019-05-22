@@ -122,6 +122,24 @@ public class QuizRepository {
         }
     }
 
+    public void updateQuestions(Long quizId) {
+        new updateQuestionsAsyncTask(mQuizDao).execute(quizId);
+    }
+
+    private static class updateQuestionsAsyncTask extends AsyncTask<Long, Void, Void> {
+        private QuizDao mAsyncTaskDao;
+
+        updateQuestionsAsyncTask(QuizDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(Long... params) {
+            mAsyncTaskDao.updateQuestions(params[0], System.currentTimeMillis());
+            return null;
+        }
+    }
+
     public void addWord(long quizId, String wordString, String pinyinString) {
         WordItem wordItem = new WordItem(quizId, wordString, pinyinString);
         new addWordAsyncTask(mQuizDao).execute(wordItem);

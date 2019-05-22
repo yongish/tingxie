@@ -40,6 +40,9 @@ public interface QuizDao {
     @Insert
     void insert(Question question);
 
+    @Query("UPDATE question SET reset_time = :timestamp WHERE quiz_id = :quizId")
+    void updateQuestions(long quizId, long timestamp);
+
     @Update
     void markQuestionCorrect(Question question);
 
@@ -95,6 +98,7 @@ public interface QuizDao {
             "   LEFT JOIN quiz_pinyin tp ON quiz.id = tp.quiz_id\n" +
             "   LEFT JOIN question q ON tp.quiz_id = q.quiz_id\n" +
             "   AND tp.pinyin_string = q.pinyin_string\n" +
+            "   AND q.reset_time <= q.timestamp\n" +
             "   GROUP BY quiz.id,\n" +
             "            tp.pinyin_string),\n" +
             "     tp2 AS\n" +
@@ -119,6 +123,7 @@ public interface QuizDao {
             "  (SELECT tp.pinyin_string,\n" +
             "          Count(correct) AS correct_count\n" +
             "   FROM quiz_pinyin tp LEFT JOIN question q ON tp.quiz_id = q.quiz_id\n" +
+            "   AND q.reset_time <= q.timestamp\n" +
             "   WHERE tp.quiz_id = :quizId\n" +
             "   GROUP BY tp.pinyin_string),\n" +
             "     tp2 AS\n" +
@@ -145,6 +150,7 @@ public interface QuizDao {
             "   FROM quiz_pinyin qp\n" +
             "   LEFT JOIN question qn ON qp.quiz_id = qn.quiz_id\n" +
             "   AND qp.pinyin_string = qn.pinyin_string\n" +
+            "   AND qn.reset_time <= qn.timestamp\n" +
             "   WHERE qp.quiz_id = :quizId\n" +
             "   GROUP BY qp.pinyin_string),\n" +
             "     tp2 AS\n" +

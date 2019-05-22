@@ -4,6 +4,7 @@ import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -15,7 +16,7 @@ import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.db.Word;
 
 @Database(entities = {Question.class, Quiz.class, Pinyin.class, Word.class, QuizPinyin.class},
-        version = 1)
+        version = 2)
 public abstract class PinyinRoomDatabase extends RoomDatabase {
     public abstract QuizDao pinyinDao();
     private static PinyinRoomDatabase INSTANCE;
@@ -34,6 +35,7 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             PinyinRoomDatabase.class, "pinyin_database")
+                            .addMigrations(MIGRATION_1_2)
                             .addCallback(sRoomDatabaseCallback)
                             .build();
                 }
@@ -41,6 +43,13 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
         }
         return INSTANCE;
     }
+
+    private static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE question ADD COLUMN reset_time INTEGER DEFAULT 1558504709");
+        }
+    };
 
     /**
      * Populate the database in the background.

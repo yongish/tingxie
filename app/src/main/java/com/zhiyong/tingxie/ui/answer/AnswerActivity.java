@@ -54,8 +54,9 @@ public class AnswerActivity extends AppCompatActivity {
         });
 
         btnAnswerCorrect = findViewById(R.id.btnAnswerCorrect);
+        long ts = System.currentTimeMillis();
         final Question.QuestionBuilder questionBuilder = new Question.QuestionBuilder()
-                .timestamp(System.currentTimeMillis())
+                .timestamp(ts)
                 .pinyinString(pinyinString)
                 .quizId(quizId);
         final Intent intentQuestion = new Intent(getApplicationContext(), QuestionActivity.class);

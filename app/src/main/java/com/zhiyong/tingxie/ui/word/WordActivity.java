@@ -3,8 +3,10 @@ package com.zhiyong.tingxie.ui.word;
 import android.app.AlertDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -97,8 +99,7 @@ public class WordActivity extends AppCompatActivity {
                                 if (pinyin != null && pinyin.length() > 0) {
                                     // Add word to current quizId.
                                     mWordViewModel.addWord(quizId, inputWord, pinyin);
-                                    // todo: Reset correct counters of all quiz words to 0.
-
+                                    mWordViewModel.updateQuestions(quizId);
                                 } else {
                                     Toast.makeText(WordActivity.this, "ERROR in pinyin lookup", Toast.LENGTH_LONG).show();
                                     dialog.cancel();

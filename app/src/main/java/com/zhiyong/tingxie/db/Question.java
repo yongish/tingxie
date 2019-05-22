@@ -18,15 +18,19 @@ public class Question {
 
     private long timestamp;
 
+    private long reset_time;
+
     private String pinyin_string;
 
     private boolean correct;
 
     private long quiz_id;
 
-    public Question(@NonNull long timestamp, @NonNull String pinyin_string, @NonNull boolean correct,
+    public Question(@NonNull long timestamp, @NonNull long reset_time,
+                    @NonNull String pinyin_string, @NonNull boolean correct,
                     @NonNull long quiz_id) {
         this.timestamp = timestamp;
+        this.reset_time = reset_time;
         this.pinyin_string = pinyin_string;
         this.correct = correct;
         this.quiz_id = quiz_id;
@@ -44,6 +48,11 @@ public class Question {
     @NonNull
     public long getTimestamp() {
         return timestamp;
+    }
+
+    @NonNull
+    public long getReset_time() {
+        return reset_time;
     }
 
     @NonNull
@@ -88,7 +97,8 @@ public class Question {
         }
 
         public Question build() {
-            return new Question(nestedTimestamp, nestedPinyinString, nestedCorrect, nestedQuizId);
+            return new Question(nestedTimestamp, nestedTimestamp, nestedPinyinString, nestedCorrect,
+                    nestedQuizId);
         }
     }
 }
