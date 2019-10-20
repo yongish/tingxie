@@ -18,11 +18,15 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.zhiyong.tingxie.db.Question;
 import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.db.Quiz;
+import com.zhiyong.tingxie.ui.login.LoginActivity;
 
 import java.util.List;
 
@@ -30,10 +34,13 @@ public class MainActivity extends AppCompatActivity {
 
     private QuizViewModel mQuizViewModel;
     RecyclerView recyclerView;
+    private FirebaseAuth auth;
+    private FirebaseAuth.AuthStateListener authListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        auth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -143,5 +150,19 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         HelpDialogFragment fragment = HelpDialogFragment.newInstance();
         fragment.show(fm, "fragment_help");
+    }
+
+    public void logout(MenuItem item) {
+        auth.signOut();
+        FirebaseUser user = auth.getCurrentUser();
+        if (user == null) {
+            // user auth state is changed - user is null
+            // launch login activity
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
+        } else {
+            Toast.makeText(this, "Logout failed.", Toast.LENGTH_SHORT).show();
+            // todo: Log error.
+        }
     }
 }
