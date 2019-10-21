@@ -3,13 +3,15 @@ package com.zhiyong.tingxie.ui.main;
 public class QuizItem {
     private long id;
     private int date;
+    private String title;
     private int totalWords;
     private int notLearned;
     private int round;
 
-    public QuizItem(long id, int date, int totalWords, int notLearned, int round) {
+    public QuizItem(long id, int date, String title, int totalWords, int notLearned, int round) {
         this.id = id;
         this.date = date;
+        this.title = title;
         this.totalWords = totalWords;
         this.notLearned = notLearned;
         this.round = round;
@@ -25,6 +27,14 @@ public class QuizItem {
 
     public void setDate(int date) {
         this.date = date;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public int getTotalWords() {

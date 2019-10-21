@@ -16,7 +16,7 @@ import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.db.Word;
 
 @Database(entities = {Question.class, Quiz.class, Pinyin.class, Word.class, QuizPinyin.class},
-        version = 2)
+        version = 3)
 public abstract class PinyinRoomDatabase extends RoomDatabase {
     public abstract QuizDao pinyinDao();
     private static PinyinRoomDatabase INSTANCE;
@@ -35,7 +35,7 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             PinyinRoomDatabase.class, "pinyin_database")
-                            .addMigrations(MIGRATION_1_2)
+                            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                             .addCallback(sRoomDatabaseCallback)
                             .build();
                 }
@@ -48,6 +48,13 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE question ADD COLUMN reset_time INTEGER NOT NULL DEFAULT 1558504709");
+        }
+    };
+
+    private static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE quiz ADD COLUMN title TEXT");
         }
     };
 

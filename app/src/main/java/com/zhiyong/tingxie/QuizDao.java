@@ -92,6 +92,7 @@ public interface QuizDao {
 
     @Query("WITH tpc AS\n" +
             "  (SELECT quiz.id AS quiz_id,\n" +
+            "          title,\n" +
             "          tp.pinyin_string,\n" +
             "          Count(correct) AS correct_count\n" +
             "   FROM quiz\n" +
@@ -109,6 +110,7 @@ public interface QuizDao {
             "   GROUP BY tpc.quiz_id)\n" +
             "SELECT t.id,\n" +
             "       t.date,\n" +
+            "       t.title,\n" +
             "       tp2.total AS totalWords,\n" +
             "       Min(tp2.total, Count(tp2.rounds_completed = tpc.correct_count)) AS notLearned,\n" +
             "       tp2.rounds_completed + 1 AS round\n" +

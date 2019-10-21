@@ -2,7 +2,6 @@ package com.zhiyong.tingxie.ui.main;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -10,12 +9,17 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -83,6 +87,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
 
 
             holder.tvDate.setText(displayDate);
+            holder.etTitle.setText(current.getTitle());
             holder.tvWordsLeft.setText(String.format(Locale.US,
 //                    "%d words",
 //                    current.getTotalWords()));
@@ -124,6 +129,24 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                     newFragment.show(
                             ((FragmentActivity)context).getSupportFragmentManager(), "datePicker"
                     );
+                }
+            });
+            holder.etTitle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        QuizItem newItem = current;
+                        newItem.setTitle(v.getText().toString());
+                        mQuizItems.set(i, newItem);
+                        notifyDataSetChanged();
+
+                        viewModel.updateQuiz(new Quiz(
+                                newItem.getId(), newItem.getDate(), newItem.getTitle()
+                        ));
+
+                        holder.etTitle.clearFocus();
+                    }
+                    return false;
                 }
             });
             holder.btnAddViewWords.setOnClickListener(new View.OnClickListener() {
@@ -213,7 +236,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                         notifyItemInserted(adapterPosition);
 
                         // Reinsert deleted quiz, question, quiz_pinyin rows.
-                        Quiz quiz = new Quiz(quizId, quizItem.getDate());
+                        Quiz quiz = new Quiz(quizId, quizItem.getDate(), quizItem.getTitle());
                         viewModel.insertQuiz(quiz);
                         viewModel.insertQuestions(getQuestionsOfQuiz(quizId));
                         viewModel.insertQuizPinyins(getQuizPinyinsOfQuiz(quizId));
@@ -255,6 +278,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
 
     class QuizViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvDate;
+        private final EditText etTitle;
         private final TextView tvWordsLeft;
         private final ImageView ivEditDate;
         private final Button btnAddViewWords;
@@ -264,6 +288,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         private QuizViewHolder(View itemView) {
             super(itemView);
             tvDate = itemView.findViewById(R.id.tvDate);
+            etTitle = itemView.findViewById(R.id.etTitle);
             tvWordsLeft = itemView.findViewById(R.id.tvWordsLeft);
             ivEditDate = itemView.findViewById(R.id.ivEditDate);
             btnAddViewWords = itemView.findViewById(R.id.btnAddViewWords);

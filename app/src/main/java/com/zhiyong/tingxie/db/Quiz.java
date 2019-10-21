@@ -16,14 +16,18 @@ public class Quiz {
 
     private int date;
 
+    private String title;
+
     public Quiz(@NonNull int date) {
         this.date = date;
+        title = "No title";
     }
 
     @Ignore
-    public Quiz(long id, @NonNull int date) {
+    public Quiz(long id, @NonNull int date, String title) {
         this.id = id;
         this.date = date;
+        this.title = title;
     }
 
     public void setId(long id) {
@@ -35,8 +39,16 @@ public class Quiz {
         return id;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     @NonNull
     public int getDate() {
         return date;
+    }
+
+    public String getTitle() {
+        return title;
     }
 }
