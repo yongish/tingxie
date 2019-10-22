@@ -9,14 +9,13 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -143,6 +142,10 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                         viewModel.updateQuiz(new Quiz(
                                 newItem.getId(), newItem.getDate(), newItem.getTitle()
                         ));
+
+                        InputMethodManager inputManager = (InputMethodManager)
+                                context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                        inputManager.toggleSoftInput(0, 0);
 
                         holder.etTitle.clearFocus();
                     }
