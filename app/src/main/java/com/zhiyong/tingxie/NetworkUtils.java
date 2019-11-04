@@ -1,13 +1,27 @@
 package com.zhiyong.tingxie;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.util.Log;
 
+import com.zhiyong.tingxie.db.Term;
+
+import org.jetbrains.annotations.NotNull;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
+import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class NetworkUtils {
+    private static OkHttpClient client = new OkHttpClient();
+
     private static final String LOG_TAG = NetworkUtils.class.getSimpleName();
 
     static Element getPinyin(String url) {
@@ -20,4 +34,26 @@ public class NetworkUtils {
         }
         return result;
     }
+
+//    public static LiveData<List<Term>> getTerms(String uid, String quizId) {
+//        uid = "Um1QB4JIqNb61MYXVdc99ZUidkt2";
+//        String token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjVkY2U3ZTQxYWRkMTIxYjg2ZWQ0MDRiODRkYTc1NzM5NDY3ZWQyYmMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vdGluZ3hpZS1iMWFjYiIsImF1ZCI6InRpbmd4aWUtYjFhY2IiLCJhdXRoX3RpbWUiOjE1NzE1OTg2MzEsInVzZXJfaWQiOiJVbTFRQjRKSXFOYjYxTVlYVmRjOTlaVWlka3QyIiwic3ViIjoiVW0xUUI0SklxTmI2MU1ZWFZkYzk5WlVpZGt0MiIsImlhdCI6MTU3MjU4Nzc4NywiZXhwIjoxNTcyNTkxMzg3LCJlbWFpbCI6Inlvbmdpc2hAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsieW9uZ2lzaEBnbWFpbC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.NTRmPzMaIdShfSCwp3-rpluMBbL8juNF8j4z85AVzcUK86NhN4KQsTliphD2Af4QLEzk7gTdFNEDUbdORerObcg0vlkkUOuUghGtn3loN4oDoOMtyFre0PrDnqEIsHbdPqYboz3raVLes2YRTEr-pSaRHtW1xlyOn23gKefx2oxqyIMS2KLmesiEWFbXOn3U-DvIkAtgbWv1A1z5DAzUT9xTCHZH9aIrn8ZupROokIKHtKiXgmcAib0uG4Cxprh7mlu6wkfhExSuskyQpm7EtE2dw70-7Iyy1uIwa1rMkvJEPrJ5IHBSjzXaL6QazGUwWzTG27RKikICaKX0xyTHtg";
+//        Request request = new Request.Builder()
+//                .header("Authorization", "Bearer " + token)
+//                .url("https://localhost:8443/term/" + uid)
+//                .build();
+//        client.newCall(request).enqueue(new Callback() {
+//            MutableLiveData<List<Term>> terms = new MutableLiveData<>();
+//            @Override
+//            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+//                terms = null;
+//            }
+//
+//            @Override
+//            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+//                terms.setValue(response.body());
+//            }
+//        });
+//        return terms;
+//    }
 }

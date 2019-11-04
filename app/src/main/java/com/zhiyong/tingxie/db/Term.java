@@ -1,3 +1,6 @@
+/**
+ * todo: May delete this because we do not directly access MySQL DB.
+ */
 package com.zhiyong.tingxie.db;
 
 import android.arch.persistence.room.Entity;
@@ -38,6 +41,6 @@ public class Term {
         this.id = id;
     }
 
-    public void setTimesCorrect(@NonNull long quizId, @NonNull String userId, @NonNull String word,
-                                )
+//    public void setTimesCorrect(@NonNull long quizId, @NonNull String userId, @NonNull String word,
+//                                )
 }

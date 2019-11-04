@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 
 import com.zhiyong.tingxie.db.QuizPinyin;
+import com.zhiyong.tingxie.ui.main.QuizRepository;
 
 // todo: Try placing duplicate functions of QuizViewMode and WordViewModel.
 public abstract class CommonViewModel extends AndroidViewModel {

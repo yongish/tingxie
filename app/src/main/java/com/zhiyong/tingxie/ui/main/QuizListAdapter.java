@@ -40,8 +40,9 @@ import java.util.Locale;
 
 public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizViewHolder> {
 
-    public static final int WORD_ACTIVITY_REQUEST_CODE = 2;
-    public static final int QUESTION_ACTIVITY_REQUEST_CODE = 3;
+    static final int WORD_ACTIVITY_REQUEST_CODE = 2;
+    static final int QUESTION_ACTIVITY_REQUEST_CODE = 3;
+    public static final String EXTRA_UID = "com.zhiyong.tingxie.ui.main.extra.UID";
     public static final String EXTRA_QUIZ_ID = "com.zhiyong.tingxie.ui.main.extra.QUIZ_ID";
 
     private final Calendar c = Calendar.getInstance();

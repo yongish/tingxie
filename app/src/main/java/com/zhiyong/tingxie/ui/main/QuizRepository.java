@@ -1,25 +1,55 @@
-package com.zhiyong.tingxie;
+package com.zhiyong.tingxie.ui.main;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.zhiyong.tingxie.PinyinRoomDatabase;
+import com.zhiyong.tingxie.QuizDao;
+import com.zhiyong.tingxie.RetrofitService;
 import com.zhiyong.tingxie.db.Pinyin;
 import com.zhiyong.tingxie.db.Question;
 import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.db.QuizPinyin;
+import com.zhiyong.tingxie.db.Term;
 import com.zhiyong.tingxie.db.Word;
 import com.zhiyong.tingxie.ui.main.QuizItem;
 import com.zhiyong.tingxie.ui.word.WordItem;
 
 import java.util.List;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+
 /* A Repository is a class that abstracts access to multiple data sources.
 A Repository manages query threads and allows you to use multiple backends.
 In the most common example, the Repository implements the logic for deciding whether to fetch data
 from a network or use results cached in the local database. */
 public class QuizRepository {
+
+//    private static QuizRepository quizRepository;
+//
+//    public static QuizRepository getInstance() {
+//        if (quizRepository == null) {
+//            quizRepository = new QuizRepository();
+//        }
+//        return quizRepository;
+//    }
+//
+//    private QuizApi quizApi;
+//
+//    public QuizRepository() {
+//        quizApi = RetrofitService.createService(QuizApi.class);
+//    }
+//
+//    public MutableLiveData<QuizResponse> getQuizItems(String uid, String token) {
+//        MutableLiveData<QuizResponse>
+//
+//
+//        // todo: POST contents of local SQLite DB to backend.
+//    }
 
     private static final String TAG = "QuizRepository";
 
@@ -30,6 +60,10 @@ public class QuizRepository {
     private LiveData<List<Question>> mAllQuestions;
     private LiveData<List<WordItem>> mPossibleQuestions;
     private LiveData<List<WordItem>> mRemainingQuestions;
+
+    private String uid;
+    private String token;
+    private LiveData<List<Term>> mAllTerms;
 
     public QuizRepository(Application application, long quizId) {
         PinyinRoomDatabase db = PinyinRoomDatabase.getDatabase(application);
@@ -42,7 +76,12 @@ public class QuizRepository {
         mAllQuestions = mQuizDao.getAllQuestions();
         mPossibleQuestions = mQuizDao.getPossibleQuestions(quizId);
         mRemainingQuestions = mQuizDao.getRemainingQuestions(quizId);
+
+        // Todo: Pass in uid and token in constructor.
+//        this.uid = uid;
+//        this.token = token;
     }
+
 
     public LiveData<List<QuizItem>> getAllQuizItems() {
         return mAllQuizItems;

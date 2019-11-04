@@ -5,7 +5,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.zhiyong.tingxie"
-        minSdkVersion 16
+        minSdkVersion 24
         targetSdkVersion 28
         versionCode 22
         versionName "1.0"
@@ -30,7 +30,14 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", 'BASE_URL', "\"https://<TODO>.com:443\""
         }
+        debug {
+            buildConfigField "String", 'BASE_URL', "\"https://10.0.2.2:8443\""
+        }
+//        staging {
+//            buildConfigField "String", 'BASE_URL', "https://stg-api.yourbackend.com"
+//        }
     }
 }
 
@@ -83,6 +90,9 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.belerweb/pinyin4j
     implementation group: 'com.belerweb', name: 'pinyin4j', version: '2.5.1'
+
+    implementation 'com.squareup.okhttp3:okhttp:4.2.2'
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
 }
 
 apply plugin: 'com.google.gms.google-services'
