@@ -1,10 +1,10 @@
 package com.zhiyong.tingxie;
 
-import android.arch.persistence.room.Room;
+import androidx.room.Room;
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.filters.MediumTest;
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.filters.MediumTest;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.zhiyong.tingxie.db.Pinyin;
 import com.zhiyong.tingxie.db.Question;

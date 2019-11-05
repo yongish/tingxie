@@ -1,13 +1,13 @@
 package com.zhiyong.tingxie;
 
-import android.arch.persistence.db.SupportSQLiteDatabase;
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
-import android.arch.persistence.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
+import androidx.room.Database;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.zhiyong.tingxie.db.Pinyin;
 import com.zhiyong.tingxie.db.Question;
@@ -16,7 +16,7 @@ import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.db.Word;
 
 @Database(entities = {Question.class, Quiz.class, Pinyin.class, Word.class, QuizPinyin.class},
-        version = 3)
+        version = 4)
 public abstract class PinyinRoomDatabase extends RoomDatabase {
     public abstract QuizDao pinyinDao();
     private static PinyinRoomDatabase INSTANCE;
@@ -35,7 +35,7 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             PinyinRoomDatabase.class, "pinyin_database")
-                            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
                             .addCallback(sRoomDatabaseCallback)
                             .build();
                 }
@@ -55,6 +55,19 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE quiz ADD COLUMN title TEXT DEFAULT 'No title'");
+        }
+    };
+
+    private static final Migration MIGRATION_3_4 = new Migration(3, 4) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.beginTransaction();
+            try {
+//                database.execSQL("");
+                database.setTransactionSuccessful();
+            } finally {
+                database.endTransaction();
+            }
         }
     };
 

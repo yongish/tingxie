@@ -1,8 +1,8 @@
 package com.zhiyong.tingxie.ui.word;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import com.zhiyong.tingxie.QuizRepository;
 import com.zhiyong.tingxie.db.QuizPinyin;

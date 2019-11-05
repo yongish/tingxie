@@ -1,7 +1,7 @@
 package com.zhiyong.tingxie;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
+import androidx.lifecycle.AndroidViewModel;
 
 import com.zhiyong.tingxie.db.QuizPinyin;
 
