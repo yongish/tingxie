@@ -14,13 +14,13 @@ public class TermRepository {
 
     private static TermRepository termRepository;
     private static FirebaseAuth auth;
-    private static SharedPreferences mPref;
+    private static String uid;
 
     public static TermRepository getInstance(SharedPreferences pref) {
         if (termRepository == null) {
             termRepository = new TermRepository();
             auth = FirebaseAuth.getInstance();
-            mPref = pref;
+            uid = pref.getString("uid", null);
         }
         return termRepository;
     }
@@ -33,9 +33,8 @@ public class TermRepository {
 
     public MutableLiveData<TermResponse> getTerms() {
         final MutableLiveData<TermResponse> terms = new MutableLiveData<>();
-        final String uid = mPref.getString("uid", null);
         if (uid == null) {
-            throw new IllegalStateException("uid or token is null.");
+            throw new IllegalStateException("uid is null.");
         }
 
         termApi.getTermsList(uid).enqueue(new Callback<TermResponse>() {

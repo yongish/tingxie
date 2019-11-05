@@ -3,6 +3,8 @@ package com.zhiyong.tingxie.ui.main;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.zhiyong.tingxie.db.Question;
@@ -17,9 +19,16 @@ public class QuizViewModel extends AndroidViewModel {
     private LiveData<List<QuizPinyin>> mQuizPinyins;
     private LiveData<List<Question>> mQuestions;
 
+    private MutableLiveData<QuizResponse> mutableLiveData;
+
     public QuizViewModel(@NonNull Application application) {
         super(application);
         mRepository = new QuizRepository(application, -1);
+//        mRepository = QuizRepository.getInstance(
+//                application.getSharedPreferences("login", Context.MODE_PRIVATE)
+//        );
+//        mutableLiveData = mRepository.getQuizItems();
+
         mAllQuizItems = mRepository.getAllQuizItems();
         mQuizPinyins = mRepository.getAllQuizPinyins();
         mQuestions = mRepository.getAllQuestions();

@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie.ui.word;
+package com.zhiyong.tingxie.ui.main;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -9,9 +9,9 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
-public class TermResponse extends PolyglotResponse {
-    @SerializedName("terms")
+public class QuizResponse extends PolyglotResponse {
+    @SerializedName("quizzes")
     @Expose
     @Getter @Setter
-    private List<Term> terms;
+    private List<Quiz> quizzes;
 }
