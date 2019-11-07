@@ -47,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        // todo: Download from backend.
+
+
         recyclerView = findViewById(R.id.recyclerview_main);
 
         final TextView emptyView = findViewById(R.id.empty_view);
@@ -130,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
     public void processDatePickerResult(long quizId, int year, int month, int day) {
         int date = Integer.valueOf(year + String.format("%02d", ++month) +
                 String.format("%02d", day));
-        Quiz quiz = new Quiz(date);
+        Quiz quiz = new Quiz(date, uid);
         if (quizId != -1) {
             quiz.setId(quizId);
             mQuizViewModel.updateQuiz(quiz);

@@ -1,11 +1,13 @@
 package com.zhiyong.tingxie.ui.login;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GetTokenResult;
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.ui.main.MainActivity;
 import com.zhiyong.tingxie.ui.resetpassword.ResetPasswordActivity;
@@ -39,6 +42,30 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
         }
+
+
+        auth.getCurrentUser().getIdToken(true).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+            @Override
+            public void onComplete(@NonNull Task<GetTokenResult> task) {
+                if (task.isSuccessful()) {
+                    GetTokenResult result = task.getResult();
+                    String idToken = result.getToken();
+                    Toast.makeText(LoginActivity.this, idToken, Toast.LENGTH_LONG).show();
+
+
+                    SharedPreferences mPrefs = getSharedPreferences("login", MODE_PRIVATE);
+                    SharedPreferences.Editor mEditor = mPrefs.edit();
+                    mEditor.putBoolean("logged_in", false).apply();
+
+                    Log.d("UID: ", auth.getUid());
+                    Log.d("TOKEN: ", idToken);
+//                            task.getResult().getExpirationTimestamp()
+                    // Send token to your backend via HTTPS.
+                } else {
+
+                }
+            }
+        });
 
         // set the view now
         setContentView(R.layout.activity_login);

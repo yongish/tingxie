@@ -4,10 +4,11 @@
 package com.zhiyong.tingxie.db;
 
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import androidx.annotation.NonNull;
 
-@Entity()
+@Entity(indices = {@Index("id")})
 public class Term {
     @PrimaryKey(autoGenerate = true)
     @NonNull
@@ -19,7 +20,7 @@ public class Term {
 
     private long quizId;
 
-    private String userId;
+    private String uid;
 
     private String word;
 
@@ -32,7 +33,7 @@ public class Term {
         this.createdAt = createdAt;
         this.deletedAt = deletedAt;
         this.quizId = quizId;
-        this.userId = userId;
+        this.uid = userId;
         this.word = word;
         this.pinyin = pinyin;
     }
@@ -41,6 +42,6 @@ public class Term {
         this.id = id;
     }
 
-//    public void setTimesCorrect(@NonNull long quizId, @NonNull String userId, @NonNull String word,
+//    public void setTimesCorrect(@NonNull long quizId, @NonNull String uid, @NonNull String word,
 //                                )
 }

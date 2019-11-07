@@ -9,13 +9,11 @@ import android.content.Context;
 import android.os.AsyncTask;
 import androidx.annotation.NonNull;
 
-import com.zhiyong.tingxie.db.Pinyin;
 import com.zhiyong.tingxie.db.Question;
 import com.zhiyong.tingxie.db.Quiz;
-import com.zhiyong.tingxie.db.QuizPinyin;
-import com.zhiyong.tingxie.db.Word;
+import com.zhiyong.tingxie.db.Term;
 
-@Database(entities = {Question.class, Quiz.class, Pinyin.class, Word.class, QuizPinyin.class},
+@Database(entities = {Question.class, Quiz.class, Term.class},
         version = 4)
 public abstract class PinyinRoomDatabase extends RoomDatabase {
     public abstract QuizDao pinyinDao();
@@ -63,7 +61,13 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.beginTransaction();
             try {
-//                database.execSQL("");
+//                database.execSQL("CREATE TABLE term ");
+//                database.execSQL("INSERT INTO term () SELECT  FROM ");
+//                database.execSQL("ALTER TABLE quiz ADD COLUMN ");
+//                database.execSQL("INSERT INTO quiz () SELECT  FROM ");
+//                database.execSQL("DROP TABLE word");
+//                database.execSQL("DROP TABLE quiz_pinyin");
+//                database.execSQL("DROP TABLE pinyin");
                 database.setTransactionSuccessful();
             } finally {
                 database.endTransaction();

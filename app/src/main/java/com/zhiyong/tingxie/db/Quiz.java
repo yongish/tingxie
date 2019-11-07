@@ -14,20 +14,38 @@ public class Quiz {
     @ColumnInfo(name = "id")
     private long id;
 
+    // todo: Maybe consider encryption of local data.
+    // For syncing with backend DB. Also in case multiple users use this phone.
+    private String uid; // For syncing with backend DB. Also in case multiple users use this phone.
+
     private int date;
 
     private String title;
 
-    public Quiz(@NonNull int date) {
+    private int totalTerms;
+
+    private int notLearned;
+
+    private int roundsCompleted;
+
+    public Quiz(@NonNull int date, String uid) {
         this.date = date;
         title = "No title";
+        this.uid = uid;
+        totalTerms = 0;
+        notLearned = 0;
+        roundsCompleted = 0;
     }
 
     @Ignore
-    public Quiz(long id, @NonNull int date, String title) {
+    public Quiz(long id, @NonNull int date, String title, int totalTerms, int notLearned,
+                int roundsCompleted) {
         this.id = id;
         this.date = date;
         this.title = title;
+        this.totalTerms = totalTerms;
+        this.notLearned = notLearned;
+        this.roundsCompleted = roundsCompleted;
     }
 
     public void setId(long id) {
