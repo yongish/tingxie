@@ -18,8 +18,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.zhiyong.tingxie.R;
+import com.zhiyong.tingxie.RetrofitService;
 import com.zhiyong.tingxie.ui.main.MainActivity;
 import com.zhiyong.tingxie.ui.resetpassword.ResetPasswordActivity;
 import com.zhiyong.tingxie.ui.signup.SignupActivity;
@@ -34,38 +36,34 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final SharedPreferences.Editor mEditor = getSharedPreferences("login", MODE_PRIVATE)
+                .edit();
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
+        final FirebaseUser user = auth.getCurrentUser();
+//        user.getIdToken(false).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+        if (user != null) {
+            user.getIdToken(true).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                @Override
+                public void onComplete(@NonNull Task<GetTokenResult> task) {
+                    if (task.isSuccessful()) {
+                        GetTokenResult result = task.getResult();
+                        String idToken = result.getToken();
 
-        if (auth.getCurrentUser() != null) {
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-            finish();
-        }
-
-
-        auth.getCurrentUser().getIdToken(true).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-            @Override
-            public void onComplete(@NonNull Task<GetTokenResult> task) {
-                if (task.isSuccessful()) {
-                    GetTokenResult result = task.getResult();
-                    String idToken = result.getToken();
-                    Toast.makeText(LoginActivity.this, idToken, Toast.LENGTH_LONG).show();
-
-
-                    SharedPreferences mPrefs = getSharedPreferences("login", MODE_PRIVATE);
-                    SharedPreferences.Editor mEditor = mPrefs.edit();
-                    mEditor.putBoolean("logged_in", false).apply();
-
-                    Log.d("UID: ", auth.getUid());
-                    Log.d("TOKEN: ", idToken);
+                        mEditor.putString("uid", auth.getUid());
+                        mEditor.putString("token", idToken);
+                        RetrofitService.setToken(idToken);
+                        mEditor.apply();
 //                            task.getResult().getExpirationTimestamp()
-                    // Send token to your backend via HTTPS.
-                } else {
-
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        finish();
+                    } else {
+                        throw new IllegalStateException("Issue with getIdToken.");
+                    }
                 }
-            }
-        });
+            });
+        }
 
         // set the view now
         setContentView(R.layout.activity_login);
@@ -132,9 +130,27 @@ public class LoginActivity extends AppCompatActivity {
                                         Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
                                     }
                                 } else {
-                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
+                                    auth.getCurrentUser().getIdToken(true).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<GetTokenResult> task) {
+                                            if (task.isSuccessful()) {
+                                                GetTokenResult result = task.getResult();
+                                                String idToken = result.getToken();
+
+                                                mEditor.putString("uid", auth.getUid());
+                                                mEditor.putString("token", idToken);
+                                                mEditor.apply();
+
+                                                RetrofitService.setToken(idToken);
+
+                                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                                startActivity(intent);
+                                                finish();
+                                            } else {
+                                                throw new IllegalStateException("Issue with getIdToken.");
+                                            }
+                                        }
+                                    });
                                 }
                             }
                         });

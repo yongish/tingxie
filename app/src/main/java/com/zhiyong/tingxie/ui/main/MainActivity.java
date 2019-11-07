@@ -3,6 +3,7 @@ package com.zhiyong.tingxie.ui.main;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     private QuizViewModel mQuizViewModel;
     RecyclerView recyclerView;
+    private SharedPreferences mPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +102,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         helper.attachToRecyclerView(recyclerView);
+
+        mPrefs = getSharedPreferences("login", MODE_PRIVATE);
     }
 
     @Override
@@ -134,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
     public void processDatePickerResult(long quizId, int year, int month, int day) {
         int date = Integer.valueOf(year + String.format("%02d", ++month) +
                 String.format("%02d", day));
-        Quiz quiz = new Quiz(date, uid);
+        Quiz quiz = new Quiz(date, mPrefs.getString("uid", null));
         if (quizId != -1) {
             quiz.setId(quizId);
             mQuizViewModel.updateQuiz(quiz);

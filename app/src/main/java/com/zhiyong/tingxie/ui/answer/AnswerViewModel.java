@@ -4,7 +4,7 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.annotation.NonNull;
 
-import com.zhiyong.tingxie.QuizRepository;
+import com.zhiyong.tingxie.ui.main.QuizRepository;
 import com.zhiyong.tingxie.db.Question;
 
 public class AnswerViewModel extends AndroidViewModel {

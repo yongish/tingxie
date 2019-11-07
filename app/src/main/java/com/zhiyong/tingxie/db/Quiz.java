@@ -13,19 +13,13 @@ public class Quiz {
     @NonNull
     @ColumnInfo(name = "id")
     private long id;
-
     // todo: Maybe consider encryption of local data.
     // For syncing with backend DB. Also in case multiple users use this phone.
     private String uid; // For syncing with backend DB. Also in case multiple users use this phone.
-
     private int date;
-
     private String title;
-
     private int totalTerms;
-
     private int notLearned;
-
     private int roundsCompleted;
 
     public Quiz(@NonNull int date, String uid) {
@@ -48,8 +42,36 @@ public class Quiz {
         this.roundsCompleted = roundsCompleted;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public int getTotalTerms() {
+        return totalTerms;
+    }
+
+    public void setTotalTerms(int totalTerms) {
+        this.totalTerms = totalTerms;
+    }
+
+    public int getNotLearned() {
+        return notLearned;
+    }
+
+    public void setNotLearned(int notLearned) {
+        this.notLearned = notLearned;
+    }
+
+    public int getRoundsCompleted() {
+        return roundsCompleted;
+    }
+
+    public void setRoundsCompleted(int roundsCompleted) {
+        this.roundsCompleted = roundsCompleted;
     }
 
     @NonNull
@@ -57,8 +79,8 @@ public class Quiz {
         return id;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setId(long id) {
+        this.id = id;
     }
 
     @NonNull
@@ -66,7 +88,15 @@ public class Quiz {
         return date;
     }
 
+    public void setDate(int date) {
+        this.date = date;
+    }
+
     public String getTitle() {
         return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

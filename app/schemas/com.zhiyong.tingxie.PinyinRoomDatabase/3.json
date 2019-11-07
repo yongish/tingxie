@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "92db062bd4e69f8306656f1204cf73df",
+    "identityHash": "aef2069db0b22c9fdadf068df572e80a",
     "entities": [
       {
         "tableName": "Question",
@@ -77,13 +77,19 @@
       },
       {
         "tableName": "Quiz",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` INTEGER NOT NULL, `title` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `uid` TEXT, `date` INTEGER NOT NULL, `title` TEXT, `totalTerms` INTEGER NOT NULL, `notLearned` INTEGER NOT NULL, `roundsCompleted` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "uid",
+            "columnName": "uid",
+            "affinity": "TEXT",
+            "notNull": false
           },
           {
             "fieldPath": "date",
@@ -96,6 +102,24 @@
             "columnName": "title",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "totalTerms",
+            "columnName": "totalTerms",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "notLearned",
+            "columnName": "notLearned",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "roundsCompleted",
+            "columnName": "roundsCompleted",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -112,6 +136,77 @@
               "id"
             ],
             "createSql": "CREATE  INDEX `index_Quiz_id` ON `${TABLE_NAME}` (`id`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Term",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `createdAt` INTEGER NOT NULL, `deletedAt` INTEGER NOT NULL, `quizId` INTEGER NOT NULL, `uid` TEXT, `word` TEXT, `pinyin` TEXT, `timesCorrect` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deletedAt",
+            "columnName": "deletedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "quizId",
+            "columnName": "quizId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "uid",
+            "columnName": "uid",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "word",
+            "columnName": "word",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pinyin",
+            "columnName": "pinyin",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "timesCorrect",
+            "columnName": "timesCorrect",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_Term_id",
+            "unique": false,
+            "columnNames": [
+              "id"
+            ],
+            "createSql": "CREATE  INDEX `index_Term_id` ON `${TABLE_NAME}` (`id`)"
           }
         ],
         "foreignKeys": []
@@ -135,53 +230,6 @@
         },
         "indices": [],
         "foreignKeys": []
-      },
-      {
-        "tableName": "Word",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`word_string` TEXT NOT NULL, `pinyin_string` TEXT, PRIMARY KEY(`word_string`), FOREIGN KEY(`pinyin_string`) REFERENCES `Pinyin`(`pinyin_string`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
-        "fields": [
-          {
-            "fieldPath": "word_string",
-            "columnName": "word_string",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "pinyin_string",
-            "columnName": "pinyin_string",
-            "affinity": "TEXT",
-            "notNull": false
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "word_string"
-          ],
-          "autoGenerate": false
-        },
-        "indices": [
-          {
-            "name": "index_Word_pinyin_string",
-            "unique": false,
-            "columnNames": [
-              "pinyin_string"
-            ],
-            "createSql": "CREATE  INDEX `index_Word_pinyin_string` ON `${TABLE_NAME}` (`pinyin_string`)"
-          }
-        ],
-        "foreignKeys": [
-          {
-            "table": "Pinyin",
-            "onDelete": "NO ACTION",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "pinyin_string"
-            ],
-            "referencedColumns": [
-              "pinyin_string"
-            ]
-          }
-        ]
       },
       {
         "tableName": "quiz_pinyin",
@@ -254,11 +302,58 @@
             ]
           }
         ]
+      },
+      {
+        "tableName": "Word",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`word_string` TEXT NOT NULL, `pinyin_string` TEXT, PRIMARY KEY(`word_string`), FOREIGN KEY(`pinyin_string`) REFERENCES `Pinyin`(`pinyin_string`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "word_string",
+            "columnName": "word_string",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pinyin_string",
+            "columnName": "pinyin_string",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "word_string"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_Word_pinyin_string",
+            "unique": false,
+            "columnNames": [
+              "pinyin_string"
+            ],
+            "createSql": "CREATE  INDEX `index_Word_pinyin_string` ON `${TABLE_NAME}` (`pinyin_string`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Pinyin",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "pinyin_string"
+            ],
+            "referencedColumns": [
+              "pinyin_string"
+            ]
+          }
+        ]
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"92db062bd4e69f8306656f1204cf73df\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"aef2069db0b22c9fdadf068df572e80a\")"
     ]
   }
 }

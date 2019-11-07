@@ -1,25 +1,82 @@
-package com.zhiyong.tingxie;
+package com.zhiyong.tingxie.ui.main;
 
 import android.app.Application;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.zhiyong.tingxie.PinyinRoomDatabase;
+import com.zhiyong.tingxie.QuizDao;
+import com.zhiyong.tingxie.RetrofitService;
 import com.zhiyong.tingxie.db.Pinyin;
 import com.zhiyong.tingxie.db.Question;
 import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.db.Word;
-import com.zhiyong.tingxie.ui.main.QuizItem;
 import com.zhiyong.tingxie.ui.word.WordItem;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /* A Repository is a class that abstracts access to multiple data sources.
 A Repository manages query threads and allows you to use multiple backends.
 In the most common example, the Repository implements the logic for deciding whether to fetch data
 from a network or use results cached in the local database. */
 public class QuizRepository {
+
+    private static QuizRepository quizRepository;
+    private static String uid;
+
+    public static QuizRepository getInstance(SharedPreferences pref) {
+        if (quizRepository == null) {
+            quizRepository = new QuizRepository();
+            uid = pref.getString("uid", null);
+        }
+        return quizRepository;
+    }
+
+    private QuizApi quizApi;
+
+    public QuizRepository() {
+        quizApi = RetrofitService.createService(QuizApi.class);
+    }
+
+    public MutableLiveData<QuizResponse> getQuizItems() {
+        final MutableLiveData<QuizResponse> quizItems = new MutableLiveData<>();
+        if (uid == null) {
+            throw new IllegalStateException("uid is null.");
+        }
+
+        quizApi.getQuizList(uid).enqueue(new Callback<QuizResponse>() {
+            @Override
+            public void onResponse(Call<QuizResponse> call, Response<QuizResponse> response) {
+                if (response.isSuccessful()) {
+                    quizItems.setValue(response.body());
+                } else if (response.code() == 401) {
+                    // todo: Refresh token and try again.
+                } else {
+                    throw new IllegalStateException("Error in getting terms of uid: " + uid);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<QuizResponse> call, Throwable t) {
+                quizItems.setValue(null);
+            }
+
+        });
+
+        // todo: POST contents of local SQLite DB to backend.
+
+
+        return quizItems;
+    }
 
     private static final String TAG = "QuizRepository";
 
@@ -42,7 +99,9 @@ public class QuizRepository {
         mAllQuestions = mQuizDao.getAllQuestions();
         mPossibleQuestions = mQuizDao.getPossibleQuestions(quizId);
         mRemainingQuestions = mQuizDao.getRemainingQuestions(quizId);
+
     }
+
 
     public LiveData<List<QuizItem>> getAllQuizItems() {
         return mAllQuizItems;
