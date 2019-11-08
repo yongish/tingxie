@@ -85,7 +85,6 @@ public class QuizRepository {
     private LiveData<List<WordItem>> mWordItems;
     private LiveData<List<QuizPinyin>> mAllQuizPinyins;
     private LiveData<List<Question>> mAllQuestions;
-    private LiveData<List<WordItem>> mPossibleQuestions;
     private LiveData<List<WordItem>> mRemainingQuestions;
 
     public QuizRepository(Application application, long quizId) {
@@ -93,12 +92,10 @@ public class QuizRepository {
         mQuizDao = db.pinyinDao();
         Log.d(TAG, "QuizRepository: ");
 
-        mAllQuizItems = mQuizDao.getAllQuizItems();
-        mWordItems = mQuizDao.getWordItemsOfQuiz(quizId);
-        mAllQuizPinyins = mQuizDao.getAllQuizPinyins();
-        mAllQuestions = mQuizDao.getAllQuestions();
-        mPossibleQuestions = mQuizDao.getPossibleQuestions(quizId);
-        mRemainingQuestions = mQuizDao.getRemainingQuestions(quizId);
+        mAllQuizItems = mQuizDao.getAllQuizItems(uid);
+        mWordItems = mQuizDao.getWordItemsOfQuiz(uid, quizId);
+        mAllQuestions = mQuizDao.getAllQuestions(uid);
+        mRemainingQuestions = mQuizDao.getRemainingQuestions(uid, quizId);
 
     }
 
@@ -117,10 +114,6 @@ public class QuizRepository {
 
     public LiveData<List<Question>> getAllQuestions() {
         return mAllQuestions;
-    }
-
-    public LiveData<List<WordItem>> getPossibleQuestionsOfQuiz() {
-        return mPossibleQuestions;
     }
 
     public LiveData<List<WordItem>> getRemainingQuestionsOfQuiz() {

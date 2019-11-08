@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private QuizViewModel mQuizViewModel;
     RecyclerView recyclerView;
     private SharedPreferences mPrefs;
+    private String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +59,12 @@ public class MainActivity extends AppCompatActivity {
         final TextView emptyView = findViewById(R.id.empty_view);
         mQuizViewModel = ViewModelProviders.of(this).get(QuizViewModel.class);
 
-        final QuizListAdapter adapter = new QuizListAdapter(this, mQuizViewModel, recyclerView);
+        mPrefs = getSharedPreferences("login", MODE_PRIVATE);
+        uid = mPrefs.getString("uid", null);
+
+        final QuizListAdapter adapter = new QuizListAdapter(
+                this, mQuizViewModel, recyclerView, uid
+        );
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -103,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
         });
         helper.attachToRecyclerView(recyclerView);
 
-        mPrefs = getSharedPreferences("login", MODE_PRIVATE);
     }
 
     @Override
@@ -138,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
     public void processDatePickerResult(long quizId, int year, int month, int day) {
         int date = Integer.valueOf(year + String.format("%02d", ++month) +
                 String.format("%02d", day));
-        Quiz quiz = new Quiz(date, mPrefs.getString("uid", null));
+        Quiz quiz = new Quiz(date, uid);
         if (quizId != -1) {
             quiz.setId(quizId);
             mQuizViewModel.updateQuiz(quiz);

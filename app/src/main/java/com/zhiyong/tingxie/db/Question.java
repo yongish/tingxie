@@ -16,6 +16,8 @@ public class Question {
     @NonNull
     private long id;
 
+    private String uid;
+
     private long timestamp;
 
     private long reset_time;
@@ -26,9 +28,10 @@ public class Question {
 
     private long quiz_id;
 
-    public Question(@NonNull long timestamp, long reset_time,
+    public Question(@NonNull String uid, @NonNull long timestamp, long reset_time,
                     @NonNull String pinyin_string, @NonNull boolean correct,
                     @NonNull long quiz_id) {
+        this.uid = uid;
         this.timestamp = timestamp;
         this.reset_time = reset_time;
         this.pinyin_string = pinyin_string;
@@ -71,6 +74,7 @@ public class Question {
     }
 
     public static class QuestionBuilder {
+        private String nestedUid;
         private long nestedTimestamp;
         private String nestedPinyinString;
         private boolean nestedCorrect;
@@ -97,8 +101,8 @@ public class Question {
         }
 
         public Question build() {
-            return new Question(nestedTimestamp, nestedTimestamp, nestedPinyinString, nestedCorrect,
-                    nestedQuizId);
+            return new Question(nestedUid, nestedTimestamp, nestedTimestamp, nestedPinyinString,
+                    nestedCorrect, nestedQuizId);
         }
     }
 }

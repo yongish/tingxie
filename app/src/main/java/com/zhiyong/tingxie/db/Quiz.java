@@ -32,11 +32,12 @@ public class Quiz {
     }
 
     @Ignore
-    public Quiz(long id, @NonNull int date, String title, int totalTerms, int notLearned,
-                int roundsCompleted) {
+    public Quiz(long id, @NonNull int date, String title, String uid, int totalTerms,
+                int notLearned, int roundsCompleted) {
         this.id = id;
         this.date = date;
         this.title = title;
+        this.uid = uid;
         this.totalTerms = totalTerms;
         this.notLearned = notLearned;
         this.roundsCompleted = roundsCompleted;

@@ -44,6 +44,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
     static final int QUESTION_ACTIVITY_REQUEST_CODE = 3;
     public static final String EXTRA_UID = "com.zhiyong.tingxie.ui.main.extra.UID";
     public static final String EXTRA_QUIZ_ID = "com.zhiyong.tingxie.ui.main.extra.QUIZ_ID";
+    private static String uid;
 
     private final Calendar c = Calendar.getInstance();
     private final LayoutInflater mInflater;
@@ -59,11 +60,13 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
     private List<Question> mQuestions;
     private List<QuizPinyin> mQuizPinyins;
 
-    QuizListAdapter(Context context, QuizViewModel viewModel, RecyclerView recyclerView) {
+    QuizListAdapter(Context context, QuizViewModel viewModel, RecyclerView recyclerView,
+                    String uid) {
         mInflater = LayoutInflater.from(context);
         this.context = context;
         this.viewModel = viewModel;
         this.recyclerView = recyclerView;
+        this.uid = uid;
     }
 
     @NonNull
@@ -141,7 +144,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                         notifyDataSetChanged();
 
                         viewModel.updateQuiz(new Quiz(
-                                newItem.getId(), newItem.getDate(), newItem.getTitle(),
+                                newItem.getId(), newItem.getDate(), newItem.getTitle(), uid,
                                 newItem.getTotalWords(), newItem.getNotLearned(),
                                 newItem.getRound() - 1
                         ));
@@ -243,7 +246,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
 
                         // Reinsert deleted quiz, question, quiz_pinyin rows.
                         Quiz quiz = new Quiz(
-                                quizId, quizItem.getDate(), quizItem.getTitle(),
+                                quizId, quizItem.getDate(), quizItem.getTitle(), uid,
                                 quizItem.getTotalWords(), quizItem.getNotLearned(),
                                 quizItem.getRound() - 1
                         );
