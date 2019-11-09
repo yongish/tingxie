@@ -4,6 +4,7 @@ import android.app.Application;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -30,60 +31,60 @@ In the most common example, the Repository implements the logic for deciding whe
 from a network or use results cached in the local database. */
 public class QuizRepository {
 
-    private static QuizRepository quizRepository;
+//    private static QuizRepository quizRepository;
     private static String uid;
 
-    public static QuizRepository getInstance(SharedPreferences pref) {
-        if (quizRepository == null) {
-            quizRepository = new QuizRepository();
-            uid = pref.getString("uid", null);
-        }
-        return quizRepository;
-    }
+//    public static QuizRepository getInstance(SharedPreferences pref) {
+//        if (quizRepository == null) {
+//            quizRepository = new QuizRepository();
+//            uid = pref.getString("uid", null);
+//        }
+//        return quizRepository;
+//    }
 
-    private QuizApi quizApi;
+//    private QuizApi quizApi;
 
-    public QuizRepository() {
-        quizApi = RetrofitService.createService(QuizApi.class);
-    }
+//    public QuizRepository() {
+//        quizApi = RetrofitService.createService(QuizApi.class);
+//    }
 
-    public MutableLiveData<QuizResponse> getQuizItems() {
-        final MutableLiveData<QuizResponse> quizItems = new MutableLiveData<>();
-        if (uid == null) {
-            throw new IllegalStateException("uid is null.");
-        }
-
-        quizApi.getQuizList(uid).enqueue(new Callback<QuizResponse>() {
-            @Override
-            public void onResponse(Call<QuizResponse> call, Response<QuizResponse> response) {
-                if (response.isSuccessful()) {
-                    quizItems.setValue(response.body());
-                } else if (response.code() == 401) {
-                    // todo: Refresh token and try again.
-                } else {
-                    throw new IllegalStateException("Error in getting terms of uid: " + uid);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<QuizResponse> call, Throwable t) {
-                quizItems.setValue(null);
-            }
-
-        });
-
-        // todo: POST contents of local SQLite DB to backend.
-
-
-        return quizItems;
-    }
+//    public MutableLiveData<QuizResponse> getQuizItems() {
+//        final MutableLiveData<QuizResponse> quizItems = new MutableLiveData<>();
+//        if (uid == null) {
+//            throw new IllegalStateException("uid is null.");
+//        }
+//
+//        quizApi.getQuizList(uid).enqueue(new Callback<QuizResponse>() {
+//            @Override
+//            public void onResponse(Call<QuizResponse> call, Response<QuizResponse> response) {
+//                if (response.isSuccessful()) {
+//                    quizItems.setValue(response.body());
+//                } else if (response.code() == 401) {
+//                    // todo: Refresh token and try again.
+//                } else {
+//                    throw new IllegalStateException("Error in getting terms of uid: " + uid);
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<QuizResponse> call, Throwable t) {
+//                quizItems.setValue(null);
+//            }
+//
+//        });
+//
+//        // todo: POST contents of local SQLite DB to backend.
+//
+//
+//        return quizItems;
+//    }
 
     private static final String TAG = "QuizRepository";
 
     private QuizDao mQuizDao;
     private LiveData<List<QuizItem>> mAllQuizItems;
     private LiveData<List<WordItem>> mWordItems;
-    private LiveData<List<QuizPinyin>> mAllQuizPinyins;
+//    private LiveData<List<QuizPinyin>> mAllQuizPinyins;
     private LiveData<List<Question>> mAllQuestions;
     private LiveData<List<WordItem>> mRemainingQuestions;
 
@@ -91,6 +92,9 @@ public class QuizRepository {
         PinyinRoomDatabase db = PinyinRoomDatabase.getDatabase(application);
         mQuizDao = db.pinyinDao();
         Log.d(TAG, "QuizRepository: ");
+
+        SharedPreferences pref = application.getSharedPreferences("login", Context.MODE_PRIVATE);
+        uid = pref.getString("uid", null);
 
         mAllQuizItems = mQuizDao.getAllQuizItems(uid);
         mWordItems = mQuizDao.getWordItemsOfQuiz(uid, quizId);
@@ -108,9 +112,9 @@ public class QuizRepository {
         return mWordItems;
     }
 
-    public LiveData<List<QuizPinyin>> getAllQuizPinyins() {
-        return mAllQuizPinyins;
-    }
+//    public LiveData<List<QuizPinyin>> getAllQuizPinyins() {
+//        return mAllQuizPinyins;
+//    }
 
     public LiveData<List<Question>> getAllQuestions() {
         return mAllQuestions;

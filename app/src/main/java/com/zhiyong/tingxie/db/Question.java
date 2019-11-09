@@ -16,6 +16,10 @@ public class Question {
     @NonNull
     private long id;
 
+    public String getUid() {
+        return uid;
+    }
+
     private String uid;
 
     private long timestamp;
@@ -79,6 +83,11 @@ public class Question {
         private String nestedPinyinString;
         private boolean nestedCorrect;
         private long nestedQuizId;
+
+        public QuestionBuilder uid(String uid) {
+            nestedUid = uid;
+            return this;
+        }
 
         public QuestionBuilder timestamp(long timestamp) {
             this.nestedTimestamp = timestamp;

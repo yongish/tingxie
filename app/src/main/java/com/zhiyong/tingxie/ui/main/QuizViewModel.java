@@ -1,6 +1,8 @@
 package com.zhiyong.tingxie.ui.main;
 
 import android.app.Application;
+import android.content.Context;
+
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.annotation.NonNull;
@@ -15,7 +17,7 @@ import java.util.List;
 public class QuizViewModel extends AndroidViewModel {
     private QuizRepository mRepository;
     private LiveData<List<QuizItem>> mAllQuizItems;
-    private LiveData<List<QuizPinyin>> mQuizPinyins;
+//    private LiveData<List<QuizPinyin>> mQuizPinyins;
     private LiveData<List<Question>> mQuestions;
 
     private MutableLiveData<QuizResponse> mutableLiveData;
@@ -29,7 +31,7 @@ public class QuizViewModel extends AndroidViewModel {
 //        mutableLiveData = mRepository.getQuizItems();
 
         mAllQuizItems = mRepository.getAllQuizItems();
-        mQuizPinyins = mRepository.getAllQuizPinyins();
+//        mQuizPinyins = mRepository.getAllQuizPinyins();
         mQuestions = mRepository.getAllQuestions();
     }
 
@@ -37,9 +39,9 @@ public class QuizViewModel extends AndroidViewModel {
         return mAllQuizItems;
     }
 
-    LiveData<List<QuizPinyin>> getAllQuizPinyins() {
-        return mQuizPinyins;
-    }
+//    LiveData<List<QuizPinyin>> getAllQuizPinyins() {
+//        return mQuizPinyins;
+//    }
 
     LiveData<List<Question>> getAllQuestions() {
         return mQuestions;

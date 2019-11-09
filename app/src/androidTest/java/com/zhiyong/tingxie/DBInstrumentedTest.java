@@ -53,9 +53,9 @@ public class DBInstrumentedTest {
     public void blankTest() throws InterruptedException {
         QuizItem result = LiveDataTestUtil.getValue(mDao.getAllQuizItems()).get(0);
         assertEquals(testDate, result.getDate());
-        assertEquals(0, result.getTotalWords());
+        assertEquals(0, result.getTotalTerms());
         assertEquals(0, result.getNotLearned());
-        assertEquals(1, result.getRound());
+        assertEquals(1, result.getRoundsCompleted());
     }
 
     @Test
@@ -87,13 +87,13 @@ public class DBInstrumentedTest {
 
         QuizItem result = LiveDataTestUtil.getValue(mDao.getAllQuizItems()).get(0);
         assertEquals(testDate, result.getDate());
-        assertEquals(4, result.getTotalWords());
+        assertEquals(4, result.getTotalTerms());
         assertEquals(4, result.getNotLearned());
-        assertEquals(1, result.getRound());
+        assertEquals(1, result.getRoundsCompleted());
 
         mDao.deleteQuizPinyin(quizId, s0);
         result = LiveDataTestUtil.getValue(mDao.getAllQuizItems()).get(0);
-        assertEquals(3, result.getTotalWords());
+        assertEquals(3, result.getTotalTerms());
     }
 
     @Test
@@ -165,7 +165,7 @@ public class DBInstrumentedTest {
         mDao.insert(new QuizPinyin(quizId, s0));
 
         QuizItem quizItem = LiveDataTestUtil.getValue(mDao.getAllQuizItems()).get(0);
-        assertEquals(1, quizItem.getRound());
+        assertEquals(1, quizItem.getRoundsCompleted());
 
         mDao.insert(new Question(System.currentTimeMillis(), s0, true, quizId));
 
@@ -175,7 +175,7 @@ public class DBInstrumentedTest {
         mDao.insert(new Word("九牛一毛", s1));
         mDao.insert(new QuizPinyin(quizId, s1));
         QuizItem quizItem1 = LiveDataTestUtil.getValue(mDao.getAllQuizItems()).get(0);
-        assertEquals(1, quizItem1.getRound());
+        assertEquals(1, quizItem1.getRoundsCompleted());
     }
 
     @Test

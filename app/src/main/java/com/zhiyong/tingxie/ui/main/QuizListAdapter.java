@@ -93,9 +93,9 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
             holder.etTitle.setText(current.getTitle());
             holder.tvWordsLeft.setText(String.format(Locale.US,
 //                    "%d words",
-//                    current.getTotalWords()));
+//                    current.getTotalTerms()));
                     "%d/%d remaining on round %d",
-                    current.getNotLearned(), current.getTotalWords(), current.getRound()));
+                    current.getNotLearned(), current.getTotalTerms(), current.getRoundsCompleted()));
 
             holder.ivEditDate.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -145,8 +145,8 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
 
                         viewModel.updateQuiz(new Quiz(
                                 newItem.getId(), newItem.getDate(), newItem.getTitle(), uid,
-                                newItem.getTotalWords(), newItem.getNotLearned(),
-                                newItem.getRound() - 1
+                                newItem.getTotalTerms(), newItem.getNotLearned(),
+                                newItem.getRoundsCompleted() - 1
                         ));
 
                         InputMethodManager inputManager = (InputMethodManager)
@@ -171,7 +171,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
             holder.btnStartResume.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (current.getTotalWords() > 0) {
+                    if (current.getTotalTerms() > 0) {
                         Intent intent = new Intent(context, QuestionActivity.class);
                         intent.putExtra(EXTRA_QUIZ_ID, current.getId());
                         ((Activity) context).startActivityForResult(
@@ -247,8 +247,8 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                         // Reinsert deleted quiz, question, quiz_pinyin rows.
                         Quiz quiz = new Quiz(
                                 quizId, quizItem.getDate(), quizItem.getTitle(), uid,
-                                quizItem.getTotalWords(), quizItem.getNotLearned(),
-                                quizItem.getRound() - 1
+                                quizItem.getTotalTerms(), quizItem.getNotLearned(),
+                                quizItem.getRoundsCompleted() - 1
                         );
                         viewModel.insertQuiz(quiz);
                         viewModel.insertQuestions(getQuestionsOfQuiz(quizId));

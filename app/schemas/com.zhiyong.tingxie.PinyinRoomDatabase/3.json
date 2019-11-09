@@ -2,17 +2,23 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "aef2069db0b22c9fdadf068df572e80a",
+    "identityHash": "db78afcc6b1d928d4892eb21f1493721",
     "entities": [
       {
         "tableName": "Question",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER NOT NULL, `reset_time` INTEGER NOT NULL, `pinyin_string` TEXT, `correct` INTEGER NOT NULL, `quiz_id` INTEGER NOT NULL, FOREIGN KEY(`quiz_id`) REFERENCES `Quiz`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `uid` TEXT, `timestamp` INTEGER NOT NULL, `reset_time` INTEGER NOT NULL, `pinyin_string` TEXT, `correct` INTEGER NOT NULL, `quiz_id` INTEGER NOT NULL, FOREIGN KEY(`quiz_id`) REFERENCES `Quiz`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "uid",
+            "columnName": "uid",
+            "affinity": "TEXT",
+            "notNull": false
           },
           {
             "fieldPath": "timestamp",
@@ -353,7 +359,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"aef2069db0b22c9fdadf068df572e80a\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"db78afcc6b1d928d4892eb21f1493721\")"
     ]
   }
 }

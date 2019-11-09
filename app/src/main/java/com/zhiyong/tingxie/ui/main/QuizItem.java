@@ -4,17 +4,17 @@ public class QuizItem {
     private long id;
     private int date;
     private String title;
-    private int totalWords;
+    private int totalTerms;
     private int notLearned;
-    private int round;
+    private int roundsCompleted;
 
-    public QuizItem(long id, int date, String title, int totalWords, int notLearned, int round) {
+    public QuizItem(long id, int date, String title, int totalTerms, int notLearned, int roundsCompleted) {
         this.id = id;
         this.date = date;
         this.title = title;
-        this.totalWords = totalWords;
+        this.totalTerms = totalTerms;
         this.notLearned = notLearned;
-        this.round = round;
+        this.roundsCompleted = roundsCompleted;
     }
 
     public long getId() {
@@ -37,15 +37,15 @@ public class QuizItem {
         this.title = title;
     }
 
-    public int getTotalWords() {
-        return totalWords;
+    public int getTotalTerms() {
+        return totalTerms;
     }
 
     public int getNotLearned() {
         return notLearned;
     }
 
-    public int getRound() {
-        return round;
+    public int getRoundsCompleted() {
+        return roundsCompleted;
     }
 }

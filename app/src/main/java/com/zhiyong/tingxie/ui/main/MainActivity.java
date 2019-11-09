@@ -85,12 +85,12 @@ public class MainActivity extends AppCompatActivity {
                 adapter.setQuestions(questions);
             }
         });
-        mQuizViewModel.getAllQuizPinyins().observe(this, new Observer<List<QuizPinyin>>() {
-            @Override
-            public void onChanged(@Nullable List<QuizPinyin> quizPinyins) {
-                adapter.setQuizPinyins(quizPinyins);
-            }
-        });
+//        mQuizViewModel.getAllQuizPinyins().observe(this, new Observer<List<QuizPinyin>>() {
+//            @Override
+//            public void onChanged(@Nullable List<QuizPinyin> quizPinyins) {
+//                adapter.setQuizPinyins(quizPinyins);
+//            }
+//        });
 
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
                 0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT

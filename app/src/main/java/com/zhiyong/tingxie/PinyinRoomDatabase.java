@@ -19,7 +19,7 @@ import com.zhiyong.tingxie.db.Word;
 @Database(entities = {Question.class, Quiz.class, Term.class,
         Pinyin.class, QuizPinyin.class, Word.class   // todo: Added these classes back just so the app runs. To remove them.
 },
-        version = 4)
+        version = 3)
 public abstract class PinyinRoomDatabase extends RoomDatabase {
     public abstract QuizDao pinyinDao();
     private static PinyinRoomDatabase INSTANCE;
