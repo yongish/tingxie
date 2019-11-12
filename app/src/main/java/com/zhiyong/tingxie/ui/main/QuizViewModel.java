@@ -1,9 +1,9 @@
 package com.zhiyong.tingxie.ui.main;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.annotation.NonNull;
 
 import com.zhiyong.tingxie.QuizRepository;
 import com.zhiyong.tingxie.db.Question;

@@ -1,12 +1,12 @@
 package com.zhiyong.tingxie;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.persistence.room.Dao;
-import android.arch.persistence.room.Delete;
-import android.arch.persistence.room.Insert;
-import android.arch.persistence.room.OnConflictStrategy;
-import android.arch.persistence.room.Query;
-import android.arch.persistence.room.Update;
+import androidx.lifecycle.LiveData;
+import androidx.room.Dao;
+import androidx.room.Delete;
+import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
+import androidx.room.Query;
+import androidx.room.Update;
 
 import com.zhiyong.tingxie.db.Pinyin;
 import com.zhiyong.tingxie.db.Question;
@@ -18,7 +18,7 @@ import com.zhiyong.tingxie.ui.word.WordItem;
 
 import java.util.List;
 
-import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
+import static androidx.room.OnConflictStrategy.IGNORE;
 
 @Dao
 public interface QuizDao {
