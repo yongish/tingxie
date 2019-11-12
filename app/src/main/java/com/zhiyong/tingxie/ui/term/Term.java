@@ -1,11 +1,9 @@
-package com.zhiyong.tingxie.ui.word;
-
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
-import lombok.Getter;
-import lombok.Setter;
-
+/**
+ * This class will not be used unless we want to connect this app to the backend.
+ * As of 11/8/2019, I am inclined not to do so when the backend is ready, but instead replace this
+ * native app with a React Native app derived from Polyglot.
+ */
+/*
 public class Term {
     @SerializedName("id")
     @Expose
@@ -47,3 +45,4 @@ public class Term {
     @Getter @Setter
     private int timesCorrect;
 }
+ */

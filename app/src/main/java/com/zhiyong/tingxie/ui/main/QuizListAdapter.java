@@ -28,8 +28,11 @@ import com.zhiyong.tingxie.Util;
 import com.zhiyong.tingxie.db.Question;
 import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.db.QuizPinyin;
+import com.zhiyong.tingxie.db.Term;
 import com.zhiyong.tingxie.ui.question.QuestionActivity;
-import com.zhiyong.tingxie.ui.word.WordActivity;
+import com.zhiyong.tingxie.ui.term.TermActivity;
+
+import org.parceler.Parcels;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -44,6 +47,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
     static final int QUESTION_ACTIVITY_REQUEST_CODE = 3;
     public static final String EXTRA_UID = "com.zhiyong.tingxie.ui.main.extra.UID";
     public static final String EXTRA_QUIZ_ID = "com.zhiyong.tingxie.ui.main.extra.QUIZ_ID";
+    public static final String EXTRA_QUIZ = "com.zhiyong.tingxie.ui.main.extra.QUIZ";
     private static String uid;
 
     private final Calendar c = Calendar.getInstance();
@@ -58,7 +62,8 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
     // All question and quiz_pinyin rows (for undo deletes). May be suboptimal to get all rows, but
     // getting only question and quiz_pinyin is tricky and may be overengineering.
     private List<Question> mQuestions;
-    private List<QuizPinyin> mQuizPinyins;
+    private List<Term> mTerms;
+//    private List<QuizPinyin> mQuizPinyins;
 
     QuizListAdapter(Context context, QuizViewModel viewModel, RecyclerView recyclerView,
                     String uid) {
@@ -146,7 +151,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                         viewModel.updateQuiz(new Quiz(
                                 newItem.getId(), newItem.getDate(), newItem.getTitle(), uid,
                                 newItem.getTotalTerms(), newItem.getNotLearned(),
-                                newItem.getRoundsCompleted() - 1
+                                newItem.getRoundsCompleted()
                         ));
 
                         InputMethodManager inputManager = (InputMethodManager)
@@ -161,8 +166,9 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
             holder.btnAddViewWords.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, WordActivity.class);
-                    intent.putExtra(EXTRA_QUIZ_ID, current.getId());
+                    Intent intent = new Intent(context, TermActivity.class);
+                    intent.putExtra(EXTRA_QUIZ, Parcels.wrap(current));
+//                    intent.putExtra(EXTRA_QUIZ_ID, current.getId());
                     ((Activity) context).startActivityForResult(
                             intent, WORD_ACTIVITY_REQUEST_CODE
                     );
@@ -226,9 +232,13 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         mQuestions = questions;
     }
 
-    void setQuizPinyins(List<QuizPinyin> quizPinyins) {
-        mQuizPinyins = quizPinyins;
+    void setTerms(List<Term> terms) {
+        mTerms = terms;
     }
+
+//    void setQuizPinyins(List<QuizPinyin> quizPinyins) {
+//        mQuizPinyins = quizPinyins;
+//    }
 
     void onItemRemove(RecyclerView.ViewHolder viewHolder) {
         final int adapterPosition = viewHolder.getAdapterPosition();
@@ -248,11 +258,11 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                         Quiz quiz = new Quiz(
                                 quizId, quizItem.getDate(), quizItem.getTitle(), uid,
                                 quizItem.getTotalTerms(), quizItem.getNotLearned(),
-                                quizItem.getRoundsCompleted() - 1
+                                quizItem.getRoundsCompleted()
                         );
                         viewModel.insertQuiz(quiz);
                         viewModel.insertQuestions(getQuestionsOfQuiz(quizId));
-                        viewModel.insertQuizPinyins(getQuizPinyinsOfQuiz(quizId));
+                        viewModel.insertTerms(getTermsOfQuiz(quizId));
 
                         recyclerView.scrollToPosition(adapterPosition);
                     }
@@ -266,18 +276,18 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
     private List<Question> getQuestionsOfQuiz(long quizId) {
         List<Question> result = new ArrayList<>();
         for (Question question : mQuestions) {
-            if (question.getId() == quizId) {
+            if (question.getUid().equals(uid) && question.getQuiz_id() == quizId) {
                 result.add(question);
             }
         }
         return result;
     }
 
-    private List<QuizPinyin> getQuizPinyinsOfQuiz(long quizId) {
-        List<QuizPinyin> result = new ArrayList<>();
-        for (QuizPinyin quizPinyin : mQuizPinyins) {
-            if (quizPinyin.getQuiz_id() == quizId) {
-                result.add(quizPinyin);
+    private List<Term> getTermsOfQuiz(long quizId) {
+        List<Term> result = new ArrayList<>();
+        for (Term term : mTerms) {
+            if (term.getUid().equals(uid) && term.getQuizId() == quizId) {
+                result.add(term);
             }
         }
         return result;

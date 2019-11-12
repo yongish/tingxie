@@ -5,14 +5,14 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.annotation.NonNull;
 
+import com.zhiyong.tingxie.db.Term;
 import com.zhiyong.tingxie.ui.main.QuizRepository;
-import com.zhiyong.tingxie.ui.word.WordItem;
 
 import java.util.List;
 
 public class QuestionViewModel extends AndroidViewModel {
     private QuizRepository mRepository;
-    private LiveData<List<WordItem>>  mQuestionItems;
+    private LiveData<List<Term>>  mQuestionItems;
 
     public QuestionViewModel(@NonNull Application application, long quizId) {
         super(application);
@@ -20,7 +20,7 @@ public class QuestionViewModel extends AndroidViewModel {
         mQuestionItems = mRepository.getRemainingQuestionsOfQuiz();
     }
 
-    LiveData<List<WordItem>> getRemainingQuestions() {
+    LiveData<List<Term>> getRemainingQuestions() {
         return mQuestionItems;
     }
 }

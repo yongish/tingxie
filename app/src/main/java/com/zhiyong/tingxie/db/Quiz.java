@@ -5,12 +5,10 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
-import androidx.annotation.NonNull;
 
 @Entity(indices = {@Index("id")})
 public class Quiz {
     @PrimaryKey(autoGenerate = true)
-    @NonNull
     @ColumnInfo(name = "id")
     private long id;
     // todo: Maybe consider encryption of local data.
@@ -22,7 +20,7 @@ public class Quiz {
     private int notLearned;
     private int roundsCompleted;
 
-    public Quiz(@NonNull int date, String uid) {
+    public Quiz(int date, String uid) {
         this.date = date;
         title = "No title";
         this.uid = uid;
@@ -32,7 +30,7 @@ public class Quiz {
     }
 
     @Ignore
-    public Quiz(long id, @NonNull int date, String title, String uid, int totalTerms,
+    public Quiz(long id, int date, String title, String uid, int totalTerms,
                 int notLearned, int roundsCompleted) {
         this.id = id;
         this.date = date;
@@ -75,7 +73,6 @@ public class Quiz {
         this.roundsCompleted = roundsCompleted;
     }
 
-    @NonNull
     public long getId() {
         return id;
     }
@@ -84,7 +81,6 @@ public class Quiz {
         this.id = id;
     }
 
-    @NonNull
     public int getDate() {
         return date;
     }

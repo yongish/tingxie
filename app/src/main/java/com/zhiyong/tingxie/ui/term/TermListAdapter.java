@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie.ui.word;
+package com.zhiyong.tingxie.ui.term;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,23 +15,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zhiyong.tingxie.R;
-import com.zhiyong.tingxie.db.QuizPinyin;
+import com.zhiyong.tingxie.db.Term;
 
 import java.util.List;
 import java.util.Locale;
 
-public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordViewHolder> {
+public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.WordViewHolder> {
 
     private final LayoutInflater mInflater;
     private final TextToSpeech textToSpeech;
     private final Context context;
 
-    private List<WordItem> mWordItems;
+//    private List<WordItem> mWordItems;
+    private List<Term> mTerms;
 
-    private WordViewModel viewModel;
+    private TermViewModel viewModel;
     private RecyclerView recyclerView;
 
-    WordListAdapter(final Context context, WordViewModel viewModel, RecyclerView recyclerView) {
+    TermListAdapter(final Context context, TermViewModel viewModel, RecyclerView recyclerView) {
         mInflater = LayoutInflater.from(context);
         textToSpeech = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
             @Override
@@ -55,11 +56,14 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
 
     @Override
     public void onBindViewHolder(@NonNull final WordViewHolder holder, final int i) {
-        if (mWordItems != null) {
-            final WordItem current = mWordItems.get(i);
-            final String word = current.getWordString();
+        if (mTerms != null) {
+//            final WordItem current = mWordItems.get(i);
+            final Term current = mTerms.get(i);
+//            final String word = current.getWord();
+            final String word = current.getWord();
             holder.tvWord.setText(word);
-            holder.tvPinyin.setText(current.getPinyinString());
+//            holder.tvPinyin.setText(current.getPinyin());
+            holder.tvPinyin.setText(current.getPinyin());
             holder.ivPlay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -87,37 +91,43 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         }
     }
 
-    void setWordItems(List<WordItem> wordItems) {
-        mWordItems = wordItems;
+    void setTermItems(List<Term> terms) {
+        mTerms = terms;
         notifyDataSetChanged();
     }
 
     void onItemRemove(RecyclerView.ViewHolder viewHolder) {
         final int adapterPosition = viewHolder.getAdapterPosition();
-        final WordItem wordItem = mWordItems.get(adapterPosition);
-        final QuizPinyin quizPinyin = new QuizPinyin(wordItem.getQuizId(), wordItem.getPinyinString());
+//        final WordItem wordItem = mWordItems.get(adapterPosition);
+        final Term term = mTerms.get(adapterPosition);
+//        final QuizPinyin quizPinyin = new QuizPinyin(wordItem.getQuizId(), wordItem.getPinyin());
 
         Snackbar snackbar = Snackbar
                 .make(recyclerView, "Removed word", Snackbar.LENGTH_LONG)
                 .setAction("Undo", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mWordItems.add(adapterPosition, wordItem);
+//                        mWordItems.add(adapterPosition, wordItem);
+                        mTerms.add(adapterPosition, term);
                         notifyItemInserted(adapterPosition);
-                        viewModel.addQuizPinyin(quizPinyin);
+                        viewModel.addTerm(term);
+//                        viewModel.addQuizPinyin(quizPinyin);
                         recyclerView.scrollToPosition(adapterPosition);
                     }
                 });
         snackbar.show();
-        mWordItems.remove(adapterPosition);
-        viewModel.deleteWord(quizPinyin);
+        mTerms.remove(adapterPosition);
+//        mWordItems.remove(adapterPosition);
+//        viewModel.deleteWord(quizPinyin);
+        viewModel.deleteTerm(term);
         notifyItemRemoved(adapterPosition);
     }
 
     @Override
     public int getItemCount() {
-        if (mWordItems != null)
-            return mWordItems.size();
+        if (mTerms != null) return mTerms.size();
+//        if (mWordItems != null)
+//            return mWordItems.size();
         return 0;
     }
 

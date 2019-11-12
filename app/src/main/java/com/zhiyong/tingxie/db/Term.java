@@ -4,16 +4,18 @@
 package com.zhiyong.tingxie.db;
 
 import androidx.room.Entity;
+import androidx.annotation.NonNull;
 import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
-import androidx.annotation.NonNull;
+
+import java.util.UUID;
 
 @Entity(indices = {@Index("id")})
 public class Term {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @NonNull
-    private long id;
+    private String id;
 
     private long createdAt;
 
@@ -28,18 +30,8 @@ public class Term {
     private String pinyin;
     private int timesCorrect;
 
-    public Term(@NonNull long createdAt, @NonNull long deletedAt, @NonNull long quizId,
-                @NonNull String uid, @NonNull String word, @NonNull String pinyin) {
-        this.createdAt = createdAt;
-        this.deletedAt = deletedAt;
-        this.quizId = quizId;
-        this.uid = uid;
-        this.word = word;
-        this.pinyin = pinyin;
-    }
-
-    @Ignore
-    public Term(long id, long createdAt, long deletedAt, long quizId, String uid, String word, String pinyin, int timesCorrect) {
+    public Term(String id, long createdAt, long deletedAt, long quizId, @NonNull String uid,
+                @NonNull String word, @NonNull String pinyin, int timesCorrect) {
         this.id = id;
         this.createdAt = createdAt;
         this.deletedAt = deletedAt;
@@ -50,11 +42,23 @@ public class Term {
         this.timesCorrect = timesCorrect;
     }
 
-    public long getId() {
+    @Ignore
+    public Term(long quizId, @NonNull String uid, @NonNull String word, @NonNull String pinyin) {
+        id = UUID.randomUUID().toString();
+        createdAt = System.currentTimeMillis() / 1000L;
+        deletedAt = -1;
+        this.quizId = quizId;
+        this.uid = uid;
+        this.word = word;
+        this.pinyin = pinyin;
+        timesCorrect = 0;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(@NonNull long id) {
+    public void setId() {
         this.id = id;
     }
 

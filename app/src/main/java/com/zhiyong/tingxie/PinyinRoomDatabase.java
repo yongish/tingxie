@@ -19,7 +19,7 @@ import com.zhiyong.tingxie.db.Word;
 @Database(entities = {Question.class, Quiz.class, Term.class,
         Pinyin.class, QuizPinyin.class, Word.class   // todo: Added these classes back just so the app runs. To remove them.
 },
-        version = 3)
+        version = 4)
 public abstract class PinyinRoomDatabase extends RoomDatabase {
     public abstract QuizDao pinyinDao();
     private static PinyinRoomDatabase INSTANCE;
@@ -38,7 +38,7 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             PinyinRoomDatabase.class, "pinyin_database")
-                            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)//, MIGRATION_3_4)
+                            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
                             .addCallback(sRoomDatabaseCallback)
                             .build();
                 }
@@ -61,11 +61,14 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
         }
     };
 
-//    private static final Migration MIGRATION_3_4 = new Migration(3, 4) {
-//        @Override
-//        public void migrate(@NonNull SupportSQLiteDatabase database) {
-//            database.beginTransaction();
-//            try {
+    private static final Migration MIGRATION_3_4 = new Migration(3, 4) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.beginTransaction();
+            try {
+                database.execSQL("ALTER TABLE quiz ADD column totalTerms INTEGER DEFAULT 0");
+                database.execSQL("ALTER TABLE quiz ADD column notLearned INTEGER DEFAULT 0");
+                database.execSQL("ALTER TABLE quiz ADD column roundsCompleted INTEGER DEFAULT 0");
 //                database.execSQL("CREATE TABLE term ");
 //                database.execSQL("INSERT INTO term () SELECT  FROM ");
 //                database.execSQL("ALTER TABLE quiz ADD COLUMN ");
@@ -73,12 +76,12 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
 //                database.execSQL("DROP TABLE word");
 //                database.execSQL("DROP TABLE quiz_pinyin");
 //                database.execSQL("DROP TABLE pinyin");
-//                database.setTransactionSuccessful();
-//            } finally {
-//                database.endTransaction();
-//            }
-//        }
-//    };
+                database.setTransactionSuccessful();
+            } finally {
+                database.endTransaction();
+            }
+        }
+    };
 
     /**
      * Populate the database in the background.

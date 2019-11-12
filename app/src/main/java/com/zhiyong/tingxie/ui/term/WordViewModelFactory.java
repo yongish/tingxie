@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie.ui.word;
+package com.zhiyong.tingxie.ui.term;
 
 import android.app.Application;
 import androidx.lifecycle.ViewModel;
@@ -17,6 +17,6 @@ public class WordViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new WordViewModel(mApplication, mQuizId);
+        return (T) new TermViewModel(mApplication, mQuizId);
     }
 }

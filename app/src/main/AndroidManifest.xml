@@ -27,7 +27,7 @@
             <!-- </intent-filter> -->
         </activity>
         <activity
-            android:name=".ui.word.WordActivity"
+            android:name=".ui.term.TermActivity"
             android:label="@string/title_activity_word"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie.ui.word;
+package com.zhiyong.tingxie.ui.term;
 
 import android.app.AlertDialog;
 import androidx.lifecycle.Observer;
@@ -23,20 +23,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zhiyong.tingxie.R;
+import com.zhiyong.tingxie.db.Term;
 import com.zhiyong.tingxie.ui.main.MainActivity;
+import com.zhiyong.tingxie.ui.main.QuizItem;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
 import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 
+import org.parceler.Parcels;
+
 import java.util.List;
 
+import static com.zhiyong.tingxie.ui.main.QuizListAdapter.EXTRA_QUIZ;
 import static com.zhiyong.tingxie.ui.main.QuizListAdapter.EXTRA_QUIZ_ID;
 
-public class WordActivity extends AppCompatActivity {
+public class TermActivity extends AppCompatActivity {
 
-    private WordViewModel mWordViewModel;
+    private TermViewModel mTermViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,22 +59,23 @@ public class WordActivity extends AppCompatActivity {
             }
         });
 
-        final long quizId = getIntent().getLongExtra(EXTRA_QUIZ_ID, -1);
+//        final long quizId = getIntent().getLongExtra(EXTRA_QUIZ_ID, -1);
+        final QuizItem quizItem = Parcels.unwrap(getIntent().getParcelableExtra(EXTRA_QUIZ));
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final EditText input = new EditText(WordActivity.this);
+                final EditText input = new EditText(TermActivity.this);
                 input.setInputType(InputType.TYPE_CLASS_TEXT);
-                FrameLayout container = new FrameLayout(WordActivity.this);
+                FrameLayout container = new FrameLayout(TermActivity.this);
                 FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.leftMargin = params.rightMargin =
                         getResources().getDimensionPixelSize(R.dimen.dialog_margin);
                 input.setLayoutParams(params);
                 container.addView(input);
-                new AlertDialog.Builder(WordActivity.this)
+                new AlertDialog.Builder(TermActivity.this)
                         .setTitle("Add Chinese words or phase")
                         .setMessage("No punctuation allowed.")
                         .setView(container)
@@ -91,15 +97,20 @@ public class WordActivity extends AppCompatActivity {
 //                                    pinyin = new Util().lookupPinyin(inputWord);
                                 } catch (Exception e) {
                                     // todo: Log to API.
-                                    Toast.makeText(WordActivity.this, "ERROR in local pinyin lookup", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(TermActivity.this, "ERROR in local pinyin lookup", Toast.LENGTH_LONG).show();
                                 }
 
                                 if (pinyin != null && pinyin.length() > 0) {
+
                                     // Add word to current quizId.
-                                    mWordViewModel.addWord(quizId, inputWord, pinyin);
-                                    mWordViewModel.updateQuestions(quizId);
+                                    quizItem.setTotalTerms(quizItem.getTotalTerms() + 1);
+                                    quizItem.setRoundsCompleted(0);
+                                    quizItem.set
+                                    mTermViewModel.addWord(quizItem, inputWord, pinyin);
+
+//                                    mTermViewModel.updateQuestions(quizId);
                                 } else {
-                                    Toast.makeText(WordActivity.this, "ERROR in pinyin lookup", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(TermActivity.this, "ERROR in pinyin lookup", Toast.LENGTH_LONG).show();
                                     dialog.cancel();
                                 }
                             }
@@ -114,27 +125,37 @@ public class WordActivity extends AppCompatActivity {
             }
         });
 
-        mWordViewModel = ViewModelProviders
-                .of(this, new WordViewModelFactory(this.getApplication(), quizId))
-                .get(WordViewModel.class);
+        mTermViewModel = ViewModelProviders
+                .of(this, new WordViewModelFactory(this.getApplication(), quizItem.getId()))
+                .get(TermViewModel.class);
         final RecyclerView recyclerView = findViewById(R.id.recyclerview_word);
-        final WordListAdapter adapter = new WordListAdapter(this, mWordViewModel, recyclerView);
+        final TermListAdapter adapter = new TermListAdapter(this, mTermViewModel, recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         final TextView emptyView = findViewById(R.id.empty_view);
-        mWordViewModel.getWordItemsOfQuiz().observe(this, new Observer<List<WordItem>>() {
+        mTermViewModel.getTerms().observe(this, new Observer<List<Term>>() {
             @Override
-            public void onChanged(@Nullable List<WordItem> wordItems) {
-                adapter.setWordItems(wordItems);
-                if (wordItems == null || wordItems.isEmpty()) {
+            public void onChanged(@Nullable List<Term> terms) {
+                adapter.setTermItems(terms);
+                if (terms == null || terms.isEmpty()) {
                     emptyView.setVisibility(View.VISIBLE);
                 } else {
                     emptyView.setVisibility(View.INVISIBLE);
                 }
             }
         });
-
+//        mTermViewModel.getWordItemsOfQuiz().observe(this, new Observer<List<WordItem>>() {
+//            @Override
+//            public void onChanged(@Nullable List<WordItem> wordItems) {
+//                adapter.setTermItems(wordItems);
+//                if (wordItems == null || wordItems.isEmpty()) {
+//                    emptyView.setVisibility(View.VISIBLE);
+//                } else {
+//                    emptyView.setVisibility(View.INVISIBLE);
+//                }
+//            }
+//        });
 
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
                 0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT

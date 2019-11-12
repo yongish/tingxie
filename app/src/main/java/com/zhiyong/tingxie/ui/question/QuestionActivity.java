@@ -15,9 +15,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.zhiyong.tingxie.R;
+import com.zhiyong.tingxie.db.Term;
 import com.zhiyong.tingxie.ui.answer.AnswerActivity;
 import com.zhiyong.tingxie.ui.main.MainActivity;
-import com.zhiyong.tingxie.ui.word.WordItem;
 
 import java.util.List;
 import java.util.Locale;
@@ -68,13 +68,13 @@ public class QuestionActivity extends AppCompatActivity {
         mQuestionViewModel = ViewModelProviders
                 .of(this, new QuestionViewModelFactory(this.getApplication(), quizId))
                 .get(QuestionViewModel.class);
-        mQuestionViewModel.getRemainingQuestions().observe(this, new Observer<List<WordItem>>() {
+        mQuestionViewModel.getRemainingQuestions().observe(this, new Observer<List<Term>>() {
             @Override
-            public void onChanged(@Nullable final List<WordItem> wordItems) {
+            public void onChanged(@Nullable final List<Term> wordItems) {
                 if (wordItems != null && wordItems.size() > 0) {
-                    final WordItem wordItem = wordItems.get(0);
-                    final String wordString = wordItem.getWordString();
-                    final String pinyinString = wordItem.getPinyinString();
+                    final Term wordItem = wordItems.get(0);
+                    final String wordString = wordItem.getWord();
+                    final String pinyinString = wordItem.getPinyin();
                     if (textToSpeech == null) {
                         textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
                             @Override
@@ -101,10 +101,10 @@ public class QuestionActivity extends AppCompatActivity {
                         public void onClick(View v) {
                             Intent intent = new Intent(getApplicationContext(), AnswerActivity.class);
                             StringBuilder sb = new StringBuilder();
-                            for (WordItem item : wordItems) {
-                                if (item.getPinyinString().equals(pinyinString)) {
+                            for (Term item : wordItems) {
+                                if (item.getPinyin().equals(pinyinString)) {
                                     sb.append("\n");
-                                    sb.append(item.getWordString());
+                                    sb.append(item.getWord());
                                 }
                             }
                             intent.putExtra(EXTRA_WORDS_STRING, sb.deleteCharAt(0).toString());

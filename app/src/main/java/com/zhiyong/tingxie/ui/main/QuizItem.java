@@ -1,12 +1,23 @@
 package com.zhiyong.tingxie.ui.main;
 
+import androidx.room.Ignore;
+
+import org.parceler.Parcel;
+
+import lombok.Data;
+
+@Parcel
+@Data
 public class QuizItem {
-    private long id;
-    private int date;
-    private String title;
-    private int totalTerms;
-    private int notLearned;
-    private int roundsCompleted;
+    long id;
+    int date;
+    String title;
+    int totalTerms;
+    int notLearned;
+    int roundsCompleted;
+
+    @Ignore
+    public QuizItem() {}
 
     public QuizItem(long id, int date, String title, int totalTerms, int notLearned, int roundsCompleted) {
         this.id = id;
@@ -15,37 +26,5 @@ public class QuizItem {
         this.totalTerms = totalTerms;
         this.notLearned = notLearned;
         this.roundsCompleted = roundsCompleted;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public int getDate() {
-        return date;
-    }
-
-    public void setDate(int date) {
-        this.date = date;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public int getTotalTerms() {
-        return totalTerms;
-    }
-
-    public int getNotLearned() {
-        return notLearned;
-    }
-
-    public int getRoundsCompleted() {
-        return roundsCompleted;
     }
 }
