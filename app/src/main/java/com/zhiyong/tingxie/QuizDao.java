@@ -91,9 +91,10 @@ public interface QuizDao {
     LiveData<List<WordItem>> getWordItemsOfQuiz(long quizId);
 
     @Query("WITH tpc AS\n" +
-            "  (SELECT quiz.id AS quiz_id,\n" +
+            "  (SELECT quiz.id AS id,\n" +
             "          title,\n" +
             "          tp.pinyin_string,\n" +
+            "          date,\n" +
             "          Count(correct) AS correct_count\n" +
             "   FROM quiz\n" +
             "   LEFT JOIN quiz_pinyin tp ON quiz.id = tp.quiz_id\n" +
@@ -103,22 +104,21 @@ public interface QuizDao {
             "   GROUP BY quiz.id,\n" +
             "            tp.pinyin_string),\n" +
             "     tp2 AS\n" +
-            "  (SELECT tpc.quiz_id,\n" +
+            "  (SELECT tpc.id,\n" +
             "          Count(tpc.pinyin_string) AS total,\n" +
             "          Min(correct_count) AS rounds_completed\n" +
             "   FROM tpc\n" +
-            "   GROUP BY tpc.quiz_id)\n" +
-            "SELECT t.id,\n" +
-            "       t.date,\n" +
-            "       t.title,\n" +
+            "   GROUP BY tpc.id)\n" +
+            "SELECT tpc.id,\n" +
+            "       tpc.date,\n" +
+            "       tpc.title,\n" +
             "       tp2.total AS totalWords,\n" +
             "       Min(tp2.total, Count(tp2.rounds_completed = tpc.correct_count)) AS notLearned,\n" +
             "       tp2.rounds_completed + 1 AS round\n" +
             "FROM tpc\n" +
-            "LEFT JOIN tp2 ON tp2.quiz_id = tpc.quiz_id\n" +
-            "JOIN quiz t ON t.id = tp2.quiz_id\n" +
-            "GROUP BY tp2.quiz_id\n" +
-            "ORDER BY t.date")
+            "LEFT JOIN tp2 ON tp2.id = tpc.id\n" +
+            "GROUP BY tp2.id\n" +
+            "ORDER BY tpc.date")
     LiveData<List<QuizItem>> getAllQuizItems();
 
     @Query("WITH tpc AS\n" +
