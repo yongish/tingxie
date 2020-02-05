@@ -26,6 +26,8 @@ android {
         // "pm clear" command after each test invocation. This command ensures
         // that the app's state is completely cleared between tests.
         testInstrumentationRunnerArguments clearPackageData: 'true'
+
+        multiDexEnabled true
     }
 //    testOptions {
 //        execution 'ANDROIDX_TEST_ORCHESTRATOR'
@@ -90,6 +92,11 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.belerweb/pinyin4j
     implementation group: 'com.belerweb', name: 'pinyin4j', version: '2.5.1'
+
+    implementation 'com.amplifyframework:core:0.9.0'
+    implementation 'com.amplifyframework:aws-api:0.9.0'
+
+    implementation 'com.android.support:multidex:1.0.3'
 }
 
 apply plugin: 'com.google.gms.google-services'
