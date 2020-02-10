@@ -1,3 +1,4 @@
+// Dropped in MIGRATION_3_4.
 package com.zhiyong.tingxie.db;
 
 import androidx.room.Entity;

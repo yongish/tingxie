@@ -1,33 +1,35 @@
 package com.zhiyong.tingxie.db;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import androidx.annotation.NonNull;
 
-@Entity(indices = {@Index("pinyin_string")},
-        foreignKeys = @ForeignKey(entity = Pinyin.class, parentColumns = "pinyin_string", childColumns = "pinyin_string"))
+@Entity(indices = {@Index("pinyinString")},
+        foreignKeys = @ForeignKey(entity = Pinyin.class, parentColumns = "pinyinString", childColumns = "pinyinString"))
 public class Word {
     @PrimaryKey
     @NonNull
-    private String word_string;
+    @ColumnInfo(name = "word_string")
+    private String wordString;
+    @ColumnInfo(name = "pinyin_string")
+    private String pinyinString;
 
-    private String pinyin_string;
-
-    public Word(@NonNull String word_string, @NonNull String pinyin_string) {
-        this.word_string = word_string;
-        this.pinyin_string = pinyin_string;
+    public Word(@NonNull String wordString, @NonNull String pinyinString) {
+        this.wordString = wordString;
+        this.pinyinString = pinyinString;
     }
 
     @NonNull
-    public String getWord_string() {
-        return word_string;
+    public String getWordString() {
+        return wordString;
     }
 
     @NonNull
-    public String getPinyin_string() {
-        return pinyin_string;
+    public String getPinyinString() {
+        return pinyinString;
     }
 
     // Word instances should be immutable.

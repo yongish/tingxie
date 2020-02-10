@@ -1,5 +1,6 @@
 package com.zhiyong.tingxie.db;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
@@ -9,22 +10,25 @@ import androidx.annotation.NonNull;
 import static androidx.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "quiz_pinyin",
-        indices = {@Index("quiz_id"), @Index("pinyin_string")},
+        indices = {@Index("quizId"), @Index("pinyinString")},
         foreignKeys = {
-        @ForeignKey(entity = Quiz.class, parentColumns = "id", childColumns = "quiz_id", onDelete = CASCADE),
-                @ForeignKey(entity = Pinyin.class, parentColumns = "pinyin_string", childColumns = "pinyin_string")
+        @ForeignKey(entity = Quiz.class, parentColumns = "id", childColumns = "quizId", onDelete = CASCADE),
+                @ForeignKey(entity = Pinyin.class, parentColumns = "pinyinString", childColumns = "pinyinString")
 })
 public class QuizPinyin {
     @PrimaryKey(autoGenerate = true)
     @NonNull
     private long id;
+    @ColumnInfo(name = "quiz_id")
+    private long quizId;
+    @ColumnInfo(name = "pinyin_string")
+    private String pinyinString;
+    @ColumnInfo(name = "word_string")
+    private String wordString;
 
-    private long quiz_id;
-    private String pinyin_string;
-
-    public QuizPinyin(@NonNull long quiz_id, @NonNull String pinyin_string) {
-        this.quiz_id = quiz_id;
-        this.pinyin_string = pinyin_string;
+    public QuizPinyin(@NonNull long quizId, @NonNull String pinyinString) {
+        this.quizId = quizId;
+        this.pinyinString = pinyinString;
     }
 
     public long getId() {
@@ -36,20 +40,29 @@ public class QuizPinyin {
     }
 
     @NonNull
-    public long getQuiz_id() {
-        return quiz_id;
+    public long getQuizId() {
+        return quizId;
     }
 
-    public void setQuiz_id(long quiz_id) {
-        this.quiz_id = quiz_id;
+    public void setQuizId(long quizId) {
+        this.quizId = quizId;
     }
 
     @NonNull
-    public String getPinyin_string() {
-        return pinyin_string;
+    public String getPinyinString() {
+        return pinyinString;
     }
 
-    public void setPinyin_string(String pinyin_string) {
-        this.pinyin_string = pinyin_string;
+    public void setPinyinString(String pinyinString) {
+        this.pinyinString = pinyinString;
+    }
+
+    @NonNull
+    public String getWordString() {
+        return wordString;
+    }
+
+    public void setWordString(String wordString) {
+        this.wordString = wordString;
     }
 }

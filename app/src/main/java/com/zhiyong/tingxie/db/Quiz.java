@@ -13,10 +13,13 @@ public class Quiz {
     @NonNull
     @ColumnInfo(name = "id")
     private long id;
-
     private int date;
-
     private String title;
+    @ColumnInfo(name = "total_words")
+    private int totalWords;
+    @ColumnInfo(name = "not_learned")
+    private int notLearned;
+    private int round;
 
     public Quiz(@NonNull int date) {
         this.date = date;
@@ -50,5 +53,32 @@ public class Quiz {
 
     public String getTitle() {
         return title;
+    }
+
+    @NonNull
+    public int getTotalWords() {
+        return totalWords;
+    }
+
+    public void setTotalWords(int totalWords) {
+        this.totalWords = totalWords;
+    }
+
+    @NonNull
+    public int getNotLearned() {
+        return notLearned;
+    }
+
+    public void setNotLearned(int notLearned) {
+        this.notLearned = notLearned;
+    }
+
+    @NonNull
+    public int getRound() {
+        return round;
+    }
+
+    public void setRound(int round) {
+        this.round = round;
     }
 }

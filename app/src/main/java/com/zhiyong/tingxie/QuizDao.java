@@ -55,9 +55,6 @@ public interface QuizDao {
     @Query("DELETE FROM quiz")
     void deleteAllQuizzes();
 
-    @Query("DELETE FROM pinyin")
-    void deleteAllPinyins();
-
     @Query("DELETE FROM quiz_pinyin")
     void deleteAllQuizPinyins();
 
@@ -81,70 +78,36 @@ public interface QuizDao {
 
     @Query("SELECT DISTINCT q.id AS quizId,\n" +
             "                w.word_string AS wordString,\n" +
-            "                p.pinyin_string AS pinyinString\n" +
+            "                w.pinyin_string AS pinyinString\n" +
             "FROM quiz q\n" +
             "JOIN quiz_pinyin qp ON q.id = qp.quiz_id\n" +
-            "JOIN pinyin p ON qp.pinyin_string = p.pinyin_string\n" +
-            "JOIN word w ON p.pinyin_string = w.pinyin_string\n" +
+            "JOIN word w ON qp.pinyin_string = w.pinyin_string\n" +
             "WHERE q.id = :quizId\n" +
-            "ORDER BY p.pinyin_string")
+            "ORDER BY w.pinyin_string")
     LiveData<List<WordItem>> getWordItemsOfQuiz(long quizId);
 
-    @Query("WITH tpc AS\n" +
-            "  (SELECT quiz.id AS id,\n" +
-            "          title,\n" +
-            "          tp.pinyin_string,\n" +
-            "          date,\n" +
-            "          Count(correct) AS correct_count\n" +
-            "   FROM quiz\n" +
-            "   LEFT JOIN quiz_pinyin tp ON quiz.id = tp.quiz_id\n" +
-            "   LEFT JOIN question q ON tp.quiz_id = q.quiz_id\n" +
-            "   AND tp.pinyin_string = q.pinyin_string\n" +
-            "   AND q.reset_time <= q.timestamp\n" +
-            "   GROUP BY quiz.id,\n" +
-            "            tp.pinyin_string),\n" +
-            "     tp2 AS\n" +
-            "  (SELECT tpc.id,\n" +
-            "          Count(tpc.pinyin_string) AS total,\n" +
-            "          Min(correct_count) AS rounds_completed\n" +
-            "   FROM tpc\n" +
-            "   GROUP BY tpc.id)\n" +
-            "SELECT tpc.id,\n" +
-            "       tpc.date,\n" +
-            "       tpc.title,\n" +
-            "       tp2.total AS totalWords,\n" +
-            "       Min(tp2.total, Count(tp2.rounds_completed = tpc.correct_count)) AS notLearned,\n" +
-            "       tp2.rounds_completed + 1 AS round\n" +
-            "FROM tpc\n" +
-            "LEFT JOIN tp2 ON tp2.id = tpc.id\n" +
-            "GROUP BY tp2.id\n" +
-            "ORDER BY tpc.date")
+    @Query("SELECT id, date, title, total_words, not_learned, round FROM quiz")
     LiveData<List<QuizItem>> getAllQuizItems();
 
     @Query("WITH tpc AS\n" +
             "  (SELECT tp.pinyin_string,\n" +
             "          Count(correct) AS correct_count\n" +
-            "   FROM quiz_pinyin tp LEFT JOIN question q ON tp.quiz_id = q.quiz_id\n" +
+            "   FROM quiz_pinyin tp\n" +
+            "   LEFT JOIN question q ON tp.quiz_id = q.quiz_id\n" +
             "   AND q.reset_time <= q.timestamp\n" +
             "   WHERE tp.quiz_id = :quizId\n" +
-            "   GROUP BY tp.pinyin_string),\n" +
-            "     tp2 AS\n" +
-            "  (SELECT Min(correct_count) AS rounds_completed\n" +
-            "   FROM tpc),\n" +
-            "     tp3 AS\n" +
-            "  (SELECT tpc.pinyin_string\n" +
-            "   FROM tpc\n" +
-            "   WHERE tpc.correct_count =\n" +
-            "       (SELECT rounds_completed\n" +
-            "        FROM tp2)\n" +
-            "   )\n" +
+            "   GROUP BY tp.pinyin_string)\n" +
             "SELECT :quizId AS quizId,\n" +
-            "       w.word_string AS wordString," +
-            "       tp3.pinyin_string AS pinyinString\n" +
-            "FROM tp3\n" +
-            "JOIN word w ON tp3.pinyin_string = w.pinyin_string")
+            "       tpc.pinyin_string,\n" +
+            "       w.word_string AS wordString\n" +
+            "FROM tpc\n" +
+            "JOIN word w ON tpc.pinyin_string = w.pinyin_string\n" +
+            "WHERE tpc.correct_count =\n" +
+            "    (SELECT Min(correct_count)\n" +
+            "     FROM tpc)")
     LiveData<List<WordItem>> getPossibleQuestions(long quizId);
 
+    // todo: REWRITE THIS NEXT.
     @Query("WITH tpc AS\n" +
             "  (SELECT qp.pinyin_string,\n" +
             "          qn.pinyin_string,\n" +

@@ -177,7 +177,7 @@ public class QuizRepository {
         @Override
         protected Void doInBackground(QuizPinyin... params) {
             // Word and Pinyin are immutable. Only QuizPinyin object is deleted.
-            mAsyncTaskDao.deleteQuizPinyin(params[0].getQuiz_id(), params[0].getPinyin_string());
+            mAsyncTaskDao.deleteQuizPinyin(params[0].getQuizId(), params[0].getPinyinString());
             return null;
         }
     }

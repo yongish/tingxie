@@ -16,7 +16,7 @@ import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.db.Word;
 
 @Database(entities = {Question.class, Quiz.class, Pinyin.class, Word.class, QuizPinyin.class},
-        version = 3)
+        version = 4)
 public abstract class PinyinRoomDatabase extends RoomDatabase {
     public abstract QuizDao pinyinDao();
     private static PinyinRoomDatabase INSTANCE;
@@ -35,7 +35,7 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             PinyinRoomDatabase.class, "pinyin_database")
-                            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
                             .addCallback(sRoomDatabaseCallback)
                             .build();
                 }
@@ -55,6 +55,51 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE quiz ADD COLUMN title TEXT DEFAULT 'No title'");
+        }
+    };
+
+    private static final Migration MIGRATION_3_4 = new Migration(3, 4) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE quiz ADD COLUMN total_words INTEGER");
+            database.execSQL("ALTER TABLE quiz ADD COLUMN not_learned INTEGER");
+            database.execSQL("ALTER TABLE quiz ADD COLUMN round INTEGER");
+            database.execSQL("WITH qa AS\n" +
+                    "  (WITH tpc AS\n" +
+                    "     (SELECT quiz.id AS id,\n" +
+                    "             title,\n" +
+                    "             tp.pinyin_string,date,Count(correct) AS correct_count\n" +
+                    "      FROM quiz\n" +
+                    "      LEFT JOIN quiz_pinyin tp ON quiz.id = tp.quiz_id\n" +
+                    "      LEFT JOIN question q ON tp.quiz_id = q.quiz_id\n" +
+                    "      AND tp.pinyin_string = q.pinyin_string\n" +
+                    "      AND q.reset_time <= q.timestamp\n" +
+                    "      GROUP BY quiz.id,\n" +
+                    "               tp.pinyin_string),\n" +
+                    "        tp2 AS\n" +
+                    "     (SELECT tpc.id,\n" +
+                    "             Count(tpc.pinyin_string) AS total,\n" +
+                    "             Min(correct_count) AS rounds_completed\n" +
+                    "      FROM tpc\n" +
+                    "      GROUP BY tpc.id) SELECT tpc.id,\n" +
+                    "                              tp2.total AS total_words,\n" +
+                    "                              Min(tp2.total, Count(tp2.rounds_completed = tpc.correct_count)) AS not_learned,\n" +
+                    "                              tp2.rounds_completed + 1 AS round\n" +
+                    "   FROM tpc\n" +
+                    "   LEFT JOIN tp2 ON tp2.id = tpc.id\n" +
+                    "   GROUP BY tp2.id)\n" +
+                    "UPDATE quiz\n" +
+                    "SET total_words = qa.total_words,\n" +
+                    "    not_learned = qa.not_learned,\n" +
+                    "    round = qa.round");
+            database.execSQL("ALTER TABLE quiz_pinyin ADD COLUMN word_string");
+            database.execSQL("\n" +
+                    "UPDATE quiz_pinyin\n" +
+                    "SET word_string =\n" +
+                    "  (SELECT word_string\n" +
+                    "   FROM word\n" +
+                    "   WHERE quiz_pinyin.pinyin_string = word.pinyin_string)");
+            database.execSQL("DROP TABLE IF EXISTS pinyin");
         }
     };
 

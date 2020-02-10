@@ -266,7 +266,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
     private List<QuizPinyin> getQuizPinyinsOfQuiz(long quizId) {
         List<QuizPinyin> result = new ArrayList<>();
         for (QuizPinyin quizPinyin : mQuizPinyins) {
-            if (quizPinyin.getQuiz_id() == quizId) {
+            if (quizPinyin.getQuizId() == quizId) {
                 result.add(quizPinyin);
             }
         }
