@@ -1,7 +1,7 @@
 package com.zhiyong.tingxie;
 
 import androidx.annotation.NonNull;
-import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.contrib.PickerActions;
 import androidx.test.espresso.contrib.RecyclerViewActions;
@@ -51,7 +51,7 @@ public class RecyclerViewTest {
 
     @Before
     public void before() {
-        InstrumentationRegistry.getTargetContext().deleteDatabase("pinyin_database");
+        ApplicationProvider.getApplicationContext().deleteDatabase("pinyin_database");
     }
 
     @Test
