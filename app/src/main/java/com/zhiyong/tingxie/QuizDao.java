@@ -24,9 +24,6 @@ public interface QuizDao {
     @Update
     void update(Quiz quiz);
 
-//    @Insert(onConflict = IGNORE)
-//    long insert(Pinyin pinyin);
-
     @Insert
     long insert(QuizPinyin quizPinyin);
 
