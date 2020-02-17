@@ -78,6 +78,8 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
     public void onBindViewHolder(final QuizViewHolder holder, final int i) {
         if (mQuizItems != null) {
             final QuizItem current = mQuizItems.get(i);
+            QuizItem quiz = new QuizItem(current.getId(), current.getDate(), current.getTitle(),
+                    current.getTotalWords(), current.getNotLearned(), current.getRound());
 
             String displayDate = String.valueOf(current.getDate());
             try {
@@ -159,7 +161,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, WordActivity.class);
-                    intent.putExtra("quiz", Parcels.wrap(current));
+                    intent.putExtra("quiz", Parcels.wrap(quiz));
                     ((Activity) context).startActivityForResult(
                             intent, WORD_ACTIVITY_REQUEST_CODE
                     );
@@ -170,7 +172,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                 public void onClick(View v) {
                     if (current.getTotalWords() > 0) {
                         Intent intent = new Intent(context, QuestionActivity.class);
-                        intent.putExtra("quiz", Parcels.wrap(current));
+                        intent.putExtra("quiz", Parcels.wrap(quiz));
                         ((Activity) context).startActivityForResult(
                                 intent, QUESTION_ACTIVITY_REQUEST_CODE
                         );

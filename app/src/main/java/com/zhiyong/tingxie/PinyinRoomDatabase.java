@@ -89,7 +89,10 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
                     "                              Min(tp2.total, Count(tp2.rounds_completed = tpc.correct_count)) AS not_learned,\n" +
                     "                              tp2.rounds_completed + 1 AS round\n" +
                     "   FROM tpc\n" +
-                    "   LEFT JOIN tp2 ON tp2.id = tpc.id)\n" +
+                    "   LEFT JOIN tp2 ON tp2.id = tpc.id\n" +
+                    "   GROUP BY tpc.id,\n" +
+                    "            total,\n" +
+                    "            rounds_completed)\n" +
                     "UPDATE quiz\n" +
                     "SET total_words =\n" +
                     "  (SELECT total_words\n" +
