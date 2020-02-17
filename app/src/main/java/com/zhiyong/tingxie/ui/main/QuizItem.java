@@ -1,5 +1,9 @@
 package com.zhiyong.tingxie.ui.main;
 
+import org.parceler.Parcel;
+import org.parceler.ParcelConstructor;
+
+@Parcel(Parcel.Serialization.BEAN)
 public class QuizItem {
     private long id;
     private int date;
@@ -8,6 +12,7 @@ public class QuizItem {
     private int notLearned;
     private int round;
 
+    @ParcelConstructor
     public QuizItem(long id, int date, String title, int totalWords, int notLearned, int round) {
         this.id = id;
         this.date = date;
@@ -41,11 +46,23 @@ public class QuizItem {
         return totalWords;
     }
 
+    public void setTotalWords(int totalWords) {
+        this.totalWords = totalWords;
+    }
+
     public int getNotLearned() {
         return notLearned;
     }
 
+    public void setNotLearned(int notLearned) {
+        this.notLearned = notLearned;
+    }
+
     public int getRound() {
         return round;
+    }
+
+    public void setRound(int round) {
+        this.round = round;
     }
 }

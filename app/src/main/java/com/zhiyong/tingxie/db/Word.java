@@ -2,13 +2,11 @@ package com.zhiyong.tingxie.db;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import androidx.annotation.NonNull;
 
-@Entity(indices = {@Index("pinyinString")},
-        foreignKeys = @ForeignKey(entity = Pinyin.class, parentColumns = "pinyinString", childColumns = "pinyinString"))
+@Entity(indices = {@Index("pinyin_string")})
 public class Word {
     @PrimaryKey
     @NonNull

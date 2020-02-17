@@ -10,28 +10,32 @@ import androidx.annotation.NonNull;
 import static androidx.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "quiz_pinyin",
-        indices = {@Index("quizId"), @Index("pinyinString")},
+        indices = {@Index("quiz_id"), @Index("pinyin_string")},
         foreignKeys = {
-        @ForeignKey(entity = Quiz.class, parentColumns = "id", childColumns = "quizId", onDelete = CASCADE),
-                @ForeignKey(entity = Pinyin.class, parentColumns = "pinyinString", childColumns = "pinyinString")
-})
+                @ForeignKey(entity = Quiz.class, parentColumns = "id", childColumns = "quiz_id",
+                        onDelete = CASCADE)
+        })
 public class QuizPinyin {
     @PrimaryKey(autoGenerate = true)
-    @NonNull
     private long id;
     @ColumnInfo(name = "quiz_id")
-    private long quizId;
+    @NonNull
+    private Long quizId;
     @ColumnInfo(name = "pinyin_string")
+    @NonNull
     private String pinyinString;
     @ColumnInfo(name = "word_string")
+    @NonNull
     private String wordString;
 
-    public QuizPinyin(@NonNull long quizId, @NonNull String pinyinString) {
+    public QuizPinyin(long quizId, @NonNull String pinyinString, @NonNull String wordString) {
         this.quizId = quizId;
         this.pinyinString = pinyinString;
+        this.wordString = wordString;
     }
 
-    public long getId() {
+    @NonNull
+    public Long getId() {
         return id;
     }
 
@@ -40,7 +44,7 @@ public class QuizPinyin {
     }
 
     @NonNull
-    public long getQuizId() {
+    public Long getQuizId() {
         return quizId;
     }
 

@@ -81,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        /* todo: getAllQuestions() and getAllQuizPinyins() here may be unnecessary.
+         */
         mQuizViewModel.getAllQuestions().observe(this, new Observer<List<Question>>() {
             @Override
             public void onChanged(@Nullable List<Question> questions) {

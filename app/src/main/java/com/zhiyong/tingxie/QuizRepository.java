@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.zhiyong.tingxie.db.Pinyin;
 import com.zhiyong.tingxie.db.Question;
 import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.db.QuizPinyin;
@@ -25,10 +24,10 @@ public class QuizRepository {
 
     private QuizDao mQuizDao;
     private LiveData<List<QuizItem>> mAllQuizItems;
+    private LiveData<QuizItem> mQuizItem;
     private LiveData<List<WordItem>> mWordItems;
     private LiveData<List<QuizPinyin>> mAllQuizPinyins;
     private LiveData<List<Question>> mAllQuestions;
-    private LiveData<List<WordItem>> mPossibleQuestions;
     private LiveData<List<WordItem>> mRemainingQuestions;
 
     public QuizRepository(Application application, long quizId) {
@@ -37,15 +36,19 @@ public class QuizRepository {
         Log.d(TAG, "QuizRepository: ");
 
         mAllQuizItems = mQuizDao.getAllQuizItems();
+        mQuizItem = mQuizDao.getQuizItem(quizId);
         mWordItems = mQuizDao.getWordItemsOfQuiz(quizId);
         mAllQuizPinyins = mQuizDao.getAllQuizPinyins();
         mAllQuestions = mQuizDao.getAllQuestions();
-        mPossibleQuestions = mQuizDao.getPossibleQuestions(quizId);
         mRemainingQuestions = mQuizDao.getRemainingQuestions(quizId);
     }
 
     public LiveData<List<QuizItem>> getAllQuizItems() {
         return mAllQuizItems;
+    }
+
+    public LiveData<QuizItem> getQuizItem() {
+        return mQuizItem;
     }
 
     public LiveData<List<WordItem>> getWordItemsOfQuiz() {
@@ -58,10 +61,6 @@ public class QuizRepository {
 
     public LiveData<List<Question>> getAllQuestions() {
         return mAllQuestions;
-    }
-
-    public LiveData<List<WordItem>> getPossibleQuestionsOfQuiz() {
-        return mPossibleQuestions;
     }
 
     public LiveData<List<WordItem>> getRemainingQuestionsOfQuiz() {
@@ -155,9 +154,10 @@ public class QuizRepository {
         @Override
         protected Void doInBackground(WordItem... params) {
             String pinyinString = params[0].getPinyinString();
-            mAsyncTaskDao.insert(new Pinyin(pinyinString));
-            mAsyncTaskDao.insert(new Word(params[0].getWordString(), pinyinString));
-            mAsyncTaskDao.insert(new QuizPinyin(params[0].getQuizId(), pinyinString));
+            String wordString = params[0].getWordString();
+//            mAsyncTaskDao.insert(new Pinyin(pinyinString));
+            mAsyncTaskDao.insert(new Word(wordString, pinyinString));
+            mAsyncTaskDao.insert(new QuizPinyin(params[0].getQuizId(), pinyinString, wordString));
             return null;
         }
     }

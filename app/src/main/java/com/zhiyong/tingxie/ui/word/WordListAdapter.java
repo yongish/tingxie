@@ -4,10 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.speech.tts.TextToSpeech;
+
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.google.android.material.snackbar.Snackbar;
+
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,7 +99,8 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
     void onItemRemove(RecyclerView.ViewHolder viewHolder) {
         final int adapterPosition = viewHolder.getAdapterPosition();
         final WordItem wordItem = mWordItems.get(adapterPosition);
-        final QuizPinyin quizPinyin = new QuizPinyin(wordItem.getQuizId(), wordItem.getPinyinString());
+        final QuizPinyin quizPinyin = new QuizPinyin(wordItem.getQuizId(),
+                wordItem.getPinyinString(), wordItem.getWordString());
 
         Snackbar snackbar = Snackbar
                 .make(recyclerView, "Removed word", Snackbar.LENGTH_LONG)

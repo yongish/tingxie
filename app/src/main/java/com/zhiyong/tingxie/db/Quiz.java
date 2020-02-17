@@ -10,27 +10,33 @@ import androidx.annotation.NonNull;
 @Entity(indices = {@Index("id")})
 public class Quiz {
     @PrimaryKey(autoGenerate = true)
-    @NonNull
     @ColumnInfo(name = "id")
     private long id;
     private int date;
     private String title;
     @ColumnInfo(name = "total_words")
-    private int totalWords;
+    private int totalWords; // todo: need to update these values.
     @ColumnInfo(name = "not_learned")
     private int notLearned;
     private int round;
 
-    public Quiz(@NonNull int date) {
+    public Quiz(@NonNull Integer date) {
         this.date = date;
         title = "No title";
+        totalWords = 0;
+        notLearned = 0;
+        round = 1;
     }
 
     @Ignore
-    public Quiz(long id, @NonNull int date, String title) {
+    public Quiz(long id, @NonNull Integer date, String title,
+                int totalWords, int notLearned, int round) {
         this.id = id;
         this.date = date;
         this.title = title;
+        this.totalWords = totalWords;
+        this.notLearned = notLearned;
+        this.round = round;
     }
 
     public void setId(long id) {
@@ -38,7 +44,7 @@ public class Quiz {
     }
 
     @NonNull
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -47,7 +53,7 @@ public class Quiz {
     }
 
     @NonNull
-    public int getDate() {
+    public Integer getDate() {
         return date;
     }
 
@@ -56,7 +62,7 @@ public class Quiz {
     }
 
     @NonNull
-    public int getTotalWords() {
+    public Integer getTotalWords() {
         return totalWords;
     }
 
@@ -65,7 +71,7 @@ public class Quiz {
     }
 
     @NonNull
-    public int getNotLearned() {
+    public Integer getNotLearned() {
         return notLearned;
     }
 
@@ -74,7 +80,7 @@ public class Quiz {
     }
 
     @NonNull
-    public int getRound() {
+    public Integer getRound() {
         return round;
     }
 

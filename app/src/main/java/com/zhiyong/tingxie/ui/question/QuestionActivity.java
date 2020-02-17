@@ -4,6 +4,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.speech.tts.TextToSpeech;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,12 +18,13 @@ import android.widget.Toast;
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.ui.answer.AnswerActivity;
 import com.zhiyong.tingxie.ui.main.MainActivity;
+import com.zhiyong.tingxie.ui.main.QuizItem;
 import com.zhiyong.tingxie.ui.word.WordItem;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 import java.util.Locale;
-
-import static com.zhiyong.tingxie.ui.main.QuizListAdapter.EXTRA_QUIZ_ID;
 
 public class QuestionActivity extends AppCompatActivity {
 
@@ -60,13 +62,15 @@ public class QuestionActivity extends AppCompatActivity {
 //            }
 //        });
 
-        final long quizId = getIntent().getLongExtra(EXTRA_QUIZ_ID, -1);
+
+        // From AnswerActivity.
+        Parcelable parcel = getIntent().getParcelableExtra("quiz");
+        QuizItem quizItem = Parcels.unwrap(parcel);
 
         ivPlay = findViewById(R.id.ivPlay);
         btnShowAnswer = findViewById(R.id.btnShowAnswer);
-
         mQuestionViewModel = ViewModelProviders
-                .of(this, new QuestionViewModelFactory(this.getApplication(), quizId))
+                .of(this, new QuestionViewModelFactory(this.getApplication(), quizItem.getId()))
                 .get(QuestionViewModel.class);
         mQuestionViewModel.getRemainingQuestions().observe(this, new Observer<List<WordItem>>() {
             @Override
@@ -109,7 +113,8 @@ public class QuestionActivity extends AppCompatActivity {
                             }
                             intent.putExtra(EXTRA_WORDS_STRING, sb.deleteCharAt(0).toString());
                             intent.putExtra(EXTRA_PINYIN_STRING, pinyinString);
-                            intent.putExtra(EXTRA_QUIZ_ID, quizId);
+
+                            intent.putExtra("quiz", parcel);
                             intent.putExtra(EXTRA_REMAINING_QUESTION_COUNT, wordItems.size());
                             startActivity(intent);
                         }
@@ -123,7 +128,8 @@ public class QuestionActivity extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
 
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    intent.putExtra(EXTRA_QUIZ_ID, quizId);
+                    // todo: Is quizId necessary?
+//                    intent.putExtra(EXTRA_QUIZ_ID, quizId);
                     startActivity(intent);
                 }
             }

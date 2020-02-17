@@ -25,15 +25,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.ui.main.MainActivity;
+import com.zhiyong.tingxie.ui.main.QuizItem;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
 import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 
-import java.util.List;
+import org.parceler.Parcels;
 
-import static com.zhiyong.tingxie.ui.main.QuizListAdapter.EXTRA_QUIZ_ID;
+import java.util.List;
 
 public class WordActivity extends AppCompatActivity {
 
@@ -55,7 +56,8 @@ public class WordActivity extends AppCompatActivity {
             }
         });
 
-        final long quizId = getIntent().getLongExtra(EXTRA_QUIZ_ID, -1);
+        QuizItem quizItem = Parcels.unwrap(getIntent().getParcelableExtra("quiz"));
+        long quizId = quizItem.getId();
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -99,6 +101,14 @@ public class WordActivity extends AppCompatActivity {
                                     // Add word to current quizId.
                                     mWordViewModel.addWord(quizId, inputWord, pinyin);
                                     mWordViewModel.updateQuestions(quizId);
+
+                                    // Update totalWords. Reset notLearned and round.
+                                    int totalWords = quizItem.getTotalWords() + 1;
+                                    quizItem.setTotalWords(totalWords);
+                                    quizItem.setNotLearned(totalWords);
+                                    quizItem.setRound(1);
+
+                                    mWordViewModel.updateQuiz(quizItem);
                                 } else {
                                     Toast.makeText(WordActivity.this, "ERROR in pinyin lookup", Toast.LENGTH_LONG).show();
                                     dialog.cancel();
