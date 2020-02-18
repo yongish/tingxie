@@ -3,6 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.zhiyong.tingxie.com.zhiyong.tingxie.MainActivity">
     <item
+        android:id="@+id/action_logout"
+        android:orderInCategory="100"
+        android:title="@string/logout"
+        android:onClick="logout"
+        android:icon="@drawable/ic_exit_white_24dp"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/action_help"
         android:orderInCategory="100"
         android:title="@string/help"

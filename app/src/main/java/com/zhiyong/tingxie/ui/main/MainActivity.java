@@ -1,31 +1,31 @@
 package com.zhiyong.tingxie.ui.main;
 
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
+import androidx.annotation.NonNull;
+
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import androidx.fragment.app.DialogFragment;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.ItemTouchHelper;
+
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.zhiyong.tingxie.db.Question;
-import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.db.Quiz;
-
-import java.util.List;
+import com.zhiyong.tingxie.ui.login.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,30 +35,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-//        Button crashButton = new Button(this);
-//        crashButton.setText("Crash!");
-//        crashButton.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View view) {
-//                Crashlytics.getInstance().crash(); // Force a crash
-//            }
-//        });
-//
-//        addContentView(crashButton, new ViewGroup.LayoutParams(
-//                ViewGroup.LayoutParams.MATCH_PARENT,
-//                ViewGroup.LayoutParams.WRAP_CONTENT));
-
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DialogFragment newFragment = new DatePickerFragment();
-                newFragment.show(getSupportFragmentManager(), getString(R.string.datepicker));
-            }
+        fab.setOnClickListener((View v) -> {
+            DialogFragment newFragment = new DatePickerFragment();
+            newFragment.show(getSupportFragmentManager(), getString(R.string.datepicker));
         });
 
         recyclerView = findViewById(R.id.recyclerview_main);
@@ -70,32 +54,23 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        mQuizViewModel.getAllQuizItems().observe(this, new Observer<List<QuizItem>>() {
-            @Override
-            public void onChanged(@Nullable List<QuizItem> quizItems) {
-                adapter.setQuizItems(quizItems, recyclerView);
-                if (quizItems == null || quizItems.isEmpty()) {
-                    emptyView.setVisibility(View.VISIBLE);
-                } else {
-                    emptyView.setVisibility(View.INVISIBLE);
-                }
+        mQuizViewModel.getAllQuizItems().observe(this, quizItems -> {
+            adapter.setQuizItems(quizItems, recyclerView);
+            if (quizItems.isEmpty()) {
+                emptyView.setVisibility(View.VISIBLE);
+            } else {
+                emptyView.setVisibility(View.INVISIBLE);
             }
         });
 
         /* todo: getAllQuestions() and getAllQuizPinyins() here may be unnecessary.
          */
-        mQuizViewModel.getAllQuestions().observe(this, new Observer<List<Question>>() {
-            @Override
-            public void onChanged(@Nullable List<Question> questions) {
-                adapter.setQuestions(questions);
-            }
-        });
-        mQuizViewModel.getAllQuizPinyins().observe(this, new Observer<List<QuizPinyin>>() {
-            @Override
-            public void onChanged(@Nullable List<QuizPinyin> quizPinyins) {
-                adapter.setQuizPinyins(quizPinyins);
-            }
-        });
+        mQuizViewModel.getAllQuestions().observe(this, questions ->
+                adapter.setQuestions(questions)
+        );
+        mQuizViewModel.getAllQuizPinyins().observe(this, quizPinyins ->
+                adapter.setQuizPinyins(quizPinyins)
+        );
 
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
                 0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT
@@ -160,5 +135,15 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         HelpDialogFragment fragment = HelpDialogFragment.newInstance();
         fragment.show(fm, "fragment_help");
+    }
+
+    public void logout(MenuItem item) {
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnCompleteListener(task -> {
+                    startActivity(new Intent(MainActivity.this,
+                            LoginActivity.class));
+                    finish();
+                });
     }
 }
