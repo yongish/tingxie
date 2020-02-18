@@ -8,7 +8,7 @@ android {
         applicationId "com.zhiyong.tingxie"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 26
+        versionCode 27
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -94,10 +94,6 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.belerweb/pinyin4j
     implementation group: 'com.belerweb', name: 'pinyin4j', version: '2.5.1'
-
-    // https://mvnrepository.com/artifact/org.parceler/parceler
-    implementation group: 'org.parceler', name: 'parceler', version: '1.1.13'
-    annotationProcessor group: 'org.parceler', name: 'parceler', version: '1.1.13'
 
     def multidex_version = "2.0.1"
     implementation "androidx.multidex:multidex:$multidex_version"

@@ -20,8 +20,6 @@ import com.zhiyong.tingxie.ui.main.MainActivity;
 import com.zhiyong.tingxie.ui.main.QuizItem;
 import com.zhiyong.tingxie.ui.question.QuestionActivity;
 
-import org.parceler.Parcels;
-
 import static com.zhiyong.tingxie.ui.question.QuestionActivity.EXTRA_PINYIN_STRING;
 import static com.zhiyong.tingxie.ui.question.QuestionActivity.EXTRA_REMAINING_QUESTION_COUNT;
 import static com.zhiyong.tingxie.ui.question.QuestionActivity.EXTRA_WORDS_STRING;
@@ -40,7 +38,8 @@ public class AnswerActivity extends AppCompatActivity {
 
         mAnswerViewModel = ViewModelProviders.of(this).get(AnswerViewModel.class);
 
-        QuizItem quizItem = Parcels.unwrap(getIntent().getParcelableExtra("quiz"));
+        QuizItem quizItem = getIntent().getParcelableExtra("quiz");
+
         final String wordsString = getIntent().getStringExtra(EXTRA_WORDS_STRING);
         final String pinyinString = getIntent().getStringExtra(EXTRA_PINYIN_STRING);
 
@@ -63,7 +62,7 @@ public class AnswerActivity extends AppCompatActivity {
                 .pinyinString(pinyinString)
                 .quizId(quizItem.getId());
         final Intent intentQuestion = new Intent(getApplicationContext(), QuestionActivity.class);
-        intentQuestion.putExtra("quiz", Parcels.wrap(quizItem));
+        intentQuestion.putExtra("quiz", quizItem);
         btnAnswerCorrect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,7 +90,7 @@ public class AnswerActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     Intent intent = new Intent(getApplicationContext(), QuestionActivity.class);
-                                    intent.putExtra("quiz", Parcels.wrap(quizItem));
+                                    intent.putExtra("quiz", quizItem);
                                     startActivity(intent);
                                 }
                             })

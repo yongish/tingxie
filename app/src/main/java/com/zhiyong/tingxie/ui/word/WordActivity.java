@@ -32,8 +32,6 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
 import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 
-import org.parceler.Parcels;
-
 import java.util.List;
 
 public class WordActivity extends AppCompatActivity {
@@ -56,7 +54,7 @@ public class WordActivity extends AppCompatActivity {
             }
         });
 
-        QuizItem quizItem = Parcels.unwrap(getIntent().getParcelableExtra("quiz"));
+        QuizItem quizItem = getIntent().getParcelableExtra("quiz");
         long quizId = quizItem.getId();
 
         FloatingActionButton fab = findViewById(R.id.fab);

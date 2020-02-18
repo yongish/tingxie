@@ -32,8 +32,6 @@ import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.ui.question.QuestionActivity;
 import com.zhiyong.tingxie.ui.word.WordActivity;
 
-import org.parceler.Parcels;
-
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -78,7 +76,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
     public void onBindViewHolder(final QuizViewHolder holder, final int i) {
         if (mQuizItems != null) {
             final QuizItem current = mQuizItems.get(i);
-            QuizItem quiz = new QuizItem(current.getId(), current.getDate(), current.getTitle(),
+            QuizItem quizItem = new QuizItem(current.getId(), current.getDate(), current.getTitle(),
                     current.getTotalWords(), current.getNotLearned(), current.getRound());
 
             String displayDate = String.valueOf(current.getDate());
@@ -161,7 +159,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, WordActivity.class);
-                    intent.putExtra("quiz", Parcels.wrap(quiz));
+                    intent.putExtra("quiz", quizItem);
                     ((Activity) context).startActivityForResult(
                             intent, WORD_ACTIVITY_REQUEST_CODE
                     );
@@ -172,7 +170,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                 public void onClick(View v) {
                     if (current.getTotalWords() > 0) {
                         Intent intent = new Intent(context, QuestionActivity.class);
-                        intent.putExtra("quiz", Parcels.wrap(quiz));
+                        intent.putExtra("quiz", quizItem);
                         ((Activity) context).startActivityForResult(
                                 intent, QUESTION_ACTIVITY_REQUEST_CODE
                         );

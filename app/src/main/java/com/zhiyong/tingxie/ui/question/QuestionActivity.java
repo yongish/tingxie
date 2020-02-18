@@ -21,8 +21,6 @@ import com.zhiyong.tingxie.ui.main.MainActivity;
 import com.zhiyong.tingxie.ui.main.QuizItem;
 import com.zhiyong.tingxie.ui.word.WordItem;
 
-import org.parceler.Parcels;
-
 import java.util.List;
 import java.util.Locale;
 
@@ -64,8 +62,7 @@ public class QuestionActivity extends AppCompatActivity {
 
 
         // From AnswerActivity.
-        Parcelable parcel = getIntent().getParcelableExtra("quiz");
-        QuizItem quizItem = Parcels.unwrap(parcel);
+        QuizItem quizItem = getIntent().getParcelableExtra("quiz");
 
         ivPlay = findViewById(R.id.ivPlay);
         btnShowAnswer = findViewById(R.id.btnShowAnswer);
@@ -114,7 +111,7 @@ public class QuestionActivity extends AppCompatActivity {
                             intent.putExtra(EXTRA_WORDS_STRING, sb.deleteCharAt(0).toString());
                             intent.putExtra(EXTRA_PINYIN_STRING, pinyinString);
 
-                            intent.putExtra("quiz", parcel);
+                            intent.putExtra("quiz", quizItem);
                             intent.putExtra(EXTRA_REMAINING_QUESTION_COUNT, wordItems.size());
                             startActivity(intent);
                         }
