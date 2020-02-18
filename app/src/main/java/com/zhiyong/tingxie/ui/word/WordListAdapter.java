@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.db.QuizPinyin;
+import com.zhiyong.tingxie.ui.main.QuizItem;
 
 import java.util.List;
 import java.util.Locale;
@@ -34,8 +35,10 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
 
     private WordViewModel viewModel;
     private RecyclerView recyclerView;
+    private QuizItem quizItem;
 
-    WordListAdapter(final Context context, WordViewModel viewModel, RecyclerView recyclerView) {
+    WordListAdapter(final Context context, WordViewModel viewModel,
+                    RecyclerView recyclerView, QuizItem quizItem) {
         mInflater = LayoutInflater.from(context);
         textToSpeech = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
             @Override
@@ -48,6 +51,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         this.context = context;
         this.viewModel = viewModel;
         this.recyclerView = recyclerView;
+        this.quizItem = quizItem;
     }
 
     @NonNull
@@ -116,6 +120,11 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         snackbar.show();
         mWordItems.remove(adapterPosition);
         viewModel.deleteWord(quizPinyin);
+        int totalWords = quizItem.getTotalWords() - 1;
+        quizItem.setTotalWords(totalWords);
+        quizItem.setNotLearned(totalWords);
+        quizItem.setRound(1);
+        viewModel.updateQuiz(quizItem);
         notifyItemRemoved(adapterPosition);
     }
 

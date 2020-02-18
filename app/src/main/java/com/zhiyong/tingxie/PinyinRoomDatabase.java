@@ -96,14 +96,21 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
                     "UPDATE quiz\n" +
                     "SET total_words =\n" +
                     "  (SELECT total_words\n" +
-                    "   FROM qa),\n" +
+                    "   FROM qa\n" +
+                    "   WHERE id = qa.id),\n" +
                     "    not_learned =\n" +
                     "  (SELECT not_learned\n" +
-                    "   FROM qa),\n" +
+                    "   FROM qa\n" +
+                    "   WHERE id = qa.id),\n" +
                     "    round =\n" +
                     "  (SELECT round\n" +
-                    "   FROM qa)\n" +
-                    "WHERE id = qa.id");
+                    "   FROM qa\n" +
+                    "   WHERE id = qa.id)\n" +
+                    "WHERE id =\n" +
+                    "    (SELECT id\n" +
+                    "     FROM qa\n" +
+                    "     WHERE id = qa.id)");
+
             database.execSQL("DROP TABLE IF EXISTS pinyin");
 
             database.execSQL("CREATE TABLE quiz_pinyin_temp (id INTEGER NOT NULL PRIMARY KEY, quiz_id INTEGER NOT NULL, pinyin_string TEXT NOT NULL, word_string TEXT NOT NULL, CONSTRAINT fk_quiz FOREIGN KEY (quiz_id) REFERENCES Quiz(id) ON DELETE CASCADE)");

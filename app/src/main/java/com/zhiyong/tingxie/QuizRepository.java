@@ -155,7 +155,6 @@ public class QuizRepository {
         protected Void doInBackground(WordItem... params) {
             String pinyinString = params[0].getPinyinString();
             String wordString = params[0].getWordString();
-//            mAsyncTaskDao.insert(new Pinyin(pinyinString));
             mAsyncTaskDao.insert(new Word(wordString, pinyinString));
             mAsyncTaskDao.insert(new QuizPinyin(params[0].getQuizId(), pinyinString, wordString));
             return null;

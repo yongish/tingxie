@@ -127,7 +127,9 @@ public class WordActivity extends AppCompatActivity {
                 .of(this, new WordViewModelFactory(this.getApplication(), quizId))
                 .get(WordViewModel.class);
         final RecyclerView recyclerView = findViewById(R.id.recyclerview_word);
-        final WordListAdapter adapter = new WordListAdapter(this, mWordViewModel, recyclerView);
+        final WordListAdapter adapter = new WordListAdapter(
+                this, mWordViewModel, recyclerView, quizItem
+        );
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
