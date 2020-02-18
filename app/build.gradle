@@ -75,6 +75,10 @@ dependencies {
 //    compileOnly "org.projectlombok:lombok:1.18.4"
 //    annotationProcessor "org.projectlombok:lombok:1.18.4" // add this
     implementation 'com.google.firebase:firebase-auth:19.2.0'
+    // Required only if Facebook login support is required
+    // Find the latest Facebook SDK releases here: https://goo.gl/Ce5L94
+    implementation 'com.facebook.android:facebook-android-sdk:6.1.0'
+
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.firebase:firebase-core:17.2.2'
     implementation 'com.firebaseui:firebase-ui-auth:6.2.0'

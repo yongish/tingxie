@@ -1,3 +1,6 @@
+/**
+ * No longer used after FirebaseUI added.
+ */
 package com.zhiyong.tingxie.ui.signup;
 
 import android.content.Intent;
