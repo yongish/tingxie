@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -57,70 +59,79 @@ public class WordActivity extends AppCompatActivity {
         QuizItem quizItem = getIntent().getParcelableExtra("quiz");
         long quizId = quizItem.getId();
 
+        final AutoCompleteTextView textView = findViewById(R.id.autoCompleteTextView1);
+
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final EditText input = new EditText(WordActivity.this);
-                input.setInputType(InputType.TYPE_CLASS_TEXT);
-                FrameLayout container = new FrameLayout(WordActivity.this);
-                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.leftMargin = params.rightMargin =
-                        getResources().getDimensionPixelSize(R.dimen.dialog_margin);
-                input.setLayoutParams(params);
-                container.addView(input);
-                new AlertDialog.Builder(WordActivity.this)
-                        .setTitle("Add Chinese words or phase")
-                        .setMessage("No punctuation allowed.")
-                        .setView(container)
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Only keep Chinese characters and punctuation.
-                                String inputWord = input.getText().toString().replaceAll("\\s", "");
-                                String pinyin = null;
-                                try {
-                                    // Use Pinyin4J as backup.
-                                    HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
-                                    format.setVCharType(HanyuPinyinVCharType.WITH_U_UNICODE);
-                                    format.setToneType(HanyuPinyinToneType.WITH_TONE_MARK);
-                                    // Workaround as toHanyuPinyinString "separate" argument leaves last 2 strings concatenated.
-                                    String temp = PinyinHelper.toHanYuPinyinString(inputWord + "a", format, " ", true);
-                                    pinyin = temp.substring(0, temp.length() - 1);
-                                    // todo: Remove lookupPinyin when sure.
+        fab.setOnClickListener((View view) -> {
+
+            final String[] COUNTRIES = new String[]{
+                    "Belgium", "France", "Italy", "Germany", "Spain"
+            };
+            ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, COUNTRIES);
+            textView.setInputType(InputType.TYPE_CLASS_TEXT);
+            if (textView.getParent() != null) {
+                ((ViewGroup) textView.getParent()).removeView(textView); // <- fix
+            }
+            textView.setAdapter(arrayadapter);
+
+            FrameLayout container = new FrameLayout(WordActivity.this);
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.leftMargin = params.rightMargin =
+                    getResources().getDimensionPixelSize(R.dimen.dialog_margin);
+            textView.setLayoutParams(params);
+            container.addView(textView);
+
+            new AlertDialog.Builder(WordActivity.this)
+                    .setTitle("Add Chinese words or phase")
+                    .setMessage("No punctuation allowed.")
+                    .setView(container)
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Only keep Chinese characters and punctuation.
+                            String inputWord = textView.getText().toString().replaceAll("\\s", "");
+                            String pinyin = null;
+                            try {
+                                // Use Pinyin4J as backup.
+                                HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
+                                format.setVCharType(HanyuPinyinVCharType.WITH_U_UNICODE);
+                                format.setToneType(HanyuPinyinToneType.WITH_TONE_MARK);
+                                // Workaround as toHanyuPinyinString "separate" argument leaves last 2 strings concatenated.
+                                String temp = PinyinHelper.toHanYuPinyinString(inputWord + "a", format, " ", true);
+                                pinyin = temp.substring(0, temp.length() - 1);
+                                // todo: Remove lookupPinyin when sure.
 //                                    pinyin = new Util().lookupPinyin(inputWord);
-                                } catch (Exception e) {
-                                    // todo: Log to API.
-                                    Toast.makeText(WordActivity.this, "ERROR in local pinyin lookup", Toast.LENGTH_LONG).show();
-                                }
-
-                                if (pinyin != null && pinyin.length() > 0) {
-                                    // Add word to current quizId.
-                                    mWordViewModel.addWord(quizId, inputWord, pinyin);
-                                    mWordViewModel.updateQuestions(quizId);
-
-                                    // Update totalWords. Reset notLearned and round.
-                                    int totalWords = quizItem.getTotalWords() + 1;
-                                    quizItem.setTotalWords(totalWords);
-                                    quizItem.setNotLearned(totalWords);
-                                    quizItem.setRound(1);
-
-                                    mWordViewModel.updateQuiz(quizItem);
-                                } else {
-                                    Toast.makeText(WordActivity.this, "ERROR in pinyin lookup", Toast.LENGTH_LONG).show();
-                                    dialog.cancel();
-                                }
+                            } catch (Exception e) {
+                                // todo: Log to API.
+                                Toast.makeText(WordActivity.this, "ERROR in local pinyin lookup", Toast.LENGTH_LONG).show();
                             }
-                        })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+
+                            if (pinyin != null && pinyin.length() > 0) {
+                                // Add word to current quizId.
+                                mWordViewModel.addWord(quizId, inputWord, pinyin);
+                                mWordViewModel.updateQuestions(quizId);
+
+                                // Update totalWords. Reset notLearned and round.
+                                int totalWords = quizItem.getTotalWords() + 1;
+                                quizItem.setTotalWords(totalWords);
+                                quizItem.setNotLearned(totalWords);
+                                quizItem.setRound(1);
+
+                                mWordViewModel.updateQuiz(quizItem);
+                            } else {
+                                Toast.makeText(WordActivity.this, "ERROR in pinyin lookup", Toast.LENGTH_LONG).show();
                                 dialog.cancel();
                             }
-                        })
-                        .show();
-            }
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    })
+                    .show();
         });
 
         mWordViewModel = ViewModelProviders
