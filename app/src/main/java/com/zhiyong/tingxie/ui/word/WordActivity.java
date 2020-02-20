@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -24,6 +25,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.ui.main.MainActivity;
@@ -34,6 +36,11 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
 import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 public class WordActivity extends AppCompatActivity {
@@ -49,11 +56,27 @@ public class WordActivity extends AppCompatActivity {
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            }
+        String json;
+        CedictDefinition[] definitions;
+        try {
+            InputStream is = this.getAssets().open("cedict.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+
+            ObjectMapper mapper = new ObjectMapper();
+            definitions = mapper.readValue(json, CedictDefinition[].class);
+        } catch (IOException e) {
+            Log.e("TAG", "onCreate: load cedict.json error", e);
+        }
+
+
+
+
+        toolbar.setNavigationOnClickListener((View v) -> {
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
         });
 
         QuizItem quizItem = getIntent().getParcelableExtra("quiz");
