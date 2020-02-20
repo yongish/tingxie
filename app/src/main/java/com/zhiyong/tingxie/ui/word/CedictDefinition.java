@@ -6,7 +6,7 @@ public class CedictDefinition {
     String traditional;
     String simplified;
     String pinyin;
-    List<String> defintions;
+    List<String> definitions;
 
     public String getTraditional() {
         return traditional;
@@ -32,11 +32,11 @@ public class CedictDefinition {
         this.pinyin = pinyin;
     }
 
-    public List<String> getDefintions() {
-        return defintions;
+    public List<String> getDefinitions() {
+        return definitions;
     }
 
-    public void setDefintions(List<String> defintions) {
-        this.defintions = defintions;
+    public void setDefinitions(List<String> definitions) {
+        this.definitions = definitions;
     }
 }

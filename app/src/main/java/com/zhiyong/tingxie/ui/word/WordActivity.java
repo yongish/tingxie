@@ -7,9 +7,9 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,11 +36,9 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
 import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 
 public class WordActivity extends AppCompatActivity {
@@ -58,22 +56,26 @@ public class WordActivity extends AppCompatActivity {
 
         String json;
         CedictDefinition[] definitions;
+        String[] wordArray = null;
         try {
             InputStream is = this.getAssets().open("cedict.json");
             int size = is.available();
             byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
             json = new String(buffer, "UTF-8");
 
             ObjectMapper mapper = new ObjectMapper();
             definitions = mapper.readValue(json, CedictDefinition[].class);
+
+            wordArray = new String[definitions.length * 2];
+            for (int i = 0, j = 0; i < wordArray.length; i+=2, j++) {
+                wordArray[i] = definitions[j].simplified;
+                wordArray[i + 1] = definitions[j].traditional;
+            }
+
+            Log.i("TAG", "onCreate: ");
         } catch (IOException e) {
             Log.e("TAG", "onCreate: load cedict.json error", e);
         }
-
-
-
 
         toolbar.setNavigationOnClickListener((View v) -> {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
@@ -84,13 +86,11 @@ public class WordActivity extends AppCompatActivity {
 
         final AutoCompleteTextView textView = findViewById(R.id.autoCompleteTextView1);
 
+        ArrayAdapter<String> arrayadapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, wordArray);
+
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener((View view) -> {
 
-            final String[] COUNTRIES = new String[]{
-                    "Belgium", "France", "Italy", "Germany", "Spain"
-            };
-            ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, COUNTRIES);
             textView.setInputType(InputType.TYPE_CLASS_TEXT);
             if (textView.getParent() != null) {
                 ((ViewGroup) textView.getParent()).removeView(textView); // <- fix
@@ -105,7 +105,7 @@ public class WordActivity extends AppCompatActivity {
             textView.setLayoutParams(params);
             container.addView(textView);
 
-            new AlertDialog.Builder(WordActivity.this)
+            AlertDialog dialog = new AlertDialog.Builder(WordActivity.this)
                     .setTitle("Add Chinese words or phase")
                     .setMessage("No punctuation allowed.")
                     .setView(container)
@@ -153,8 +153,9 @@ public class WordActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();
                         }
-                    })
-                    .show();
+                    }).create();
+            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+            dialog.show();
         });
 
         mWordViewModel = ViewModelProviders
