@@ -25,31 +25,32 @@ public class LoginActivity extends AppCompatActivity {
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
-        if (auth.getCurrentUser() != null) {
+
+        if (auth.getCurrentUser() == null) {
+            ActionCodeSettings actionCodeSettings = ActionCodeSettings.newBuilder()
+                    .setAndroidPackageName("com.zhiyong.tingxie",
+                            /* installIfNotAvailable= */ true,
+                            /* minimumVersion= */ null)
+                    .setHandleCodeInApp(true) // This must be set to true
+                    .setUrl("https://tingxie-b1acb.firebaseapp.com") // This URL needs to be whitelisted
+                    .build();
+            // Choose authentication providers
+            List<AuthUI.IdpConfig> providers = Arrays.asList(
+                    new AuthUI.IdpConfig.EmailBuilder().enableEmailLinkSignIn().setActionCodeSettings(actionCodeSettings).build(),
+                    new AuthUI.IdpConfig.FacebookBuilder().build(),
+                    new AuthUI.IdpConfig.GoogleBuilder().build());
+            // Create and launch sign-in intent
+            startActivityForResult(
+                    AuthUI.getInstance()
+                            .createSignInIntentBuilder()
+                            .setIsSmartLockEnabled(false)
+                            .setAvailableProviders(providers)
+                            .build(),
+                    RC_SIGN_IN);
+        } else {
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
         }
-
-        ActionCodeSettings actionCodeSettings = ActionCodeSettings.newBuilder()
-                .setAndroidPackageName("com.zhiyong.tingxie",
-                        /* installIfNotAvailable= */ true,
-                        /* minimumVersion= */ null)
-                .setHandleCodeInApp(true) // This must be set to true
-                .setUrl("https://tingxie-b1acb.firebaseapp.com") // This URL needs to be whitelisted
-                .build();
-        // Choose authentication providers
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().enableEmailLinkSignIn().setActionCodeSettings(actionCodeSettings).build(),
-                new AuthUI.IdpConfig.FacebookBuilder().build(),
-                new AuthUI.IdpConfig.GoogleBuilder().build());
-        // Create and launch sign-in intent
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setIsSmartLockEnabled(false)
-                        .setAvailableProviders(providers)
-                        .build(),
-                RC_SIGN_IN);
     }
 
     @Override
