@@ -76,6 +76,7 @@ public class WordActivity extends AppCompatActivity {
         long quizId = quizItem.getId();
 
         final AutoCompleteTextView textView = findViewById(R.id.autoCompleteTextView1);
+        textView.setThreshold(1);
 
         ArrayAdapter<String> arrayadapter = new ArrayAdapter<>(
                 getApplicationContext(),
