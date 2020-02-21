@@ -25,7 +25,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.ui.main.MainActivity;
@@ -36,9 +35,10 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
 import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
 public class WordActivity extends AppCompatActivity {
@@ -54,24 +54,15 @@ public class WordActivity extends AppCompatActivity {
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
 
-        String json;
-        CedictDefinition[] definitions;
-        String[] wordArray = null;
+        List<String> words = new ArrayList<>();
+        BufferedReader reader;
+
         try {
-            InputStream is = this.getAssets().open("cedict.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            json = new String(buffer, "UTF-8");
-
-            ObjectMapper mapper = new ObjectMapper();
-            definitions = mapper.readValue(json, CedictDefinition[].class);
-
-            wordArray = new String[definitions.length * 2];
-            for (int i = 0, j = 0; i < wordArray.length; i+=2, j++) {
-                wordArray[i] = definitions[j].simplified;
-                wordArray[i + 1] = definitions[j].traditional;
+            reader = new BufferedReader(new InputStreamReader(getAssets().open("words.txt")));
+            String mLine;
+            while ((mLine = reader.readLine()) != null) {
+                words.add(mLine.trim());
             }
-
             Log.i("TAG", "onCreate: ");
         } catch (IOException e) {
             Log.e("TAG", "onCreate: load cedict.json error", e);
@@ -86,7 +77,11 @@ public class WordActivity extends AppCompatActivity {
 
         final AutoCompleteTextView textView = findViewById(R.id.autoCompleteTextView1);
 
-        ArrayAdapter<String> arrayadapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, wordArray);
+        ArrayAdapter<String> arrayadapter = new ArrayAdapter<>(
+                getApplicationContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                words.toArray(new String[0])
+        );
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener((View view) -> {
