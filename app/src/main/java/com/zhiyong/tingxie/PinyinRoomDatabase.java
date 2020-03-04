@@ -66,50 +66,85 @@ public abstract class PinyinRoomDatabase extends RoomDatabase {
             database.execSQL("ALTER TABLE quiz ADD COLUMN total_words INTEGER NOT NULL DEFAULT 0");
             database.execSQL("ALTER TABLE quiz ADD COLUMN not_learned INTEGER NOT NULL DEFAULT 0");
             database.execSQL("ALTER TABLE quiz ADD COLUMN round INTEGER NOT NULL DEFAULT 0");
-            database.execSQL("WITH qa(id, total_words, not_learned, round) AS\n" +
-                    "  (WITH tpc AS\n" +
-                    "     (SELECT quiz.id AS id,\n" +
-                    "             title,\n" +
-                    "             tp.pinyin_string, date, Count(correct) AS correct_count\n" +
-                    "      FROM quiz\n" +
+            database.execSQL("WITH qa(id, total_words, not_learned, round) AS (\n" +
+                    "  WITH tpc AS (\n" +
+                    "    SELECT\n" +
+                    "      quiz.id AS id,\n" +
+                    "      title,\n" +
+                    "      tp.pinyin_string,\n" +
+                    "      date,\n" +
+                    "      Count(correct) AS correct_count\n" +
+                    "    FROM\n" +
+                    "      quiz\n" +
                     "      LEFT JOIN quiz_pinyin tp ON quiz.id = tp.quiz_id\n" +
                     "      LEFT JOIN question q ON tp.quiz_id = q.quiz_id\n" +
                     "      AND tp.pinyin_string = q.pinyin_string\n" +
                     "      AND q.reset_time <= q.timestamp\n" +
-                    "      GROUP BY quiz.id,\n" +
-                    "               title,\n" +
-                    "               tp.pinyin_string, date),\n" +
-                    "        tp2 AS\n" +
-                    "     (SELECT tpc.id,\n" +
-                    "             Count(tpc.pinyin_string) AS total,\n" +
-                    "             Min(correct_count) AS rounds_completed\n" +
-                    "      FROM tpc\n" +
-                    "      GROUP BY tpc.id) SELECT tpc.id,\n" +
-                    "                              tp2.total AS total_words,\n" +
-                    "                              Min(tp2.total, Count(tp2.rounds_completed = tpc.correct_count)) AS not_learned,\n" +
-                    "                              tp2.rounds_completed + 1 AS round\n" +
-                    "   FROM tpc\n" +
-                    "   LEFT JOIN tp2 ON tp2.id = tpc.id\n" +
-                    "   GROUP BY tpc.id,\n" +
-                    "            total,\n" +
-                    "            rounds_completed)\n" +
-                    "UPDATE quiz\n" +
-                    "SET total_words =\n" +
-                    "  (SELECT total_words\n" +
-                    "   FROM qa\n" +
-                    "   WHERE id = qa.id),\n" +
-                    "    not_learned =\n" +
-                    "  (SELECT not_learned\n" +
-                    "   FROM qa\n" +
-                    "   WHERE id = qa.id),\n" +
-                    "    round =\n" +
-                    "  (SELECT round\n" +
-                    "   FROM qa\n" +
-                    "   WHERE id = qa.id)\n" +
-                    "WHERE id =\n" +
-                    "    (SELECT id\n" +
-                    "     FROM qa\n" +
-                    "     WHERE id = qa.id)");
+                    "    GROUP BY\n" +
+                    "      quiz.id,\n" +
+                    "      title,\n" +
+                    "      tp.pinyin_string,\n" +
+                    "      date\n" +
+                    "  ),\n" +
+                    "  tp2 AS (\n" +
+                    "    SELECT\n" +
+                    "      tpc.id,\n" +
+                    "      Count(tpc.pinyin_string) AS total,\n" +
+                    "      Min(correct_count) AS rounds_completed\n" +
+                    "    FROM\n" +
+                    "      tpc\n" +
+                    "    GROUP BY\n" +
+                    "      tpc.id\n" +
+                    "  )\n" +
+                    "  SELECT\n" +
+                    "    tpc.id,\n" +
+                    "    tp2.total AS total_words,\n" +
+                    "    CASE WHEN Min(tp2.total) < Min(Count(tp2.rounds_completed = tpc.correct_count)) THEN Min(tp2.total) ELSE Min(Count(tp2.rounds_completed = tpc.correct_count)) END AS not_learned,\n" +
+                    "    tp2.rounds_completed + 1 AS round\n" +
+                    "  FROM\n" +
+                    "    tpc\n" +
+                    "    LEFT JOIN tp2 ON tp2.id = tpc.id\n" +
+                    "  GROUP BY\n" +
+                    "    tpc.id,\n" +
+                    "    total,\n" +
+                    "    rounds_completed\n" +
+                    ")\n" +
+                    "UPDATE\n" +
+                    "  quiz\n" +
+                    "SET\n" +
+                    "  total_words = (\n" +
+                    "    SELECT\n" +
+                    "      total_words\n" +
+                    "    FROM\n" +
+                    "      qa\n" +
+                    "    WHERE\n" +
+                    "      id = qa.id\n" +
+                    "  ),\n" +
+                    "  not_learned = (\n" +
+                    "    SELECT\n" +
+                    "      not_learned\n" +
+                    "    FROM\n" +
+                    "      qa\n" +
+                    "    WHERE\n" +
+                    "      id = qa.id\n" +
+                    "  ),\n" +
+                    "  round = (\n" +
+                    "    SELECT\n" +
+                    "      round\n" +
+                    "    FROM\n" +
+                    "      qa\n" +
+                    "    WHERE\n" +
+                    "      id = qa.id\n" +
+                    "  )\n" +
+                    "WHERE\n" +
+                    "  id = (\n" +
+                    "    SELECT\n" +
+                    "      id\n" +
+                    "    FROM\n" +
+                    "      qa\n" +
+                    "    WHERE\n" +
+                    "      id = qa.id\n" +
+                    "  )\n");
 
             database.execSQL("DROP TABLE IF EXISTS pinyin");
 
