@@ -112,6 +112,10 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void openFriends(MenuItem item) {
+//        this.startActivity(new Intent(getApplicationContext(), ))
+    }
+
     public void openSpeechSettings(MenuItem item) {
         Intent intent = new Intent();
         intent.setAction("com.android.settings.TTS_SETTINGS");
