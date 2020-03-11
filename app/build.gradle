@@ -39,6 +39,9 @@ android {
                     'proguard-rules.pro'
         }
     }
+    viewBinding {
+        enabled = true
+    }
 }
 
 dependencies {

@@ -1,29 +1,27 @@
 package com.zhiyong.tingxie.ui.main;
 
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import androidx.fragment.app.DialogFragment;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.ItemTouchHelper;
-
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.TextView;
-
 import com.zhiyong.tingxie.R;
+import com.zhiyong.tingxie.databinding.ActivityMainBinding;
+import com.zhiyong.tingxie.databinding.ContentMainBinding;
 import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.ui.login.LoginActivity;
 
@@ -35,22 +33,28 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        ActivityMainBinding activityMainBinding =
+                ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(activityMainBinding.getRoot());
+        Toolbar toolbar = activityMainBinding.toolbar;
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = activityMainBinding.fab;
         fab.setOnClickListener((View v) -> {
             DialogFragment newFragment = new DatePickerFragment();
-            newFragment.show(getSupportFragmentManager(), getString(R.string.datepicker));
+            newFragment.show(getSupportFragmentManager(),
+                    getString(R.string.datepicker));
         });
 
         recyclerView = findViewById(R.id.recyclerview_main);
 
-        final TextView emptyView = findViewById(R.id.empty_view);
+        ContentMainBinding contentMainBinding =
+                ContentMainBinding.inflate(getLayoutInflater());
+        final TextView emptyView = contentMainBinding.emptyView;
         mQuizViewModel = ViewModelProviders.of(this).get(QuizViewModel.class);
 
-        final QuizListAdapter adapter = new QuizListAdapter(this, mQuizViewModel, recyclerView);
+        final QuizListAdapter adapter = new QuizListAdapter(this, mQuizViewModel,
+                recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 

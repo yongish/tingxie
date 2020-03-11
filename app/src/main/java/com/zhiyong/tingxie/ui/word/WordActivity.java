@@ -27,6 +27,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.zhiyong.tingxie.R;
+import com.zhiyong.tingxie.databinding.ActivityWordBinding;
+import com.zhiyong.tingxie.databinding.ContentWordBinding;
 import com.zhiyong.tingxie.ui.main.MainActivity;
 import com.zhiyong.tingxie.ui.main.QuizItem;
 
@@ -40,6 +42,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class WordActivity extends AppCompatActivity {
 
@@ -48,8 +51,10 @@ public class WordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_word);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        ActivityWordBinding activityWordBinding =
+                ActivityWordBinding.inflate(getLayoutInflater());
+        setContentView(activityWordBinding.getRoot());
+        Toolbar toolbar = activityWordBinding.toolbar;
         setSupportActionBar(toolbar);
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
@@ -58,7 +63,8 @@ public class WordActivity extends AppCompatActivity {
         BufferedReader reader;
 
         try {
-            reader = new BufferedReader(new InputStreamReader(getAssets().open("words.txt")));
+            reader = new BufferedReader(new InputStreamReader(getAssets().open(
+                    "words.txt")));
             String mLine;
             while ((mLine = reader.readLine()) != null) {
                 words.add(mLine.trim());
@@ -75,7 +81,7 @@ public class WordActivity extends AppCompatActivity {
         QuizItem quizItem = getIntent().getParcelableExtra("quiz");
         long quizId = quizItem.getId();
 
-        final AutoCompleteTextView textView = findViewById(R.id.autoCompleteTextView1);
+        final AutoCompleteTextView textView = activityWordBinding.autoCompleteTextView1;
         textView.setThreshold(1);
 
         ArrayAdapter<String> arrayadapter = new ArrayAdapter<>(
@@ -84,7 +90,7 @@ public class WordActivity extends AppCompatActivity {
                 words.toArray(new String[0])
         );
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = activityWordBinding.fab;
         fab.setOnClickListener((View view) -> {
 
             textView.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -95,7 +101,8 @@ public class WordActivity extends AppCompatActivity {
 
             FrameLayout container = new FrameLayout(WordActivity.this);
             FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
             params.leftMargin = params.rightMargin =
                     getResources().getDimensionPixelSize(R.dimen.dialog_margin);
             textView.setLayoutParams(params);
@@ -105,52 +112,68 @@ public class WordActivity extends AppCompatActivity {
                     .setTitle("Add Chinese words or phase")
                     .setMessage("No punctuation allowed.")
                     .setView(container)
-                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // Only keep Chinese characters and punctuation.
-                            String inputWord = textView.getText().toString().replaceAll("\\s", "");
-                            String pinyin = null;
-                            try {
-                                // Use Pinyin4J as backup.
-                                HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
-                                format.setVCharType(HanyuPinyinVCharType.WITH_U_UNICODE);
-                                format.setToneType(HanyuPinyinToneType.WITH_TONE_MARK);
-                                // Workaround as toHanyuPinyinString "separate" argument leaves last 2 strings concatenated.
-                                String temp = PinyinHelper.toHanYuPinyinString(inputWord + "a", format, " ", true);
-                                pinyin = temp.substring(0, temp.length() - 1);
-                                // todo: Remove lookupPinyin when sure.
+                    .setPositiveButton(R.string.ok,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Only keep Chinese characters and punctuation.
+                                    String inputWord =
+                                            textView.getText().toString().replaceAll(
+                                                    "\\s", "");
+                                    String pinyin = null;
+                                    try {
+                                        // Use Pinyin4J as backup.
+                                        HanyuPinyinOutputFormat format =
+                                                new HanyuPinyinOutputFormat();
+                                        format.setVCharType(HanyuPinyinVCharType.WITH_U_UNICODE);
+                                        format.setToneType(HanyuPinyinToneType.WITH_TONE_MARK);
+                                        // Workaround as toHanyuPinyinString "separate"
+                                        // argument leaves last 2 strings concatenated.
+                                        String temp =
+                                                PinyinHelper.toHanYuPinyinString(inputWord +
+                                                        "a", format, " ", true);
+                                        pinyin = temp.substring(0, temp.length() - 1);
+                                        // todo: Remove lookupPinyin when sure.
 //                                    pinyin = new Util().lookupPinyin(inputWord);
-                            } catch (Exception e) {
-                                // todo: Log to API.
-                                Toast.makeText(WordActivity.this, "ERROR in local pinyin lookup", Toast.LENGTH_LONG).show();
-                            }
+                                    } catch (Exception e) {
+                                        // todo: Log to API.
+                                        Toast.makeText(WordActivity.this,
+                                                "ERROR in local pinyin lookup",
+                                                Toast.LENGTH_LONG).show();
+                                    }
 
-                            if (pinyin != null && pinyin.length() > 0) {
-                                // Add word to current quizId.
-                                mWordViewModel.addWord(quizId, inputWord, pinyin);
-                                mWordViewModel.updateQuestions(quizId);
+                                    if (pinyin != null && pinyin.length() > 0) {
+                                        // Add word to current quizId.
+                                        mWordViewModel.addWord(quizId, inputWord,
+                                                pinyin);
+                                        mWordViewModel.updateQuestions(quizId);
 
-                                // Update totalWords. Reset notLearned and round.
-                                int totalWords = quizItem.getTotalWords() + 1;
-                                quizItem.setTotalWords(totalWords);
-                                quizItem.setNotLearned(totalWords);
-                                quizItem.setRound(1);
+                                        // Update totalWords. Reset notLearned and round.
+                                        int totalWords = quizItem.getTotalWords() + 1;
+                                        quizItem.setTotalWords(totalWords);
+                                        quizItem.setNotLearned(totalWords);
+                                        quizItem.setRound(1);
 
-                                mWordViewModel.updateQuiz(quizItem);
-                            } else {
-                                Toast.makeText(WordActivity.this, "ERROR in pinyin lookup", Toast.LENGTH_LONG).show();
-                                dialog.cancel();
-                            }
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    }).create();
-            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                                        mWordViewModel.updateQuiz(quizItem);
+                                    } else {
+                                        Toast.makeText(WordActivity.this,
+                                                "ERROR in pinyin lookup",
+                                                Toast.LENGTH_LONG)
+                                                .show();
+                                        dialog.cancel();
+                                    }
+                                }
+                            })
+                    .setNegativeButton(R.string.cancel,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            }).create();
+            Objects.requireNonNull(dialog.getWindow()).setSoftInputMode(
+                    WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+            );
             dialog.show();
         });
 
@@ -164,25 +187,29 @@ public class WordActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        final TextView emptyView = findViewById(R.id.empty_view);
-        mWordViewModel.getWordItemsOfQuiz().observe(this, new Observer<List<WordItem>>() {
-            @Override
-            public void onChanged(@Nullable List<WordItem> wordItems) {
-                adapter.setWordItems(wordItems);
-                if (wordItems == null || wordItems.isEmpty()) {
-                    emptyView.setVisibility(View.VISIBLE);
-                } else {
-                    emptyView.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
+        ContentWordBinding binding = ContentWordBinding.inflate(getLayoutInflater());
+        final TextView emptyView = binding.emptyView;
+        mWordViewModel.getWordItemsOfQuiz().observe(this,
+                new Observer<List<WordItem>>() {
+                    @Override
+                    public void onChanged(@Nullable List<WordItem> wordItems) {
+                        adapter.setWordItems(wordItems);
+                        if (wordItems == null || wordItems.isEmpty()) {
+                            emptyView.setVisibility(View.VISIBLE);
+                        } else {
+                            emptyView.setVisibility(View.INVISIBLE);
+                        }
+                    }
+                });
 
 
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
                 0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT
         ) {
             @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
+            public boolean onMove(@NonNull RecyclerView recyclerView,
+                                  @NonNull RecyclerView.ViewHolder viewHolder,
+                                  @NonNull RecyclerView.ViewHolder viewHolder1) {
                 return false;
             }
 

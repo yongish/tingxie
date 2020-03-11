@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.zhiyong.tingxie.R;
+import com.zhiyong.tingxie.databinding.ActivityAnswerBinding;
 import com.zhiyong.tingxie.db.Question;
 import com.zhiyong.tingxie.ui.main.MainActivity;
 import com.zhiyong.tingxie.ui.main.QuizItem;
@@ -34,7 +35,8 @@ public class AnswerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_answer);
+        ActivityAnswerBinding activityAnswerBinding = ActivityAnswerBinding.inflate(getLayoutInflater());
+        setContentView(activityAnswerBinding.getRoot());
 
         mAnswerViewModel = ViewModelProviders.of(this).get(AnswerViewModel.class);
 
@@ -43,7 +45,7 @@ public class AnswerActivity extends AppCompatActivity {
         final String wordsString = getIntent().getStringExtra(EXTRA_WORDS_STRING);
         final String pinyinString = getIntent().getStringExtra(EXTRA_PINYIN_STRING);
 
-        tvAnswerWords = findViewById(R.id.tvAnswerWords);
+        tvAnswerWords = activityAnswerBinding.tvAnswerWords;
         tvAnswerWords.setText(wordsString);
         tvAnswerWords.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,73 +57,67 @@ public class AnswerActivity extends AppCompatActivity {
             }
         });
 
-        btnAnswerCorrect = findViewById(R.id.btnAnswerCorrect);
+        btnAnswerCorrect = activityAnswerBinding.btnAnswerCorrect;
         long ts = System.currentTimeMillis();
         final Question.QuestionBuilder questionBuilder = new Question.QuestionBuilder()
                 .timestamp(ts)
                 .pinyinString(pinyinString)
                 .quizId(quizItem.getId());
-        final Intent intentQuestion = new Intent(getApplicationContext(), QuestionActivity.class);
+        final Intent intentQuestion = new Intent(getApplicationContext(),
+                QuestionActivity.class);
         intentQuestion.putExtra("quiz", quizItem);
-        btnAnswerCorrect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Insert new question with boolean correct.
-                Question question = questionBuilder.correct(true).build();
-                mAnswerViewModel.insertQuestion(question);
+        btnAnswerCorrect.setOnClickListener(v -> {
+            // Insert new question with boolean correct.
+            Question question = questionBuilder.correct(true).build();
+            mAnswerViewModel.insertQuestion(question);
 
-                // todo: UPDATE notLearned.
-                quizItem.setNotLearned(quizItem.getNotLearned() - 1);
+            // todo: UPDATE notLearned.
+            quizItem.setNotLearned(quizItem.getNotLearned() - 1);
 
-                // Go to Completed Alert Dialog or QuestionActivity.
-                // Was this the last word in current round?
-                int remainingQuestionCount = getIntent().getIntExtra(EXTRA_REMAINING_QUESTION_COUNT, -1);
-                Log.d("REMAINING_QN", String.valueOf(remainingQuestionCount));
-                if (remainingQuestionCount < 2) {
-                    // todo: UPDATE ROUND.
-                    quizItem.setRound(quizItem.getRound() + 1);
-                    quizItem.setNotLearned(quizItem.getTotalWords());
+            // Go to Completed Alert Dialog or QuestionActivity.
+            // Was this the last word in current round?
+            int remainingQuestionCount = getIntent()
+                    .getIntExtra(EXTRA_REMAINING_QUESTION_COUNT, -1);
+            Log.d("REMAINING_QN", String.valueOf(remainingQuestionCount));
+            if (remainingQuestionCount < 2) {
+                // todo: UPDATE ROUND.
+                quizItem.setRound(quizItem.getRound() + 1);
+                quizItem.setNotLearned(quizItem.getTotalWords());
 
-                    // todo: Show AnswerActivity in future.
-                    new AlertDialog.Builder(AnswerActivity.this)
-                            .setTitle("Round Completed.")
-                            .setMessage("Great. You completed a round with all questions correct.")
-                            .setPositiveButton("Next round", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent = new Intent(getApplicationContext(), QuestionActivity.class);
-                                    intent.putExtra("quiz", quizItem);
-                                    startActivity(intent);
-                                }
-                            })
-                            .setNegativeButton("Main menu", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                }
-                            })
-                            .show();
-                } else {
-                    Toast.makeText(AnswerActivity.this, "Good", Toast.LENGTH_SHORT).show();
-                    startActivity(intentQuestion);
-                }
-
-                mAnswerViewModel.updateQuiz(quizItem);
-            }
-        });
-        btnAnswerWrong = findViewById(R.id.btnAnswerWrong);
-        btnAnswerWrong.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Insert new question with boolean wrong.
-                Question question = questionBuilder.correct(false).build();
-                mAnswerViewModel.insertQuestion(question);
-
-                Toast.makeText(AnswerActivity.this, "Keep going.", Toast.LENGTH_SHORT).show();
-
-                // Go to QuestionActivity.
+                // todo: Show AnswerActivity in future.
+                new AlertDialog.Builder(AnswerActivity.this)
+                        .setTitle("Round Completed.")
+                        .setMessage("Great. You completed a round with all questions correct.")
+                        .setPositiveButton("Next round", (dialog, which) -> {
+                            Intent intent = new Intent(getApplicationContext(),
+                                    QuestionActivity.class);
+                            intent.putExtra("quiz", quizItem);
+                            startActivity(intent);
+                        })
+                        .setNegativeButton("Main menu", (dialog, which) ->
+                                startActivity(new Intent(getApplicationContext(),
+                                        MainActivity.class))
+                        )
+                        .show();
+            } else {
+                Toast.makeText(AnswerActivity.this, "Good",
+                        Toast.LENGTH_SHORT).show();
                 startActivity(intentQuestion);
             }
+
+            mAnswerViewModel.updateQuiz(quizItem);
+        });
+        btnAnswerWrong = activityAnswerBinding.btnAnswerWrong;
+        btnAnswerWrong.setOnClickListener(v -> {
+            // Insert new question with boolean wrong.
+            Question question = questionBuilder.correct(false).build();
+            mAnswerViewModel.insertQuestion(question);
+
+            Toast.makeText(AnswerActivity.this, "Keep going.",
+                    Toast.LENGTH_SHORT).show();
+
+            // Go to QuestionActivity.
+            startActivity(intentQuestion);
         });
     }
 }

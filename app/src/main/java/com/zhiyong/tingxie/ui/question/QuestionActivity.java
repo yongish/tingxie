@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.zhiyong.tingxie.R;
+import com.zhiyong.tingxie.databinding.ActivityQuestionBinding;
+import com.zhiyong.tingxie.databinding.ContentQuestionBinding;
 import com.zhiyong.tingxie.ui.answer.AnswerActivity;
 import com.zhiyong.tingxie.ui.main.MainActivity;
 import com.zhiyong.tingxie.ui.main.QuizItem;
@@ -38,17 +40,16 @@ public class QuestionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_question);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        ActivityQuestionBinding activityQuestionBinding =
+                ActivityQuestionBinding.inflate(getLayoutInflater());
+        setContentView(activityQuestionBinding.getRoot());
+        Toolbar toolbar = activityQuestionBinding.toolbar;
         setSupportActionBar(toolbar);
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // todo: Scroll to same quiz.
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            }
+        toolbar.setNavigationOnClickListener(v -> {
+            // todo: Scroll to same quiz.
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
         });
 
 //        FloatingActionButton fab = findViewById(R.id.fab);
@@ -64,71 +65,64 @@ public class QuestionActivity extends AppCompatActivity {
         // From AnswerActivity.
         QuizItem quizItem = getIntent().getParcelableExtra("quiz");
 
-        ivPlay = findViewById(R.id.ivPlay);
-        btnShowAnswer = findViewById(R.id.btnShowAnswer);
+        ContentQuestionBinding contentQuestionBinding =
+                ContentQuestionBinding.inflate(getLayoutInflater());
+        ivPlay = contentQuestionBinding.ivPlay;
+        btnShowAnswer = contentQuestionBinding.btnShowAnswer;
         mQuestionViewModel = ViewModelProviders
                 .of(this, new QuestionViewModelFactory(this.getApplication(), quizItem.getId()))
                 .get(QuestionViewModel.class);
-        mQuestionViewModel.getRemainingQuestions().observe(this, new Observer<List<WordItem>>() {
-            @Override
-            public void onChanged(@Nullable final List<WordItem> wordItems) {
-                if (wordItems != null && wordItems.size() > 0) {
-                    final WordItem wordItem = wordItems.get(0);
-                    final String wordString = wordItem.getWordString();
-                    final String pinyinString = wordItem.getPinyinString();
-                    if (textToSpeech == null) {
-                        textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
-                            @Override
-                            public void onInit(int arg0) {
-                                if (arg0 == TextToSpeech.SUCCESS) {
-                                    textToSpeech.setLanguage(Locale.SIMPLIFIED_CHINESE);
-                                    textToSpeech.speak(wordString, TextToSpeech.QUEUE_FLUSH, null);
-                                }
-                            }
-                        });
-                    } else {
-                        textToSpeech.speak(wordString, TextToSpeech.QUEUE_FLUSH, null);
-                    }
-
-                    ivPlay.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
+        mQuestionViewModel.getRemainingQuestions().observe(this, wordItems -> {
+            if (wordItems != null && wordItems.size() > 0) {
+                final WordItem wordItem = wordItems.get(0);
+                final String wordString = wordItem.getWordString();
+                final String pinyinString = wordItem.getPinyinString();
+                if (textToSpeech == null) {
+                    textToSpeech = new TextToSpeech(getApplicationContext(), arg0 -> {
+                        if (arg0 == TextToSpeech.SUCCESS) {
+                            textToSpeech.setLanguage(Locale.SIMPLIFIED_CHINESE);
                             textToSpeech.speak(wordString, TextToSpeech.QUEUE_FLUSH, null);
                         }
                     });
-
-                    btnShowAnswer.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(getApplicationContext(), AnswerActivity.class);
-                            StringBuilder sb = new StringBuilder();
-                            for (WordItem item : wordItems) {
-                                if (item.getPinyinString().equals(pinyinString)) {
-                                    sb.append("\n");
-                                    sb.append(item.getWordString());
-                                }
-                            }
-                            intent.putExtra(EXTRA_WORDS_STRING, sb.deleteCharAt(0).toString());
-                            intent.putExtra(EXTRA_PINYIN_STRING, pinyinString);
-
-                            intent.putExtra("quiz", quizItem);
-                            intent.putExtra(EXTRA_REMAINING_QUESTION_COUNT, wordItems.size());
-                            startActivity(intent);
-                        }
-                    });
                 } else {
-                    // todo: There should always be questions. Should log this issue.
-                    // For now, select a random question.
-                    Log.e("NO_QUESTIONS", "onChanged: ");
-                    Toast.makeText(getApplicationContext(),
-                            "Error. Please contact Zhiyong by Facebook or email if you see this.",
-                            Toast.LENGTH_LONG).show();
-
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    // todo: Is quizId necessary?
-//                    intent.putExtra(EXTRA_QUIZ_ID, quizId);
-                    startActivity(intent);
+                    textToSpeech.speak(wordString, TextToSpeech.QUEUE_FLUSH, null);
                 }
+
+                ivPlay.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        textToSpeech.speak(wordString, TextToSpeech.QUEUE_FLUSH, null);
+                    }
+                });
+
+                btnShowAnswer.setOnClickListener(v -> {
+                    Intent intent = new Intent(getApplicationContext(), AnswerActivity.class);
+                    StringBuilder sb = new StringBuilder();
+                    for (WordItem item : wordItems) {
+                        if (item.getPinyinString().equals(pinyinString)) {
+                            sb.append("\n");
+                            sb.append(item.getWordString());
+                        }
+                    }
+                    intent.putExtra(EXTRA_WORDS_STRING, sb.deleteCharAt(0).toString());
+                    intent.putExtra(EXTRA_PINYIN_STRING, pinyinString);
+
+                    intent.putExtra("quiz", quizItem);
+                    intent.putExtra(EXTRA_REMAINING_QUESTION_COUNT, wordItems.size());
+                    startActivity(intent);
+                });
+            } else {
+                // todo: There should always be questions. Should log this issue.
+                // For now, select a random question.
+                Log.e("NO_QUESTIONS", "onChanged: ");
+                Toast.makeText(getApplicationContext(),
+                        "Error. Please contact Zhiyong by Facebook or email if you see this.",
+                        Toast.LENGTH_LONG).show();
+
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                // todo: Is quizId necessary?
+//                    intent.putExtra(EXTRA_QUIZ_ID, quizId);
+                startActivity(intent);
             }
         });
     }
