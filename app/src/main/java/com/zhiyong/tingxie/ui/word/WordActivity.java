@@ -187,8 +187,9 @@ public class WordActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        ContentWordBinding binding = ContentWordBinding.inflate(getLayoutInflater());
-        final TextView emptyView = binding.emptyView;
+//        ContentWordBinding binding = ContentWordBinding.inflate(getLayoutInflater());
+//        final TextView emptyView = binding.emptyView;
+        final TextView emptyView = findViewById(R.id.empty_view);
         mWordViewModel.getWordItemsOfQuiz().observe(this,
                 new Observer<List<WordItem>>() {
                     @Override

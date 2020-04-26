@@ -48,9 +48,10 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerview_main);
 
-        ContentMainBinding contentMainBinding =
-                ContentMainBinding.inflate(getLayoutInflater());
-        final TextView emptyView = contentMainBinding.emptyView;
+//        ContentMainBinding contentMainBinding =
+//                ContentMainBinding.inflate(getLayoutInflater());
+//        final TextView emptyView = contentMainBinding.emptyView;
+        final TextView emptyView = findViewById(R.id.empty_view);
         mQuizViewModel = ViewModelProviders.of(this).get(QuizViewModel.class);
 
         final QuizListAdapter adapter = new QuizListAdapter(this, mQuizViewModel,
