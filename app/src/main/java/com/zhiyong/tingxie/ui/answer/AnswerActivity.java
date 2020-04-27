@@ -1,6 +1,5 @@
 package com.zhiyong.tingxie.ui.answer;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.zhiyong.tingxie.R;
-import com.zhiyong.tingxie.databinding.ActivityAnswerBinding;
 import com.zhiyong.tingxie.db.Question;
 import com.zhiyong.tingxie.ui.main.MainActivity;
 import com.zhiyong.tingxie.ui.main.QuizItem;
@@ -35,8 +33,6 @@ public class AnswerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityAnswerBinding activityAnswerBinding = ActivityAnswerBinding.inflate(getLayoutInflater());
-        setContentView(activityAnswerBinding.getRoot());
 
         mAnswerViewModel = ViewModelProviders.of(this).get(AnswerViewModel.class);
 
@@ -45,7 +41,7 @@ public class AnswerActivity extends AppCompatActivity {
         final String wordsString = getIntent().getStringExtra(EXTRA_WORDS_STRING);
         final String pinyinString = getIntent().getStringExtra(EXTRA_PINYIN_STRING);
 
-        tvAnswerWords = activityAnswerBinding.tvAnswerWords;
+        tvAnswerWords = findViewById(R.id.tvAnswerWords);
         tvAnswerWords.setText(wordsString);
         tvAnswerWords.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,7 +53,7 @@ public class AnswerActivity extends AppCompatActivity {
             }
         });
 
-        btnAnswerCorrect = activityAnswerBinding.btnAnswerCorrect;
+        btnAnswerCorrect = findViewById(R.id.btnAnswerCorrect);
         long ts = System.currentTimeMillis();
         final Question.QuestionBuilder questionBuilder = new Question.QuestionBuilder()
                 .timestamp(ts)
@@ -107,7 +103,7 @@ public class AnswerActivity extends AppCompatActivity {
 
             mAnswerViewModel.updateQuiz(quizItem);
         });
-        btnAnswerWrong = activityAnswerBinding.btnAnswerWrong;
+        btnAnswerWrong = findViewById(R.id.btnAnswerCorrect);
         btnAnswerWrong.setOnClickListener(v -> {
             // Insert new question with boolean wrong.
             Question question = questionBuilder.correct(false).build();

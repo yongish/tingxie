@@ -1,12 +1,9 @@
 package com.zhiyong.tingxie.ui.question;
 
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.speech.tts.TextToSpeech;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
@@ -16,14 +13,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.zhiyong.tingxie.R;
-import com.zhiyong.tingxie.databinding.ActivityQuestionBinding;
-import com.zhiyong.tingxie.databinding.ContentQuestionBinding;
 import com.zhiyong.tingxie.ui.answer.AnswerActivity;
 import com.zhiyong.tingxie.ui.main.MainActivity;
 import com.zhiyong.tingxie.ui.main.QuizItem;
 import com.zhiyong.tingxie.ui.word.WordItem;
 
-import java.util.List;
 import java.util.Locale;
 
 public class QuestionActivity extends AppCompatActivity {
@@ -40,10 +34,7 @@ public class QuestionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityQuestionBinding activityQuestionBinding =
-                ActivityQuestionBinding.inflate(getLayoutInflater());
-        setContentView(activityQuestionBinding.getRoot());
-        Toolbar toolbar = activityQuestionBinding.toolbar;
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
@@ -65,10 +56,8 @@ public class QuestionActivity extends AppCompatActivity {
         // From AnswerActivity.
         QuizItem quizItem = getIntent().getParcelableExtra("quiz");
 
-        ContentQuestionBinding contentQuestionBinding =
-                ContentQuestionBinding.inflate(getLayoutInflater());
-        ivPlay = contentQuestionBinding.ivPlay;
-        btnShowAnswer = contentQuestionBinding.btnShowAnswer;
+        ivPlay = findViewById(R.id.ivPlay);
+        btnShowAnswer = findViewById(R.id.btnShowAnswer);
         mQuestionViewModel = ViewModelProviders
                 .of(this, new QuestionViewModelFactory(this.getApplication(), quizItem.getId()))
                 .get(QuestionViewModel.class);

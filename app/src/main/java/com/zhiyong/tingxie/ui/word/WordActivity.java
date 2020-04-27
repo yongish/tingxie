@@ -27,8 +27,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.zhiyong.tingxie.R;
-import com.zhiyong.tingxie.databinding.ActivityWordBinding;
-import com.zhiyong.tingxie.databinding.ContentWordBinding;
 import com.zhiyong.tingxie.ui.main.MainActivity;
 import com.zhiyong.tingxie.ui.main.QuizItem;
 
@@ -51,10 +49,7 @@ public class WordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityWordBinding activityWordBinding =
-                ActivityWordBinding.inflate(getLayoutInflater());
-        setContentView(activityWordBinding.getRoot());
-        Toolbar toolbar = activityWordBinding.toolbar;
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
@@ -81,7 +76,7 @@ public class WordActivity extends AppCompatActivity {
         QuizItem quizItem = getIntent().getParcelableExtra("quiz");
         long quizId = quizItem.getId();
 
-        final AutoCompleteTextView textView = activityWordBinding.autoCompleteTextView1;
+        final AutoCompleteTextView textView = findViewById(R.id.autoCompleteTextView1);
         textView.setThreshold(1);
 
         ArrayAdapter<String> arrayadapter = new ArrayAdapter<>(
@@ -90,7 +85,7 @@ public class WordActivity extends AppCompatActivity {
                 words.toArray(new String[0])
         );
 
-        FloatingActionButton fab = activityWordBinding.fab;
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener((View view) -> {
 
             textView.setInputType(InputType.TYPE_CLASS_TEXT);

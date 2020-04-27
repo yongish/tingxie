@@ -20,8 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.zhiyong.tingxie.R;
-import com.zhiyong.tingxie.databinding.ActivityMainBinding;
-import com.zhiyong.tingxie.databinding.ContentMainBinding;
 import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.ui.login.LoginActivity;
 
@@ -33,13 +31,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityMainBinding activityMainBinding =
-                ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(activityMainBinding.getRoot());
-        Toolbar toolbar = activityMainBinding.toolbar;
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = activityMainBinding.fab;
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener((View v) -> {
             DialogFragment newFragment = new DatePickerFragment();
             newFragment.show(getSupportFragmentManager(),
@@ -48,9 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerview_main);
 
-//        ContentMainBinding contentMainBinding =
-//                ContentMainBinding.inflate(getLayoutInflater());
-//        final TextView emptyView = contentMainBinding.emptyView;
         final TextView emptyView = findViewById(R.id.empty_view);
         mQuizViewModel = ViewModelProviders.of(this).get(QuizViewModel.class);
 
