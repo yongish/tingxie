@@ -63,18 +63,20 @@ val MIGRATION_3_4: Migration = object : Migration(3, 4) {
             FROM temp_pinyin_correct tpc
             GROUP BY tpc.id
         """)
+
         database.execSQL("""
             CREATE TABLE temp_quiz AS
-            SELECT id, 
+            SELECT tpc.id, 
                 total_words, 
-                CASE WHEN Min(tp2.total) < Min(Count(tp2.rounds_completed = tpc.correct_count)) 
-                    THEN Min(tp2.total) 
-                    ELSE Min(Count(tp2.rounds_completed = tpc.correct_count)) 
+                CASE WHEN Min(tp2.total_words) < Count(tp2.rounds_completed = tpc.correct_count)
+                    THEN Min(tp2.total_words) 
+                    ELSE Count(tp2.rounds_completed = tpc.correct_count)
                     END AS not_learned,
                 tp2.rounds_completed + 1 AS round
             FROM temp_pinyin_correct tpc LEFT JOIN temp_quiz_stats tp2 ON tp2.id = tpc.id
-            GROUP BY tpc.id, total, rounds_completed
+            GROUP BY tpc.id, total_words, rounds_completed
             """)
+
         database.execSQL("""
         UPDATE quiz
         SET total_words = (SELECT total_words FROM temp_quiz qa WHERE id = qa.id),
