@@ -33,6 +33,7 @@ public class AnswerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_answer);
 
         mAnswerViewModel = ViewModelProviders.of(this).get(AnswerViewModel.class);
 
@@ -103,7 +104,7 @@ public class AnswerActivity extends AppCompatActivity {
 
             mAnswerViewModel.updateQuiz(quizItem);
         });
-        btnAnswerWrong = findViewById(R.id.btnAnswerCorrect);
+        btnAnswerWrong = findViewById(R.id.btnAnswerWrong);
         btnAnswerWrong.setOnClickListener(v -> {
             // Insert new question with boolean wrong.
             Question question = questionBuilder.correct(false).build();
