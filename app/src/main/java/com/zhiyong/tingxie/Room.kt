@@ -13,6 +13,10 @@ import com.zhiyong.tingxie.db.Word
 
 @Database(entities = [Question::class, Quiz::class, Word::class, QuizPinyin::class], version = 4)
 abstract class PinyinRoomDatabase : RoomDatabase() {
+    fun pinyinDao(): QuizDao {
+        return pinyinDao;
+    }
+
     abstract val pinyinDao: QuizDao
 }
 
