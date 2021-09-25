@@ -11,9 +11,9 @@ import com.zhiyong.tingxie.getDatabase
 
 class QuizViewModel(application: Application) : AndroidViewModel(application) {
     private val mRepository: QuizRepository = QuizRepository(getDatabase(application), -1)
-    val allQuizItems: LiveData<List<QuizItem>>
-    val allQuizPinyins: LiveData<List<QuizPinyin>>
-    val allQuestions: LiveData<List<Question>>
+    val allQuizItems: LiveData<List<QuizItem>> = mRepository.allQuizItems
+    val allQuizPinyins: LiveData<List<QuizPinyin>> = mRepository.allQuizPinyins
+    val allQuestions: LiveData<List<Question>> = mRepository.allQuestions
 
     fun insertQuiz(quiz: Quiz?) {
         mRepository.insertQuiz(quiz)
@@ -37,11 +37,5 @@ class QuizViewModel(application: Application) : AndroidViewModel(application) {
         for (quizPinyin in quizPinyins) {
             mRepository.insertQuizPinyin(quizPinyin)
         }
-    }
-
-    init {
-        allQuizItems = mRepository.allQuizItems
-        allQuizPinyins = mRepository.allQuizPinyins
-        allQuestions = mRepository.allQuestions
     }
 }

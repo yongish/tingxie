@@ -9,9 +9,5 @@ import com.zhiyong.tingxie.ui.word.WordItem
 
 class QuestionViewModel(application: Application, quizId: Long) : AndroidViewModel(application) {
     private val mRepository: QuizRepository = QuizRepository(getDatabase(application), quizId)
-    val remainingQuestions: LiveData<List<WordItem>>
-
-    init {
-        remainingQuestions = mRepository.remainingQuestionsOfQuiz
-    }
+    val remainingQuestions: LiveData<List<WordItem>> = mRepository.remainingQuestionsOfQuiz
 }
