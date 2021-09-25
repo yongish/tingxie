@@ -9,6 +9,8 @@ import com.zhiyong.tingxie.db.QuizPinyin
 import com.zhiyong.tingxie.db.Word
 import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.ui.word.WordItem
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /* A Repository is a class that abstracts access to multiple data sources.
 A Repository manages query threads and allows you to use multiple backends.
@@ -23,16 +25,9 @@ class QuizRepository(database: PinyinRoomDatabase, quizId: Long) {
     val allQuestions: LiveData<List<Question>>
     val remainingQuestionsOfQuiz: LiveData<List<WordItem>>
 
-    fun insertQuiz(quiz: Quiz?) {
-        insertQuizAsyncTask(mQuizDao).execute(quiz)
-    }
+    fun insertQuiz(quiz: Quiz?) = mQuizDao.insert(quiz)
 
-    private class insertQuizAsyncTask internal constructor(private val mAsyncTaskDao: QuizDao) : AsyncTask<Quiz?, Void?, Void?>() {
-        override fun doInBackground(vararg p0: Quiz?): Void? {
-            mAsyncTaskDao.insert(p0[0])
-            return null
-        }
-    }
+    fun deleteQuizPinyins(quizId: Long) = mQuizDao.deleteQuizPinyins(quizId)
 
     fun updateQuiz(quiz: Quiz?) {
         updateQuizAsyncTask(mQuizDao).execute(quiz)

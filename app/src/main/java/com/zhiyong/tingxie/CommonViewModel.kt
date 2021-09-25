@@ -9,9 +9,9 @@ abstract class CommonViewModel(application: Application, quizId: Int) : AndroidV
     var repository: QuizRepository
         protected set
 
-    fun addQuizPinyin(quizPinyin: QuizPinyin?) {
-        repository.insertQuizPinyin(quizPinyin)
-    }
+//    fun addQuizPinyin(quizPinyin: QuizPinyin?) {
+//        repository.insertQuizPinyin(quizPinyin)
+//    }
 
     init {
         repository = QuizRepository(getDatabase(application), quizId.toLong())

@@ -3,11 +3,14 @@ package com.zhiyong.tingxie.ui.main
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
 import com.zhiyong.tingxie.QuizRepository
 import com.zhiyong.tingxie.db.Question
 import com.zhiyong.tingxie.db.Quiz
 import com.zhiyong.tingxie.db.QuizPinyin
 import com.zhiyong.tingxie.getDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class QuizViewModel(application: Application) : AndroidViewModel(application) {
     private val mRepository: QuizRepository = QuizRepository(getDatabase(application), -1)
@@ -16,7 +19,9 @@ class QuizViewModel(application: Application) : AndroidViewModel(application) {
     val allQuestions: LiveData<List<Question>> = mRepository.allQuestions
 
     fun insertQuiz(quiz: Quiz?) {
-        mRepository.insertQuiz(quiz)
+        viewModelScope.launch (Dispatchers.IO) {
+            mRepository.insertQuiz(quiz)
+        }
     }
 
     fun updateQuiz(quiz: Quiz?) {
@@ -24,7 +29,10 @@ class QuizViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun deleteQuiz(quizId: Long) {
-        mRepository.deleteQuiz(quizId)
+        viewModelScope.launch(Dispatchers.IO) {
+            mRepository.deleteQuiz(quizId)
+            mRepository.deleteQuizPinyins(quizId)
+        }
     }
 
     fun insertQuestions(questions: List<Question?>) {

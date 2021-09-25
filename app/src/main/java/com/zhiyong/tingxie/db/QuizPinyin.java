@@ -2,19 +2,11 @@ package com.zhiyong.tingxie.db;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import androidx.annotation.NonNull;
 
-import static androidx.room.ForeignKey.CASCADE;
-
-@Entity(tableName = "quiz_pinyin",
-        indices = {@Index("quiz_id"), @Index("pinyin_string")},
-        foreignKeys = {
-                @ForeignKey(entity = Quiz.class, parentColumns = "id", childColumns = "quiz_id",
-                        onDelete = CASCADE)
-        })
+@Entity(tableName = "quiz_pinyin", indices = {@Index("quiz_id"), @Index("pinyin_string")})
 public class QuizPinyin {
     @PrimaryKey(autoGenerate = true)
     private long id;

@@ -2,6 +2,7 @@ package com.zhiyong.tingxie;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -44,6 +45,9 @@ public interface QuizDao {
 
     @Query("DELETE FROM quiz_pinyin WHERE quiz_id = :quizId AND pinyin_string = :pinyin")
     void deleteQuizPinyin(long quizId, String pinyin);
+
+    @Query("DELETE FROM quiz_pinyin WHERE quiz_id = :quizId")
+    void deleteQuizPinyins(long quizId);
 
     @Query("SELECT * FROM quiz_pinyin")
     LiveData<List<QuizPinyin>> getAllQuizPinyins();

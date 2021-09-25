@@ -248,7 +248,6 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                                 quizItem.getRound());
                         viewModel.insertQuiz(quiz);
                         viewModel.insertQuestions(getQuestionsOfQuiz(quizId));
-//                        viewModel.insertQuizPinyins(getQuizPinyinsOfQuiz(quizId));
                         viewModel.insertQuizPinyins(deletedQuizPinyins);
 
                         recyclerView.scrollToPosition(adapterPosition);
