@@ -73,7 +73,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
     }
 
     @Override
-    public void onBindViewHolder(final QuizViewHolder holder, final int i) {
+    public void onBindViewHolder(final QuizViewHolder holder, int i) {
         if (mQuizItems != null) {
             final QuizItem current = mQuizItems.get(i);
             QuizItem quizItem = new QuizItem(current.getId(), current.getDate(), current.getTitle(),
@@ -232,6 +232,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         final QuizItem quizItem = mQuizItems.get(adapterPosition);
         // Get question and quiz_pinyin rows to be deleted (from all question and quiz_pinyin rows).
         final long quizId = quizItem.getId();
+        final List<QuizPinyin> deletedQuizPinyins = new ArrayList<>(mQuizPinyins);
 
         Snackbar snackbar = Snackbar
                 .make(recyclerView, "Removed quiz", Snackbar.LENGTH_LONG)
@@ -247,7 +248,8 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                                 quizItem.getRound());
                         viewModel.insertQuiz(quiz);
                         viewModel.insertQuestions(getQuestionsOfQuiz(quizId));
-                        viewModel.insertQuizPinyins(getQuizPinyinsOfQuiz(quizId));
+//                        viewModel.insertQuizPinyins(getQuizPinyinsOfQuiz(quizId));
+                        viewModel.insertQuizPinyins(deletedQuizPinyins);
 
                         recyclerView.scrollToPosition(adapterPosition);
                     }
@@ -263,16 +265,6 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         for (Question question : mQuestions) {
             if (question.getId() == quizId) {
                 result.add(question);
-            }
-        }
-        return result;
-    }
-
-    private List<QuizPinyin> getQuizPinyinsOfQuiz(long quizId) {
-        List<QuizPinyin> result = new ArrayList<>();
-        for (QuizPinyin quizPinyin : mQuizPinyins) {
-            if (quizPinyin.getQuizId() == quizId) {
-                result.add(quizPinyin);
             }
         }
         return result;
