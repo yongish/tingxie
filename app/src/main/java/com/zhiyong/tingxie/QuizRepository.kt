@@ -76,6 +76,7 @@ class QuizRepository(database: PinyinRoomDatabase, quizId: Long) {
         override fun doInBackground(vararg p0: WordItem?): Void? {
             val pinyinString = p0[0]?.pinyinString
             val wordString = p0[0]?.wordString
+            // todo: Think Word table is not used anymore can be deleted.
             mAsyncTaskDao.insert(Word(wordString!!, pinyinString!!))
             mAsyncTaskDao.insert(p0[0]?.quizId?.let { QuizPinyin(it, pinyinString, wordString, false) })
             return null
