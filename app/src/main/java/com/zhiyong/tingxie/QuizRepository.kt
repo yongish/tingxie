@@ -68,7 +68,7 @@ class QuizRepository(database: PinyinRoomDatabase, quizId: Long) {
     }
 
     fun addWord(quizId: Long, wordString: String?, pinyinString: String?) {
-        val wordItem = WordItem(quizId, wordString, pinyinString)
+        val wordItem = WordItem(quizId, wordString, pinyinString, false)
         addWordAsyncTask(mQuizDao).execute(wordItem)
     }
 
@@ -77,7 +77,7 @@ class QuizRepository(database: PinyinRoomDatabase, quizId: Long) {
             val pinyinString = p0[0]?.pinyinString
             val wordString = p0[0]?.wordString
             mAsyncTaskDao.insert(Word(wordString!!, pinyinString!!))
-            mAsyncTaskDao.insert(p0[0]?.quizId?.let { QuizPinyin(it, pinyinString, wordString) })
+            mAsyncTaskDao.insert(p0[0]?.quizId?.let { QuizPinyin(it, pinyinString, wordString, false) })
             return null
         }
     }
@@ -104,6 +104,17 @@ class QuizRepository(database: PinyinRoomDatabase, quizId: Long) {
     private class insertQuizPinyinAsyncTask internal constructor(private val mAsyncTaskDao: QuizDao) : AsyncTask<QuizPinyin?, Void?, Void?>() {
         override fun doInBackground(vararg p0: QuizPinyin?): Void? {
             mAsyncTaskDao.insert(p0[0])
+            return null
+        }
+    }
+
+    fun updateQuizPinyin(quizPinyin: QuizPinyin?) {
+        updateQuizPinyinAsyncTask(mQuizDao).execute(quizPinyin)
+    }
+
+    private class updateQuizPinyinAsyncTask internal constructor(private val mAsyncTaskDao: QuizDao) : AsyncTask<QuizPinyin?, Void?, Void?>() {
+        override fun doInBackground(vararg p0: QuizPinyin?): Void? {
+            mAsyncTaskDao.update(p0[0])
             return null
         }
     }

@@ -70,7 +70,7 @@ public class DBInstrumentedTest {
         String s0 = "jiāo tà shí dì";
         String w0 = "脚踏实地";
         mDao.insert(new Word(w0, s0));
-        mDao.insert(new QuizPinyin(quizId, s0, w0));
+        mDao.insert(new QuizPinyin(quizId, s0, w0, false));
         long timestamp = System.currentTimeMillis();
 
         // Answer question correctly.
@@ -89,8 +89,8 @@ public class DBInstrumentedTest {
         String w1 = "九牛一毛";
         mDao.insert(new Word("脚踏实地", s0));
         mDao.insert(new Word("九牛一毛", s1));
-        mDao.insert(new QuizPinyin(quizId, s0, w0));
-        mDao.insert(new QuizPinyin(quizId, s1, w1));
+        mDao.insert(new QuizPinyin(quizId, s0, w0, false));
+        mDao.insert(new QuizPinyin(quizId, s1, w1, false));
 
         // Answer question correctly.
         int numberLeftBefore = LiveDataTestUtil.getValue(mDao.getRemainingQuestions(quizId)).size();
@@ -107,7 +107,7 @@ public class DBInstrumentedTest {
         String s0 = "jiāo tà shí dì";
         String w0 = "脚踏实地";
         mDao.insert(new Word(w0, s0));
-        mDao.insert(new QuizPinyin(quizId, s0, w0));
+        mDao.insert(new QuizPinyin(quizId, s0, w0, false));
 
         int numberLeftBefore = LiveDataTestUtil.getValue(mDao.getRemainingQuestions(quizId)).size();
         assertEquals(1, numberLeftBefore);
@@ -118,7 +118,7 @@ public class DBInstrumentedTest {
         String s1 = "jǐu níu yī máo";
         String w1 = "九牛一毛";
         mDao.insert(new Word(w1, s1));
-        mDao.insert(new QuizPinyin(quizId, s1, w1));
+        mDao.insert(new QuizPinyin(quizId, s1, w1, false));
         int numberLeft = LiveDataTestUtil.getValue(mDao.getRemainingQuestions(quizId)).size();
         assertEquals(1, numberLeft);
     }
@@ -128,7 +128,7 @@ public class DBInstrumentedTest {
         String s0 = "jiāo tà shí dì";
         String w0 = "脚踏实地";
         mDao.insert(new Word(w0, s0));
-        mDao.insert(new QuizPinyin(quizId, s0, w0));
+        mDao.insert(new QuizPinyin(quizId, s0, w0, false));
 
         QuizItem quizItem = LiveDataTestUtil.getValue(mDao.getAllQuizItems()).get(0);
         assertEquals(1, quizItem.getRound());
@@ -139,7 +139,7 @@ public class DBInstrumentedTest {
         String s1 = "jǐu níu yī máo";
         String w1 = "九牛一毛";
         mDao.insert(new Word(w1, s1));
-        mDao.insert(new QuizPinyin(quizId, s1, w1));
+        mDao.insert(new QuizPinyin(quizId, s1, w1, false));
         QuizItem quizItem1 = LiveDataTestUtil.getValue(mDao.getAllQuizItems()).get(0);
         assertEquals(1, quizItem1.getRound());
     }
@@ -149,7 +149,7 @@ public class DBInstrumentedTest {
         String s0 = "jiāo tà shí dì";
         String w0 = "脚踏实地";
         mDao.insert(new Word(w0, s0));
-        mDao.insert(new QuizPinyin(quizId, s0, w0));
+        mDao.insert(new QuizPinyin(quizId, s0, w0, false));
 
         long ts = System.currentTimeMillis();
         mDao.insert(new Question(ts, ts, s0, true, quizId));
@@ -158,7 +158,7 @@ public class DBInstrumentedTest {
         String s1 = "jǐu níu yī máo";
         String w1 = "九牛一毛";
         mDao.insert(new Word(w1, s1));
-        mDao.insert(new QuizPinyin(quizId, s1, w1));
+        mDao.insert(new QuizPinyin(quizId, s1, w1, false));
 //        assertEquals(0, (int) LiveDataTestUtil.getValue(mDao.getCorrectCount(quizId, s0)));
     }
 

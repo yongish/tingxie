@@ -18,6 +18,7 @@ import com.zhiyong.tingxie.db.Question;
 import com.zhiyong.tingxie.ui.main.MainActivity;
 import com.zhiyong.tingxie.ui.main.QuizItem;
 import com.zhiyong.tingxie.ui.question.QuestionActivity;
+import com.zhiyong.tingxie.ui.word.WordItem;
 
 import static com.zhiyong.tingxie.ui.question.QuestionActivity.EXTRA_PINYIN_STRING;
 import static com.zhiyong.tingxie.ui.question.QuestionActivity.EXTRA_REMAINING_QUESTION_COUNT;
@@ -103,12 +104,15 @@ public class AnswerActivity extends AppCompatActivity {
             }
 
             mAnswerViewModel.updateQuiz(quizItem);
+            mAnswerViewModel.updateWordItem(new WordItem(quizItem.getId(), wordsString, pinyinString, true));
         });
         btnAnswerWrong = findViewById(R.id.btnAnswerWrong);
         btnAnswerWrong.setOnClickListener(v -> {
             // Insert new question with boolean wrong.
             Question question = questionBuilder.correct(false).build();
             mAnswerViewModel.insertQuestion(question);
+
+            mAnswerViewModel.updateWordItem(new WordItem(quizItem.getId(), wordsString, pinyinString, false));
 
             Toast.makeText(AnswerActivity.this, "Keep going.",
                     Toast.LENGTH_SHORT).show();

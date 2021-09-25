@@ -4,11 +4,13 @@ public class WordItem {
     private long quizId;
     private String wordString;
     private String pinyinString;
+    private boolean asked;
 
-    public WordItem(long quizId, String wordString, String pinyinString) {
+    public WordItem(long quizId, String wordString, String pinyinString, boolean asked) {
         this.quizId = quizId;
         this.wordString = wordString;
         this.pinyinString = pinyinString;
+        this.asked = asked;
     }
 
     public long getQuizId() {
@@ -21,5 +23,9 @@ public class WordItem {
 
     public String getPinyinString() {
         return pinyinString;
+    }
+
+    public boolean isAsked() {
+        return asked;
     }
 }

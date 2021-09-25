@@ -104,7 +104,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         final int adapterPosition = viewHolder.getAdapterPosition();
         final WordItem wordItem = mWordItems.get(adapterPosition);
         final QuizPinyin quizPinyin = new QuizPinyin(wordItem.getQuizId(),
-                wordItem.getPinyinString(), wordItem.getWordString());
+                wordItem.getPinyinString(), wordItem.getWordString(), wordItem.isAsked());
 
         Snackbar snackbar = Snackbar
                 .make(recyclerView, "Removed word", Snackbar.LENGTH_LONG)

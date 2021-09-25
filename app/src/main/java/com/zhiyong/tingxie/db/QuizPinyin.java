@@ -27,11 +27,15 @@ public class QuizPinyin {
     @ColumnInfo(name = "word_string")
     @NonNull
     private String wordString;
+    @NonNull
+    private boolean asked;
 
-    public QuizPinyin(long quizId, @NonNull String pinyinString, @NonNull String wordString) {
+    public QuizPinyin(long quizId, @NonNull String pinyinString,
+                      @NonNull String wordString, @NonNull boolean asked) {
         this.quizId = quizId;
         this.pinyinString = pinyinString;
         this.wordString = wordString;
+        this.asked = asked;
     }
 
     @NonNull
@@ -68,5 +72,13 @@ public class QuizPinyin {
 
     public void setWordString(String wordString) {
         this.wordString = wordString;
+    }
+
+    public boolean isAsked() {
+        return asked;
+    }
+
+    public void setAsked(boolean asked) {
+        this.asked = asked;
     }
 }

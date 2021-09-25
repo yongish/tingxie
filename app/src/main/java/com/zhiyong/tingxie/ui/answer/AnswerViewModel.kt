@@ -5,8 +5,10 @@ import androidx.lifecycle.AndroidViewModel
 import com.zhiyong.tingxie.QuizRepository
 import com.zhiyong.tingxie.db.Question
 import com.zhiyong.tingxie.db.Quiz
+import com.zhiyong.tingxie.db.QuizPinyin
 import com.zhiyong.tingxie.getDatabase
 import com.zhiyong.tingxie.ui.main.QuizItem
+import com.zhiyong.tingxie.ui.word.WordItem
 
 class AnswerViewModel(application: Application) : AndroidViewModel(application) {
     private val mRepository: QuizRepository = QuizRepository(getDatabase(application), -1)
@@ -25,4 +27,8 @@ class AnswerViewModel(application: Application) : AndroidViewModel(application) 
         ))
     }
 
+    fun updateWordItem(wordItem: WordItem) {
+        // todo: Can WordItem and QuizPinyin be the same class?
+        mRepository.updateQuizPinyin(QuizPinyin(wordItem.quizId, wordItem.pinyinString, wordItem.wordString, wordItem.isAsked))
+    }
 }

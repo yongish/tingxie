@@ -27,6 +27,9 @@ public interface QuizDao {
     @Insert
     long insert(QuizPinyin quizPinyin);
 
+    @Update
+    int update(QuizPinyin quizPinyin);
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(Word word);
 
@@ -52,13 +55,15 @@ public interface QuizDao {
     LiveData<Integer> getCorrectCount(long quizId, String pinyin);
 
     @Query("SELECT DISTINCT q.id AS quizId,\n" +
-            "                w.word_string AS wordString,\n" +
-            "                w.pinyin_string AS pinyinString\n" +
+            "                qp.word_string AS wordString,\n" +
+            "                qp.pinyin_string AS pinyinString,\n" +
+            "                qp.asked\n" +
             "FROM quiz q\n" +
             "JOIN quiz_pinyin qp ON q.id = qp.quiz_id\n" +
-            "JOIN word w ON qp.pinyin_string = w.pinyin_string\n" +
+//            "JOIN word w ON qp.pinyin_string = w.pinyin_string\n" +
             "WHERE q.id = :quizId\n" +
-            "ORDER BY w.pinyin_string")
+            "ORDER BY qp.pinyin_string")
+//            "ORDER BY w.pinyin_string")
     LiveData<List<WordItem>> getWordItemsOfQuiz(long quizId);
 
     @Query("SELECT id, date, title, total_words AS totalWords, not_learned AS notLearned, round " +
@@ -69,23 +74,7 @@ public interface QuizDao {
             "FROM quiz WHERE id = :id")
     LiveData<QuizItem> getQuizItem(long id);
 
-    @Query("WITH tpc AS\n" +
-            "  (SELECT qp.pinyin_string,\n" +
-            "          qp.word_string,\n" +
-            "          Count(correct) AS correct_count\n" +
-            "   FROM quiz_pinyin qp\n" +
-            "   LEFT JOIN question qn ON qp.quiz_id = qn.quiz_id\n" +
-            "   AND qp.pinyin_string = qn.pinyin_string\n" +
-            "   AND qn.reset_time <= qn.timestamp\n" +
-            "   WHERE qp.quiz_id = :quizId\n" +
-            "   GROUP BY qp.pinyin_string,\n" +
-            "            qp.word_string)\n" +
-            "SELECT :quizId AS quizId,\n" +
-            "       tpc.word_string AS wordString,\n" +
-            "       tpc.pinyin_string AS pinyinString\n" +
-            "FROM tpc\n" +
-            "WHERE tpc.correct_count =\n" +
-            "    (SELECT Min(correct_count) AS rounds_completed\n" +
-            "     FROM tpc)")
+    @Query("SELECT :quizId AS quizId, word_string AS wordString, pinyin_string AS pinyinString, asked " +
+            "FROM quiz_pinyin qp WHERE qp.asked = 0 AND qp.quiz_id = :quizId")
     LiveData<List<WordItem>> getRemainingQuestions(long quizId);
 }

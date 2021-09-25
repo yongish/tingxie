@@ -6,12 +6,10 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.zhiyong.tingxie.db.Question
-import com.zhiyong.tingxie.db.Quiz
-import com.zhiyong.tingxie.db.QuizPinyin
-import com.zhiyong.tingxie.db.Word
+import com.zhiyong.tingxie.db.*
 
-@Database(entities = [Question::class, Quiz::class, Word::class, QuizPinyin::class], version = 4)
+@Database(entities = [Question::class, Quiz::class, Word::class, QuizPinyin::class],
+    version = 5)
 abstract class PinyinRoomDatabase : RoomDatabase() {
     fun pinyinDao(): QuizDao {
         return pinyinDao;
@@ -28,7 +26,9 @@ fun getDatabase(context: Context): PinyinRoomDatabase {
         if (!::INSTANCE.isInitialized) {
             INSTANCE = Room.databaseBuilder(context.applicationContext,
                     PinyinRoomDatabase::class.java, "pinyin_database")
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
+                    .addMigrations(
+                        MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5
+                    )
                     .build()
         }
     }
@@ -111,5 +111,10 @@ val MIGRATION_3_4: Migration = object : Migration(3, 4) {
         database.execSQL("DROP TABLE word")
         database.execSQL("ALTER TABLE word_temp RENAME TO word")
         database.execSQL("CREATE INDEX index_Word_pinyin_string ON word(pinyin_string)")
+    }
+}
+val MIGRATION_4_5: Migration = object : Migration(4, 5) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL("ALTER TABLE quiz_pinyin ADD COLUMN asked INTEGER NOT NULL DEFAULT 0")
     }
 }
