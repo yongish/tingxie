@@ -104,13 +104,25 @@ class QuizRepository(database: PinyinRoomDatabase, quizId: Long) {
         }
     }
 
+    fun resetAsked(quizId: Long?) {
+        resetAskedAsyncTask(mQuizDao).execute(quizId)
+    }
+
+    private class resetAskedAsyncTask internal constructor(private val mAsyncTaskDao: QuizDao) : AsyncTask<Long?, Void?, Void?>() {
+        override fun doInBackground(vararg p0: Long?): Void? {
+            mAsyncTaskDao.resetAsked(p0[0]!!)
+            return null
+        }
+    }
+
     fun updateQuizPinyin(quizPinyin: QuizPinyin?) {
         updateQuizPinyinAsyncTask(mQuizDao).execute(quizPinyin)
     }
 
     private class updateQuizPinyinAsyncTask internal constructor(private val mAsyncTaskDao: QuizDao) : AsyncTask<QuizPinyin?, Void?, Void?>() {
         override fun doInBackground(vararg p0: QuizPinyin?): Void? {
-            mAsyncTaskDao.update(p0[0])
+//            mAsyncTaskDao.update(p0[0])
+            mAsyncTaskDao.updateQuizPinyin(p0[0]!!.quizId, p0[0]!!.pinyinString, p0[0]!!.isAsked)
             return null
         }
     }

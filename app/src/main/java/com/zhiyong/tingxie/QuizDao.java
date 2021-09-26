@@ -28,8 +28,13 @@ public interface QuizDao {
     @Insert
     long insert(QuizPinyin quizPinyin);
 
-    @Update
-    int update(QuizPinyin quizPinyin);
+    @Query("UPDATE quiz_pinyin SET asked = 0 WHERE quiz_id = :quizId")
+    void resetAsked(long quizId);
+
+//    @Update
+//    int update(QuizPinyin quizPinyin);
+    @Query("UPDATE quiz_pinyin SET asked = :asked WHERE quiz_id = :quizId AND pinyin_string = :pinyinString")
+    void updateQuizPinyin(long quizId, String pinyinString, boolean asked);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(Word word);

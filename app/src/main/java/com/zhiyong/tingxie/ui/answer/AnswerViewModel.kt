@@ -16,6 +16,10 @@ class AnswerViewModel(application: Application) : AndroidViewModel(application) 
         mRepository.insertQuestion(question)
     }
 
+    fun resetAsked(quizId: Long) {
+        mRepository.resetAsked(quizId)
+    }
+
     fun updateQuiz(quizItem: QuizItem) {
         mRepository.updateQuiz(Quiz(
                 quizItem.id,

@@ -71,6 +71,7 @@ public class AnswerActivity extends AppCompatActivity {
 
             // todo: UPDATE notLearned.
             quizItem.setNotLearned(quizItem.getNotLearned() - 1);
+            mAnswerViewModel.updateWordItem(new WordItem(quizItem.getId(), wordsString, pinyinString, true));
 
             // Go to Completed Alert Dialog or QuestionActivity.
             // Was this the last word in current round?
@@ -81,6 +82,7 @@ public class AnswerActivity extends AppCompatActivity {
                 // todo: UPDATE ROUND.
                 quizItem.setRound(quizItem.getRound() + 1);
                 quizItem.setNotLearned(quizItem.getTotalWords());
+                mAnswerViewModel.resetAsked(quizItem.getId());
 
                 // todo: Show AnswerActivity in future.
                 new AlertDialog.Builder(AnswerActivity.this)
@@ -104,7 +106,6 @@ public class AnswerActivity extends AppCompatActivity {
             }
 
             mAnswerViewModel.updateQuiz(quizItem);
-            mAnswerViewModel.updateWordItem(new WordItem(quizItem.getId(), wordsString, pinyinString, true));
         });
         btnAnswerWrong = findViewById(R.id.btnAnswerWrong);
         btnAnswerWrong.setOnClickListener(v -> {
