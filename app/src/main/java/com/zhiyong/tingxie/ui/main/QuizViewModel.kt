@@ -9,6 +9,7 @@ import com.zhiyong.tingxie.db.Question
 import com.zhiyong.tingxie.db.Quiz
 import com.zhiyong.tingxie.db.QuizPinyin
 import com.zhiyong.tingxie.getDatabase
+import com.zhiyong.tingxie.ui.word.WordItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -21,6 +22,12 @@ class QuizViewModel(application: Application) : AndroidViewModel(application) {
     fun insertQuiz(quiz: Quiz?) {
         viewModelScope.launch (Dispatchers.IO) {
             mRepository.insertQuiz(quiz)
+        }
+    }
+
+    fun addWords(quizId: Long, wordItems: List<WordItem>) {
+        for (wordItem in wordItems) {
+            mRepository.addWord(quizId, wordItem.wordString, wordItem.pinyinString)
         }
     }
 

@@ -31,6 +31,7 @@ import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.ui.question.QuestionActivity;
 import com.zhiyong.tingxie.ui.word.WordActivity;
+import com.zhiyong.tingxie.ui.word.WordItem;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -232,7 +233,13 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         final QuizItem quizItem = mQuizItems.get(adapterPosition);
         // Get question and quiz_pinyin rows to be deleted (from all question and quiz_pinyin rows).
         final long quizId = quizItem.getId();
-        final List<QuizPinyin> deletedQuizPinyins = new ArrayList<>(mQuizPinyins);
+        final List<WordItem> deletedWordItems = new ArrayList<>();
+        for (QuizPinyin quizPinyin : mQuizPinyins) {
+            if (quizPinyin.getQuizId() == quizId) {
+                deletedWordItems.add(new WordItem(quizId, quizPinyin.getWordString(),
+                        quizPinyin.getPinyinString(), quizPinyin.isAsked()));
+            }
+        }
 
         Snackbar snackbar = Snackbar
                 .make(recyclerView, "Removed quiz", Snackbar.LENGTH_LONG)
@@ -248,7 +255,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                                 quizItem.getRound());
                         viewModel.insertQuiz(quiz);
                         viewModel.insertQuestions(getQuestionsOfQuiz(quizId));
-                        viewModel.insertQuizPinyins(deletedQuizPinyins);
+                        viewModel.addWords(quizId, deletedWordItems);
 
                         recyclerView.scrollToPosition(adapterPosition);
                     }
