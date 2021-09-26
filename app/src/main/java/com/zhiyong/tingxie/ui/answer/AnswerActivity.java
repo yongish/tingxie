@@ -67,12 +67,11 @@ public class AnswerActivity extends AppCompatActivity {
         btnAnswerCorrect.setOnClickListener(v -> {
             // Insert new question with boolean correct.
             Question question = questionBuilder.correct(true).build();
-            mAnswerViewModel.insertQuestion(question);
+            mAnswerViewModel.onAnswer(question, new WordItem(
+                    quizItem.getId(), wordsString, pinyinString, true
+            ));
 
-            // todo: UPDATE notLearned.
             quizItem.setNotLearned(quizItem.getNotLearned() - 1);
-            mAnswerViewModel.updateWordItem(new WordItem(quizItem.getId(), wordsString, pinyinString, true));
-
             // Go to Completed Alert Dialog or QuestionActivity.
             // Was this the last word in current round?
             int remainingQuestionCount = getIntent()
@@ -111,9 +110,9 @@ public class AnswerActivity extends AppCompatActivity {
         btnAnswerWrong.setOnClickListener(v -> {
             // Insert new question with boolean wrong.
             Question question = questionBuilder.correct(false).build();
-            mAnswerViewModel.insertQuestion(question);
-
-            mAnswerViewModel.updateWordItem(new WordItem(quizItem.getId(), wordsString, pinyinString, false));
+            mAnswerViewModel.onAnswer(question, new WordItem(
+                    quizItem.getId(), wordsString, pinyinString, false
+            ));
 
             Toast.makeText(AnswerActivity.this, "Keep going.",
                     Toast.LENGTH_SHORT).show();

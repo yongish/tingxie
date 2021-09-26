@@ -121,7 +121,6 @@ class QuizRepository(database: PinyinRoomDatabase, quizId: Long) {
 
     private class updateQuizPinyinAsyncTask internal constructor(private val mAsyncTaskDao: QuizDao) : AsyncTask<QuizPinyin?, Void?, Void?>() {
         override fun doInBackground(vararg p0: QuizPinyin?): Void? {
-//            mAsyncTaskDao.update(p0[0])
             mAsyncTaskDao.updateQuizPinyin(p0[0]!!.quizId, p0[0]!!.pinyinString, p0[0]!!.isAsked)
             return null
         }

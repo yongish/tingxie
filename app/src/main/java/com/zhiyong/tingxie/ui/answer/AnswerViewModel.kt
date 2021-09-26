@@ -12,9 +12,6 @@ import com.zhiyong.tingxie.ui.word.WordItem
 
 class AnswerViewModel(application: Application) : AndroidViewModel(application) {
     private val mRepository: QuizRepository = QuizRepository(getDatabase(application), -1)
-    fun insertQuestion(question: Question?) {
-        mRepository.insertQuestion(question)
-    }
 
     fun resetAsked(quizId: Long) {
         mRepository.resetAsked(quizId)
@@ -31,8 +28,8 @@ class AnswerViewModel(application: Application) : AndroidViewModel(application) 
         ))
     }
 
-    fun updateWordItem(wordItem: WordItem) {
-        // todo: Can WordItem and QuizPinyin be the same class?
-        mRepository.updateQuizPinyin(QuizPinyin(wordItem.quizId, wordItem.pinyinString, wordItem.wordString, wordItem.isAsked))
+    fun onAnswer(question: Question, wordItem: WordItem) {
+      mRepository.insertQuestion(question)
+      mRepository.updateQuizPinyin(QuizPinyin(wordItem.quizId, wordItem.pinyinString, wordItem.wordString, wordItem.isAsked))
     }
 }
