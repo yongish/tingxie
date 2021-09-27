@@ -9,8 +9,6 @@ import com.zhiyong.tingxie.db.QuizPinyin
 import com.zhiyong.tingxie.db.Word
 import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.ui.word.WordItem
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 /* A Repository is a class that abstracts access to multiple data sources.
 A Repository manages query threads and allows you to use multiple backends.
