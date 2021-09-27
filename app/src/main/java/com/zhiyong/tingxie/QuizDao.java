@@ -2,7 +2,6 @@ package com.zhiyong.tingxie;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -31,8 +30,6 @@ public interface QuizDao {
     @Query("UPDATE quiz_pinyin SET asked = 0 WHERE quiz_id = :quizId")
     void resetAsked(long quizId);
 
-//    @Update
-//    int update(QuizPinyin quizPinyin);
     @Query("UPDATE quiz_pinyin SET asked = :asked WHERE quiz_id = :quizId AND pinyin_string = :pinyinString")
     void updateQuizPinyin(long quizId, String pinyinString, boolean asked);
 
