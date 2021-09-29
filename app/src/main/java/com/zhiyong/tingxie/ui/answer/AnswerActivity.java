@@ -17,6 +17,7 @@ import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.db.Question;
 import com.zhiyong.tingxie.ui.main.MainActivity;
 import com.zhiyong.tingxie.ui.main.QuizItem;
+import com.zhiyong.tingxie.ui.question.MyCanvasView;
 import com.zhiyong.tingxie.ui.question.QuestionActivity;
 import com.zhiyong.tingxie.ui.word.WordItem;
 
@@ -30,6 +31,7 @@ public class AnswerActivity extends AppCompatActivity {
     private TextView tvAnswerWords;
     private Button btnAnswerCorrect;
     private Button btnAnswerWrong;
+//    private MyCanvasView myCanvasView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,5 +122,9 @@ public class AnswerActivity extends AppCompatActivity {
             // Go to QuestionActivity.
             startActivity(intentQuestion);
         });
+
+//        MyCanvasView myCanvasView = new MyCanvasView(this);
+//        myCanvasView = new MyCanvasView(findViewById(R.id.view));
+//        myCanvasView.setContentDescription("Write your answer here.");
     }
 }
