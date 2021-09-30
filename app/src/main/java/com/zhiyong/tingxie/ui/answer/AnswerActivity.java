@@ -1,11 +1,15 @@
 package com.zhiyong.tingxie.ui.answer;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +25,7 @@ import com.zhiyong.tingxie.ui.question.MyCanvasView;
 import com.zhiyong.tingxie.ui.question.QuestionActivity;
 import com.zhiyong.tingxie.ui.word.WordItem;
 
+import static com.zhiyong.tingxie.ui.question.QuestionActivity.EXTRA_CANVAS;
 import static com.zhiyong.tingxie.ui.question.QuestionActivity.EXTRA_PINYIN_STRING;
 import static com.zhiyong.tingxie.ui.question.QuestionActivity.EXTRA_REMAINING_QUESTION_COUNT;
 import static com.zhiyong.tingxie.ui.question.QuestionActivity.EXTRA_WORDS_STRING;
@@ -31,7 +36,7 @@ public class AnswerActivity extends AppCompatActivity {
     private TextView tvAnswerWords;
     private Button btnAnswerCorrect;
     private Button btnAnswerWrong;
-//    private MyCanvasView myCanvasView;
+    private ImageView ivAnswer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,12 @@ public class AnswerActivity extends AppCompatActivity {
 
         final String wordsString = getIntent().getStringExtra(EXTRA_WORDS_STRING);
         final String pinyinString = getIntent().getStringExtra(EXTRA_PINYIN_STRING);
+        final Bitmap drawing = getIntent().getParcelableExtra(EXTRA_CANVAS);
+
+        ivAnswer = findViewById(R.id.ivAnswer);
+        Bitmap b = BitmapFactory.decodeByteArray(
+                getIntent().getByteArrayExtra("byteArray"),0,getIntent().getByteArrayExtra("byteArray").length);
+        ivAnswer.setImageBitmap(b);
 
         tvAnswerWords = findViewById(R.id.tvAnswerWords);
         tvAnswerWords.setText(wordsString);

@@ -2,6 +2,9 @@ package com.zhiyong.tingxie.ui.question;
 
 import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +21,7 @@ import com.zhiyong.tingxie.ui.main.MainActivity;
 import com.zhiyong.tingxie.ui.main.QuizItem;
 import com.zhiyong.tingxie.ui.word.WordItem;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Locale;
 
 public class QuestionActivity extends AppCompatActivity {
@@ -25,11 +29,34 @@ public class QuestionActivity extends AppCompatActivity {
     public static final String EXTRA_WORDS_STRING = "com.zhiyong.tingxie.ui.question.extra.WORDS_STRING";
     public static final String EXTRA_PINYIN_STRING = "com.zhiyong.tingxie.ui.question.extra.PINYIN_STRING";
     public static final String EXTRA_REMAINING_QUESTION_COUNT = "com.zhiyong.tingxie.ui.question.extra.REMAINING_QUESTION_COUNT";
+    public static final String EXTRA_CANVAS = "com.zhiyong.tingxie.ui.question.extra.CANVAS";
 
     private TextToSpeech textToSpeech;
     private QuestionViewModel mQuestionViewModel;
     private ImageView ivPlay;
     private Button btnShowAnswer;
+    private MyCanvasView myCanvasView;
+
+    /**
+     * reduces the size of the image
+     * @param image
+     * @param maxSize
+     * @return
+     */
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +87,8 @@ public class QuestionActivity extends AppCompatActivity {
 
         ivPlay = findViewById(R.id.ivPlay);
         btnShowAnswer = findViewById(R.id.btnShowAnswer);
+        myCanvasView = findViewById(R.id.view);
+
         mQuestionViewModel = ViewModelProviders
                 .of(this, new QuestionViewModelFactory(this.getApplication(), quizItem.getId()))
                 .get(QuestionViewModel.class);
@@ -100,6 +129,17 @@ public class QuestionActivity extends AppCompatActivity {
 
                     intent.putExtra("quiz", quizItem);
                     intent.putExtra(EXTRA_REMAINING_QUESTION_COUNT, wordItems.size());
+
+                    // todo next: Pass the canvas to answeractivity.
+                    ByteArrayOutputStream bs = new ByteArrayOutputStream();
+
+                    Bitmap bitmap = Bitmap.createBitmap(myCanvasView.getWidth(), myCanvasView.getHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas c = new Canvas(bitmap);
+                    myCanvasView.draw(c);
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 50, bs);
+                    byte[] ba = bs.toByteArray();
+                    intent.putExtra("byteArray", ba);
+
                     startActivity(intent);
                 });
             } else {

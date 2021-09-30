@@ -14,7 +14,8 @@ class MyCanvasView @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null
 ): View(context, attrs) {
-  private lateinit var extraCanvas: Canvas
+//  private lateinit var extraCanvas: Canvas
+  lateinit var extraCanvas: Canvas
   private lateinit var extraBitmap: Bitmap
   // Set up the paint with which to draw.
   private val paint = Paint().apply {
