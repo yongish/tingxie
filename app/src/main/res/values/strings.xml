@@ -62,4 +62,5 @@
     <string name="reset_counter">Reset counter</string>
     <string name="logout">Logout</string>
     <string name="friends">Friends</string>
+    <string name="missing_sound">No sound?</string>
 </resources>

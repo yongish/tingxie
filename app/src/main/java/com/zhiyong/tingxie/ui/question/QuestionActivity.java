@@ -1,5 +1,6 @@
 package com.zhiyong.tingxie.ui.question;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,6 +9,8 @@ import android.speech.tts.TextToSpeech;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -133,5 +136,26 @@ public class QuestionActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_question, menu);
+        return true;
+    }
+
+    public void openMissingSoundDialog(MenuItem item) {
+        new AlertDialog.Builder(QuestionActivity.this)
+                .setTitle(R.string.missing_sound)
+                .setMessage("Set preferred engine to \"Google Text-to-speech Engine.\"")
+                .setPositiveButton("Open phone speech settings", ((dialog, which) -> {
+                    Intent intent = new Intent();
+                    intent.setAction("com.android.settings.TTS_SETTINGS");
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    this.startActivity(intent);
+                }))
+                .setNegativeButton("No need. I can heard the words.", (dialog, which) -> dialog.dismiss())
+                .show();
     }
 }
