@@ -3,7 +3,6 @@ package com.zhiyong.tingxie.ui.answer;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,12 +20,12 @@ import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.db.Question;
 import com.zhiyong.tingxie.ui.main.MainActivity;
 import com.zhiyong.tingxie.ui.main.QuizItem;
-import com.zhiyong.tingxie.ui.question.MyCanvasView;
 import com.zhiyong.tingxie.ui.question.QuestionActivity;
 import com.zhiyong.tingxie.ui.word.WordItem;
 
-import static com.zhiyong.tingxie.ui.question.QuestionActivity.EXTRA_CANVAS;
+import static com.zhiyong.tingxie.ui.question.QuestionActivity.EXTRA_BYTE_ARRAY;
 import static com.zhiyong.tingxie.ui.question.QuestionActivity.EXTRA_PINYIN_STRING;
+import static com.zhiyong.tingxie.ui.question.QuestionActivity.EXTRA_QUIZ_ITEM;
 import static com.zhiyong.tingxie.ui.question.QuestionActivity.EXTRA_REMAINING_QUESTION_COUNT;
 import static com.zhiyong.tingxie.ui.question.QuestionActivity.EXTRA_WORDS_STRING;
 
@@ -45,15 +44,15 @@ public class AnswerActivity extends AppCompatActivity {
 
         mAnswerViewModel = ViewModelProviders.of(this).get(AnswerViewModel.class);
 
-        QuizItem quizItem = getIntent().getParcelableExtra("quiz");
+        QuizItem quizItem = getIntent().getParcelableExtra(EXTRA_QUIZ_ITEM);
 
         final String wordsString = getIntent().getStringExtra(EXTRA_WORDS_STRING);
         final String pinyinString = getIntent().getStringExtra(EXTRA_PINYIN_STRING);
-        final Bitmap drawing = getIntent().getParcelableExtra(EXTRA_CANVAS);
 
         ivAnswer = findViewById(R.id.ivAnswer);
-        Bitmap b = BitmapFactory.decodeByteArray(
-                getIntent().getByteArrayExtra("byteArray"),0,getIntent().getByteArrayExtra("byteArray").length);
+        byte[] ba = getIntent().getByteArrayExtra(EXTRA_BYTE_ARRAY);
+        assert ba != null;
+        Bitmap b = BitmapFactory.decodeByteArray(ba, 0, ba.length);
         ivAnswer.setImageBitmap(b);
 
         tvAnswerWords = findViewById(R.id.tvAnswerWords);
@@ -133,9 +132,5 @@ public class AnswerActivity extends AppCompatActivity {
             // Go to QuestionActivity.
             startActivity(intentQuestion);
         });
-
-//        MyCanvasView myCanvasView = new MyCanvasView(this);
-//        myCanvasView = new MyCanvasView(findViewById(R.id.view));
-//        myCanvasView.setContentDescription("Write your answer here.");
     }
 }
