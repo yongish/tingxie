@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zhiyong.tingxie.R;
@@ -35,6 +36,7 @@ public class QuestionActivity extends AppCompatActivity {
     private ImageView ivPlay;
     private Button btnShowAnswer;
     private MyCanvasView myCanvasView;
+    private TextView tvQuestionPinyin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +77,10 @@ public class QuestionActivity extends AppCompatActivity {
                 final WordItem wordItem = wordItems.get(0);
                 final String wordString = wordItem.getWordString();
                 final String pinyinString = wordItem.getPinyinString();
+
+                tvQuestionPinyin = findViewById(R.id.tvQuestionPinyin);
+                tvQuestionPinyin.setText(pinyinString);
+
                 if (textToSpeech == null) {
                     textToSpeech = new TextToSpeech(getApplicationContext(), arg0 -> {
                         if (arg0 == TextToSpeech.SUCCESS) {

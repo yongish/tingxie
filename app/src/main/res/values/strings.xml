@@ -12,7 +12,7 @@
     <string name="speech_settings">Speech settings</string>
     <string name="title_activity_question">Question</string>
     <string name="show_answer">Show Answer</string>
-    <string name="question_instructions">Write your answer below, then tap Show Answer.\nNumber of quiz words with this pinyin: 1</string>
+    <string name="question_instructions">Draw your answer below, then tap Show Answer.</string>
     <string name="answer">Answer</string>
     <string name="answer_query">Did you write these correctly?</string>
     <string name="no">No</string>
