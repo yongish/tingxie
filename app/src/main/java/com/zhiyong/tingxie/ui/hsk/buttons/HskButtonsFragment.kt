@@ -9,16 +9,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import com.zhiyong.tingxie.R
-import com.zhiyong.tingxie.ui.word.WordActivity
+import com.zhiyong.tingxie.ui.hsk.words.HskWordsActivity
 
 class HskButtonsFragment : Fragment() {
 
-  // todo: Maybe try an array of 5 buttons for the 5 HSK lists.
   private lateinit var btnHsk1: Button
   private lateinit var btnHsk2: Button
+  private lateinit var btnHsk3: Button
+  private lateinit var btnHsk4: Button
+  private lateinit var btnHsk5: Button
+  private lateinit var btnHsk6: Button
 
   companion object {
     fun newInstance() = HskButtonsFragment()
+    val EXTRA_LEVEL = "com.zhiyong.tingxie.ui.hsk.words.LEVEL"
   }
 
   private lateinit var buttonsViewModel: HskButtonsViewModel
@@ -30,17 +34,19 @@ class HskButtonsFragment : Fragment() {
     return inflater.inflate(R.layout.hsk_buttons_fragment, container, false)
   }
 
+  fun setOnClickListenerHelper() {
+
+  }
+
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     btnHsk1 = view.findViewById(R.id.btnHsk1)
     btnHsk2 = view.findViewById(R.id.btnHsk2)
 
     btnHsk1.setOnClickListener {
-//      startActivity(Intent(this@HskFragment.context, WordActivity::class.java))
-      // todo: stopped here. Next is to create a HSK list (activity, fragment) pair.
-      val intent = Intent(activity, WordActivity::class.java)
-      intent.putExtra("level", "hsk1")
-      activity?.startActivity(Intent(activity, WordActivity::class.java))
+      val intent = Intent(activity, HskWordsActivity::class.java)
+      intent.putExtra(EXTRA_LEVEL, 1)
+      startActivity(intent)
     }
 
     buttonsViewModel = ViewModelProvider(this).get(HskButtonsViewModel::class.java)

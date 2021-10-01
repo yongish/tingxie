@@ -19,6 +19,20 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/tvIndex"
+            style="@style/text_view_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvHanzi"
+            app:layout_constraintEnd_toStartOf="@+id/tvHanzi"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="888." />
+
+        <TextView
             android:id="@+id/tvHanzi"
             style="@style/text_view_style"
             android:layout_width="wrap_content"
@@ -62,16 +76,5 @@
         app:layout_constraintStart_toEndOf="@+id/wordLayout"
         app:layout_constraintTop_toTopOf="@+id/wordLayout"
         app:srcCompat="@drawable/ic_play_circle_outline_black_36dp" />
-
-    <ImageView
-        android:id="@+id/ivDelete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_delete" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

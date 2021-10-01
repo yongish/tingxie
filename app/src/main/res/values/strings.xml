@@ -68,4 +68,5 @@
     <string name="hsk1_150_words">HSK1: 150 words</string>
     <string name="hsk2_300_words">HSK2: 300 words</string>
     <string name="erase">Erase</string>
+    <string name="index">%d.\u0020</string>
 </resources>

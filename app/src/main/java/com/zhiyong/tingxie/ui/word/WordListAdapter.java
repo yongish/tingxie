@@ -153,7 +153,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
 
         private WordViewHolder(View itemView) {
             super(itemView);
-            tvWord = itemView.findViewById(R.id.tvWord);
+            tvWord = itemView.findViewById(R.id.tvHanzi);
             tvPinyin = itemView.findViewById(R.id.tvPinyin);
             ivPlay = itemView.findViewById(R.id.ivPlay);
             wordLayout = itemView.findViewById(R.id.wordLayout);
