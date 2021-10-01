@@ -21,6 +21,7 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.db.Quiz;
+import com.zhiyong.tingxie.ui.hsk.buttons.HskButtonsActivity;
 import com.zhiyong.tingxie.ui.login.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -114,11 +115,19 @@ public class MainActivity extends AppCompatActivity {
 //        this.startActivity(new Intent(getApplicationContext(), ))
     }
 
-    public void openSpeechSettings(MenuItem item) {
+    public static Intent openSpeechSettingsHelper() {
         Intent intent = new Intent();
         intent.setAction("com.android.settings.TTS_SETTINGS");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        this.startActivity(intent);
+        return intent;
+    }
+
+    public void openSpeechSettings(MenuItem item) {
+        startActivity(openSpeechSettingsHelper());
+    }
+
+    public void openHskLists(MenuItem item) {
+        startActivity(new Intent(MainActivity.this, HskButtonsActivity.class));
     }
 
     public void processDatePickerResult(long quizId, int year, int month, int day) {

@@ -27,9 +27,9 @@
         android:layout_height="match_parent"
         android:text="@string/play_demo_video" />
 
-    <Button
-        android:id="@+id/btnFacebook"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/comment_contact_developer_on_facebook" />
+<!--    <Button-->
+<!--        android:id="@+id/btnFacebook"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:text="@string/comment_contact_developer_on_facebook" />-->
 </LinearLayout>

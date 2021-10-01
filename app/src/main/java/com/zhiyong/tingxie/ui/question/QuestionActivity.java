@@ -150,12 +150,10 @@ public class QuestionActivity extends AppCompatActivity {
                 .setTitle(R.string.missing_sound)
                 .setMessage("Set preferred engine to \"Google Text-to-speech Engine.\"")
                 .setPositiveButton("Open phone speech settings", ((dialog, which) -> {
-                    Intent intent = new Intent();
-                    intent.setAction("com.android.settings.TTS_SETTINGS");
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    this.startActivity(intent);
+                    startActivity(MainActivity.openSpeechSettingsHelper());
                 }))
-                .setNegativeButton("No need. I can heard the words.", (dialog, which) -> dialog.dismiss())
+                .setNegativeButton("No need. I can heard the words.",
+                        (dialog, which) -> dialog.dismiss())
                 .show();
     }
 }

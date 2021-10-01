@@ -15,7 +15,7 @@ import com.zhiyong.tingxie.R;
 
 public class HelpDialogFragment extends DialogFragment {
     private Button btnDemo;
-    private Button btnFacebook;
+//    private Button btnFacebook;
 
     public HelpDialogFragment() { }
 
@@ -40,14 +40,14 @@ public class HelpDialogFragment extends DialogFragment {
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/xqOFlM8_vak")));
             }
         });
-        btnFacebook = getView().findViewById(R.id.btnFacebook);
-        btnFacebook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String url = "https://www.facebook.com/n/?听写-295524347790755";
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                startActivity(intent);
-            }
-        });
+//        btnFacebook = getView().findViewById(R.id.btnFacebook);
+//        btnFacebook.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String url = "https://www.facebook.com/n/?听写-295524347790755";
+//                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+//                startActivity(intent);
+//            }
+//        });
     }
 }
