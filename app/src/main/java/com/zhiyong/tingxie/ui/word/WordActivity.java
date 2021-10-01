@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -217,5 +219,19 @@ public class WordActivity extends AppCompatActivity {
             }
         });
         helper.attachToRecyclerView(recyclerView);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_hsk_list, menu);
+        return true;
+    }
+
+    public void openHelpHsk(MenuItem item) {
+        new AlertDialog.Builder(WordActivity.this)
+                .setTitle("Words are tappable")
+                .setMessage("Tap on a word to search for it in Baidu dictionary.")
+                .show();
     }
 }
