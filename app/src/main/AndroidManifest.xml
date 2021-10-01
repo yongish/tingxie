@@ -19,6 +19,7 @@
             android:exported="true" />
         <activity
             android:name=".ui.hsk.buttons.HskButtonsActivity"
+            android:label="@string/hsk_levels"
             android:exported="true" />
         <activity
             android:name=".ui.main.MainActivity"

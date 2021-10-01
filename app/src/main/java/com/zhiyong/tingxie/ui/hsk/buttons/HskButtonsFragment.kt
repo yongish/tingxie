@@ -3,10 +3,8 @@ package com.zhiyong.tingxie.ui.hsk.buttons
 import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsActivity
@@ -22,7 +20,7 @@ class HskButtonsFragment : Fragment() {
 
   companion object {
     fun newInstance() = HskButtonsFragment()
-    val EXTRA_LEVEL = "com.zhiyong.tingxie.ui.hsk.words.LEVEL"
+    const val EXTRA_LEVEL = "com.zhiyong.tingxie.ui.hsk.words.LEVEL"
   }
 
   private lateinit var buttonsViewModel: HskButtonsViewModel
@@ -32,10 +30,6 @@ class HskButtonsFragment : Fragment() {
     savedInstanceState: Bundle?
   ): View {
     return inflater.inflate(R.layout.hsk_buttons_fragment, container, false)
-  }
-
-  fun setOnClickListenerHelper() {
-
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

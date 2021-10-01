@@ -14,5 +14,12 @@ class HskButtonsActivity : AppCompatActivity() {
         .replace(R.id.container, HskButtonsFragment.newInstance())
         .commitNow()
     }
+    supportActionBar?.setDisplayHomeAsUpEnabled(true)
   }
+
+  override fun onSupportNavigateUp(): Boolean {
+    onBackPressed()
+    return true
+  }
+
 }
