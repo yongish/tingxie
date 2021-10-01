@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
+import java.io.ByteArrayOutputStream
 import kotlin.math.abs
 
 private const val STROKE_WIDTH = 12f
@@ -15,7 +16,7 @@ class MyCanvasView @JvmOverloads constructor(
   attrs: AttributeSet? = null
 ): View(context, attrs) {
   private lateinit var extraCanvas: Canvas
-  lateinit var extraBitmap: Bitmap
+  private lateinit var extraBitmap: Bitmap
   // Set up the paint with which to draw.
   private val paint = Paint().apply {
     // Smooths out edges of what is drawn without affecting shape.
@@ -33,6 +34,16 @@ class MyCanvasView @JvmOverloads constructor(
   private var currentX = 0f
   private var currentY = 0f
   private val touchTolerance = ViewConfiguration.get(context).scaledTouchSlop
+
+  fun getByteArray(): ByteArray {
+    val bs = ByteArrayOutputStream()
+    extraBitmap.compress(Bitmap.CompressFormat.PNG, 50, bs)
+    return bs.toByteArray()
+  }
+
+  fun erase() {
+    extraCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
+  }
 
   override fun onSizeChanged(width: Int, height: Int, oldWidth: Int, oldHeight: Int) {
     super.onSizeChanged(width, height, oldWidth, oldHeight)

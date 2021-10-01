@@ -3,7 +3,6 @@ package com.zhiyong.tingxie.ui.question;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,7 +10,6 @@ import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,7 +21,6 @@ import com.zhiyong.tingxie.ui.main.MainActivity;
 import com.zhiyong.tingxie.ui.main.QuizItem;
 import com.zhiyong.tingxie.ui.word.WordItem;
 
-import java.io.ByteArrayOutputStream;
 import java.util.Locale;
 
 public class QuestionActivity extends AppCompatActivity {
@@ -38,6 +35,7 @@ public class QuestionActivity extends AppCompatActivity {
     private QuestionViewModel mQuestionViewModel;
     private ImageView ivPlay;
     private Button btnShowAnswer;
+    private Button btnErase;
     private MyCanvasView myCanvasView;
     private TextView tvQuestionPinyin;
 
@@ -69,6 +67,7 @@ public class QuestionActivity extends AppCompatActivity {
         QuizItem quizItem = getIntent().getParcelableExtra("quiz");
 
         ivPlay = findViewById(R.id.ivPlay);
+        btnErase = findViewById(R.id.btnErase);
         btnShowAnswer = findViewById(R.id.btnShowAnswer);
         myCanvasView = findViewById(R.id.view);
 
@@ -95,11 +94,12 @@ public class QuestionActivity extends AppCompatActivity {
                     textToSpeech.speak(wordString, TextToSpeech.QUEUE_FLUSH, null);
                 }
 
-                ivPlay.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        textToSpeech.speak(wordString, TextToSpeech.QUEUE_FLUSH, null);
-                    }
+                ivPlay.setOnClickListener(v -> textToSpeech.speak(
+                        wordString, TextToSpeech.QUEUE_FLUSH, null
+                ));
+
+                btnErase.setOnClickListener(v -> {
+                    myCanvasView.erase();
                 });
 
                 btnShowAnswer.setOnClickListener(v -> {
@@ -115,10 +115,7 @@ public class QuestionActivity extends AppCompatActivity {
                     intent.putExtra(EXTRA_WORDS_STRING, sb.deleteCharAt(0).toString());
                     intent.putExtra(EXTRA_PINYIN_STRING, pinyinString);
                     intent.putExtra(EXTRA_REMAINING_QUESTION_COUNT, wordItems.size());
-
-                    ByteArrayOutputStream bs = new ByteArrayOutputStream();
-                    myCanvasView.getExtraBitmap().compress(Bitmap.CompressFormat.PNG, 50, bs);
-                    intent.putExtra(EXTRA_BYTE_ARRAY, bs.toByteArray());
+                    intent.putExtra(EXTRA_BYTE_ARRAY, myCanvasView.getByteArray());
 
                     startActivity(intent);
                 });
