@@ -6,6 +6,7 @@ import android.view.Menu
 import androidx.appcompat.app.AlertDialog
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.ui.hsk.buttons.HskButtonsFragment.Companion.EXTRA_LEVEL
+import com.zhiyong.tingxie.ui.main.MainActivity
 
 class HskWordsActivity : AppCompatActivity() {
 
@@ -36,8 +37,19 @@ class HskWordsActivity : AppCompatActivity() {
     val builder: AlertDialog.Builder = this.let {
       AlertDialog.Builder(it)
     }
-    builder.setMessage("Tap on a word to search for it in Baidu dictionary.")
-      .setTitle("Words are tappable")
-    builder.create().show()
+    builder.setMessage(
+      """
+      1. Tap on a word to search for it in Baidu dictionary.
+      2. No sound on play button? Set preferred engine to "Google Text-to-speech Engine."
+      """.trimIndent()
+    )
+      .setTitle("Tips")
+      .setPositiveButton("Open phone speech settings") {
+          _, _ -> startActivity(MainActivity.openSpeechSettingsHelper());
+      }
+      .setNegativeButton("No need. I can heard the words.") {
+          dialog, _ -> dialog.dismiss()
+      }
+      .create().show()
   }
 }
