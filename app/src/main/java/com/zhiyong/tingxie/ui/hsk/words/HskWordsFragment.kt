@@ -13,9 +13,6 @@ import com.zhiyong.tingxie.ui.hsk.buttons.HskButtonsFragment.Companion.EXTRA_LEV
 import org.json.JSONArray
 import xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScroller
 
-
-
-
 class HskWordsFragment : Fragment() {
 
   companion object {
@@ -29,14 +26,13 @@ class HskWordsFragment : Fragment() {
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
-
     return inflater.inflate(R.layout.hsk_words_fragment, container, false)
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    var level = requireActivity().intent.getIntExtra(EXTRA_LEVEL, 0)
+    val level = requireActivity().intent.getIntExtra(EXTRA_LEVEL, 0)
     val wordArray = JSONArray(requireActivity().assets
       .open("hsk-vocab-json/hsk-level-$level.json").bufferedReader().use{
         it.readText()
@@ -58,8 +54,6 @@ class HskWordsFragment : Fragment() {
 
     val fastScroller: VerticalRecyclerViewFastScroller = requireActivity().findViewById(R.id.fast_scroller)
     fastScroller.setRecyclerView(recyclerView);
-    fastScroller.setSectionIndicator(sectionTitleIndicator);
-
     recyclerView.setOnScrollListener(fastScroller.onScrollListener);
 
     adapter.setWordItems(hskWords)
