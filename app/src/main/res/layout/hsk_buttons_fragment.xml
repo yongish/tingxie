@@ -11,56 +11,56 @@
         android:id="@+id/btnStartHsk3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="@string/start_hsk3_quiz"
+        app:layout_constraintBottom_toBottomOf="@+id/btnHsk3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnStartHsk2" />
+        app:layout_constraintTop_toTopOf="@+id/btnHsk3" />
 
     <Button
         android:id="@+id/btnStartHsk4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="@string/start_hsk4_quiz"
+        app:layout_constraintBottom_toBottomOf="@+id/btnHsk4"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnStartHsk3" />
+        app:layout_constraintTop_toTopOf="@+id/btnHsk4" />
 
     <Button
         android:id="@+id/btnStartHsk5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="@string/start_hsk5_quiz"
+        app:layout_constraintBottom_toBottomOf="@+id/btnHsk5"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnStartHsk4" />
+        app:layout_constraintTop_toTopOf="@+id/btnHsk5" />
 
     <Button
         android:id="@+id/btnStartHsk6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="@string/start_hsk6_quiz"
+        app:layout_constraintBottom_toBottomOf="@+id/btnHsk6"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnStartHsk5" />
+        app:layout_constraintTop_toTopOf="@+id/btnHsk6" />
 
     <Button
         android:id="@+id/btnStartHsk2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="@string/start_hsk2_quiz"
+        app:layout_constraintBottom_toBottomOf="@+id/btnHsk2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnStartHsk1" />
+        app:layout_constraintTop_toTopOf="@+id/btnHsk2" />
 
     <Button
         android:id="@+id/btnHsk1"
@@ -150,10 +150,10 @@
         android:id="@+id/btnStartHsk1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="@string/start_hsk1_quiz"
+        app:layout_constraintBottom_toBottomOf="@+id/btnHsk1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/btnHsk1" />
 </androidx.constraintlayout.widget.ConstraintLayout>
