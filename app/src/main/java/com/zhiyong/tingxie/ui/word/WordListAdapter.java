@@ -90,8 +90,8 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
                 }
             });
         } else {
-            holder.tvWord.setText("No Word");
-            holder.tvPinyin.setText("No pinyin");
+            holder.tvWord.setText(R.string.no_word);
+            holder.tvPinyin.setText(R.string.no_pinyin);
         }
     }
 

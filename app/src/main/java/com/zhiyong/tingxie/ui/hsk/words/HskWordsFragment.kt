@@ -48,7 +48,7 @@ class HskWordsFragment : Fragment() {
     }
 
     recyclerView = requireActivity().findViewById(R.id.recyclerview_hsk_words)
-    val adapter = HskWordsAdapter()
+    val adapter = HskWordsAdapter(requireContext())
     recyclerView.adapter = adapter
     recyclerView.layoutManager = LinearLayoutManager(requireActivity())
     adapter.setWordItems(hskWords)
