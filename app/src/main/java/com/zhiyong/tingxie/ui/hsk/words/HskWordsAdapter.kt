@@ -1,6 +1,8 @@
 package com.zhiyong.tingxie.ui.hsk.words
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,8 +13,17 @@ import com.zhiyong.tingxie.R
 class HskWordsAdapter : RecyclerView.Adapter<HskWordsAdapter.ViewHolder>() {
   private lateinit var mWordItems: List<HskWord>
 
-  override fun onBindViewHolder(holder: ViewHolder, position: Int) =
+  override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     holder.bind(mWordItems[position])
+    val word = mWordItems[position].hanzi
+    holder.tvHanzi.setOnClickListener {
+      val webIntent: Intent = Intent(
+        Intent.ACTION_VIEW,
+        Uri.parse("https://baike.baidu.com/item/$word")
+      )
+      holder.context.startActivity(webIntent)
+    }
+  }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
     ViewHolder.from(parent, parent.context)
