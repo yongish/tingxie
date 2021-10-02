@@ -32,16 +32,26 @@ class HskButtonsFragment : Fragment() {
     return inflater.inflate(R.layout.hsk_buttons_fragment, container, false)
   }
 
+  fun onClickListenerHelper(level: Int) {
+    val intent = Intent(activity, HskWordsActivity::class.java)
+    intent.putExtra(EXTRA_LEVEL, level)
+    startActivity(intent)
+  }
+
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     btnHsk1 = view.findViewById(R.id.btnHsk1)
+    btnHsk1.setOnClickListener { onClickListenerHelper(1) }
     btnHsk2 = view.findViewById(R.id.btnHsk2)
-
-    btnHsk1.setOnClickListener {
-      val intent = Intent(activity, HskWordsActivity::class.java)
-      intent.putExtra(EXTRA_LEVEL, 1)
-      startActivity(intent)
-    }
+    btnHsk2.setOnClickListener { onClickListenerHelper(2) }
+    btnHsk3 = view.findViewById(R.id.btnHsk3)
+    btnHsk3.setOnClickListener { onClickListenerHelper(3) }
+    btnHsk4 = view.findViewById(R.id.btnHsk4)
+    btnHsk4.setOnClickListener { onClickListenerHelper(4) }
+    btnHsk5 = view.findViewById(R.id.btnHsk5)
+    btnHsk5.setOnClickListener { onClickListenerHelper(5) }
+    btnHsk6 = view.findViewById(R.id.btnHsk6)
+    btnHsk6.setOnClickListener { onClickListenerHelper(6) }
 
     buttonsViewModel = ViewModelProvider(this).get(HskButtonsViewModel::class.java)
     // TODO: Use the ViewModel
