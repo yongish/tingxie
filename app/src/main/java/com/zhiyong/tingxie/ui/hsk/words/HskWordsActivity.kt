@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AlertDialog
 import com.zhiyong.tingxie.R
+import com.zhiyong.tingxie.ui.hsk.buttons.HskButtonsFragment.Companion.EXTRA_LEVEL
 
 class HskWordsActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.hsk_words_activity)
+    title = "HSK level ${intent.getIntExtra(EXTRA_LEVEL, 0)}"
     if (savedInstanceState == null) {
       supportFragmentManager.beginTransaction()
         .replace(R.id.container, HskWordsFragment.newInstance())
