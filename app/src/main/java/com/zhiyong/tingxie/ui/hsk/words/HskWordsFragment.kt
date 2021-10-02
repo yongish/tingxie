@@ -11,6 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.ui.hsk.buttons.HskButtonsFragment.Companion.EXTRA_LEVEL
 import org.json.JSONArray
+import xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScroller
+
+
+
 
 class HskWordsFragment : Fragment() {
 
@@ -51,6 +55,13 @@ class HskWordsFragment : Fragment() {
     val adapter = HskWordsAdapter(requireContext())
     recyclerView.adapter = adapter
     recyclerView.layoutManager = LinearLayoutManager(requireActivity())
+
+    val fastScroller: VerticalRecyclerViewFastScroller = requireActivity().findViewById(R.id.fast_scroller)
+    fastScroller.setRecyclerView(recyclerView);
+    fastScroller.setSectionIndicator(sectionTitleIndicator);
+
+    recyclerView.setOnScrollListener(fastScroller.onScrollListener);
+
     adapter.setWordItems(hskWords)
 
     viewModel = ViewModelProvider(this).get(HskWordsViewModel::class.java)

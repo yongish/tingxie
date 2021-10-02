@@ -20,4 +20,12 @@
         app:fastScrollVerticalThumbDrawable="@drawable/fast_scroll_thumb"
         app:fastScrollVerticalTrackDrawable="@drawable/fast_scroll_track"
     />
+
+    <xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScroller
+        android:id="@+id/fast_scroller"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
