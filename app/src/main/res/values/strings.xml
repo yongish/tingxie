@@ -84,4 +84,5 @@
     <string name="start_hsk6_quiz">Start/resume\nHSK6 quiz</string>
     <string name="start_hsk2_quiz">Start/resume\nHSK2 quiz</string>
     <string name="start_hsk1_quiz">Start/resume\nHSK1 quiz</string>
+    <string name="reset">Reset</string>
 </resources>
