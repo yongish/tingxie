@@ -7,74 +7,61 @@
     android:layout_marginTop="10dp"
     android:background="@color/colorPrimaryLight">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/wordLayout"
+    <TextView
+        android:id="@+id/tvIndex"
+        style="@style/text_view_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal"
+        android:textSize="16sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tvHanzi"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        tools:text="888." />
 
-        <TextView
-            android:id="@+id/tvIndex"
-            style="@style/text_view_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/tvHanzi"
-            app:layout_constraintEnd_toStartOf="@+id/tvHanzi"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="888." />
 
-        <TextView
-            android:id="@+id/tvHanzi"
-            style="@style/text_view_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tvPinyin"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="守株待兔" />
+    <TextView
+        android:id="@+id/tvHanzi"
+        style="@style/text_view_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvIndex"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="守株待兔" />
 
-        <TextView
-            android:id="@+id/tvPinyin"
-            style="@style/text_view_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:textAppearance="@android:style/TextAppearance.Small"
-            app:layout_constraintBaseline_toBaselineOf="@+id/tvHanzi"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/tvHanzi"
-            tools:text="shǒu zhū dài tù" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/tvPinyin"
+        style="@style/text_view_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:textAppearance="@android:style/TextAppearance.Small"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tvHanzi"
+        app:layout_constraintStart_toEndOf="@+id/tvHanzi"
+        tools:text="shǒu zhū dài tù" />
 
     <ImageView
         android:id="@+id/ivPlay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/wordLayout"
-        app:layout_constraintStart_toEndOf="@+id/wordLayout"
-        app:layout_constraintTop_toTopOf="@+id/wordLayout"
+        app:layout_constraintBottom_toBottomOf="@+id/tvPinyin"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton2"
+        app:layout_constraintTop_toTopOf="@+id/tvPinyin"
         app:srcCompat="@drawable/ic_play_circle_outline_black_36dp" />
+
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/ivPlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ivPlay"
+        app:srcCompat="@drawable/ic_add_black_24dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
