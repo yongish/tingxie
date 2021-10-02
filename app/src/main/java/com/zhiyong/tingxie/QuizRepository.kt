@@ -28,6 +28,12 @@ class QuizRepository(database: PinyinRoomDatabase, quizId: Long) {
     val remainingQuestionsOfQuiz: LiveData<List<WordItem>> =
         mQuizDao.getRemainingQuestions(quizId)
 
+    fun remainingHskQuestions(level: Int) {
+        // Read appropriate file. It may be more efficient to read a single file into
+
+        //
+    }
+
     fun insertQuiz(quiz: Quiz?) = mQuizDao.insert(quiz)
 
     fun deleteQuizPinyins(quizId: Long) = mQuizDao.deleteQuizPinyins(quizId)
