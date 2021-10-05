@@ -11,6 +11,7 @@ import com.zhiyong.tingxie.db.Question;
 import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.db.Word;
+import com.zhiyong.tingxie.ui.hsk.words.HskQuestionItem;
 import com.zhiyong.tingxie.ui.main.QuizItem;
 import com.zhiyong.tingxie.ui.word.WordItem;
 
@@ -83,4 +84,13 @@ public interface QuizDao {
     @Query("SELECT :quizId AS quizId, word_string AS wordString, pinyin_string AS pinyinString, asked " +
             "FROM quiz_pinyin qp WHERE qp.asked = 0 AND qp.quiz_id = :quizId")
     LiveData<List<WordItem>> getRemainingQuestions(long quizId);
+
+    @Query("SELECT id, asked, level, hanzi, pinyin FROM hsk WHERE level = :level")
+    LiveData<List<HskQuestionItem>> getHsk(int level);
+
+    @Query("UPDATE hsk SET asked = 1 WHERE id = :id")
+    void updateAskedHsk(int id);
+
+    @Query("UPDATE hsk SET asked = 0 WHERE level = :level")
+    void resetHsk(int level);
 }

@@ -2,10 +2,8 @@ package com.zhiyong.tingxie
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import com.zhiyong.tingxie.db.Question
-import com.zhiyong.tingxie.db.Quiz
-import com.zhiyong.tingxie.db.QuizPinyin
-import com.zhiyong.tingxie.db.Word
+import com.zhiyong.tingxie.db.*
+import com.zhiyong.tingxie.ui.hsk.words.HskQuestionItem
 import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.ui.word.WordItem
 import java.util.concurrent.ExecutorService
@@ -28,10 +26,8 @@ class QuizRepository(database: PinyinRoomDatabase, quizId: Long) {
     val remainingQuestionsOfQuiz: LiveData<List<WordItem>> =
         mQuizDao.getRemainingQuestions(quizId)
 
-    fun remainingHskQuestions(level: Int) {
-        // Read appropriate file. It may be more efficient to read a single file into
-
-        //
+    fun getHskQuestions(level: Int): LiveData<List<HskQuestionItem>> {
+        return mQuizDao.getHsk(level)
     }
 
     fun insertQuiz(quiz: Quiz?) = mQuizDao.insert(quiz)

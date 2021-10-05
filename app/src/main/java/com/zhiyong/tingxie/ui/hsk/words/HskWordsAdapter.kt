@@ -14,9 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.zhiyong.tingxie.R
 import java.util.*
 
-class HskWordsAdapter(context: Context) : RecyclerView.Adapter<HskWordsAdapter.ViewHolder>() {
+class HskWordsAdapter(private var context: Context) : RecyclerView.Adapter<HskWordsAdapter.ViewHolder>() {
   private lateinit var mWordItems: List<HskWord>
-  private var context: Context = context
   private lateinit var textToSpeech: TextToSpeech
 
   init {
@@ -49,7 +48,12 @@ class HskWordsAdapter(context: Context) : RecyclerView.Adapter<HskWordsAdapter.V
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
     ViewHolder.from(parent, context)
 
-  override fun getItemCount(): Int = mWordItems.size
+  override fun getItemCount(): Int {
+    if (::mWordItems.isInitialized) {
+      return mWordItems.size
+    }
+    return 0
+  }
 
   fun setWordItems(wordItems: List<HskWord>) {
     mWordItems = wordItems
