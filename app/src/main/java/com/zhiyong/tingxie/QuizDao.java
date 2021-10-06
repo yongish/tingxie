@@ -88,6 +88,9 @@ public interface QuizDao {
     @Query("SELECT id, asked, level, hanzi, pinyin FROM hsk WHERE level = :level")
     LiveData<List<HskQuestionItem>> getHsk(int level);
 
+    @Query("SELECT id, asked, level, hanzi, pinyin FROM hsk WHERE asked = 0 AND level = :level")
+    LiveData<List<HskQuestionItem>> getUnaskedHsk(int level);
+
     @Query("UPDATE hsk SET asked = 1 WHERE id = :id")
     void updateAskedHsk(int id);
 

@@ -11,4 +11,6 @@ class HskWordsViewModel(application: Application) : AndroidViewModel(application
 
 //  fun getHskQuestions(level: Int) = repository.getHskQuestions(level)
   fun getHskQuestions(level: Int): LiveData<List<HskQuestionItem>> = repository.getHskQuestions(level)
+
+  fun getUnaskedHskQuestions(level: Int): LiveData<List<HskQuestionItem>> = repository.getUnaskedHskQuestions(level)
 }

@@ -30,6 +30,10 @@ class QuizRepository(database: PinyinRoomDatabase, quizId: Long) {
         return mQuizDao.getHsk(level)
     }
 
+    fun getUnaskedHskQuestions(level: Int): LiveData<List<HskQuestionItem>> {
+        return mQuizDao.getUnaskedHsk(level)
+    }
+
     fun insertQuiz(quiz: Quiz?) = mQuizDao.insert(quiz)
 
     fun deleteQuizPinyins(quizId: Long) = mQuizDao.deleteQuizPinyins(quizId)
