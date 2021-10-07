@@ -34,7 +34,14 @@
             android:label="@string/title_activity_question"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".ui.question.HskQuestionActivity"
+            android:label="@string/title_activity_question"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".ui.answer.AnswerActivity"
+            android:label="@string/answer" />
+        <activity
+            android:name=".ui.answer.HskAnswerActivity"
             android:label="@string/answer" />
         <activity
             android:name=".ui.login.LoginActivity"

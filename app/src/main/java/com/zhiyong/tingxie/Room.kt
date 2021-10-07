@@ -8,8 +8,7 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.zhiyong.tingxie.db.*
 
-@Database(entities = [Question::class, Quiz::class, Word::class, QuizPinyin::class,//], version = 6)
-  Hsk::class], version = 7)
+@Database(entities = [Question::class, Quiz::class, Word::class, QuizPinyin::class], version = 6)
 abstract class PinyinRoomDatabase : RoomDatabase() {
     fun pinyinDao(): QuizDao {
         return pinyinDao;
@@ -28,9 +27,8 @@ fun getDatabase(context: Context): PinyinRoomDatabase {
                     PinyinRoomDatabase::class.java, "pinyin_database")
                     .addMigrations(
                         MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5,
-                        MIGRATION_5_6, MIGRATION_6_7
+                        MIGRATION_5_6
                     )
-              .createFromAsset("tingxie.db")
                     .build()
         }
     }
@@ -129,9 +127,4 @@ val MIGRATION_5_6: Migration = object : Migration(5, 6) {
         database.execSQL("CREATE INDEX index_quiz_pinyin_quiz_id ON quiz_pinyin(quiz_id)")
         database.execSQL("CREATE INDEX index_quiz_pinyin_pinyin_string ON quiz_pinyin(pinyin_string)")
     }
-}
-val MIGRATION_6_7: Migration = object : Migration(6, 7) {
-  override fun migrate(database: SupportSQLiteDatabase) {
-    database.execSQL("CREATE TABLE hsk (id INTEGER NOT NULL PRIMARY KEY, asked INTEGER NOT NULL, level INTEGER NOT NULL, hanzi TEXT NOT NULL, pinyin TEXT NOT NULL)")
-  }
 }

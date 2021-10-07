@@ -90,12 +90,10 @@ public class AnswerActivity extends AppCompatActivity {
                     .getIntExtra(EXTRA_REMAINING_QUESTION_COUNT, -1);
             Log.d("REMAINING_QN", String.valueOf(remainingQuestionCount));
             if (remainingQuestionCount < 2) {
-                // todo: UPDATE ROUND.
                 quizItem.setRound(quizItem.getRound() + 1);
                 quizItem.setNotLearned(quizItem.getTotalWords());
                 mAnswerViewModel.resetAsked(quizItem.getId());
 
-                // todo: Show AnswerActivity in future.
                 new AlertDialog.Builder(AnswerActivity.this)
                         .setTitle("Round Completed.")
                         .setMessage("Great. You completed a round with all questions correct.")

@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import android.widget.Button
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsActivity
-import com.zhiyong.tingxie.ui.question.QuestionActivity
+import com.zhiyong.tingxie.ui.question.HskQuestionActivity
 
 class HskButtonsFragment : Fragment() {
 
@@ -48,7 +48,7 @@ class HskButtonsFragment : Fragment() {
     assignBtns(arrayOf(
       R.id.btnStartHsk1, R.id.btnStartHsk2, R.id.btnStartHsk3,
       R.id.btnStartHsk4, R.id.btnStartHsk5, R.id.btnStartHsk6
-    ), QuestionActivity::class.java)
+    ), HskQuestionActivity::class.java)
 
     buttonsViewModel = ViewModelProvider(this).get(HskButtonsViewModel::class.java)
     // TODO: Use the ViewModel

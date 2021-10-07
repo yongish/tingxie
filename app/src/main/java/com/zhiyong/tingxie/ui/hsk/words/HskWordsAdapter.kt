@@ -22,7 +22,7 @@ class HskWordsAdapter(private var context: Context) : RecyclerView.Adapter<HskWo
     textToSpeech = TextToSpeech(context, TextToSpeech.OnInitListener { status ->
       if (status != TextToSpeech.ERROR){
         //if there is no error then set language
-        textToSpeech.language = Locale.UK
+        textToSpeech.language = Locale.SIMPLIFIED_CHINESE
       }
     })
   }

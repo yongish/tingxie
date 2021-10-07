@@ -2,15 +2,18 @@ package com.zhiyong.tingxie.ui.hsk.words
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import com.zhiyong.tingxie.QuizRepository
-import com.zhiyong.tingxie.getDatabase
 
 class HskWordsViewModel(application: Application) : AndroidViewModel(application) {
-  private val repository: QuizRepository = QuizRepository(getDatabase(application), -1)
+  private val repository: QuizRepository = QuizRepository(-1, application)
 
-//  fun getHskQuestions(level: Int) = repository.getHskQuestions(level)
-  fun getHskQuestions(level: Int): LiveData<List<HskQuestionItem>> = repository.getHskQuestions(level)
+  fun getHsk(level: Int): List<HskWordsAdapter.HskWord> = repository.getHsk(level)
 
-  fun getUnaskedHskQuestions(level: Int): LiveData<List<HskQuestionItem>> = repository.getUnaskedHskQuestions(level)
+  fun getUnaskedHskWords(level: Int): List<HskWordsAdapter.HskWord> = repository.getUnaskedHskWords(level)
+
+  fun getHanzis(level: Int, pinyin: String): List<String> = repository.getHanzis(level, pinyin)
+
+  fun resetAsked(level: Int): Boolean = repository.resetAsked(level)
+
+  fun setAsked(index: Int) = repository.setAsked(index)
 }

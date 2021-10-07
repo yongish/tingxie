@@ -14,6 +14,6 @@ abstract class CommonViewModel(application: Application, quizId: Int) : AndroidV
 //    }
 
     init {
-        repository = QuizRepository(getDatabase(application), quizId.toLong())
+        repository = QuizRepository(quizId.toLong(), application)
     }
 }
