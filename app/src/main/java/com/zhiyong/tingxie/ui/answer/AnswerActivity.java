@@ -20,14 +20,14 @@ import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.db.Question;
 import com.zhiyong.tingxie.ui.main.MainActivity;
 import com.zhiyong.tingxie.ui.main.QuizItem;
-import com.zhiyong.tingxie.ui.question.QuestionActivity;
+import com.zhiyong.tingxie.ui.question.HskQuestionActivity;
 import com.zhiyong.tingxie.ui.word.WordItem;
 
-import static com.zhiyong.tingxie.ui.question.QuestionActivity.EXTRA_BYTE_ARRAY;
-import static com.zhiyong.tingxie.ui.question.QuestionActivity.EXTRA_PINYIN_STRING;
-import static com.zhiyong.tingxie.ui.question.QuestionActivity.EXTRA_QUIZ_ITEM;
-import static com.zhiyong.tingxie.ui.question.QuestionActivity.EXTRA_REMAINING_QUESTION_COUNT;
-import static com.zhiyong.tingxie.ui.question.QuestionActivity.EXTRA_WORDS_STRING;
+import static com.zhiyong.tingxie.ui.question.HskQuestionActivity.EXTRA_BYTE_ARRAY;
+import static com.zhiyong.tingxie.ui.question.HskQuestionActivity.EXTRA_PINYIN_STRING;
+import static com.zhiyong.tingxie.ui.question.HskQuestionActivity.EXTRA_QUIZ_ITEM;
+import static com.zhiyong.tingxie.ui.question.HskQuestionActivity.EXTRA_REMAINING_QUESTION_COUNT;
+import static com.zhiyong.tingxie.ui.question.HskQuestionActivity.EXTRA_WORDS_STRING;
 
 public class AnswerActivity extends AppCompatActivity {
 
@@ -69,12 +69,13 @@ public class AnswerActivity extends AppCompatActivity {
 
         btnAnswerCorrect = findViewById(R.id.btnAnswerCorrect);
         long ts = System.currentTimeMillis();
+        assert quizItem != null;
         final Question.QuestionBuilder questionBuilder = new Question.QuestionBuilder()
                 .timestamp(ts)
                 .pinyinString(pinyinString)
                 .quizId(quizItem.getId());
         final Intent intentQuestion = new Intent(getApplicationContext(),
-                QuestionActivity.class);
+                HskQuestionActivity.class);
         intentQuestion.putExtra("quiz", quizItem);
         btnAnswerCorrect.setOnClickListener(v -> {
             // Insert new question with boolean correct.
@@ -99,7 +100,7 @@ public class AnswerActivity extends AppCompatActivity {
                         .setMessage("Great. You completed a round with all questions correct.")
                         .setPositiveButton("Next round", (dialog, which) -> {
                             Intent intent = new Intent(getApplicationContext(),
-                                    QuestionActivity.class);
+                                    HskQuestionActivity.class);
                             intent.putExtra("quiz", quizItem);
                             startActivity(intent);
                         })

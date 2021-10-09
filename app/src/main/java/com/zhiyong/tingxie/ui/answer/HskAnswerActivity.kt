@@ -16,8 +16,6 @@ import com.zhiyong.tingxie.ui.hsk.buttons.HskButtonsFragment.Companion.EXTRA_LEV
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsViewModel
 import com.zhiyong.tingxie.ui.main.MainActivity
 import com.zhiyong.tingxie.ui.question.HskQuestionActivity
-import com.zhiyong.tingxie.ui.question.QuestionActivity
-import com.zhiyong.tingxie.ui.question.QuestionActivity.EXTRA_REMAINING_QUESTION_COUNT
 
 class HskAnswerActivity: AppCompatActivity() {
   private lateinit var viewModel: HskWordsViewModel
@@ -38,11 +36,11 @@ class HskAnswerActivity: AppCompatActivity() {
 
     viewModel = ViewModelProvider(this).get(HskWordsViewModel::class.java)
 
-    val wordsString = intent.getStringExtra(QuestionActivity.EXTRA_WORDS_STRING)
-    val pinyinString = intent.getStringExtra(QuestionActivity.EXTRA_PINYIN_STRING)
+    val wordsString = intent.getStringExtra(HskQuestionActivity.EXTRA_WORDS_STRING)
+    val pinyinString = intent.getStringExtra(HskQuestionActivity.EXTRA_PINYIN_STRING)
     val hskIndex = intent.getIntExtra(HskQuestionActivity.EXTRA_HSK_ID, 1)
 
-    val ba = intent.getByteArrayExtra(QuestionActivity.EXTRA_BYTE_ARRAY)!!
+    val ba = intent.getByteArrayExtra(HskQuestionActivity.EXTRA_BYTE_ARRAY)!!
     val b = BitmapFactory.decodeByteArray(ba, 0, ba.size)
     ivAnswer.setImageBitmap(b)
 
@@ -59,7 +57,7 @@ class HskAnswerActivity: AppCompatActivity() {
     intentQuestion.putExtra(EXTRA_LEVEL, level)
     btnAnswerCorrect.setOnClickListener {
       viewModel.setAsked(hskIndex)
-      val remainingCount = intent.getIntExtra(EXTRA_REMAINING_QUESTION_COUNT, -1)
+      val remainingCount = intent.getIntExtra(HskQuestionActivity.EXTRA_REMAINING_QUESTION_COUNT, -1)
       if (remainingCount < 2) {
         viewModel.resetAsked(level)
 

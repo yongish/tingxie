@@ -28,7 +28,7 @@ public interface QuizDao {
     long insert(QuizPinyin quizPinyin);
 
     @Query("UPDATE quiz_pinyin SET asked = 0 WHERE quiz_id = :quizId")
-    void resetAsked(long quizId);
+    int resetAsked(long quizId);
 
     @Query("UPDATE quiz_pinyin SET asked = :asked WHERE quiz_id = :quizId AND pinyin_string = :pinyinString")
     void updateQuizPinyin(long quizId, String pinyinString, boolean asked);

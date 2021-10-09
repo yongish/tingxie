@@ -29,7 +29,7 @@ import com.zhiyong.tingxie.Util;
 import com.zhiyong.tingxie.db.Question;
 import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.db.QuizPinyin;
-import com.zhiyong.tingxie.ui.question.QuestionActivity;
+import com.zhiyong.tingxie.ui.question.HskQuestionActivity;
 import com.zhiyong.tingxie.ui.word.WordActivity;
 import com.zhiyong.tingxie.ui.word.WordItem;
 
@@ -170,7 +170,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                 @Override
                 public void onClick(View v) {
                     if (current.getTotalWords() > 0) {
-                        Intent intent = new Intent(context, QuestionActivity.class);
+                        Intent intent = new Intent(context, HskQuestionActivity.class);
                         intent.putExtra("quiz", quizItem);
                         ((Activity) context).startActivityForResult(
                                 intent, QUESTION_ACTIVITY_REQUEST_CODE
