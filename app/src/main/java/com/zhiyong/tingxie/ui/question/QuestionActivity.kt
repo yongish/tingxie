@@ -29,7 +29,7 @@ import com.zhiyong.tingxie.ui.word.WordItem
 import java.util.*
 import kotlin.text.StringBuilder
 
-class HskQuestionActivity: AppCompatActivity() {
+class QuestionActivity: AppCompatActivity() {
   private lateinit var btnErase: Button
   private lateinit var btnReset: Button
   private lateinit var btnShowAnswer: Button
