@@ -1,5 +1,7 @@
 package com.zhiyong.tingxie.ui.word;
 
+import static com.zhiyong.tingxie.ui.question.QuestionActivity.EXTRA_QUIZ_ITEM;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -77,7 +79,7 @@ public class WordActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
         });
 
-        QuizItem quizItem = getIntent().getParcelableExtra("quiz");
+        QuizItem quizItem = getIntent().getParcelableExtra(EXTRA_QUIZ_ITEM);
         long quizId = quizItem.getId();
 
         final AutoCompleteTextView textView = findViewById(R.id.autoCompleteTextView1);

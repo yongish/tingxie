@@ -1,5 +1,7 @@
 package com.zhiyong.tingxie.ui.main;
 
+import static com.zhiyong.tingxie.ui.question.QuestionActivity.EXTRA_QUIZ_ITEM;
+
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -160,7 +162,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, WordActivity.class);
-                    intent.putExtra("quiz", quizItem);
+                    intent.putExtra(EXTRA_QUIZ_ITEM, quizItem);
                     ((Activity) context).startActivityForResult(
                             intent, WORD_ACTIVITY_REQUEST_CODE
                     );
@@ -171,7 +173,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                 public void onClick(View v) {
                     if (current.getTotalWords() > 0) {
                         Intent intent = new Intent(context, QuestionActivity.class);
-                        intent.putExtra("quiz", quizItem);
+                        intent.putExtra(EXTRA_QUIZ_ITEM, quizItem);
                         ((Activity) context).startActivityForResult(
                                 intent, QUESTION_ACTIVITY_REQUEST_CODE
                         );

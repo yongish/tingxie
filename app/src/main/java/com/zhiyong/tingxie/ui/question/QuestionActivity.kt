@@ -19,7 +19,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.zhiyong.tingxie.R
-import com.zhiyong.tingxie.ui.answer.HskAnswerActivity
+import com.zhiyong.tingxie.ui.answer.AnswerActivity
 import com.zhiyong.tingxie.ui.hsk.buttons.HskButtonsFragment.Companion.EXTRA_LEVEL
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsViewModel
 import com.zhiyong.tingxie.ui.main.MainActivity
@@ -91,7 +91,7 @@ class QuestionActivity: AppCompatActivity() {
     }
 
     // From AnswerActivity.
-    val quizItem: QuizItem? = intent.getParcelableExtra("quiz")
+    val quizItem: QuizItem? = intent.getParcelableExtra(EXTRA_QUIZ_ITEM)
     if (quizItem == null) {
       questionViewModel = ViewModelProvider(this).get(HskWordsViewModel::class.java)
 
@@ -118,7 +118,7 @@ class QuestionActivity: AppCompatActivity() {
       hanzisMatchingPinyin.forEach { sb.append("\n$it") }
 
       btnShowAnswer.setOnClickListener {
-        val intent = Intent(applicationContext, HskAnswerActivity::class.java)
+        val intent = Intent(applicationContext, AnswerActivity::class.java)
         intent.putExtra(EXTRA_LEVEL, level)
         intent.putExtra(EXTRA_HSK_ID, unaskedWord.index)
 
@@ -157,7 +157,7 @@ class QuestionActivity: AppCompatActivity() {
 //            }
 
             btnShowAnswer.setOnClickListener {
-              val intent = Intent(applicationContext, HskAnswerActivity::class.java)
+              val intent = Intent(applicationContext, AnswerActivity::class.java)
               intent.putExtra(EXTRA_QUIZ_ITEM, quizItem)
 
               intent.putExtra(EXTRA_WORDS_STRING, sb.deleteCharAt(0).toString())
