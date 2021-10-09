@@ -19,7 +19,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.zhiyong.tingxie.R
-import com.zhiyong.tingxie.ui.answer.AnswerActivity
 import com.zhiyong.tingxie.ui.answer.HskAnswerActivity
 import com.zhiyong.tingxie.ui.hsk.buttons.HskButtonsFragment.Companion.EXTRA_LEVEL
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsViewModel
@@ -158,7 +157,7 @@ class QuestionActivity: AppCompatActivity() {
 //            }
 
             btnShowAnswer.setOnClickListener {
-              val intent = Intent(applicationContext, AnswerActivity::class.java)
+              val intent = Intent(applicationContext, HskAnswerActivity::class.java)
               intent.putExtra(EXTRA_QUIZ_ITEM, quizItem)
 
               intent.putExtra(EXTRA_WORDS_STRING, sb.deleteCharAt(0).toString())
