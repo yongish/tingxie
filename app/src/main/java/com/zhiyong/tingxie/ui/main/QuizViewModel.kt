@@ -1,6 +1,7 @@
 package com.zhiyong.tingxie.ui.main
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
@@ -22,6 +23,16 @@ class QuizViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch (Dispatchers.IO) {
             mRepository.insertQuiz(quiz)
         }
+    }
+
+    fun insertQuizFuture(quiz: Quiz?): Long {
+        val quizIdFuture = mRepository.insertQuiz1(quiz)
+        try {
+            return quizIdFuture.get()
+        } catch (e: Exception) {
+            Log.e("insertQuiz1", "error")
+        }
+        return -2
     }
 
     fun addWords(quizId: Long, wordItems: List<WordItem>) {
@@ -47,9 +58,7 @@ class QuizViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun insertQuizPinyins(quizPinyins: List<QuizPinyin?>) {
-        for (quizPinyin in quizPinyins) {
-            mRepository.insertQuizPinyin(quizPinyin)
-        }
+    fun insertQuizPinyin(quizPinyin: QuizPinyin) {
+        mRepository.insertQuizPinyin(quizPinyin)
     }
 }

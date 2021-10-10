@@ -29,6 +29,15 @@ public class Quiz {
     }
 
     @Ignore
+    public Quiz(@NonNull Integer date, int totalWords) {
+        this.date = date;
+        title = "No title";
+        this.totalWords = totalWords;
+        notLearned = totalWords;
+        round = 1;
+    }
+
+    @Ignore
     public Quiz(long id, @NonNull Integer date, String title,
                 int totalWords, int notLearned, int round) {
         this.id = id;

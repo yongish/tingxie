@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.ui.hsk.buttons.HskButtonsFragment.Companion.EXTRA_LEVEL
+import com.zhiyong.tingxie.ui.main.QuizViewModel
 import xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScroller
 
 class HskWordsFragment : Fragment() {
@@ -19,6 +20,7 @@ class HskWordsFragment : Fragment() {
   }
 
   private lateinit var viewModel: HskWordsViewModel
+  private lateinit var quizViewModel: QuizViewModel
   private lateinit var recyclerView: RecyclerView
 
   override fun onCreateView(
@@ -34,12 +36,16 @@ class HskWordsFragment : Fragment() {
     val level = requireActivity().intent.getIntExtra(EXTRA_LEVEL, 0)
 
     viewModel = ViewModelProvider(this).get(HskWordsViewModel::class.java)
+    quizViewModel = ViewModelProvider(this).get(QuizViewModel::class.java)
 
     recyclerView = requireActivity().findViewById(R.id.recyclerview_hsk_words)
-    val adapter = HskWordsAdapter(requireContext())
+    val adapter = HskWordsAdapter(requireActivity(), viewModel, quizViewModel)
     recyclerView.adapter = adapter
     recyclerView.layoutManager = LinearLayoutManager(requireActivity())
     adapter.setWordItems(viewModel.getHsk(level))
+
+    // need to set quizzes too, because the adapter needs the quizzes for the add to quiz buttons.
+    quizViewModel.allQuizItems.observe(requireActivity()) { adapter.setQuizItems(it) }
 
     val fastScroller: VerticalRecyclerViewFastScroller = requireActivity().findViewById(R.id.fast_scroller)
     fastScroller.setRecyclerView(recyclerView);

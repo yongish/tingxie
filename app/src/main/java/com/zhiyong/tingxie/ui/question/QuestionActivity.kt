@@ -41,14 +41,6 @@ class QuestionActivity: AppCompatActivity() {
   private lateinit var questionViewModel: HskWordsViewModel
   private lateinit var mQuestionViewModel: QuestionViewModel
 
-  private fun speak(hanzi: String) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      textToSpeech.speak(hanzi, TextToSpeech.QUEUE_FLUSH,null,null)
-    } else {
-      textToSpeech.speak(hanzi, TextToSpeech.QUEUE_FLUSH, null)
-    }
-  }
-
   private fun initializeCommonComponents(
     hanzi: String, pinyin: String, numUnasked: Int, numTotal: Int?
   ) {
@@ -62,11 +54,11 @@ class QuestionActivity: AppCompatActivity() {
       if (status != TextToSpeech.ERROR) {
         //if there is no error then set language
         textToSpeech.language = Locale.SIMPLIFIED_CHINESE
-        speak(hanzi)
+        speak(textToSpeech, hanzi)
       }
     }
     ivPlay = findViewById(R.id.ivPlay)
-    ivPlay.setOnClickListener { speak(hanzi) }
+    ivPlay.setOnClickListener { speak(textToSpeech, hanzi) }
 
     tvQuestionPinyin = findViewById(R.id.tvQuestionPinyin)
     tvQuestionPinyin.text = pinyin
@@ -208,5 +200,13 @@ class QuestionActivity: AppCompatActivity() {
     const val EXTRA_REMAINING_QUESTION_COUNT =
       "com.zhiyong.tingxie.ui.question.extra.REMAINING_QUESTION_COUNT"
     const val EXTRA_BYTE_ARRAY = "com.zhiyong.tingxie.ui.question.extra.BYTE_ARRAY"
+
+    fun speak(textToSpeech: TextToSpeech, hanzi: String) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        textToSpeech.speak(hanzi, TextToSpeech.QUEUE_FLUSH,null,null)
+      } else {
+        textToSpeech.speak(hanzi, TextToSpeech.QUEUE_FLUSH, null)
+      }
+    }
   }
 }

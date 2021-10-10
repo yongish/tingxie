@@ -8,15 +8,16 @@ import com.zhiyong.tingxie.ui.hsk.words.HskWordsAdapter
 import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.ui.word.WordItem
 import org.json.JSONArray
+import java.util.concurrent.Callable
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import java.util.concurrent.Future
 
 
 /* A Repository is a class that abstracts access to multiple data sources.
 A Repository manages query threads and allows you to use multiple backends.
 In the most common example, the Repository implements the logic for deciding whether to fetch data
 from a network or use results cached in the local database. */
-//class QuizRepository (database: PinyinRoomDatabase, quizId: Long, context: Context) {
 class QuizRepository (quizId: Long, val context: Context) {
     private val executor: ExecutorService = Executors.newSingleThreadExecutor()
 
@@ -60,7 +61,6 @@ class QuizRepository (quizId: Long, val context: Context) {
         val sharedPreferences = context.getSharedPreferences("hsk", Context.MODE_PRIVATE)
         val askedIds = HashSet(sharedPreferences.getStringSet("askedHskIds", setOf())!!.map { id -> id.toInt() })
         unaskedIds.removeAll(askedIds)
-//        return wordList.filter { it.index in unaskedIds }.random()
         return wordList.filter { it.index in unaskedIds }
     }
 
@@ -88,9 +88,13 @@ class QuizRepository (quizId: Long, val context: Context) {
         editor.apply()
     }
 
-    fun insertQuiz(quiz: Quiz?) = mQuizDao.insert(quiz)
+    fun insertQuiz(quiz: Quiz?): Long = mQuizDao.insert(quiz)
 
-    fun deleteQuizPinyins(quizId: Long) = mQuizDao.deleteQuizPinyins(quizId)
+    fun insertQuiz1(quiz: Quiz?): Future<Long> = executor.submit(Callable {
+        mQuizDao.insert(quiz)
+    })
+
+  fun deleteQuizPinyins(quizId: Long) = mQuizDao.deleteQuizPinyins(quizId)
 
     fun updateQuiz(quiz: Quiz?) = executor.execute {
         mQuizDao.update(quiz)
