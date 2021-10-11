@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.db.Question.QuestionBuilder
+import com.zhiyong.tingxie.db.Quiz
 import com.zhiyong.tingxie.ui.hsk.buttons.HskButtonsFragment.Companion.EXTRA_LEVEL
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsViewModel
 import com.zhiyong.tingxie.ui.main.MainActivity
@@ -128,12 +129,14 @@ class AnswerActivity: AppCompatActivity() {
         mAnswerViewModel.onAnswer(question, WordItem(
           quizItem.id, wordsString, pinyinString, true
         ))
-        quizItem.notLearned = quizItem.notLearned - 1
         // Go to Completed Alert Dialog or QuestionActivity.
         // Was this the last word in current round?
         Log.d("REMAINING_QN", remainingCount.toString())
         handleCorrect(remainingCount, intentQuestion, quizItem = quizItem)
-        mAnswerViewModel.updateQuiz(quizItem)
+        mAnswerViewModel.updateQuiz(Quiz(
+          quizItem.id, quizItem.date, quizItem.title,
+          quizItem.totalWords, quizItem.notLearned - 1, quizItem.round
+        ))
       }
       btnAnswerWrong.setOnClickListener { v: View? ->
         // Insert new question with boolean wrong.

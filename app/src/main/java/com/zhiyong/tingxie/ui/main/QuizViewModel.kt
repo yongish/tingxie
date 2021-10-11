@@ -2,19 +2,17 @@ package com.zhiyong.tingxie.ui.main
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import com.zhiyong.tingxie.QuizRepository
 import com.zhiyong.tingxie.db.Question
 import com.zhiyong.tingxie.db.Quiz
 import com.zhiyong.tingxie.db.QuizPinyin
 import com.zhiyong.tingxie.ui.word.WordItem
+import com.zhiyong.tingxie.viewmodel.UpdateQuizViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class QuizViewModel(application: Application) : AndroidViewModel(application) {
-    private val mRepository: QuizRepository = QuizRepository(-1, application)
+class QuizViewModel(application: Application) : UpdateQuizViewModel(application) {
     val allQuizItems: LiveData<List<QuizItem>> = mRepository.allQuizItems
     val allQuizPinyins: LiveData<List<QuizPinyin>> = mRepository.allQuizPinyins
     val allQuestions: LiveData<List<Question>> = mRepository.allQuestions
@@ -39,10 +37,6 @@ class QuizViewModel(application: Application) : AndroidViewModel(application) {
         for (wordItem in wordItems) {
             mRepository.addWord(quizId, wordItem.wordString, wordItem.pinyinString)
         }
-    }
-
-    fun updateQuiz(quiz: Quiz?) {
-        mRepository.updateQuiz(quiz)
     }
 
     fun deleteQuiz(quizId: Long) {
