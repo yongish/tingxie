@@ -73,7 +73,7 @@ public interface QuizDao {
     LiveData<List<WordItem>> getWordItemsOfQuiz(long quizId);
 
     @Query("SELECT id, date, title, total_words AS totalWords, not_learned AS notLearned, round " +
-            "FROM quiz ORDER BY date")
+            "FROM quiz ORDER BY date DESC")
     LiveData<List<QuizItem>> getAllQuizItems();
 
     @Query("SELECT id, date, title, total_words AS totalWords, not_learned AS notLearned, round " +

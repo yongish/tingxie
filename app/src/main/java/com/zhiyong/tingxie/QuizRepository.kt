@@ -90,11 +90,11 @@ class QuizRepository (quizId: Long, val context: Context) {
 
     fun insertQuiz(quiz: Quiz?): Long = mQuizDao.insert(quiz)
 
-    fun insertQuiz1(quiz: Quiz?): Future<Long> = executor.submit(Callable {
+    fun insertQuizFuture(quiz: Quiz?): Future<Long> = executor.submit(Callable {
         mQuizDao.insert(quiz)
     })
 
-  fun deleteQuizPinyins(quizId: Long) = mQuizDao.deleteQuizPinyins(quizId)
+    fun deleteQuizPinyins(quizId: Long) = mQuizDao.deleteQuizPinyins(quizId)
 
     fun updateQuiz(quiz: Quiz?) = executor.execute {
         mQuizDao.update(quiz)

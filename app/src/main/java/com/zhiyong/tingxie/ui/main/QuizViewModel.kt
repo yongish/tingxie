@@ -26,7 +26,7 @@ class QuizViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun insertQuizFuture(quiz: Quiz?): Long {
-        val quizIdFuture = mRepository.insertQuiz1(quiz)
+        val quizIdFuture = mRepository.insertQuizFuture(quiz)
         try {
             return quizIdFuture.get()
         } catch (e: Exception) {

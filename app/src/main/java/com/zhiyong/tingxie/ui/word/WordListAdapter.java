@@ -114,6 +114,9 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
                         mWordItems.add(adapterPosition, wordItem);
                         notifyItemInserted(adapterPosition);
                         viewModel.addQuizPinyin(quizPinyin);
+
+                        // todo: Check if there is a bug here. May need viewModel.updateQuiz(quizItem)
+
                         recyclerView.scrollToPosition(adapterPosition);
                     }
                 });
@@ -121,6 +124,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         mWordItems.remove(adapterPosition);
         viewModel.deleteWord(quizPinyin);
         int totalWords = quizItem.getTotalWords() - 1;
+        // todo: Check if there is a bug. May need a copy of quizItem.
         quizItem.setTotalWords(totalWords);
         quizItem.setNotLearned(totalWords);
         quizItem.setRound(1);

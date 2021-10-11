@@ -78,10 +78,10 @@ public class RecyclerViewTest {
         addQuiz(2019, 2, 28);
         onView(withId(R.id.recyclerview_main))
                 .check(matches(atPosition(0, hasDescendant(withText(containsString(
-                        "28 Feb 2019"))))));
+                        "01 Mar 2019"))))));
         onView(withId(R.id.recyclerview_main))
                 .check(matches(atPosition(1, hasDescendant(withText(containsString(
-                        "01 Mar 2019"))))));
+                        "28 Feb 2019"))))));
         removeQuiz(0);
         removeQuiz(0);
     }
@@ -93,10 +93,10 @@ public class RecyclerViewTest {
 
         onView(withId(R.id.recyclerview_main))
                 .check(matches(atPosition(0, hasDescendant(withText(containsString(
-                        "01 Mar 2019"))))));
+                        "02 Mar 2019"))))));
         onView(withId(R.id.recyclerview_main))
                 .check(matches(atPosition(1, hasDescendant(withText(containsString(
-                        "02 Mar 2019"))))));
+                        "01 Mar 2019"))))));
         onView(withId(R.id.recyclerview_main)).perform(
                 RecyclerViewActions.actionOnItemAtPosition(
                         0, MyViewAction.clickChildViewWithId(R.id.ivEditDate)
@@ -109,10 +109,10 @@ public class RecyclerViewTest {
 
         onView(withId(R.id.recyclerview_main))
                 .check(matches(atPosition(0, hasDescendant(withText(containsString(
-                        "02 Mar 2019"))))));
+                        "02 Apr 2019"))))));
         onView(withId(R.id.recyclerview_main))
                 .check(matches(atPosition(1, hasDescendant(withText(containsString(
-                        "02 Apr 2019"))))));
+                        "01 Mar 2019"))))));
 
         removeQuiz(0);
         removeQuiz(0);

@@ -12,7 +12,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.lifecycle.LifecycleOwner
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.db.Quiz
@@ -56,13 +56,11 @@ class HskWordsAdapter(
     holder.ibAdd.setOnClickListener {
       when (quizItems.size) {
         0 -> {
-          Log.i("numQuizItems", "000000000000000")
+          Log.i("numQuizItems", "0")
           val sdf = SimpleDateFormat("yyyymmdd")
           val currentDate = sdf.format(Date())
-          // todo: Specifying totalWords in quiz is a hack.
-          // Should first check the return value of insertQuizPinyin, then update the quizItem.
           val quizId = quizViewModel.insertQuizFuture(
-            Quiz(Integer.valueOf(currentDate), 1)
+            Quiz(Integer.valueOf(currentDate))
           )
           quizViewModel.insertQuizPinyin(
             QuizPinyin(quizId, wordItem.pinyin, word, false)
@@ -70,62 +68,39 @@ class HskWordsAdapter(
           Toast.makeText(context, "Added to a new quiz", Toast.LENGTH_SHORT).show()
         }
         1 -> {
-          Log.i("numQuizItems", "111111111111111")
+          Log.i("numQuizItems", "1")
+          quizViewModel.insertQuizPinyin(
+            QuizPinyin(quizItems[0].id, wordItem.pinyin, word, false)
+          )
+          Toast.makeText(context, "Added to your quiz", Toast.LENGTH_SHORT).show()
         }
         else -> {
-          Log.i("numQuizItems", "more")
+          Log.i("numQuizItems", ">1")
+          val b: AlertDialog.Builder = AlertDialog.Builder(context)
+          b.setTitle("Select a quiz to add this word to.")
+          val quizItemStrings: Array<String> = quizItems.map {
+              quizItem -> "${quizItem.date} | ${quizItem.title}"
+          }.toTypedArray()
+          b.setItems(quizItemStrings) { dialog, which ->
+            dialog.dismiss()
+            val updatedQuizItem = quizItems[which]
+            quizViewModel.insertQuizPinyin(
+              QuizPinyin(updatedQuizItem.id, wordItem.pinyin, word, false)
+            )
+            quizViewModel.updateQuiz(Quiz(
+              updatedQuizItem.id,
+              updatedQuizItem.date,
+              updatedQuizItem.title,
+              updatedQuizItem.totalWords + 1,
+              updatedQuizItem.totalWords + 1,
+              1
+            ))
+            Toast.makeText(context, "Added to selected quiz", Toast.LENGTH_SHORT).show()
+          }
+          b.show()
         }
       }
     }
-
-//      viewModel.allQuizItems.observe(lifecycleOwner, { Log.i("PL", "placeholder") })
-//      viewModel.addHskWordToQuiz(mWordItems[position]) {
-//        if (it) {
-//          Toast.makeText(context, "Added to a new quiz", Toast.LENGTH_SHORT).show()
-//        } else {
-//          val b: AlertDialog.Builder = AlertDialog.Builder(context)
-//          b.setTitle("Select a quiz to add this word to.")
-//          val quizItems = viewModel.allQuizItems.value
-//          if (quizItems == null) {
-//            Log.e("HskWordsAdapter", "quizItems should not be null.")
-//          } else {
-//            val quizItemStrings: Array<String> = quizItems.map { quizItem -> "${quizItem.date}|${quizItem.title}" }.toTypedArray()
-//            b.setItems(quizItemStrings) { dialog, which ->
-//              dialog.dismiss()
-//              val pair = Pair(
-//                quizItemStrings[which].substringBefore('|').trim(),
-//                quizItemStrings[which].substringAfter('|').trim()
-//              )
-//            }
-//            b.show()
-//          }
-//        }
-//      }
-//      notifyDataSetChanged()
-//      val addedNewQuiz = viewModel.addHskWordToQuiz(mWordItems[position])
-//      if (addedNewQuiz) {
-//        Toast.makeText(context, "Added to a new quiz", Toast.LENGTH_SHORT).show()
-//      } else {
-//        // todo: stopped here. Next step is to ask the user to select an existing quiz.
-//          // Use a spinner dialog.
-//        val b: AlertDialog.Builder = AlertDialog.Builder(context)
-//        b.setTitle("Select a quiz to add this word to.")
-//        val quizItems = viewModel.allQuizItems.value
-//        if (quizItems == null) {
-//          Log.e("HskWordsAdapter", "quizItems should not be null.")
-//        } else {
-//          val quizItemStrings: Array<String> = quizItems.map { quizItem -> "${quizItem.date}|${quizItem.title}" }.toTypedArray()
-//          b.setItems(quizItemStrings) { dialog, which ->
-//            dialog.dismiss()
-//            val pair = Pair(
-//              quizItemStrings[which].substringBefore('|').trim(),
-//              quizItemStrings[which].substringAfter('|').trim()
-//            )
-//          }
-//          b.show()
-//        }
-//      }
-//    }
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
