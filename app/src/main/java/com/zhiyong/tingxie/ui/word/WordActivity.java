@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.zhiyong.tingxie.R;
+import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.ui.main.MainActivity;
 import com.zhiyong.tingxie.ui.main.QuizItem;
 
@@ -154,8 +155,12 @@ public class WordActivity extends AppCompatActivity {
                                         quizItem.setTotalWords(totalWords);
                                         quizItem.setNotLearned(totalWords);
                                         quizItem.setRound(1);
-
-                                        mWordViewModel.updateQuiz(quizItem);
+                                        mWordViewModel.updateQuiz(new Quiz(quizItem.getId(), quizItem.getDate(), quizItem.getTitle(), quizItem.getTotalWords(), quizItem.getNotLearned(), quizItem.getRound()));
+                                        // 10/10/21. Using this line and removing the
+                                        // quizItem.set... calls above cause the word to
+                                        // not be added. I don't know why. Seems to work
+                                        // in Kotlin.
+//                                        mWordViewModel.updateQuiz(new Quiz(quizItem.getId(), quizItem.getDate(), quizItem.getTitle(), totalWords, totalWords, 1));
                                     } else {
                                         Toast.makeText(WordActivity.this,
                                                 "ERROR in pinyin lookup",

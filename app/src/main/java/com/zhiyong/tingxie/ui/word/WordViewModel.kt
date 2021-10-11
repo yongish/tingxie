@@ -29,15 +29,8 @@ internal class WordViewModel(application: Application, quizId: Long) : AndroidVi
         mRepository.updateQuestions(quizId)
     }
 
-    fun updateQuiz(quizItem: QuizItem) {
-        mRepository.updateQuiz(Quiz(
-                quizItem.id,
-                quizItem.date,
-                quizItem.title,
-                quizItem.totalWords,
-                quizItem.notLearned,
-                quizItem.round
-        ))
+    fun updateQuiz(quiz: Quiz) {
+        mRepository.updateQuiz(quiz)
     }
 
     init {

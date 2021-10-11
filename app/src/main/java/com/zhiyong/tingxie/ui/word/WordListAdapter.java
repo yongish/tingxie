@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zhiyong.tingxie.R;
+import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.ui.main.QuizItem;
 
@@ -128,7 +129,10 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         quizItem.setTotalWords(totalWords);
         quizItem.setNotLearned(totalWords);
         quizItem.setRound(1);
-        viewModel.updateQuiz(quizItem);
+        viewModel.updateQuiz(new Quiz(
+                quizItem.getId(), quizItem.getDate(), quizItem.getTitle(),
+                quizItem.getTotalWords(), quizItem.getNotLearned(), quizItem.getRound()
+        ));
         notifyItemRemoved(adapterPosition);
     }
 
