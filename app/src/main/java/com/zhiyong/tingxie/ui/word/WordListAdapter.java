@@ -107,6 +107,10 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         final QuizPinyin quizPinyin = new QuizPinyin(wordItem.getQuizId(),
                 wordItem.getPinyinString(), wordItem.getWordString(), wordItem.isAsked());
 
+        final Quiz quizCopy = new Quiz(
+                quizItem.getId(), quizItem.getDate(), quizItem.getTitle(),
+                quizItem.getTotalWords(), quizItem.getNotLearned(), quizItem.getRound()
+        );
         Snackbar snackbar = Snackbar
                 .make(recyclerView, "Removed word", Snackbar.LENGTH_LONG)
                 .setAction("Undo", new View.OnClickListener() {
@@ -115,9 +119,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
                         mWordItems.add(adapterPosition, wordItem);
                         notifyItemInserted(adapterPosition);
                         viewModel.addQuizPinyin(quizPinyin);
-
-                        // todo: Check if there is a bug here. May need viewModel.updateQuiz(quizItem)
-
+                        viewModel.updateQuiz(quizCopy);
                         recyclerView.scrollToPosition(adapterPosition);
                     }
                 });
@@ -125,7 +127,6 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         mWordItems.remove(adapterPosition);
         viewModel.deleteWord(quizPinyin);
         int totalWords = quizItem.getTotalWords() - 1;
-        // todo: Check if there is a bug. May need a copy of quizItem.
         quizItem.setTotalWords(totalWords);
         quizItem.setNotLearned(totalWords);
         quizItem.setRound(1);
