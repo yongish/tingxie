@@ -170,13 +170,11 @@ public class WordActivity extends AppCompatActivity {
                                     }
                                 }
                             })
-                    .setNegativeButton(R.string.cancel,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.cancel();
-                                }
-                            }).create();
+                    .setNegativeButton(R.string.cancel, (d, which) -> d.cancel())
+                    .setNeutralButton("Use camera", (d, which) -> {
+                        Toast.makeText(WordActivity.this, "HHHH", Toast.LENGTH_LONG).show();
+                    })
+                    .create();
             Objects.requireNonNull(dialog.getWindow()).setSoftInputMode(
                     WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
             );
