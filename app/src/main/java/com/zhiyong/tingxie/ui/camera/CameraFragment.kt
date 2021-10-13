@@ -40,7 +40,7 @@ class CameraFragment : Fragment() {
   private var imageCapture: ImageCapture? = null
   private lateinit var outputDirectory: File
   private lateinit var cameraExecutor: ExecutorService
-  private lateinit var camera_capture_button: Button
+  private lateinit var btnCapture: Button
   private lateinit var viewFinder: PreviewView
 
   private lateinit var viewModel: CameraViewModel
@@ -56,8 +56,8 @@ class CameraFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
 
     // Set up the listener for take photo button
-    camera_capture_button = requireActivity().findViewById(R.id.camera_capture_button)
-    camera_capture_button.setOnClickListener { takePhoto() }
+    btnCapture = requireActivity().findViewById(R.id.camera_capture_button)
+    btnCapture.setOnClickListener { takePhoto() }
 
     viewFinder = requireActivity().findViewById(R.id.viewFinder)
 
