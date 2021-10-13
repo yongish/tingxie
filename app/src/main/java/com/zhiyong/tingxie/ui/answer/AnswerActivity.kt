@@ -138,7 +138,7 @@ class AnswerActivity: AppCompatActivity() {
           quizItem.totalWords, quizItem.notLearned - 1, quizItem.round
         ))
       }
-      btnAnswerWrong.setOnClickListener { v: View? ->
+      btnAnswerWrong.setOnClickListener {
         // Insert new question with boolean wrong.
         val question = questionBuilder.correct(false).build()
         mAnswerViewModel.onAnswer(question, WordItem(
