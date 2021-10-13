@@ -74,7 +74,7 @@
     <string name="erase">Erase</string>
     <string name="index">%d.\u0020</string>
     <string name="hsk_levels">HSK levels</string>
-<!-- TODO: Remove or change this placeholder text -->
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="no_pinyin">No pinyin</string>
     <string name="no_word">No Word</string>
