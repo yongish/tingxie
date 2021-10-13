@@ -17,10 +17,10 @@ import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.zhiyong.tingxie.R
-import kotlinx.android.synthetic.main.camera_fragment.*
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -41,6 +41,7 @@ class CameraFragment : Fragment() {
   private lateinit var outputDirectory: File
   private lateinit var cameraExecutor: ExecutorService
   private lateinit var camera_capture_button: Button
+  private lateinit var viewFinder: PreviewView
 
   private lateinit var viewModel: CameraViewModel
 
@@ -57,6 +58,8 @@ class CameraFragment : Fragment() {
     // Set up the listener for take photo button
     camera_capture_button = requireActivity().findViewById(R.id.camera_capture_button)
     camera_capture_button.setOnClickListener { takePhoto() }
+
+    viewFinder = requireActivity().findViewById(R.id.viewFinder)
 
 //    outputDirectory = getOutputDirectory()
 
