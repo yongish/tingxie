@@ -72,6 +72,9 @@ class CameraFragment : Fragment() {
       ActivityCompat.requestPermissions(
         requireActivity(), REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
     }
+
+    viewModel = ViewModelProvider(this).get(CameraViewModel::class.java)
+    // TODO: Use the ViewModel
   }
 
   private fun takePhoto() {
@@ -154,11 +157,4 @@ class CameraFragment : Fragment() {
 //    return if (mediaDir != null && mediaDir.exists())
 //      mediaDir else filesDir
 //  }
-
-  override fun onActivityCreated(savedInstanceState: Bundle?) {
-    super.onActivityCreated(savedInstanceState)
-    viewModel = ViewModelProvider(this).get(CameraViewModel::class.java)
-    // TODO: Use the ViewModel
-  }
-
 }
