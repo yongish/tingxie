@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.db.Quiz;
+import com.zhiyong.tingxie.ui.camera.CameraActivity;
 import com.zhiyong.tingxie.ui.main.MainActivity;
 import com.zhiyong.tingxie.ui.main.QuizItem;
 
@@ -171,9 +172,9 @@ public class WordActivity extends AppCompatActivity {
                                 }
                             })
                     .setNegativeButton(R.string.cancel, (d, which) -> d.cancel())
-                    .setNeutralButton("Use camera", (d, which) -> {
-                        Toast.makeText(WordActivity.this, "HHHH", Toast.LENGTH_LONG).show();
-                    })
+                    .setNeutralButton("Use camera", (d, which) -> startActivity(
+                            new Intent(this, CameraActivity.class)
+                    ))
                     .create();
             Objects.requireNonNull(dialog.getWindow()).setSoftInputMode(
                     WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
