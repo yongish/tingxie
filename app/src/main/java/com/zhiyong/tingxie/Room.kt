@@ -8,7 +8,7 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.zhiyong.tingxie.db.*
 
-@Database(entities = [Question::class, Quiz::class, Word::class, QuizPinyin::class], version = 6)
+@Database(entities = [Question::class, Quiz::class, Word::class, QuizPinyin::class], version = 7)
 abstract class PinyinRoomDatabase : RoomDatabase() {
     fun pinyinDao(): QuizDao {
         return pinyinDao;
@@ -27,7 +27,7 @@ fun getDatabase(context: Context): PinyinRoomDatabase {
                     PinyinRoomDatabase::class.java, "pinyin_database")
                     .addMigrations(
                         MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5,
-                        MIGRATION_5_6
+                        MIGRATION_5_6, MIGRATION_6_7
                     )
                     .build()
         }
@@ -127,4 +127,14 @@ val MIGRATION_5_6: Migration = object : Migration(5, 6) {
         database.execSQL("CREATE INDEX index_quiz_pinyin_quiz_id ON quiz_pinyin(quiz_id)")
         database.execSQL("CREATE INDEX index_quiz_pinyin_pinyin_string ON quiz_pinyin(pinyin_string)")
     }
+}
+val MIGRATION_6_7: Migration = object : Migration(6, 7) {
+  override fun migrate(database: SupportSQLiteDatabase) {
+    // stopped here. fixing the INT vs INTEGER error, also nonnull false when expecting true.
+    database.execSQL("CREATE TABLE quiz_temp (id INTEGER NOT NULL PRIMARY KEY, date INTEGER NOT NULL, title TEXT NOT NULL, total_words INTEGER NOT NULL, not_learned INTEGER NOT NULL, round INTEGER NOT NULL)")
+    database.execSQL("INSERT INTO quiz_temp SELECT * FROM quiz")
+    database.execSQL("DROP TABLE quiz")
+    database.execSQL("ALTER TABLE quiz_temp RENAME TO quiz")
+    database.execSQL("CREATE INDEX index_Quiz_id ON quiz(id)")
+  }
 }
