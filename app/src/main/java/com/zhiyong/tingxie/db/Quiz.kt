@@ -4,45 +4,17 @@ import androidx.annotation.NonNull
 import androidx.room.*
 
 @Entity(indices = [Index("id")])
-class Quiz {
+data class Quiz (
   @PrimaryKey(autoGenerate = true)
   @ColumnInfo(name = "id")
   @NonNull
-  var id: Long = 0
-  @NonNull
-  var date: Int
-  @NonNull
-  var title: String
-
-  @ColumnInfo(name = "total_words")
-  @NonNull
-  var totalWords // todo: need to update these values.
-          : Int
-
-  @ColumnInfo(name = "not_learned")
-  @NonNull
-  var notLearned: Int
-  @NonNull
-  var round: Int
-
-  constructor(date: Int) {
-    this.date = date
-    title = "No title"
-    totalWords = 0
-    notLearned = 0
-    round = 1
-  }
-
-  @Ignore
-  constructor(
-    id: Long, date: Int, title: String,
-    totalWords: Int, notLearned: Int, round: Int
+  var id: Long,
+  @NonNull val date: Int,
+  @NonNull val title: String = "No title",
+  @ColumnInfo(name = "total_words") @NonNull val totalWords: Int = 0,
+  @ColumnInfo(name = "not_learned") @NonNull val notLearned: Int = 0,
+  @NonNull val round: Int = 1
   ) {
-    this.id = id
-    this.date = date
-    this.title = title
-    this.totalWords = totalWords
-    this.notLearned = notLearned
-    this.round = round
-  }
+  @Ignore
+  constructor(date: Int) : this(0, date)
 }
