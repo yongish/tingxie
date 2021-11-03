@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 7,
-    "identityHash": "ac1ce315ab0a2c5d91e1145576c2b1a3",
+    "identityHash": "e5e16aaf3f344d2cbfb9b084e814f464",
     "entities": [
       {
         "tableName": "Question",
@@ -77,7 +77,7 @@
       },
       {
         "tableName": "Quiz",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` INTEGER NOT NULL, `title` TEXT, `total_words` INTEGER NOT NULL, `not_learned` INTEGER NOT NULL, `round` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` INTEGER NOT NULL, `title` TEXT NOT NULL, `total_words` INTEGER NOT NULL, `not_learned` INTEGER NOT NULL, `round` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -95,7 +95,7 @@
             "fieldPath": "title",
             "columnName": "title",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "totalWords",
@@ -229,56 +229,12 @@
           }
         ],
         "foreignKeys": []
-      },
-      {
-        "tableName": "hsk",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `asked` INTEGER NOT NULL, `level` INTEGER NOT NULL, `hanzi` TEXT NOT NULL, `pinyin` TEXT NOT NULL, PRIMARY KEY(`id`))",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "asked",
-            "columnName": "asked",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "level",
-            "columnName": "level",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "hanzi",
-            "columnName": "hanzi",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "pinyin",
-            "columnName": "pinyin",
-            "affinity": "TEXT",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "id"
-          ],
-          "autoGenerate": false
-        },
-        "indices": [],
-        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ac1ce315ab0a2c5d91e1145576c2b1a3')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e5e16aaf3f344d2cbfb9b084e814f464')"
     ]
   }
 }
