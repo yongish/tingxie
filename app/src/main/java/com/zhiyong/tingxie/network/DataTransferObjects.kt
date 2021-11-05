@@ -6,6 +6,7 @@ import com.zhiyong.tingxie.db.Quiz
 @JsonClass(generateAdapter = true)
 data class NetworkQuizContainer(val quizzes: List<NetworkQuiz>)
 
+@JsonClass(generateAdapter = true)
 data class NetworkQuiz(val id: Long,
                        val date: Int,
                        val title: String,
