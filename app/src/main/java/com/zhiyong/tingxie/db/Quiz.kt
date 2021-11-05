@@ -2,7 +2,7 @@ package com.zhiyong.tingxie.db
 
 import androidx.annotation.NonNull
 import androidx.room.*
-import com.zhiyong.tingxie.domain.TingXieQuiz
+import com.zhiyong.tingxie.ui.main.QuizItem
 
 @Entity(indices = [Index("id")])
 data class Quiz (
@@ -20,9 +20,9 @@ data class Quiz (
   constructor(date: Int) : this(0, date)
 }
 
-fun List<Quiz>.asDomainModel(): List<TingXieQuiz> {
+fun List<Quiz>.asDomainModel(): List<QuizItem> {
   return map {
-    TingXieQuiz(
+    QuizItem(
       id = it.id,
       date = it.date,
       title = it.title,

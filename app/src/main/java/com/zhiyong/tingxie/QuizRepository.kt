@@ -5,11 +5,10 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.zhiyong.tingxie.db.*
-import com.zhiyong.tingxie.domain.TingXieQuiz
+import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.network.TingXieNetwork
 import com.zhiyong.tingxie.network.asDatabaseModel
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsAdapter
-import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.ui.word.WordItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -29,7 +28,7 @@ class QuizRepository(val context: Context) {
     // todo: val database: PinyinRoomDatabase instead of val context: Context.
     private val executor: ExecutorService = Executors.newSingleThreadExecutor()
 
-    val quizzes: LiveData<List<TingXieQuiz>> = Transformations.map(getDatabase(context).pinyinDao.allQuizItems1) {
+    val quizzes: LiveData<List<QuizItem>> = Transformations.map(getDatabase(context).pinyinDao.allQuizItems1) {
         it.asDomainModel()
     }
 
