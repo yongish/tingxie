@@ -6,7 +6,7 @@ import com.zhiyong.tingxie.QuizRepository
 import com.zhiyong.tingxie.db.Quiz
 
 open class UpdateQuizViewModel(application: Application) : AndroidViewModel(application) {
-  val mRepository: QuizRepository = QuizRepository(-1, application)
+  val mRepository: QuizRepository = QuizRepository(application)
 
   fun updateQuiz(quiz: Quiz?) = mRepository.updateQuiz(quiz)
 }

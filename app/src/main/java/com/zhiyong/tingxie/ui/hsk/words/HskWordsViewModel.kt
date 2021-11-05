@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import com.zhiyong.tingxie.QuizRepository
 
 class HskWordsViewModel(application: Application) : AndroidViewModel(application) {
-  private val repository: QuizRepository = QuizRepository(-1, application)
+  private val repository: QuizRepository = QuizRepository(application)
 
   fun getHsk(level: Int): List<HskWordsAdapter.HskWord> = repository.getHsk(level)
 

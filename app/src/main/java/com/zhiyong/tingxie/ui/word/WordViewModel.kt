@@ -11,7 +11,7 @@ import com.zhiyong.tingxie.ui.main.QuizItem
 internal class WordViewModel(application: Application, quizId: Long) : AndroidViewModel(application) {
     val wordItemsOfQuiz: LiveData<List<WordItem>>
     val quizItem: LiveData<QuizItem>
-    private val mRepository: QuizRepository = QuizRepository(quizId, application)
+    private val mRepository: QuizRepository = QuizRepository(application)
 
     fun addWord(quizId: Long, word: String?, pinyin: String?) {
         mRepository.addWord(quizId, word, pinyin)
@@ -34,7 +34,7 @@ internal class WordViewModel(application: Application, quizId: Long) : AndroidVi
     }
 
     init {
-        wordItemsOfQuiz = mRepository.wordItemsOfQuiz
-        quizItem = mRepository.quizItem
+        wordItemsOfQuiz = mRepository.getWordItemsOfQuiz(quizId)
+        quizItem = mRepository.getQuizItem(quizId)
     }
 }

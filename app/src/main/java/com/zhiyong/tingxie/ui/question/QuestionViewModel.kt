@@ -7,7 +7,6 @@ import com.zhiyong.tingxie.QuizRepository
 import com.zhiyong.tingxie.ui.word.WordItem
 
 class QuestionViewModel(application: Application, quizId: Long) : AndroidViewModel(application) {
-    private val mRepository: QuizRepository = QuizRepository(-1, application)
-//    val remainingQuestions: LiveData<List<WordItem>> = mRepository.remainingQuestionsOfQuiz
+    private val mRepository: QuizRepository = QuizRepository(application)
     val remainingQuestions: LiveData<List<WordItem>> = mRepository.getRemainingQuestions(quizId)
 }

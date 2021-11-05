@@ -18,15 +18,21 @@ import java.util.concurrent.Future
 A Repository manages query threads and allows you to use multiple backends.
 In the most common example, the Repository implements the logic for deciding whether to fetch data
 from a network or use results cached in the local database. */
-class QuizRepository (val quizId: Long, val context: Context) {
+class QuizRepository(val context: Context) {
     private val executor: ExecutorService = Executors.newSingleThreadExecutor()
 
     private val mQuizDao: QuizDao = getDatabase(context).pinyinDao
     val allQuizItems: LiveData<List<QuizItem>> = mQuizDao.allQuizItems
-    val quizItem: LiveData<QuizItem> = mQuizDao.getQuizItem(quizId)
-    val wordItemsOfQuiz: LiveData<List<WordItem>> = mQuizDao.getWordItemsOfQuiz(quizId)
     val allQuizPinyins: LiveData<List<QuizPinyin>> = mQuizDao.allQuizPinyins
     val allQuestions: LiveData<List<Question>> = mQuizDao.allQuestions
+
+    fun getQuizItem(quizId: Long): LiveData<QuizItem> {
+        return mQuizDao.getQuizItem(quizId)
+    }
+
+    fun getWordItemsOfQuiz(quizId: Long): LiveData<List<WordItem>> {
+        return mQuizDao.getWordItemsOfQuiz(quizId)
+    }
 
     fun getRemainingQuestions(quizId: Long): LiveData<List<WordItem>> {
         return mQuizDao.getRemainingQuestions(quizId)
