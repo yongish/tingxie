@@ -4,9 +4,11 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
+import com.zhiyong.tingxie.QuizRepository
 import com.zhiyong.tingxie.db.Question
 import com.zhiyong.tingxie.db.Quiz
 import com.zhiyong.tingxie.db.QuizPinyin
+import com.zhiyong.tingxie.getDatabase
 import com.zhiyong.tingxie.ui.word.WordItem
 import com.zhiyong.tingxie.viewmodel.UpdateQuizViewModel
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +18,19 @@ class QuizViewModel(application: Application) : UpdateQuizViewModel(application)
     val allQuizItems: LiveData<List<QuizItem>> = mRepository.allQuizItems
     val allQuizPinyins: LiveData<List<QuizPinyin>> = mRepository.allQuizPinyins
     val allQuestions: LiveData<List<Question>> = mRepository.allQuestions
+
+    private val videosRepository = QuizRepository(getDatabase(application))
+    init {
+        refreshDataFromRepository()
+    }
+
+    private fun refreshDataFromRepository() {
+        viewModelScope.launch {
+            try {
+
+            }
+        }
+    }
 
     fun insertQuiz(quiz: Quiz?) {
         viewModelScope.launch (Dispatchers.IO) {

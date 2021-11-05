@@ -3,11 +3,18 @@ package com.zhiyong.tingxie
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import com.zhiyong.tingxie.db.*
+import com.zhiyong.tingxie.domain.TingXieQuiz
+import com.zhiyong.tingxie.network.TingXieNetwork
+import com.zhiyong.tingxie.network.asDatabaseModel
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsAdapter
 import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.ui.word.WordItem
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
+import timber.log.Timber
 import java.util.concurrent.Callable
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -19,7 +26,20 @@ A Repository manages query threads and allows you to use multiple backends.
 In the most common example, the Repository implements the logic for deciding whether to fetch data
 from a network or use results cached in the local database. */
 class QuizRepository(val context: Context) {
+    // todo: val database: PinyinRoomDatabase instead of val context: Context.
     private val executor: ExecutorService = Executors.newSingleThreadExecutor()
+
+    val quizzes: LiveData<List<TingXieQuiz>> = Transformations.map(getDatabase(context).pinyinDao.allQuizItems1) {
+        it.asDomainModel()
+    }
+
+    suspend fun refreshQuizzes() {
+        withContext(Dispatchers.IO) {
+            Timber.d("refresh quizzes called")
+            val quizzes = TingXieNetwork.tingxie.getQuizzes()
+            getDatabase(context).pinyinDao.insertAll(quizzes.asDatabaseModel())
+        }
+    }
 
     private val mQuizDao: QuizDao = getDatabase(context).pinyinDao
     val allQuizItems: LiveData<List<QuizItem>> = mQuizDao.allQuizItems
