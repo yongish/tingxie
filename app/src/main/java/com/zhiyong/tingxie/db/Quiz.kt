@@ -23,6 +23,7 @@ data class Quiz (
 fun List<Quiz>.asDomainModel(): List<TingXieQuiz> {
   return map {
     TingXieQuiz(
+      id = it.id,
       date = it.date,
       title = it.title,
       totalWords = it.totalWords,

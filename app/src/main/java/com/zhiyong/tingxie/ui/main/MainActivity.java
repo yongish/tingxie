@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -61,6 +62,10 @@ public class MainActivity extends AppCompatActivity {
                 emptyView.setVisibility(View.INVISIBLE);
             }
         });
+
+//        mQuizViewModel.getQuizzes().observe(this, quizzes -> {
+//            adapter.setQuizItems();
+//        });
 
         /* todo: getAllQuestions() and getAllQuizPinyins() here may be unnecessary.
          */
