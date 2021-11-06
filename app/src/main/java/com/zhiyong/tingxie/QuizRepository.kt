@@ -13,7 +13,6 @@ import com.zhiyong.tingxie.ui.word.WordItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
-import timber.log.Timber
 import java.util.concurrent.Callable
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -28,20 +27,18 @@ class QuizRepository(val context: Context) {
     // todo: val database: PinyinRoomDatabase instead of val context: Context.
     private val executor: ExecutorService = Executors.newSingleThreadExecutor()
 
-    val quizzes: LiveData<List<QuizItem>> = Transformations.map(getDatabase(context).pinyinDao.allQuizItems1) {
+    val quizzes: LiveData<List<QuizItem>> = Transformations.map(getDatabase(context).pinyinDao.allQuizItems) {
         it.asDomainModel()
     }
 
     suspend fun refreshQuizzes() {
         withContext(Dispatchers.IO) {
-            Timber.d("refresh quizzes called")
             val quizzes = TingXieNetwork.tingxie.getQuizzes()
             getDatabase(context).pinyinDao.insertAll(quizzes.asDatabaseModel())
         }
     }
 
     private val mQuizDao: QuizDao = getDatabase(context).pinyinDao
-    val allQuizItems: LiveData<List<QuizItem>> = mQuizDao.allQuizItems
     val allQuizPinyins: LiveData<List<QuizPinyin>> = mQuizDao.allQuizPinyins
     val allQuestions: LiveData<List<Question>> = mQuizDao.allQuestions
 

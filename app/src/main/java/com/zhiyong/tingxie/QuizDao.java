@@ -72,24 +72,12 @@ public interface QuizDao {
 //            "ORDER BY w.pinyin_string")
     LiveData<List<WordItem>> getWordItemsOfQuiz(long quizId);
 
-    @Query("SELECT id, date, title, total_words AS totalWords, not_learned AS notLearned, round " +
-            "FROM quiz ORDER BY date DESC")
-    LiveData<List<QuizItem>> getAllQuizItems();
-
-
-
-
-
     @Query("SELECT id, date, title, total_words, not_learned, round " +
             "FROM quiz ORDER BY date DESC")
-    LiveData<List<Quiz>> getAllQuizItems1();
+    LiveData<List<Quiz>> getAllQuizItems();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<Quiz> quizzes);
-
-
-
-
 
     @Query("SELECT id, date, title, total_words AS totalWords, not_learned AS notLearned, round " +
             "FROM quiz WHERE id = :id")
