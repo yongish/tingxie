@@ -6,13 +6,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -63,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mQuizViewModel.getEventNetworkError().observe(this, isNetworkError -> {
+            if (isNetworkError) onNetworkError();
+        });
 //        mQuizViewModel.getQuizzes().observe(this, quizzes -> {
 //            adapter.setQuizItems();
 //        });
@@ -161,5 +164,12 @@ public class MainActivity extends AppCompatActivity {
                             LoginActivity.class));
                     finish();
                 });
+    }
+
+    private void onNetworkError() {
+        if(!mQuizViewModel.isNetworkErrorShown().getValue()) {
+            Toast.makeText(this, "Network Error", Toast.LENGTH_LONG).show();
+            mQuizViewModel.onNetworkErrorShown();
+        }
     }
 }

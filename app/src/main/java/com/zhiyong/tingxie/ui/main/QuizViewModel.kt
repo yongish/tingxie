@@ -16,15 +16,15 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 class QuizViewModel(application: Application) : UpdateQuizViewModel(application) {
-    val allQuizItems: LiveData<List<QuizItem>> = mRepository.allQuizItems
+    val allQuizItems: LiveData<List<QuizItem>> = mRepository.quizzes
     val allQuizPinyins: LiveData<List<QuizPinyin>> = mRepository.allQuizPinyins
     val allQuestions: LiveData<List<Question>> = mRepository.allQuestions
 
-    private var _eventNetworkError = MutableLiveData<Boolean>(false)
+    private var _eventNetworkError = MutableLiveData(false)
     val eventNetworkError: LiveData<Boolean>
         get() = _eventNetworkError
 
-    private var _isNetworkErrorShown = MutableLiveData<Boolean>(false)
+    private var _isNetworkErrorShown = MutableLiveData(false)
     val isNetworkErrorShown: LiveData<Boolean>
         get() = _isNetworkErrorShown
 
@@ -46,6 +46,10 @@ class QuizViewModel(application: Application) : UpdateQuizViewModel(application)
                 }
             }
         }
+    }
+
+    fun onNetworkErrorShown() {
+        _isNetworkErrorShown.value = true
     }
 
     fun insertQuiz(quiz: Quiz?) {

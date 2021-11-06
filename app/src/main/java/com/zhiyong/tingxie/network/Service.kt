@@ -11,8 +11,7 @@ interface Service {
 
 object TingXieNetwork {
   private val retrofit = Retrofit.Builder()
-//    .baseUrl("https://android-kotlin-fun-mars-server.appspot.com/")
-    .baseUrl("http://localhost:3000/")
+    .baseUrl("http://10.0.2.2:3000/") // todo: Replace with production URL.
     .addConverterFactory(MoshiConverterFactory.create())
     .build()
 
