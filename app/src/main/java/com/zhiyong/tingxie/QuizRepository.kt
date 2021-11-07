@@ -25,20 +25,56 @@ In the most common example, the Repository implements the logic for deciding whe
 from a network or use results cached in the local database. */
 class QuizRepository(val context: Context) {
     // todo: val database: PinyinRoomDatabase instead of val context: Context.
+    private val mQuizDao: QuizDao = getDatabase(context).pinyinDao
+
     private val executor: ExecutorService = Executors.newSingleThreadExecutor()
 
-    val quizzes: LiveData<List<QuizItem>> = Transformations.map(getDatabase(context).pinyinDao.allQuizItems) {
+    val quizzes: LiveData<List<QuizItem>> = Transformations.map(mQuizDao.allQuizItems) {
         it.asDomainModel()
+    }
+
+    private fun syncLocalDeletedRows() {
+
+    }
+
+    private fun syncLocalInsertedRows() {
+
+    }
+
+    private fun syncLocalUpdatedRows() {
+
+    }
+
+    private fun syncRemoteDeletedRows() {
+
+    }
+
+    private fun syncRemoteInsertedRows() {
+
+    }
+
+    private fun syncRemoteUpdatedRows() {
+
     }
 
     suspend fun refreshQuizzes() {
         withContext(Dispatchers.IO) {
+            // Insert quizzes in local DB not in remote DB.
+
+            // status flag. inserted (0), updated (1), deleted (-1).
+            // sync flag. synced (1), unsynced (0).
+
+            // Local rows marked as -1 should be deleted
+
+
+            // Insert quizzes in remote DB not in local DB.
             val quizzes = TingXieNetwork.tingxie.getQuizzes()
-            getDatabase(context).pinyinDao.insertAll(quizzes.asDatabaseModel())
+
+
+            mQuizDao.insertAll(quizzes.asDatabaseModel())
         }
     }
 
-    private val mQuizDao: QuizDao = getDatabase(context).pinyinDao
     val allQuizPinyins: LiveData<List<QuizPinyin>> = mQuizDao.allQuizPinyins
     val allQuestions: LiveData<List<Question>> = mQuizDao.allQuestions
 

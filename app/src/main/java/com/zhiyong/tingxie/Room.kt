@@ -130,9 +130,8 @@ val MIGRATION_5_6: Migration = object : Migration(5, 6) {
 }
 val MIGRATION_6_7: Migration = object : Migration(6, 7) {
   override fun migrate(database: SupportSQLiteDatabase) {
-    // stopped here. fixing the INT vs INTEGER error, also nonnull false when expecting true.
-    database.execSQL("CREATE TABLE quiz_temp (id INTEGER NOT NULL PRIMARY KEY, date INTEGER NOT NULL, title TEXT NOT NULL, total_words INTEGER NOT NULL, not_learned INTEGER NOT NULL, round INTEGER NOT NULL)")
-    database.execSQL("INSERT INTO quiz_temp SELECT * FROM quiz")
+    database.execSQL("CREATE TABLE quiz_temp (id INTEGER NOT NULL PRIMARY KEY, date INTEGER NOT NULL, title TEXT NOT NULL, total_words INTEGER NOT NULL, not_learned INTEGER NOT NULL, round INTEGER NOT NULL, synced INTEGER NOT NULL, status INTEGER NOT NULL)")
+    database.execSQL("INSERT INTO quiz_temp SELECT id, date, title, total_words, not_learned, round, 0, 0 FROM quiz")
     database.execSQL("DROP TABLE quiz")
     database.execSQL("ALTER TABLE quiz_temp RENAME TO quiz")
     database.execSQL("CREATE INDEX index_Quiz_id ON quiz(id)")
