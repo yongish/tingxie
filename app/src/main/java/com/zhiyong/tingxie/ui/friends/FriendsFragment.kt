@@ -7,8 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.recyclerview.widget.RecyclerView
-import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.FriendsFragmentBinding
 
 class FriendsFragment : Fragment() {
@@ -21,14 +19,12 @@ class FriendsFragment : Fragment() {
   private var _binding: FriendsFragmentBinding? = null
   private val binding get() = _binding!!
 
-  private lateinit var recyclerView: RecyclerView
-
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
     _binding = FriendsFragmentBinding.inflate(inflater, container, false)
-    return inflater.inflate(R.layout.friends_fragment, container, false)
+    return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,16 +33,7 @@ class FriendsFragment : Fragment() {
     viewModel = ViewModelProvider(this).get(FriendsViewModel::class.java)
     viewModel.friends.observe(viewLifecycleOwner, { friends ->
       friends?.apply {
-
-//        binding.recyclerviewFriends.adapter = FriendsAdapter(friends)
-        val adapter = FriendsAdapter(friends, requireActivity())
-//        binding.recyclerviewFriends.adapter = adapter
-        recyclerView = requireActivity().findViewById(R.id.recyclerview_friends)
-        recyclerView.adapter = adapter
-
-        adapter.setEmailItems(friends)
-//        adapter.setEmailItems(arrayListOf(TingXieFriend("hhhhhhhh")))
-
+        binding.recyclerviewFriends.adapter = FriendsAdapter(friends)
       }
     })
 

@@ -1,7 +1,10 @@
 package com.zhiyong.tingxie.ui.friends
 
 import android.app.Application
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.zhiyong.tingxie.QuizRepository
 import kotlinx.coroutines.launch
 
