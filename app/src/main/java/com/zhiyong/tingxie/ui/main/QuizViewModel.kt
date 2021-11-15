@@ -28,8 +28,9 @@ class QuizViewModel(application: Application) : UpdateQuizViewModel(application)
     val isNetworkErrorShown: LiveData<Boolean>
         get() = _isNetworkErrorShown
 
-    private val videosRepository = QuizRepository(application)
-    val quizzes = videosRepository.quizzes
+    private val repository = QuizRepository(application)
+    val quizzes = repository.quizzes
+
     init {
         refreshDataFromRepository()
     }
@@ -37,7 +38,7 @@ class QuizViewModel(application: Application) : UpdateQuizViewModel(application)
     private fun refreshDataFromRepository() {
         viewModelScope.launch {
             try {
-                videosRepository.refreshQuizzes()
+                repository.refreshQuizzes()
                 _eventNetworkError.value = false
                 _isNetworkErrorShown.value = false
             } catch (networkError: IOException) {

@@ -22,6 +22,7 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.db.Quiz;
+import com.zhiyong.tingxie.ui.friends.FriendsActivity;
 import com.zhiyong.tingxie.ui.hsk.buttons.HskButtonsActivity;
 import com.zhiyong.tingxie.ui.login.LoginActivity;
 
@@ -120,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openFriends(MenuItem item) {
-//        this.startActivity(new Intent(getApplicationContext(), ))
+        startActivity(new Intent(MainActivity.this, FriendsActivity.class));
     }
 
     public static Intent openSpeechSettingsHelper() {

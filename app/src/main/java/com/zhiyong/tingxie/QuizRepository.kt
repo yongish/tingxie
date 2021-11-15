@@ -5,9 +5,9 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.zhiyong.tingxie.db.*
+import com.zhiyong.tingxie.network.*
+import com.zhiyong.tingxie.ui.friends.TingXieFriend
 import com.zhiyong.tingxie.ui.main.QuizItem
-import com.zhiyong.tingxie.network.TingXieNetwork
-import com.zhiyong.tingxie.network.asDatabaseModel
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsAdapter
 import com.zhiyong.tingxie.ui.word.WordItem
 import kotlinx.coroutines.Dispatchers
@@ -73,6 +73,16 @@ class QuizRepository(val context: Context) {
 
             mQuizDao.insertAll(quizzes.asDatabaseModel())
         }
+    }
+
+    suspend fun getFriends(): List<TingXieFriend> {
+//        return TingXieNetwork.tingxie.getFriends().asDomainModel()
+        try {
+            TingXieNetwork.tingxie.getFriends().asDomainModel()
+        } catch (e: Exception) {
+
+        }
+      return arrayListOf(TingXieFriend("test0@email.com"), TingXieFriend("test1@email.com"))
     }
 
     val allQuizPinyins: LiveData<List<QuizPinyin>> = mQuizDao.allQuizPinyins

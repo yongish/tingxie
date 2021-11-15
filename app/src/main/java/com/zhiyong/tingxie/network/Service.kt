@@ -7,6 +7,9 @@ import retrofit2.http.GET
 interface Service {
   @GET("quizzes")
   suspend fun getQuizzes(): NetworkQuizContainer
+
+  @GET("friends")
+  suspend fun getFriends(): NetworkFriendContainer
 }
 
 object TingXieNetwork {
