@@ -33,7 +33,9 @@ class FriendsFragment : Fragment() {
     viewModel = ViewModelProvider(this).get(FriendsViewModel::class.java)
     viewModel.friends.observe(viewLifecycleOwner, { friends ->
       friends?.apply {
-        binding.recyclerviewFriends.adapter = FriendsAdapter(friends)
+        binding.recyclerviewFriends.adapter = FriendsAdapter(
+          friends, viewModel, binding.recyclerviewFriends
+        )
       }
     })
 

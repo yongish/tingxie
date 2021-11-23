@@ -5,12 +5,14 @@
     android:id="@+id/friend"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorScreenBackground"
     tools:context=".ui.friends.FriendsFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_friends"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="8dp"
         app:layoutManager="LinearLayoutManager"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

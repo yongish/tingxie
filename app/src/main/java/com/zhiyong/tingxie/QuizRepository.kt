@@ -85,6 +85,14 @@ class QuizRepository(val context: Context) {
       return arrayListOf(TingXieFriend("test0@email.com"), TingXieFriend("test1@email.com"))
     }
 
+    suspend fun addFriend(friend: TingXieFriend) {
+        TingXieNetwork.tingxie.postFriend(NetworkFriend(friend.email))
+    }
+
+    suspend fun deleteFriend(email: String) {
+        TingXieNetwork.tingxie.deleteFriend(email)
+    }
+
     val allQuizPinyins: LiveData<List<QuizPinyin>> = mQuizDao.allQuizPinyins
     val allQuestions: LiveData<List<Question>> = mQuizDao.allQuestions
 

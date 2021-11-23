@@ -37,4 +37,21 @@ class FriendsViewModel(application: Application) : AndroidViewModel(application)
       }
     }
   }
+
+  fun addFriend(friend: TingXieFriend) {
+    viewModelScope.launch {
+      repository.addFriend(friend)
+    }
+  }
+
+  fun deleteFriend(email: String) {
+    viewModelScope.launch {
+      try {
+        repository.deleteFriend(email)
+        _status.value = Status.DONE
+      } catch (e: Exception) {
+        _status.value = Status.ERROR
+      }
+    }
+  }
 }

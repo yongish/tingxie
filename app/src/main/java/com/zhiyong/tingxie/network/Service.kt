@@ -2,7 +2,7 @@ package com.zhiyong.tingxie.network
 
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.GET
+import retrofit2.http.*
 
 interface Service {
   @GET("quizzes")
@@ -10,6 +10,12 @@ interface Service {
 
   @GET("friends")
   suspend fun getFriends(): NetworkFriendContainer
+
+  @POST("friends")
+  suspend fun postFriend(@Body friend: NetworkFriend): NetworkFriend
+
+  @DELETE("friends/{email}")
+  suspend fun deleteFriend(@Path("email") email: String): Boolean
 }
 
 object TingXieNetwork {
