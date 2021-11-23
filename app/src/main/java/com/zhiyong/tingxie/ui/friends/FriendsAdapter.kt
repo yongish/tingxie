@@ -37,10 +37,6 @@ class FriendsAdapter(private val friends: List<TingXieFriend>,
 
   override fun getItemCount(): Int = friends.size
 
-  fun onFriendRemove(viewHolder: RecyclerView.ViewHolder) {
-    viewModel.deleteFriend(friends[viewHolder.adapterPosition].email)
-  }
-
   class ViewHolder(private val binding: RecyclerviewFriendBinding)
     : RecyclerView.ViewHolder(binding.root) {
     val ivDelete = binding.ivDelete
