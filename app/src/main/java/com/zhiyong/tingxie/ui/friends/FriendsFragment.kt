@@ -37,7 +37,6 @@ class FriendsFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-
     binding.fab.setOnClickListener {
       val editText = EditText(context)
       val params = FrameLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
@@ -68,7 +67,7 @@ class FriendsFragment : Fragment() {
     viewModel.friends.observe(viewLifecycleOwner, { friends ->
       friends?.apply {
         binding.recyclerviewFriends.adapter = FriendsAdapter(
-          friends, viewModel, binding.recyclerviewFriends
+          friends, requireActivity(), viewModel, binding.recyclerviewFriends
         )
       }
     })
