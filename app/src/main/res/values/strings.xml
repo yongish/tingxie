@@ -88,4 +88,5 @@
     <string name="your_email_address">Your email address:</string>
     <string name="enter_friend_email">Enter friend\'s email</string>
     <string name="friend_connect_instructions">To connect with your friend, search for her email address.</string>
+    <string name="add_friend">Add friend</string>
 </resources>

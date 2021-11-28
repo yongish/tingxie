@@ -6,7 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.FriendsFragmentBinding
 
 class FriendsFragment : Fragment() {
@@ -29,6 +35,29 @@ class FriendsFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+
+    binding.fab.setOnClickListener {
+      val editText = EditText(context)
+      val params = FrameLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+      params.leftMargin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
+      params.rightMargin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
+      editText.layoutParams = params
+      val frameLayout = context?.let {
+        it1 -> FrameLayout(it1)
+      }
+      frameLayout?.addView(editText)
+
+      val dialog = AlertDialog.Builder(requireActivity())
+      dialog.setMessage("To connect with a friend, search for her email address.\nYour email address: ")
+              .setTitle("Add friend")
+              .setView(frameLayout)
+              .setPositiveButton(R.string.ok) { dialog1, _ -> {
+                // todo. Search for email after API is implemented.
+              } }
+              .setNegativeButton(R.string.cancel) { dialog1, _ -> dialog1.cancel() }
+              .create()
+              .show()
+    }
 
     viewModel = ViewModelProvider(this).get(FriendsViewModel::class.java)
     viewModel.friends.observe(viewLifecycleOwner, { friends ->
