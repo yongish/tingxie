@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.FriendsFragmentBinding
 
@@ -36,6 +37,7 @@ class FriendsFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
+
     binding.fab.setOnClickListener {
       val editText = EditText(context)
       val params = FrameLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
@@ -47,8 +49,11 @@ class FriendsFragment : Fragment() {
       }
       frameLayout?.addView(editText)
 
+      val yourEmail = FirebaseAuth.getInstance().currentUser?.email
       val dialog = AlertDialog.Builder(requireActivity())
-      dialog.setMessage("To connect with a friend, search for her email address.\nYour email address: ")
+      dialog.setMessage("To connect with a friend, search for her email address.${
+        if (yourEmail == null) "" else "\nYour email address: $yourEmail"
+      }")
               .setTitle("Add friend")
               .setView(frameLayout)
               .setPositiveButton(R.string.ok) { dialog1, _ -> {
