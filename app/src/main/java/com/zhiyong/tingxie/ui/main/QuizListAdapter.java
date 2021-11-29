@@ -1,6 +1,7 @@
 package com.zhiyong.tingxie.ui.main;
 
 import static com.zhiyong.tingxie.ui.question.QuestionActivity.EXTRA_QUIZ_ITEM;
+import static com.zhiyong.tingxie.ui.share.ShareActivity.EXTRA_QUIZ_ID;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -32,6 +33,7 @@ import com.zhiyong.tingxie.db.Question;
 import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.ui.question.QuestionActivity;
+import com.zhiyong.tingxie.ui.share.ShareActivity;
 import com.zhiyong.tingxie.ui.word.WordActivity;
 import com.zhiyong.tingxie.ui.word.WordItem;
 
@@ -188,6 +190,11 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                     onItemRemove(holder);
                 }
             });
+            holder.ivShare.setOnClickListener(v -> {
+                Intent intent = new Intent(context, ShareActivity.class);
+                intent.putExtra(EXTRA_QUIZ_ID, quizItem.getId());
+                context.startActivity(intent);
+            });
         } else {
             holder.tvDate.setText("No Date");
             holder.tvWordsLeft.setText("No info on progress.");
@@ -292,6 +299,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         private final Button btnAddViewWords;
         private final Button btnStartResume;
         private final ImageView ivDelete;
+        private final ImageView ivShare;
 
         private QuizViewHolder(View itemView) {
             super(itemView);
@@ -302,6 +310,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
             btnAddViewWords = itemView.findViewById(R.id.btnAddViewWords);
             btnStartResume = itemView.findViewById(R.id.btnStartResume);
             ivDelete = itemView.findViewById(R.id.ivDelete);
+            ivShare = itemView.findViewById(R.id.ivShare);
         }
     }
 }
