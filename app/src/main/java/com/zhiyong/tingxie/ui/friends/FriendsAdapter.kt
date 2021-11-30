@@ -14,14 +14,12 @@ import android.text.style.ImageSpan
 import com.zhiyong.tingxie.R
 import android.text.Spannable
 import androidx.core.content.res.ResourcesCompat
-import com.google.firebase.auth.FirebaseAuth
 
 
 class FriendsAdapter(private val friends: List<TingXieFriend>,
                      private val context: Context,
                      val viewModel: FriendsViewModel,
-                     val recyclerView: RecyclerView
-                     )
+                     val recyclerView: RecyclerView)
   : RecyclerView.Adapter<FriendsAdapter.ViewHolder>() {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -47,7 +45,9 @@ class FriendsAdapter(private val friends: List<TingXieFriend>,
 
     val friend = friends[position]
     holder.bind(friend)
-    holder.tvName.text = FirebaseAuth.getInstance().currentUser?.displayName
+    holder.tvName.text = String.format(
+        context.getString(R.string.username), friend.lastName, friend.firstName
+    )
     holder.tvEmail.setOnClickListener {
       val builder = AlertDialog.Builder(context)
       builder.setMessage(spannableString)

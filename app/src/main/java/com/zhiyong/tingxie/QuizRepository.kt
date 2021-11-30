@@ -84,11 +84,13 @@ class QuizRepository(val context: Context) {
         } catch (e: Exception) {
 
         }
-      return arrayListOf(TingXieFriend("test0@email.com"), TingXieFriend("test1@email.com"))
+      return arrayListOf(TingXieFriend("test0@email.com", "first0", "last0"), TingXieFriend("test1@email.com", "first0", "last0"))
     }
 
     suspend fun addFriend(friend: TingXieFriend) {
-        TingXieNetwork.tingxie.postFriend(NetworkFriend(friend.email))
+        TingXieNetwork.tingxie.postFriend(
+                NetworkFriend(friend.email, friend.firstName, friend.lastName)
+        )
     }
 
     suspend fun deleteFriend(email: String) {
