@@ -8,6 +8,17 @@ interface Service {
   @GET("quizzes")
   suspend fun getQuizzes(): NetworkQuizContainer
 
+  @GET("quizzes/{quizId}/shares")
+  suspend fun getShares(@Path("quizId") quizId: Long): NetworkShareContainer
+
+  @POST("quizzes/{quizId}/shares")
+  suspend fun postShare(@Body share: NetworkShare): NetworkShare
+
+  @DELETE("quizzes/{quizId}/shares/{email}")
+  suspend fun deleteShare(
+      @Path("quizId") quizId: Long, @Path("email") email: String
+  ): Boolean
+
   @GET("friends/{email}")
   suspend fun getFriends(@Path("email") email: String): NetworkFriendContainer
 

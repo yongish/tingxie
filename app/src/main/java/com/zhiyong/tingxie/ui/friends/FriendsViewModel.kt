@@ -31,8 +31,8 @@ class FriendsViewModel(application: Application) : AndroidViewModel(application)
   }
 
   private fun getFriends(email: String) {
-    _status.value = Status.LOADING
     viewModelScope.launch {
+      _status.value = Status.LOADING
       try {
         _friends.value = repository.getFriends(email)
         _status.value = Status.DONE
@@ -51,6 +51,7 @@ class FriendsViewModel(application: Application) : AndroidViewModel(application)
 
   fun deleteFriend(email: String) {
     viewModelScope.launch {
+      _status.value = Status.LOADING
       try {
         repository.deleteFriend(email)
         _status.value = Status.DONE

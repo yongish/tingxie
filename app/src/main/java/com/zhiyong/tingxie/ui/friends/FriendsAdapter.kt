@@ -45,9 +45,6 @@ class FriendsAdapter(private val friends: List<TingXieFriend>,
 
     val friend = friends[position]
     holder.bind(friend)
-    holder.tvName.text = String.format(
-        context.getString(R.string.username), friend.lastName, friend.firstName
-    )
     holder.llIdentifier.setOnClickListener {
       val builder = AlertDialog.Builder(context)
       builder.setMessage(spannableString)
@@ -57,7 +54,7 @@ class FriendsAdapter(private val friends: List<TingXieFriend>,
     holder.ivDelete.setOnClickListener {
       val adapterPosition = holder.adapterPosition
       Snackbar
-        .make(recyclerView, "Removed friend", Snackbar.LENGTH_LONG)
+        .make(recyclerView, "Removed ${friend.firstName}", Snackbar.LENGTH_LONG)
         .setAction("Undo") {
           viewModel.addFriend(friend)
           notifyItemInserted(adapterPosition)
@@ -72,12 +69,16 @@ class FriendsAdapter(private val friends: List<TingXieFriend>,
 
   class ViewHolder(private val binding: RecyclerviewFriendBinding)
     : RecyclerView.ViewHolder(binding.root) {
-    val tvName = binding.tvName
     val llIdentifier = binding.llIdentifier
     val ivDelete = binding.ivDelete
 
     fun bind(friend: TingXieFriend) = with(binding) {
       tvEmail.text = friend.email
+      tvName.text = String.format(
+          itemView.context.getString(R.string.username),
+          friend.lastName,
+          friend.firstName,
+      )
     }
   }
 }

@@ -4,25 +4,52 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.zhiyong.tingxie.QuizRepository
 import com.zhiyong.tingxie.ui.friends.Status
+import kotlinx.coroutines.launch
 
-class ShareViewModel(application: Application, quizId: Long) : AndroidViewModel(application) {
+class ShareViewModel(quizId: Long, application: Application) : AndroidViewModel(application) {
   private val repository: QuizRepository = QuizRepository(application)
 
   private val _status = MutableLiveData<Status>()
   val status: LiveData<Status>
     get() = _status
 
-  private val _roles = MutableLiveData<List<TingXieQuizRole>>()
-  val roles: LiveData<List<TingXieQuizRole>>
-    get() = _roles
+  private val _shares = MutableLiveData<List<TingXieShare>>()
+  val shares: LiveData<List<TingXieShare>>
+    get() = _shares
 
   init {
-    getRoles(quizId)
+    getShares(quizId)
   }
 
-  private fun getRoles(quizId: Long) {
+  private fun getShares(quizId: Long) {
+    viewModelScope.launch {
+      _status.value = Status.LOADING
+      try {
+        _shares.value = repository.getShares(quizId)
+        _status.value = Status.DONE
+      } catch (e: Exception) {
+        _shares.value = ArrayList()
+        _status.value = Status.ERROR
+      }
+    }
+  }
 
+  fun addShare(share: TingXieShare) {
+    viewModelScope.launch { repository.addShare(share) }
+  }
+
+  fun deleteShare(quizId: Long, email: String) {
+    viewModelScope.launch {
+      _status.value = Status.LOADING
+      try {
+        repository.deleteShare(quizId, email)
+        _status.value = Status.DONE
+      } catch (e: Exception) {
+        _status.value = Status.ERROR
+      }
+    }
   }
 }
