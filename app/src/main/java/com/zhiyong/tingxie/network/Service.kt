@@ -8,8 +8,8 @@ interface Service {
   @GET("quizzes")
   suspend fun getQuizzes(): NetworkQuizContainer
 
-  @GET("friends")
-  suspend fun getFriends(): NetworkFriendContainer
+  @GET("friends/{email}")
+  suspend fun getFriends(@Path("email") email: String): NetworkFriendContainer
 
   @POST("friends")
   suspend fun postFriend(@Body friend: NetworkFriend): NetworkFriend

@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.QuizRepository
 import kotlinx.coroutines.launch
 
@@ -22,14 +23,18 @@ class FriendsViewModel(application: Application) : AndroidViewModel(application)
     get() = _friends
 
   init {
-    getFriends()
+//    getFriends()
+    val email = FirebaseAuth.getInstance().currentUser?.email
+    if (email != null) {
+      getFriends(email)
+    }
   }
 
-  private fun getFriends() {
+  private fun getFriends(email: String) {
     _status.value = Status.LOADING
     viewModelScope.launch {
       try {
-        _friends.value = repository.getFriends()
+        _friends.value = repository.getFriends(email)
         _status.value = Status.DONE
       } catch (e: Exception) {
         _friends.value = ArrayList()

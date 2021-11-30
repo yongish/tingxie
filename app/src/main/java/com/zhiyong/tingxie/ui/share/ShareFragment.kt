@@ -29,6 +29,6 @@ class ShareFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(ShareViewModel::class.java)
 
         // todo: Get editors and viewers of quiz.
-//        viewModel
+//        viewModel.friends.observe()
     }
 }

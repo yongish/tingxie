@@ -4,11 +4,13 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
+import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.db.*
 import com.zhiyong.tingxie.network.*
 import com.zhiyong.tingxie.ui.friends.TingXieFriend
 import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsAdapter
+import com.zhiyong.tingxie.ui.share.EnumQuizRole
 import com.zhiyong.tingxie.ui.word.WordItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -75,10 +77,10 @@ class QuizRepository(val context: Context) {
         }
     }
 
-    suspend fun getFriends(): List<TingXieFriend> {
+    suspend fun getFriends(email: String): List<TingXieFriend> {
 //        return TingXieNetwork.tingxie.getFriends().asDomainModel()
         try {
-            TingXieNetwork.tingxie.getFriends().asDomainModel()
+            TingXieNetwork.tingxie.getFriends(email).asDomainModel()
         } catch (e: Exception) {
 
         }
@@ -166,7 +168,16 @@ class QuizRepository(val context: Context) {
         editor.apply()
     }
 
-    fun insertQuiz(quiz: Quiz?): Long = mQuizDao.insert(quiz)
+    fun insertQuiz(quiz: Quiz?) {
+        mQuizDao.insert(quiz)
+        // todo: Current user should be an editor of this newly-created quiz.
+        val email = FirebaseAuth.getInstance().currentUser?.email
+        if (email == null || quiz == null) {
+            throw IllegalStateException("Quiz or email is null.")
+        } else {
+            mQuizDao.insert(QuizRole(quiz.id, email, EnumQuizRole.EDITOR))
+        }
+    }
 
     fun insertQuizFuture(quiz: Quiz?): Future<Long> = executor.submit(Callable {
         mQuizDao.insert(quiz)

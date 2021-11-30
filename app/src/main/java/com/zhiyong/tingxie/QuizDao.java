@@ -11,6 +11,7 @@ import com.zhiyong.tingxie.db.DatabaseFriend;
 import com.zhiyong.tingxie.db.Question;
 import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.db.QuizPinyin;
+import com.zhiyong.tingxie.db.QuizRole;
 import com.zhiyong.tingxie.db.Word;
 import com.zhiyong.tingxie.ui.main.QuizItem;
 import com.zhiyong.tingxie.ui.word.WordItem;
@@ -21,6 +22,9 @@ import java.util.List;
 public interface QuizDao {
     @Insert
     long insert(Quiz quiz);
+
+    @Insert
+    long insert(QuizRole quizRole);
 
     @Update
     void update(Quiz quiz);

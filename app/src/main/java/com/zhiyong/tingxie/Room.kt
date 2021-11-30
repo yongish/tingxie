@@ -8,7 +8,9 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.zhiyong.tingxie.db.*
 
-@Database(entities = [Question::class, Quiz::class, Word::class, QuizPinyin::class], version = 7)
+@Database(entities =
+[Question::class, Quiz::class, Word::class, QuizPinyin::class, QuizRole::class],
+        version = 8)
 abstract class PinyinRoomDatabase : RoomDatabase() {
     fun pinyinDao(): QuizDao {
         return pinyinDao;
@@ -27,7 +29,7 @@ fun getDatabase(context: Context): PinyinRoomDatabase {
                     PinyinRoomDatabase::class.java, "pinyin_database")
                     .addMigrations(
                         MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5,
-                        MIGRATION_5_6, MIGRATION_6_7
+                        MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8
                     )
                     .build()
         }
@@ -135,5 +137,10 @@ val MIGRATION_6_7: Migration = object : Migration(6, 7) {
     database.execSQL("DROP TABLE quiz")
     database.execSQL("ALTER TABLE quiz_temp RENAME TO quiz")
     database.execSQL("CREATE INDEX index_Quiz_id ON quiz(id)")
+  }
+}
+val MIGRATION_7_8: Migration = object : Migration(7, 8) {
+  override fun migrate(database: SupportSQLiteDatabase) {
+    database.execSQL("CREATE TABLE quiz_role (id INTEGER PRIMARY KEY, quiz_id INTEGER NOT NULL, email TEXT NOT NULL, role TEXT NOT NULL)")
   }
 }
