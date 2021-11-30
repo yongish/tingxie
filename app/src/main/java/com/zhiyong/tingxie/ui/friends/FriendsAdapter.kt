@@ -48,7 +48,7 @@ class FriendsAdapter(private val friends: List<TingXieFriend>,
     holder.tvName.text = String.format(
         context.getString(R.string.username), friend.lastName, friend.firstName
     )
-    holder.tvEmail.setOnClickListener {
+    holder.llIdentifier.setOnClickListener {
       val builder = AlertDialog.Builder(context)
       builder.setMessage(spannableString)
               .setNegativeButton(com.zhiyong.tingxie.R.string.ok) { dialog, _ -> dialog.dismiss() }
@@ -73,7 +73,7 @@ class FriendsAdapter(private val friends: List<TingXieFriend>,
   class ViewHolder(private val binding: RecyclerviewFriendBinding)
     : RecyclerView.ViewHolder(binding.root) {
     val tvName = binding.tvName
-    val tvEmail = binding.tvEmail
+    val llIdentifier = binding.llIdentifier
     val ivDelete = binding.ivDelete
 
     fun bind(friend: TingXieFriend) = with(binding) {
