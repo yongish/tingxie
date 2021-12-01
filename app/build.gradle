@@ -9,7 +9,7 @@ android {
     compileSdkVersion 31
     defaultConfig {
         applicationId "com.zhiyong.tingxie"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 31
         versionCode 49
         versionName "1.0"
@@ -86,14 +86,14 @@ dependencies {
     // https://mvnrepository.com/artifact/org.jsoup/jsoup
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
 
-    implementation 'com.google.firebase:firebase-auth:19.3.1'
+    implementation 'com.google.firebase:firebase-auth:21.0.1'
     // Required only if Facebook login support is required
     // Find the latest Facebook SDK releases here: https://goo.gl/Ce5L94
     implementation 'com.facebook.android:facebook-android-sdk:11.3.0'
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.firebase:firebase-core:17.4.0'
-    implementation 'com.firebaseui:firebase-ui-auth:6.2.0'
+    implementation 'com.google.firebase:firebase-core:20.0.0'
+    implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
     // Add dependency
 
     androidTestImplementation 'androidx.test:runner:1.4.0'
