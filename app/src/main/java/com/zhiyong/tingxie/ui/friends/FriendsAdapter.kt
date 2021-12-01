@@ -48,7 +48,7 @@ class FriendsAdapter(private val friends: List<TingXieFriend>,
     holder.llIdentifier.setOnClickListener {
       val builder = AlertDialog.Builder(context)
       builder.setMessage(spannableString)
-              .setNegativeButton(com.zhiyong.tingxie.R.string.ok) { dialog, _ -> dialog.dismiss() }
+              .setNegativeButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
               .create().show()
     }
     holder.ivDelete.setOnClickListener {
