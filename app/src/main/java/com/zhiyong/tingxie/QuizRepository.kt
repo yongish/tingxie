@@ -105,7 +105,8 @@ class QuizRepository(val context: Context) {
     } catch (e: Exception) {
 
     }
-    return arrayListOf(TingXieShare("yongish@gmail.com", "firstZ", "lastZ", EnumQuizRole.VIEWER), TingXieShare("test0email.com", "first0", "last0", EnumQuizRole.EDITOR), TingXieShare("test1email.com", "first1", "last1", EnumQuizRole.VIEWER))
+//    return arrayListOf(TingXieShare("yongish@gmail.com", "firstZ", "lastZ", EnumQuizRole.VIEWER), TingXieShare("test0email.com", "first0", "last0", EnumQuizRole.EDITOR), TingXieShare("test1email.com", "first1", "last1", EnumQuizRole.VIEWER))
+    return arrayListOf()
   }
 
   suspend fun addShare(share: TingXieShare) {

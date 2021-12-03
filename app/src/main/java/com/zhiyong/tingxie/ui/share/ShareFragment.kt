@@ -31,15 +31,24 @@ class ShareFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
     val quizId = arguments?.getLong(EXTRA_QUIZ_ID)
 
+    binding.fab.setOnClickListener {
+      // stopped here. Choose a friend to share a quiz with.
+    }
+
     if (quizId != null) {
       val viewModelFactory = ShareViewModelFactory(quizId, requireNotNull(activity).application)
-      viewModel = ViewModelProvider(this, viewModelFactory).get(ShareViewModel::class.java)
+      viewModel = ViewModelProvider(this, viewModelFactory)[ShareViewModel::class.java]
 
       viewModel.shares.observe(viewLifecycleOwner, { shares ->
         shares?.apply {
           binding.recyclerviewShares.adapter = ShareAdapter(
               quizId, shares, requireActivity(), viewModel, binding.recyclerviewShares
           )
+        }
+        if (shares.isEmpty()) {
+          binding.emptyView.visibility = View.VISIBLE
+        } else {
+          binding.emptyView.visibility = View.INVISIBLE
         }
       })
 

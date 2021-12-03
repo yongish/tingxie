@@ -63,12 +63,17 @@ class FriendsFragment : Fragment() {
               .show()
     }
 
-    viewModel = ViewModelProvider(this).get(FriendsViewModel::class.java)
+    viewModel = ViewModelProvider(this)[FriendsViewModel::class.java]
     viewModel.friends.observe(viewLifecycleOwner, { friends ->
       friends?.apply {
         binding.recyclerviewFriends.adapter = FriendsAdapter(
           friends, requireActivity(), viewModel, binding.recyclerviewFriends
         )
+      }
+      if (friends.isEmpty()) {
+        binding.emptyView.visibility = View.VISIBLE
+      } else {
+        binding.emptyView.visibility = View.INVISIBLE
       }
     })
 
