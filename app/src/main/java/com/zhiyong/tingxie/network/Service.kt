@@ -20,10 +20,10 @@ interface Service {
   ): Boolean
 
   @GET("friends/{email}")
-  suspend fun getFriends(@Path("email") email: String): NetworkFriendContainer
+  suspend fun getFriends(@Path("email") email: String): NetworkIndividualContainer
 
   @POST("friends")
-  suspend fun postFriend(@Body friend: NetworkFriend): NetworkFriend
+  suspend fun postFriend(@Body individual: NetworkIndividual): NetworkIndividual
 
   @DELETE("friends/{email}")
   suspend fun deleteFriend(@Path("email") email: String): Boolean

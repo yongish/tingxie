@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 enum class Status { LOADING, ERROR, DONE }
 
-class FriendsViewModel(application: Application) : AndroidViewModel(application) {
+class IndividualViewModel(application: Application) : AndroidViewModel(application) {
   private val repository: QuizRepository = QuizRepository(application)
 
   private val _status = MutableLiveData<Status>()
@@ -26,11 +26,11 @@ class FriendsViewModel(application: Application) : AndroidViewModel(application)
 //    getFriends()
     val email = FirebaseAuth.getInstance().currentUser?.email
     if (email != null) {
-      getFriends(email)
+      getIndividuals(email)
     }
   }
 
-  private fun getFriends(email: String) {
+  private fun getIndividuals(email: String) {
     viewModelScope.launch {
       _status.value = Status.LOADING
       try {
@@ -43,13 +43,13 @@ class FriendsViewModel(application: Application) : AndroidViewModel(application)
     }
   }
 
-  fun addFriend(individual: TingXieIndividual) {
+  fun addIndividual(individual: TingXieIndividual) {
     viewModelScope.launch {
       repository.addFriend(individual)
     }
   }
 
-  fun deleteFriend(email: String) {
+  fun deleteIndividual(email: String) {
     viewModelScope.launch {
       _status.value = Status.LOADING
       try {

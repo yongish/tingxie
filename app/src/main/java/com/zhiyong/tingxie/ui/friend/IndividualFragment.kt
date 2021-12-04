@@ -22,7 +22,7 @@ class IndividualFragment : Fragment() {
     fun newInstance() = IndividualFragment()
   }
 
-  private lateinit var viewModel: FriendsViewModel
+  private lateinit var viewModel: IndividualViewModel
   private var _binding: IndividualFragmentBinding? = null
   private val binding get() = _binding!!
 
@@ -63,11 +63,11 @@ class IndividualFragment : Fragment() {
               .show()
     }
 
-    viewModel = ViewModelProvider(this)[FriendsViewModel::class.java]
+    viewModel = ViewModelProvider(this)[IndividualViewModel::class.java]
     viewModel.friends.observe(viewLifecycleOwner, { friends ->
       friends?.apply {
-        binding.recyclerviewFriends.adapter = IndividualAdapter(
-          friends, requireActivity(), viewModel, binding.recyclerviewFriends
+        binding.recyclerviewIndividuals.adapter = IndividualAdapter(
+          friends, requireActivity(), viewModel, binding.recyclerviewIndividuals
         )
       }
       if (friends.isEmpty()) {

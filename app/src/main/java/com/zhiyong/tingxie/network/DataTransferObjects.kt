@@ -24,13 +24,13 @@ fun NetworkQuizContainer.asDatabaseModel(): List<Quiz> {
 }
 
 @JsonClass(generateAdapter = true)
-data class NetworkFriendContainer(val friends: List<NetworkFriend>)
+data class NetworkIndividualContainer(val individuals: List<NetworkIndividual>)
 
 @JsonClass(generateAdapter = true)
-data class NetworkFriend(val email: String, val firstName: String, val lastName: String)
+data class NetworkIndividual(val email: String, val firstName: String, val lastName: String)
 
-fun NetworkFriendContainer.asDomainModel(): List<TingXieIndividual> {
-  return friends.map { TingXieIndividual(it.email, it.firstName, it.lastName) }
+fun NetworkIndividualContainer.asDomainModel(): List<TingXieIndividual> {
+  return individuals.map { TingXieIndividual(it.email, it.firstName, it.lastName) }
 }
 
 //fun NetworkFriendContainer.asDatabaseModel(): List<DatabaseFriend> {

@@ -6,24 +6,23 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
-import com.zhiyong.tingxie.databinding.RecyclerviewFriendBinding
-
+import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ImageSpan
+import com.google.android.material.snackbar.Snackbar
 import com.zhiyong.tingxie.R
-import android.text.Spannable
 import androidx.core.content.res.ResourcesCompat
+import com.zhiyong.tingxie.databinding.RecyclerviewIndividualBinding
 
 
 class IndividualAdapter(private val individuals: List<TingXieIndividual>,
                         private val context: Context,
-                        val viewModel: FriendsViewModel,
+                        val viewModel: IndividualViewModel,
                         val recyclerView: RecyclerView)
   : RecyclerView.Adapter<IndividualAdapter.ViewHolder>() {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-    return ViewHolder(RecyclerviewFriendBinding.inflate(
+    return ViewHolder(RecyclerviewIndividualBinding.inflate(
       LayoutInflater.from(parent.context), parent, false
     ))
   }
@@ -43,8 +42,8 @@ class IndividualAdapter(private val individuals: List<TingXieIndividual>,
       Spannable.SPAN_INCLUSIVE_EXCLUSIVE
     )
 
-    val friend = individuals[position]
-    holder.bind(friend)
+    val individual = individuals[position]
+    holder.bind(individual)
     holder.llIdentifier.setOnClickListener {
       val builder = AlertDialog.Builder(context)
       builder.setMessage(spannableString)
@@ -54,20 +53,20 @@ class IndividualAdapter(private val individuals: List<TingXieIndividual>,
     holder.ivDelete.setOnClickListener {
       val adapterPosition = holder.adapterPosition
       Snackbar
-        .make(recyclerView, "Removed ${friend.firstName}", Snackbar.LENGTH_LONG)
+        .make(recyclerView, "Removed ${individual.firstName}", Snackbar.LENGTH_LONG)
         .setAction("Undo") {
-          viewModel.addFriend(friend)
+          viewModel.addIndividual(individual)
           notifyItemInserted(adapterPosition)
         }
         .show()
-      viewModel.deleteFriend(friend.email)
+      viewModel.deleteIndividual(individual.email)
       notifyItemRemoved(adapterPosition)
     }
   }
 
   override fun getItemCount(): Int = individuals.size
 
-  class ViewHolder(private val binding: RecyclerviewFriendBinding)
+  class ViewHolder(private val binding: RecyclerviewIndividualBinding)
     : RecyclerView.ViewHolder(binding.root) {
     val llIdentifier = binding.llIdentifier
     val ivDelete = binding.ivDelete

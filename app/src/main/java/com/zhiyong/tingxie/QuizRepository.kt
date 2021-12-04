@@ -90,7 +90,7 @@ class QuizRepository(val context: Context) {
 
   suspend fun addFriend(individual: TingXieIndividual) {
     TingXieNetwork.tingxie.postFriend(
-        NetworkFriend(individual.email, individual.firstName, individual.lastName)
+        NetworkIndividual(individual.email, individual.firstName, individual.lastName)
     )
   }
 

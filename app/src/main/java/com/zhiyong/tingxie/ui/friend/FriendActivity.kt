@@ -10,9 +10,9 @@ class FriendActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.friend_activity)
     if (savedInstanceState == null) {
-      supportFragmentManager.beginTransaction()
-        .replace(R.id.container, IndividualFragment.newInstance())
-        .commitNow()
+//      supportFragmentManager.beginTransaction()
+//        .replace(R.id.container, IndividualFragment.newInstance())
+//        .commitNow()
     }
   }
 }
