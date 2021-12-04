@@ -2,7 +2,7 @@ package com.zhiyong.tingxie.network
 
 import com.squareup.moshi.JsonClass
 import com.zhiyong.tingxie.db.Quiz
-import com.zhiyong.tingxie.ui.friends.TingXieFriend
+import com.zhiyong.tingxie.ui.friend.TingXieIndividual
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
 import com.zhiyong.tingxie.ui.share.TingXieShare
 
@@ -29,8 +29,8 @@ data class NetworkFriendContainer(val friends: List<NetworkFriend>)
 @JsonClass(generateAdapter = true)
 data class NetworkFriend(val email: String, val firstName: String, val lastName: String)
 
-fun NetworkFriendContainer.asDomainModel(): List<TingXieFriend> {
-  return friends.map { TingXieFriend(it.email, it.firstName, it.lastName) }
+fun NetworkFriendContainer.asDomainModel(): List<TingXieIndividual> {
+  return friends.map { TingXieIndividual(it.email, it.firstName, it.lastName) }
 }
 
 //fun NetworkFriendContainer.asDatabaseModel(): List<DatabaseFriend> {

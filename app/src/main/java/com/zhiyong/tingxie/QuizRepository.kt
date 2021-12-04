@@ -7,7 +7,7 @@ import androidx.lifecycle.Transformations
 import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.db.*
 import com.zhiyong.tingxie.network.*
-import com.zhiyong.tingxie.ui.friends.TingXieFriend
+import com.zhiyong.tingxie.ui.friend.TingXieIndividual
 import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsAdapter
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
@@ -78,19 +78,19 @@ class QuizRepository(val context: Context) {
     }
   }
 
-  suspend fun getFriends(email: String): List<TingXieFriend> {
+  suspend fun getFriends(email: String): List<TingXieIndividual> {
 //        return TingXieNetwork.tingxie.getFriends().asDomainModel()
     try {
       TingXieNetwork.tingxie.getFriends(email).asDomainModel()
     } catch (e: Exception) {
 
     }
-    return arrayListOf(TingXieFriend("test0@email.com", "first0", "last0"), TingXieFriend("test1@email.com", "first1", "last1"))
+    return arrayListOf(TingXieIndividual("test0@email.com", "first0", "last0"), TingXieIndividual("test1@email.com", "first1", "last1"))
   }
 
-  suspend fun addFriend(friend: TingXieFriend) {
+  suspend fun addFriend(individual: TingXieIndividual) {
     TingXieNetwork.tingxie.postFriend(
-        NetworkFriend(friend.email, friend.firstName, friend.lastName)
+        NetworkFriend(individual.email, individual.firstName, individual.lastName)
     )
   }
 

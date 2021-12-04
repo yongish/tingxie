@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie.ui.friends
+package com.zhiyong.tingxie.ui.friend
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -16,11 +16,11 @@ import android.text.Spannable
 import androidx.core.content.res.ResourcesCompat
 
 
-class FriendsAdapter(private val friends: List<TingXieFriend>,
-                     private val context: Context,
-                     val viewModel: FriendsViewModel,
-                     val recyclerView: RecyclerView)
-  : RecyclerView.Adapter<FriendsAdapter.ViewHolder>() {
+class IndividualAdapter(private val individuals: List<TingXieIndividual>,
+                        private val context: Context,
+                        val viewModel: FriendsViewModel,
+                        val recyclerView: RecyclerView)
+  : RecyclerView.Adapter<IndividualAdapter.ViewHolder>() {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
     return ViewHolder(RecyclerviewFriendBinding.inflate(
@@ -43,7 +43,7 @@ class FriendsAdapter(private val friends: List<TingXieFriend>,
       Spannable.SPAN_INCLUSIVE_EXCLUSIVE
     )
 
-    val friend = friends[position]
+    val friend = individuals[position]
     holder.bind(friend)
     holder.llIdentifier.setOnClickListener {
       val builder = AlertDialog.Builder(context)
@@ -65,19 +65,19 @@ class FriendsAdapter(private val friends: List<TingXieFriend>,
     }
   }
 
-  override fun getItemCount(): Int = friends.size
+  override fun getItemCount(): Int = individuals.size
 
   class ViewHolder(private val binding: RecyclerviewFriendBinding)
     : RecyclerView.ViewHolder(binding.root) {
     val llIdentifier = binding.llIdentifier
     val ivDelete = binding.ivDelete
 
-    fun bind(friend: TingXieFriend) = with(binding) {
-      tvEmail.text = friend.email
+    fun bind(individual: TingXieIndividual) = with(binding) {
+      tvEmail.text = individual.email
       tvName.text = String.format(
           itemView.context.getString(R.string.username),
-          friend.lastName,
-          friend.firstName,
+          individual.lastName,
+          individual.firstName,
       )
     }
   }

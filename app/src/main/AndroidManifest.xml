@@ -19,7 +19,7 @@
             android:name=".ui.share.ShareActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.friends.FriendsActivity"
+            android:name=".ui.friend.FriendActivity"
             android:exported="false" />
         <activity
             android:name=".ui.connect.FriendConnectActivity"

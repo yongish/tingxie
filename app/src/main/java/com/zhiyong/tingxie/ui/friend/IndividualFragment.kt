@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie.ui.friends
+package com.zhiyong.tingxie.ui.friend
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -14,23 +14,23 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.R
-import com.zhiyong.tingxie.databinding.FriendsFragmentBinding
+import com.zhiyong.tingxie.databinding.IndividualFragmentBinding
 
-class FriendsFragment : Fragment() {
+class IndividualFragment : Fragment() {
 
   companion object {
-    fun newInstance() = FriendsFragment()
+    fun newInstance() = IndividualFragment()
   }
 
   private lateinit var viewModel: FriendsViewModel
-  private var _binding: FriendsFragmentBinding? = null
+  private var _binding: IndividualFragmentBinding? = null
   private val binding get() = _binding!!
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
-    _binding = FriendsFragmentBinding.inflate(inflater, container, false)
+    _binding = IndividualFragmentBinding.inflate(inflater, container, false)
     return binding.root
   }
 
@@ -66,7 +66,7 @@ class FriendsFragment : Fragment() {
     viewModel = ViewModelProvider(this)[FriendsViewModel::class.java]
     viewModel.friends.observe(viewLifecycleOwner, { friends ->
       friends?.apply {
-        binding.recyclerviewFriends.adapter = FriendsAdapter(
+        binding.recyclerviewFriends.adapter = IndividualAdapter(
           friends, requireActivity(), viewModel, binding.recyclerviewFriends
         )
       }

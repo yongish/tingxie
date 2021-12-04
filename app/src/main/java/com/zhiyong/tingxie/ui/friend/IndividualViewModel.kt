@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie.ui.friends
+package com.zhiyong.tingxie.ui.friend
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -18,8 +18,8 @@ class FriendsViewModel(application: Application) : AndroidViewModel(application)
   val status: LiveData<Status>
     get() = _status
 
-  private val _friends = MutableLiveData<List<TingXieFriend>>()
-  val friends: LiveData<List<TingXieFriend>>
+  private val _friends = MutableLiveData<List<TingXieIndividual>>()
+  val friends: LiveData<List<TingXieIndividual>>
     get() = _friends
 
   init {
@@ -43,9 +43,9 @@ class FriendsViewModel(application: Application) : AndroidViewModel(application)
     }
   }
 
-  fun addFriend(friend: TingXieFriend) {
+  fun addFriend(individual: TingXieIndividual) {
     viewModelScope.launch {
-      repository.addFriend(friend)
+      repository.addFriend(individual)
     }
   }
 
