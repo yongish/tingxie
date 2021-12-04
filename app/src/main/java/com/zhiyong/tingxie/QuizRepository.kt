@@ -105,14 +105,19 @@ class QuizRepository(val context: Context) {
     } catch (e: Exception) {
 
     }
-//    return arrayListOf(TingXieShare("yongish@gmail.com", "firstZ", "lastZ", EnumQuizRole.VIEWER), TingXieShare("test0email.com", "first0", "last0", EnumQuizRole.EDITOR), TingXieShare("test1email.com", "first1", "last1", EnumQuizRole.VIEWER))
-    return arrayListOf()
+    return arrayListOf(
+        TingXieShare("yongish@gmail.com", "firstZ", "lastZ", true, EnumQuizRole.VIEWER),
+        TingXieShare("test0email.com", "first0", "last0", false, EnumQuizRole.EDITOR),
+        TingXieShare("test1email.com", "first1", "last1", false, EnumQuizRole.VIEWER),
+        TingXieShare("test2email.com", "first2", "last2", true, EnumQuizRole.VIEWER),
+    )
+//    return arrayListOf()
   }
 
   suspend fun addShare(share: TingXieShare) {
-    TingXieNetwork.tingxie.postShare(
-        NetworkShare(share.email, share.firstName, share.lastName, share.role)
-    )
+    TingXieNetwork.tingxie.postShare(NetworkShare(
+        share.email, share.firstName, share.lastName, true, share.role
+    ))
   }
 
   suspend fun deleteShare(quizId: Long, email: String) {

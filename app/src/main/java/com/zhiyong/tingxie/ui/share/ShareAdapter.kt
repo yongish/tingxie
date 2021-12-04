@@ -3,23 +3,30 @@ package com.zhiyong.tingxie.ui.share
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.databinding.RecyclerviewShareBinding
 
 import android.view.View.OnTouchListener
+import android.widget.Filter
+import android.widget.Filterable
+import com.zhiyong.tingxie.R
 
+enum class IsShared { SHARED, ALL }
 
 class ShareAdapter(private val quizId: Long,
                    private val shares: List<TingXieShare>,
                    private val context: Context,
                    val viewModel: ShareViewModel,
                    val recyclerView: RecyclerView)
-  : RecyclerView.Adapter<ShareAdapter.ViewHolder>() {
+  : RecyclerView.Adapter<ShareAdapter.ViewHolder>(), Filterable {
+
+  var sharesFiltered: List<TingXieShare> = shares.filter { it.isShared }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
     return ViewHolder(RecyclerviewShareBinding.inflate(
@@ -27,22 +34,23 @@ class ShareAdapter(private val quizId: Long,
     ))
   }
 
+  @SuppressLint("ClickableViewAccessibility")
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    val share = shares[position]
+    val share = sharesFiltered[position]
     holder.bind(share)
 
-    holder.ivDelete.setOnClickListener {
-      val adapterPosition = holder.adapterPosition
-      Snackbar
-          .make(recyclerView, "Removed ${share.firstName}", Snackbar.LENGTH_LONG)
-          .setAction("Undo") {
-            viewModel.addShare(share)
-            notifyItemInserted(adapterPosition)
-          }
-          .show()
-      viewModel.deleteShare(quizId, share.email)
-      notifyItemRemoved(adapterPosition)
-    }
+//    holder.ivDelete.setOnClickListener {
+//      val adapterPosition = holder.adapterPosition
+//      Snackbar
+//          .make(recyclerView, "Removed ${share.firstName}", Snackbar.LENGTH_LONG)
+//          .setAction("Undo") {
+//            viewModel.addShare(share)
+//            notifyItemInserted(adapterPosition)
+//          }
+//          .show()
+//      viewModel.deleteShare(quizId, share.email)
+//      notifyItemRemoved(adapterPosition)
+//    }
 
     val adapter = ArrayAdapter(
         context,
@@ -53,7 +61,7 @@ class ShareAdapter(private val quizId: Long,
     holder.spRole.adapter = adapter
     holder.spRole.setSelection(EnumQuizRole.values().indexOf(share.role))
 
-    val role = shares
+    val role = sharesFiltered
         .first { it.email == FirebaseAuth.getInstance().currentUser?.email }.role
     if (role == EnumQuizRole.VIEWER) {
       holder.spRole.alpha = .3f
@@ -69,17 +77,56 @@ class ShareAdapter(private val quizId: Long,
         true
       })
     }
+
+    holder.cbIsShared.isChecked = share.isShared
+    holder.cbIsShared.alpha = .3f
+    holder.cbIsShared.setOnTouchListener(OnTouchListener
+    @SuppressLint("ClickableViewAccessbility") { _, _ ->
+      val builder = AlertDialog.Builder(context)
+      builder.setMessage("You must be an editor to edit sharing settings.")
+          .setPositiveButton("Request editor role") {
+            dialog, _ -> dialog.dismiss()
+          }
+          .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
+          .create().show()
+      true
+    })
   }
 
-  override fun getItemCount(): Int = shares.size
+  override fun getItemCount(): Int = sharesFiltered.size
+
+  override fun getFilter(): Filter {
+    return object : Filter() {
+      override fun performFiltering(constraint: CharSequence?): FilterResults {
+        return FilterResults().apply {
+          values = if (IsShared.valueOf(constraint.toString()) == IsShared.SHARED) {
+            shares.filter { it.isShared }
+          } else {
+            shares
+          }
+        }
+      }
+
+      override fun publishResults(constraint: CharSequence?, results: FilterResults) {
+        sharesFiltered = results.values as List<TingXieShare>
+        notifyDataSetChanged()
+      }
+    }
+  }
 
   class ViewHolder(private val binding: RecyclerviewShareBinding)
     : RecyclerView.ViewHolder(binding.root) {
-    val ivDelete = binding.ivDelete
+//    val ivDelete = binding.ivDelete
     val spRole = binding.spRole
+    val cbIsShared = binding.cbIsShared
 
     fun bind(share: TingXieShare) = with(binding) {
       tvEmail.text = share.email
+      tvName.text = String.format(
+          itemView.context.getString(R.string.username),
+          share.lastName,
+          share.firstName,
+      )
     }
   }
 }

@@ -8,5 +8,6 @@ data class TingXieShare(
     val email: String,
     val firstName: String,
     val lastName: String,
+    val isShared: Boolean,
     val role: EnumQuizRole
     )

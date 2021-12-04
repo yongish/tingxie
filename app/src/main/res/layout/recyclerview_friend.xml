@@ -25,7 +25,6 @@
         android:layout_width="0dp"
         android:layout_height="53dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/ivDelete"
@@ -37,7 +36,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:text="First Last" />
 
@@ -46,7 +44,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             tools:text="me@tingxie.com" />
     </LinearLayout>
 

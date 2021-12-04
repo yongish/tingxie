@@ -43,8 +43,14 @@ fun NetworkFriendContainer.asDomainModel(): List<TingXieFriend> {
 data class NetworkShareContainer(val shares: List<NetworkShare>)
 
 @JsonClass(generateAdapter = true)
-data class NetworkShare(val email: String, val firstName: String, val lastName: String, val role: EnumQuizRole)
+data class NetworkShare(val email: String,
+                        val firstName: String,
+                        val lastName: String,
+                        val isShared: Boolean,
+                        val role: EnumQuizRole)
 
 fun NetworkShareContainer.asDomainModel(): List<TingXieShare> {
-  return shares.map { TingXieShare(it.email, it.firstName, it.lastName, it.role) }
+  return shares.map {
+    TingXieShare(it.email, it.firstName, it.lastName, it.isShared, it.role)
+  }
 }
