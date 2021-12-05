@@ -20,7 +20,8 @@
             android:exported="false" />
         <activity
             android:name=".ui.friend.FriendActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/friends" />
         <activity
             android:name=".ui.connect.FriendConnectActivity"
             android:exported="false"

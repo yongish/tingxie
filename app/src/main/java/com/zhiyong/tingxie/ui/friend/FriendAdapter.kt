@@ -1,4 +1,16 @@
 package com.zhiyong.tingxie.ui.friend
 
-class FriendAdapter {
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.viewpager2.adapter.FragmentStateAdapter
+
+class FriendAdapter(activity: AppCompatActivity, val itemsCount: Int) : FragmentStateAdapter(activity) {
+  override fun getItemCount(): Int = itemsCount
+
+  override fun createFragment(position: Int): Fragment {
+    if (position == 0) {
+      return IndividualFragment.newInstance()
+    }
+    return GroupFragment.newInstance()
+  }
 }
