@@ -15,6 +15,7 @@ import com.zhiyong.tingxie.databinding.RecyclerviewShareBinding
 import android.view.View.OnTouchListener
 import android.widget.Filter
 import android.widget.Filterable
+import android.widget.Toast
 import com.zhiyong.tingxie.R
 
 enum class IsShared { SHARED, ALL }
@@ -61,6 +62,8 @@ class ShareAdapter(private val quizId: Long,
     holder.spRole.adapter = adapter
     holder.spRole.setSelection(EnumQuizRole.values().indexOf(share.role))
 
+    holder.cbIsShared.isChecked = share.isShared
+
     val role = sharesFiltered
         .first { it.email == FirebaseAuth.getInstance().currentUser?.email }.role
     if (role == EnumQuizRole.VIEWER) {
@@ -76,21 +79,15 @@ class ShareAdapter(private val quizId: Long,
             .create().show()
         true
       })
+    } else {
+      // todo: Save menu item should appear.
+      holder.cbIsShared.setOnClickListener {
+
+      }
+      // todo: Save menu item should appear.
+      holder.spRole.setOnItemClickListener { adapterView, view, i, l ->  }
     }
 
-    holder.cbIsShared.isChecked = share.isShared
-    holder.cbIsShared.alpha = .3f
-    holder.cbIsShared.setOnTouchListener(OnTouchListener
-    @SuppressLint("ClickableViewAccessbility") { _, _ ->
-      val builder = AlertDialog.Builder(context)
-      builder.setMessage("You must be an editor to edit sharing settings.")
-          .setPositiveButton("Request editor role") {
-            dialog, _ -> dialog.dismiss()
-          }
-          .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
-          .create().show()
-      true
-    })
   }
 
   override fun getItemCount(): Int = sharesFiltered.size

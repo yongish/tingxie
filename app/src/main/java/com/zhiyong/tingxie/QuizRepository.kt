@@ -144,7 +144,7 @@ class QuizRepository(val context: Context) {
 
     }
     return arrayListOf(
-        TingXieShare("yongish@gmail.com", "firstZ", "lastZ", true, EnumQuizRole.VIEWER),
+        TingXieShare("yongish@gmail.com", "firstZ", "lastZ", true, EnumQuizRole.EDITOR),
         TingXieShare("test0email.com", "first0", "last0", false, EnumQuizRole.EDITOR),
         TingXieShare("test1email.com", "first1", "last1", false, EnumQuizRole.VIEWER),
         TingXieShare("test2email.com", "first2", "last2", true, EnumQuizRole.VIEWER),

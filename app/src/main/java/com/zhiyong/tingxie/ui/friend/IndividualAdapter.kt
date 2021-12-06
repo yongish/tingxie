@@ -43,7 +43,7 @@ class IndividualAdapter(private val individuals: List<TingXieIndividual>,
 
     val individual = individuals[position]
     holder.bind(individual)
-    holder.llIdentifier.setOnClickListener {
+    holder.clIdentifier.setOnClickListener {
       val builder = AlertDialog.Builder(context)
       builder.setMessage(spannableString)
               .setNegativeButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
@@ -67,7 +67,7 @@ class IndividualAdapter(private val individuals: List<TingXieIndividual>,
 
   class ViewHolder(private val binding: RecyclerviewIndividualBinding)
     : RecyclerView.ViewHolder(binding.root) {
-    val llIdentifier = binding.llIdentifier
+    val clIdentifier = binding.clIdentifier
     val ivDelete = binding.ivDelete
 
     fun bind(individual: TingXieIndividual) = with(binding) {

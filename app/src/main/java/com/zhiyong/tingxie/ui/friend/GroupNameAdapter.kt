@@ -1,6 +1,7 @@
 package com.zhiyong.tingxie.ui.friend
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +25,7 @@ class GroupNameAdapter(private val groups: List<TingXieGroup>,
     holder.bind(group)
     holder.clIdentifier.setOnClickListener {
       // Open GroupMember activity.
+      context.startActivity(Intent(context, GroupMemberActivity::class.java))
     }
     holder.ivDelete.setOnClickListener {
       val adapterPosition = holder.adapterPosition

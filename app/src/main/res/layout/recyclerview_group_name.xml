@@ -31,6 +31,7 @@
 
         <TextView
             android:id="@+id/tvName"
+            style="@style/text_view_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -41,6 +42,7 @@
 
         <TextView
             android:id="@+id/tvMemberCount"
+            style="@style/text_view_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

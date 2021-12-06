@@ -57,7 +57,7 @@ class ShareFragment : Fragment() {
       adapter.filter.filter(IsShared.ALL.name)
       binding.fab.visibility = View.GONE
 
-      // Display done check button on menu bar.
+      // todo: Display done check button on menu bar.
     }
 
     if (quizId != null) {
