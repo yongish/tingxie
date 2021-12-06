@@ -21,11 +21,10 @@ class IndividualAdapter(private val individuals: List<TingXieIndividual>,
                         val recyclerView: RecyclerView)
   : RecyclerView.Adapter<IndividualAdapter.ViewHolder>() {
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-    return ViewHolder(RecyclerviewIndividualBinding.inflate(
-      LayoutInflater.from(parent.context), parent, false
-    ))
-  }
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
+      ViewHolder(RecyclerviewIndividualBinding.inflate(
+        LayoutInflater.from(parent.context), parent, false
+      ))
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val spannableString = SpannableString(
@@ -72,7 +71,7 @@ class IndividualAdapter(private val individuals: List<TingXieIndividual>,
     val ivDelete = binding.ivDelete
 
     fun bind(individual: TingXieIndividual) = with(binding) {
-      tvEmail.text = individual.email
+      tvSub.text = individual.email
       tvName.text = String.format(
           itemView.context.getString(R.string.username),
           individual.lastName,

@@ -2,6 +2,7 @@ package com.zhiyong.tingxie.network
 
 import com.squareup.moshi.JsonClass
 import com.zhiyong.tingxie.db.Quiz
+import com.zhiyong.tingxie.ui.friend.TingXieGroup
 import com.zhiyong.tingxie.ui.friend.TingXieIndividual
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
 import com.zhiyong.tingxie.ui.share.TingXieShare
@@ -17,27 +18,36 @@ data class NetworkQuiz(val id: Long,
                        val not_learned: Int,
                        val round: Int)
 
-fun NetworkQuizContainer.asDatabaseModel(): List<Quiz> {
-  return quizzes.map {
-    Quiz(it.id, it.date, it.title, it.total_words, it.not_learned, it.round)
-  }
+fun NetworkQuizContainer.asDatabaseModel(): List<Quiz> = quizzes.map {
+  Quiz(it.id, it.date, it.title, it.total_words, it.not_learned, it.round)
 }
 
 @JsonClass(generateAdapter = true)
 data class NetworkIndividualContainer(val individuals: List<NetworkIndividual>)
 
+fun NetworkIndividualContainer.asDomainModel(): List<TingXieIndividual> =
+    individuals.map { TingXieIndividual(it.email, it.firstName, it.lastName) }
+
 @JsonClass(generateAdapter = true)
 data class NetworkIndividual(val email: String, val firstName: String, val lastName: String)
-
-fun NetworkIndividualContainer.asDomainModel(): List<TingXieIndividual> {
-  return individuals.map { TingXieIndividual(it.email, it.firstName, it.lastName) }
-}
 
 //fun NetworkFriendContainer.asDatabaseModel(): List<DatabaseFriend> {
 //  return friends.map {
 //    DatabaseFriend(it.email)
 //  }
 //}
+
+@JsonClass(generateAdapter = true)
+data class NetworkGroupContainer(val groups: List<NetworkGroup>)
+
+fun NetworkGroupContainer.asDomainModel(): List<TingXieGroup> = groups.map {
+  TingXieGroup(it.name, it.individuals.map {
+    it1 -> TingXieIndividual(it1.email, it1.firstName, it1.lastName)
+  } )
+}
+
+@JsonClass(generateAdapter = true)
+data class NetworkGroup(val name: String, val individuals: List<NetworkIndividual>)
 
 @JsonClass(generateAdapter = true)
 data class NetworkShareContainer(val shares: List<NetworkShare>)
@@ -49,8 +59,6 @@ data class NetworkShare(val email: String,
                         val isShared: Boolean,
                         val role: EnumQuizRole)
 
-fun NetworkShareContainer.asDomainModel(): List<TingXieShare> {
-  return shares.map {
-    TingXieShare(it.email, it.firstName, it.lastName, it.isShared, it.role)
-  }
+fun NetworkShareContainer.asDomainModel(): List<TingXieShare> = shares.map {
+  TingXieShare(it.email, it.firstName, it.lastName, it.isShared, it.role)
 }

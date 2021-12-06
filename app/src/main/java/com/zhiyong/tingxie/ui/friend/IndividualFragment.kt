@@ -49,18 +49,17 @@ class IndividualFragment : Fragment() {
       frameLayout?.addView(editText)
 
       val yourEmail = FirebaseAuth.getInstance().currentUser?.email
-      val dialog = AlertDialog.Builder(requireActivity())
-      dialog.setMessage("To connect with a friend, search for her email address.${
+      val builder = AlertDialog.Builder(requireActivity())
+      builder.setMessage("To connect with a friend, search for her email address.${
         if (yourEmail == null) "" else "\nYour email address: $yourEmail"
       }")
               .setTitle("Add friend")
               .setView(frameLayout)
-              .setPositiveButton(R.string.ok) { dialog1, _ -> {
+              .setPositiveButton(R.string.ok) { dialog, _ -> {
                 // todo. Search for email after API is implemented.
               } }
-              .setNegativeButton(R.string.cancel) { dialog1, _ -> dialog1.cancel() }
-              .create()
-              .show()
+              .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
+              .create().show()
     }
 
     viewModel = ViewModelProvider(this)[IndividualViewModel::class.java]

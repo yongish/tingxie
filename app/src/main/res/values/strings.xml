@@ -55,9 +55,10 @@
     <string name="title_activity_login">Login</string>
     <string name="clone">Clone</string>
     <string name="no_friends">You don\'t have any friends yet.\nTap the + button to add a friend and share quizzes.</string>
-    <string name="no_shares">You have not shared this quiz with any friends.\nTap the + button to share it with friends.</string>
-    <string name="no_quizzes">You have not added any quizzes.\nTap the + button to add a quiz.</string>
-    <string name="no_words">You have not added any words.\nTap the + button to add a word.</string>
+    <string name="no_groups">You haven\'t created any friend groups.\nTap the + button to create a group, then add friends to it.</string>
+    <string name="no_shares">You haven\'t shared this quiz with any friends.\nTap the + button to share it with friends.</string>
+    <string name="no_quizzes">You haven\'t added any quizzes.\nTap the + button to add a quiz.</string>
+    <string name="no_words">You haven\'t added any words.\nTap the + button to add a word.</string>
     <string name="help">Help</string>
     <string name="help_options">Help options</string>
     <string name="play_demo_video">Play demo video on YouTube.</string>
@@ -90,8 +91,10 @@
     <string name="your_email_address">Your email address:</string>
     <string name="enter_friend_email">Enter friend\'s email</string>
     <string name="friend_connect_instructions">To connect with your friend, search for her email address.</string>
-    <string name="add_friend">Add friend.</string>
+    <string name="add_friend">Add a friend.</string>
+    <string name="create_group">Create a friend group.</string>
     <string name="add_share">Add a friend to share.</string>
     <string name="username">%s, %s</string>
     <string name="shared">Shared</string>
+    <string name="member_count">No. of members: %d</string>
 </resources>

@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.zhiyong.tingxie.QuizRepository
 import kotlinx.coroutines.launch
 
@@ -25,7 +26,9 @@ class IndividualViewModel(application: Application) : AndroidViewModel(applicati
   init {
 //    getFriends()
     val email = FirebaseAuth.getInstance().currentUser?.email
-    if (email != null) {
+    if (email == null) {
+      FirebaseCrashlytics.getInstance().recordException(Exception("NO EMAIL."))
+    } else {
       getIndividuals(email)
     }
   }

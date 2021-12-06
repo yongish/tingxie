@@ -27,6 +27,19 @@ interface Service {
 
   @DELETE("friends/{email}")
   suspend fun deleteFriend(@Path("email") email: String): Boolean
+
+  @GET("friends/{email}/groups")
+  suspend fun getGroups(@Path("email") email: String): NetworkGroupContainer
+
+  @POST("friends/{email}/groups")
+  suspend fun postGroup(@Body group: NetworkGroup): NetworkGroup
+
+  @PUT("friends/{email}/groups")
+  suspend fun putGroup(@Body group: NetworkGroup): NetworkGroup
+
+  @DELETE("friends/{email}/groups/{name}")
+  suspend fun deleteGroup(@Path("email") email: String,
+                          @Path("name") name: String): Boolean
 }
 
 object TingXieNetwork {
