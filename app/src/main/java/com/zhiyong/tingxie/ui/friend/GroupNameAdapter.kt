@@ -20,10 +20,9 @@ class GroupNameAdapter(private val groups: List<TingXieGroup>,
       ))
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
     val group = groups[position]
     holder.bind(group)
-    holder.ivEdit.setOnClickListener {
+    holder.clIdentifier.setOnClickListener {
       // Open GroupMember activity.
     }
     holder.ivDelete.setOnClickListener {
@@ -44,7 +43,7 @@ class GroupNameAdapter(private val groups: List<TingXieGroup>,
 
   class ViewHolder(private val binding: RecyclerviewGroupNameBinding)
     : RecyclerView.ViewHolder(binding.root) {
-    val ivEdit = binding.ivEdit
+    val clIdentifier = binding.clIdentifier
     val ivDelete = binding.ivDelete
 
     fun bind(group: TingXieGroup) = with(binding) {
