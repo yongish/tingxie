@@ -3,6 +3,7 @@ package com.zhiyong.tingxie.network
 import com.squareup.moshi.JsonClass
 import com.zhiyong.tingxie.db.Quiz
 import com.zhiyong.tingxie.ui.friend.TingXieGroup
+import com.zhiyong.tingxie.ui.friend.TingXieGroupMember
 import com.zhiyong.tingxie.ui.friend.TingXieIndividual
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
 import com.zhiyong.tingxie.ui.share.TingXieShare
@@ -40,14 +41,17 @@ data class NetworkIndividual(val email: String, val firstName: String, val lastN
 @JsonClass(generateAdapter = true)
 data class NetworkGroupContainer(val groups: List<NetworkGroup>)
 
+@JsonClass(generateAdapter = true)
+data class NetworkGroupMember(val email: String, val role: EnumQuizRole, val firstName: String, val lastName: String)
+
 fun NetworkGroupContainer.asDomainModel(): List<TingXieGroup> = groups.map {
   TingXieGroup(it.name, it.individuals.map {
-    it1 -> TingXieIndividual(it1.email, it1.firstName, it1.lastName)
+    it1 -> TingXieGroupMember(it1.email, it1.role, it1.firstName, it1.lastName)
   } )
 }
 
 @JsonClass(generateAdapter = true)
-data class NetworkGroup(val name: String, val individuals: List<NetworkIndividual>)
+data class NetworkGroup(val name: String, val individuals: List<NetworkGroupMember>)
 
 @JsonClass(generateAdapter = true)
 data class NetworkShareContainer(val shares: List<NetworkShare>)

@@ -71,8 +71,12 @@ class ShareAdapter(private val quizId: Long,
       holder.spRole.setOnTouchListener(OnTouchListener
       @SuppressLint("ClickableViewAccessbility") { _, _ ->
         val builder = AlertDialog.Builder(context)
+
+        // todo: Check if there is a pending editor request.
+
         builder.setMessage("You must be an editor to edit sharing settings.")
             .setPositiveButton("Request editor role") {
+              // todo: Request editor role.
               dialog, _ -> dialog.dismiss()
             }
             .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
@@ -80,12 +84,12 @@ class ShareAdapter(private val quizId: Long,
         true
       })
     } else {
-      // todo: Save menu item should appear.
-      holder.cbIsShared.setOnClickListener {
-
-      }
-      // todo: Save menu item should appear.
-      holder.spRole.setOnItemClickListener { adapterView, view, i, l ->  }
+//      // todo: Save menu item should appear.
+//      holder.cbIsShared.setOnClickListener {
+//
+//      }
+//      // todo: Save menu item should appear.
+//      holder.spRole.setOnItemClickListener { adapterView, view, i, l ->  }
     }
 
   }

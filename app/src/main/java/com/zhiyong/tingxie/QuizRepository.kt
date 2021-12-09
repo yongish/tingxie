@@ -8,6 +8,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.db.*
 import com.zhiyong.tingxie.network.*
 import com.zhiyong.tingxie.ui.friend.TingXieGroup
+import com.zhiyong.tingxie.ui.friend.TingXieGroupMember
 import com.zhiyong.tingxie.ui.friend.TingXieIndividual
 import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsAdapter
@@ -87,13 +88,13 @@ class QuizRepository(val context: Context) {
     }
     return arrayListOf(
         TingXieGroup("group0", arrayListOf(
-            TingXieIndividual("g0i0@email.com", "g0f0", "g0l0"),
-            TingXieIndividual("g0i1@email.com", "g0f1", "g0l1"),
-            TingXieIndividual("g0i2@email.com", "g0f2", "g0l2"),
+            TingXieGroupMember("g0i0@email.com", EnumQuizRole.EDITOR, "g0f0", "g0l0"),
+            TingXieGroupMember("g0i1@email.com", EnumQuizRole.EDITOR, "g0f1", "g0l1"),
+            TingXieGroupMember("g0i2@email.com", EnumQuizRole.EDITOR, "g0f2", "g0l2"),
         )),
         TingXieGroup("group1", arrayListOf(
-            TingXieIndividual("g1i0@email.com", "g1f0", "g1l0"),
-            TingXieIndividual("g1i1@email.com", "g1f1", "g1l1"),
+            TingXieGroupMember("g1i0@email.com", EnumQuizRole.VIEWER, "g1f0", "g1l0"),
+            TingXieGroupMember("g1i1@email.com", EnumQuizRole.EDITOR, "g1f1", "g1l1"),
         )),
     )
   }
@@ -101,14 +102,14 @@ class QuizRepository(val context: Context) {
   suspend fun addGroup(group: TingXieGroup) {
     TingXieNetwork.tingxie.postGroup(NetworkGroup(
         group.name,
-        group.individuals.map { NetworkIndividual(it.email, it.firstName, it.lastName) }
+        group.individuals.map { NetworkGroupMember(it.email, it.role, it.firstName, it.lastName) }
     ))
   }
 
   suspend fun updateGroup(group: TingXieGroup) {
     TingXieNetwork.tingxie.putGroup(NetworkGroup(
         group.name,
-        group.individuals.map { NetworkIndividual(it.email, it.firstName, it.lastName) }
+        group.individuals.map { NetworkGroupMember(it.email, it.role, it.firstName, it.lastName) }
     ))
   }
 

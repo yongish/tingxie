@@ -23,7 +23,6 @@ class GroupFragment : Fragment() {
   private lateinit var groupNames: List<String>
   private var _binding: GroupFragmentBinding? = null
   private val binding get() = _binding!!
-  // stopped here
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View {
@@ -36,7 +35,9 @@ class GroupFragment : Fragment() {
 
     binding.fab.setOnClickListener {
       val editText = EditText(context)
-      val params = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+      val params = FrameLayout.LayoutParams(
+          ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+      )
       params.leftMargin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
       params.rightMargin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
       editText.layoutParams = params
@@ -49,9 +50,11 @@ class GroupFragment : Fragment() {
       builder.setMessage("Name your new group.\nExample: Class 5A")
           .setTitle("Create new group")
           .setView(frameLayout)
-          .setPositiveButton(R.string.ok) { dialog, _ ->
+          .setPositiveButton(R.string.ok) { _, _ ->
             if (groupNames.contains(editText.text.toString())) {
-              Toast.makeText(context, "Group names must be unique", Toast.LENGTH_LONG).show()
+              Toast.makeText(
+                  context, "Group names must be unique", Toast.LENGTH_LONG
+              ).show()
             } else {
               viewModel.addGroup(TingXieGroup(editText.text.toString()))
             }

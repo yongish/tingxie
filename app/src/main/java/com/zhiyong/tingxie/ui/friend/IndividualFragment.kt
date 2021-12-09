@@ -55,9 +55,9 @@ class IndividualFragment : Fragment() {
       }")
               .setTitle("Add friend")
               .setView(frameLayout)
-              .setPositiveButton(R.string.ok) { dialog, _ -> {
-                // todo. Search for email after API is implemented.
-              } }
+              .setPositiveButton(R.string.ok) { dialog, _ ->
+                // todo Search for email after API is implemented.
+              }
               .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
               .create().show()
     }

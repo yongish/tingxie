@@ -56,6 +56,7 @@
     <string name="clone">Clone</string>
     <string name="no_friends">You don\'t have any friends yet.\nTap the + button to add a friend and share quizzes.</string>
     <string name="no_groups">You haven\'t created any friend groups.\nTap the + button to create a group, then add friends to it.</string>
+    <string name="no_members">You haven\'t added any friends to this group.\nTap the + button to add a friend.</string>
     <string name="no_shares">You haven\'t shared this quiz with any friends.\nTap the + button to share it with friends.</string>
     <string name="no_quizzes">You haven\'t added any quizzes.\nTap the + button to add a quiz.</string>
     <string name="no_words">You haven\'t added any words.\nTap the + button to add a word.</string>

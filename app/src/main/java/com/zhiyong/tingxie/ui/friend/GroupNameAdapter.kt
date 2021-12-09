@@ -15,6 +15,10 @@ class GroupNameAdapter(private val groups: List<TingXieGroup>,
                        val recyclerView: RecyclerView)
   : RecyclerView.Adapter<GroupNameAdapter.ViewHolder>() {
 
+  companion object {
+    const val EXTRA_GROUP = "com.zhiong.tingxie.ui.friend.extra.GROUP"
+  }
+
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
       ViewHolder(RecyclerviewGroupNameBinding.inflate(
         LayoutInflater.from(parent.context), parent, false
@@ -25,7 +29,9 @@ class GroupNameAdapter(private val groups: List<TingXieGroup>,
     holder.bind(group)
     holder.clIdentifier.setOnClickListener {
       // Open GroupMember activity.
-      context.startActivity(Intent(context, GroupMemberActivity::class.java))
+      val intent = Intent(context, GroupMemberActivity::class.java)
+      intent.putExtra(EXTRA_GROUP, group)
+      context.startActivity(intent)
     }
     holder.ivDelete.setOnClickListener {
       val adapterPosition = holder.adapterPosition

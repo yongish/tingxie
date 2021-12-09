@@ -1,5 +1,9 @@
 package com.zhiyong.tingxie.ui.friend
 
-data class TingXieGroup(val name: String, val individuals: List<TingXieIndividual>) {
-  constructor(name: String): this(name, arrayListOf())
-}
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
+class TingXieGroup(
+    val name: String, val individuals: List<TingXieGroupMember> = arrayListOf()
+) : Parcelable
