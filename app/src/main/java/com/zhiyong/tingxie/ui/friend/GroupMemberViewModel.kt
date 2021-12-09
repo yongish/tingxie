@@ -12,7 +12,11 @@ class GroupMemberViewModel(application: Application) : IndividualViewModel(appli
   val members: LiveData<List<TingXieGroupMember>>
     get() = _members
 
-  fun addGroupMember(groupName: String, email: String) {
+  fun add(groupName: String, member: TingXieGroupMember) {
+
+  }
+
+  fun delete(groupName: String, email: String) {
 
   }
 }

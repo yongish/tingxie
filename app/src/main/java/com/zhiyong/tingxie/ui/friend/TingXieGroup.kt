@@ -5,5 +5,5 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 class TingXieGroup(
-    val name: String, val individuals: List<TingXieGroupMember> = arrayListOf()
+    val name: String, val members: List<TingXieGroupMember> = arrayListOf()
 ) : Parcelable

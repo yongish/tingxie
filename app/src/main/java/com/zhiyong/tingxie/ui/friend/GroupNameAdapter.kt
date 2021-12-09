@@ -57,7 +57,7 @@ class GroupNameAdapter(private val groups: List<TingXieGroup>,
     fun bind(group: TingXieGroup) = with(binding) {
       tvName.text = group.name
       tvMemberCount.text = String.format(
-          itemView.context.getString(R.string.member_count), group.individuals.size
+          itemView.context.getString(R.string.member_count), group.members.size
       )
     }
   }

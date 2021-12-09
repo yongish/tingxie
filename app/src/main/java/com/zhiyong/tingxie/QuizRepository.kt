@@ -102,14 +102,14 @@ class QuizRepository(val context: Context) {
   suspend fun addGroup(group: TingXieGroup) {
     TingXieNetwork.tingxie.postGroup(NetworkGroup(
         group.name,
-        group.individuals.map { NetworkGroupMember(it.email, it.role, it.firstName, it.lastName) }
+        group.members.map { NetworkGroupMember(it.email, it.role, it.firstName, it.lastName) }
     ))
   }
 
   suspend fun updateGroup(group: TingXieGroup) {
     TingXieNetwork.tingxie.putGroup(NetworkGroup(
         group.name,
-        group.individuals.map { NetworkGroupMember(it.email, it.role, it.firstName, it.lastName) }
+        group.members.map { NetworkGroupMember(it.email, it.role, it.firstName, it.lastName) }
     ))
   }
 

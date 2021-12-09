@@ -52,7 +52,7 @@ class GroupMemberFragment : Fragment() {
       return
     }
 
-    val isAdmin = group.individuals.find { it.email == email }?.role == EnumQuizRole.EDITOR
+    val isAdmin = group.members.find { it.email == email }?.role == EnumQuizRole.EDITOR
 
     binding.fab.setOnClickListener {
       // stopped here. Show a list of names (email addresses) that have not been added.
@@ -88,7 +88,16 @@ class GroupMemberFragment : Fragment() {
               .setTitle("Add to group")
               .setView(frameLayout)
               .setPositiveButton(R.string.ok) { _, _ ->
-                viewModel.addGroupMember(group.name, unaddedFriends[spinner.selectedItemPosition].email)
+                val friend = unaddedFriends[spinner.selectedItemPosition]
+                viewModel.add(
+                    group.name,
+                    TingXieGroupMember(
+                        friend.email,
+                        spinner.selectedItem as EnumQuizRole,
+                        friend.firstName,
+                        friend.lastName
+                    )
+                )
               }
               .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
               .create().show()
@@ -108,8 +117,22 @@ class GroupMemberFragment : Fragment() {
     viewModel = ViewModelProvider(this)[GroupMemberViewModel::class.java]
     viewModel.friends.observe(viewLifecycleOwner, { friends ->
       friends?.apply {
-        unaddedFriends = friends - group.individuals.map { TingXieIndividual(it.email, it.firstName, it.lastName) }.toSet()
+        unaddedFriends = friends - group.members.map { TingXieIndividual(it.email, it.firstName, it.lastName) }.toSet()
+        binding.recyclerviewGroups.adapter = GroupMemberAdapter(
+            group, requireContext(), viewModel, binding.recyclerviewGroups
+        )
       }
     })
+
+    if (group.members.isEmpty()) {
+      binding.emptyView.visibility = View.VISIBLE
+    } else {
+      binding.emptyView.visibility = View.INVISIBLE
+    }
+  }
+
+  override fun onDestroyView() {
+    super.onDestroyView()
+    _binding = null
   }
 }
