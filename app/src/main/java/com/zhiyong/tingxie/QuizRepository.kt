@@ -34,6 +34,17 @@ class QuizRepository(val context: Context) {
 
   private val executor: ExecutorService = Executors.newSingleThreadExecutor()
 
+  private lateinit var email: String
+
+  init {
+    val email = FirebaseAuth.getInstance().currentUser?.email
+    if (email == null) {
+      // todo Log Crashlytics
+    } else {
+      this.email = email
+    }
+  }
+
   val quizzes: LiveData<List<QuizItem>> = Transformations.map(mQuizDao.allQuizItems) {
     it.asDomainModel()
   }
@@ -73,14 +84,14 @@ class QuizRepository(val context: Context) {
 
 
       // Insert quizzes in remote DB not in local DB.
-      val quizzes = TingXieNetwork.tingxie.getQuizzes()
+      val quizzes = TingXieNetwork.tingxie.getQuizzes(email)
 
 
       mQuizDao.insertAll(quizzes.asDatabaseModel())
     }
   }
 
-  suspend fun getGroups(email: String, quizId: Long): List<TingXieGroup> {
+  suspend fun getGroups(quizId: Long): List<TingXieGroup> {
     try {
       if (quizId == -1L) {
         TingXieNetwork.tingxie.getGroups(email).asDomainModel()
@@ -104,24 +115,24 @@ class QuizRepository(val context: Context) {
   }
 
   suspend fun addGroup(group: TingXieGroup) {
-    TingXieNetwork.tingxie.postGroup(NetworkGroup(
+    TingXieNetwork.tingxie.postGroup(email, NetworkGroup(
         group.name,
         group.members.map { NetworkGroupMember(it.email, it.role, it.firstName, it.lastName) }
     ))
   }
 
   suspend fun updateGroup(group: TingXieGroup) {
-    TingXieNetwork.tingxie.putGroup(NetworkGroup(
+    TingXieNetwork.tingxie.putGroup(email, NetworkGroup(
         group.name,
         group.members.map { NetworkGroupMember(it.email, it.role, it.firstName, it.lastName) }
     ))
   }
 
   suspend fun deleteGroup(email: String, name: String) {
-    TingXieNetwork.tingxie.deleteGroup(email, name)
+    TingXieNetwork.tingxie.deleteGroup(name, this.email, email)
   }
 
-  suspend fun getFriends(email: String): List<TingXieIndividual> {
+  suspend fun getFriends(): List<TingXieIndividual> {
 //        return TingXieNetwork.tingxie.getFriends().asDomainModel()
     try {
       TingXieNetwork.tingxie.getFriends(email).asDomainModel()
@@ -133,18 +144,19 @@ class QuizRepository(val context: Context) {
 
   suspend fun addFriend(individual: TingXieIndividual) {
     TingXieNetwork.tingxie.postFriend(
+        email,
         NetworkIndividual(individual.email, individual.firstName, individual.lastName)
     )
   }
 
   suspend fun deleteFriend(email: String) {
-    TingXieNetwork.tingxie.deleteFriend(email)
+    TingXieNetwork.tingxie.deleteFriend(this.email, email)
   }
 
   suspend fun getShares(quizId: Long): List<TingXieShare> {
     try {
 //            return TingXieNetwork.tingxie.getShares(quizId).asDomainModel()
-      TingXieNetwork.tingxie.getShares(quizId).asDomainModel()
+      TingXieNetwork.tingxie.getShares(email, quizId).asDomainModel()
     } catch (e: Exception) {
 
     }
@@ -157,14 +169,14 @@ class QuizRepository(val context: Context) {
 //    return arrayListOf()
   }
 
-  suspend fun addShare(share: TingXieShare) {
-    TingXieNetwork.tingxie.postShare(NetworkShare(
+  suspend fun addShare(quizId: Long, share: TingXieShare) {
+    TingXieNetwork.tingxie.postShare(email, quizId, NetworkShare(
         share.email, share.firstName, share.lastName, true, share.role
     ))
   }
 
   suspend fun deleteShare(quizId: Long, email: String) {
-    TingXieNetwork.tingxie.deleteShare(quizId, email)
+    TingXieNetwork.tingxie.deleteShare(this.email, quizId, email)
   }
 
   val allQuizPinyins: LiveData<List<QuizPinyin>> = mQuizDao.allQuizPinyins

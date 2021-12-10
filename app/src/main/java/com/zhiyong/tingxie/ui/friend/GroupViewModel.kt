@@ -24,18 +24,14 @@ class GroupViewModel(application: Application) : AndroidViewModel(application) {
   val email = FirebaseAuth.getInstance().currentUser?.email
 
   init {
-    if (email == null) {
-      FirebaseCrashlytics.getInstance().recordException(Exception("NO EMAIL."))
-    } else {
-      getGroups(email)
-    }
+    getGroups()
   }
 
-  private fun getGroups(email: String, quizId: Long = -1) {
+  private fun getGroups(quizId: Long = -1) {
     viewModelScope.launch {
       _status.value = Status.LOADING
       try {
-        _groups.value = repository.getGroups(email, quizId)
+        _groups.value = repository.getGroups(quizId)
         _status.value = Status.DONE
       } catch (e: Exception) {
         _groups.value = ArrayList()

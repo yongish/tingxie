@@ -6,46 +6,52 @@ import retrofit2.http.*
 
 interface Service {
   @GET("quizzes")
-  suspend fun getQuizzes(): NetworkQuizContainer
+  suspend fun getQuizzes(@Query("email") email: String): NetworkQuizContainer
 
-  @GET("quizzes/{quizId}/shares")
-  suspend fun getShares(@Path("quizId") quizId: Long): NetworkShareContainer
+  @GET("shares")
+  suspend fun getShares(@Query("email") email: String,
+                        @Query("quizId") quizId: Long): NetworkShareContainer
 
-  @POST("quizzes/{quizId}/shares")
-  suspend fun postShare(@Body share: NetworkShare): NetworkShare
+  @POST("shares/userEmail/{email}/quizId/{quizId}")
+  suspend fun postShare(@Path("email") email: String,
+                        @Path("quizId") quizId: Long,
+                        @Body share: NetworkShare): NetworkShare
 
-  @DELETE("quizzes/{quizId}/shares/{email}")
-  suspend fun deleteShare(
-      @Path("quizId") quizId: Long, @Path("email") email: String
-  ): Boolean
+  @DELETE("shares/userEmail/{userEmail}/quizzes/{quizId}/email/{email}")
+  suspend fun deleteShare(@Path("userEmail") userEmail: String,
+                          @Path("quizId") quizId: Long,
+                          @Path("email") email: String): Boolean
 
-  @GET("friends/{email}")
-  suspend fun getFriends(@Path("email") email: String): NetworkIndividualContainer
+  @GET("friends")
+  suspend fun getFriends(@Query("email") email: String): NetworkIndividualContainer
 
   @POST("friends")
-  suspend fun postFriend(@Body individual: NetworkIndividual): NetworkIndividual
+  suspend fun postFriend(@Query("email") email: String,
+                         @Body individual: NetworkIndividual): NetworkIndividual
 
-  @DELETE("friends/{email}")
-  suspend fun deleteFriend(@Path("email") email: String): Boolean
+  @DELETE("friends/userEmail/{userEmail}/friendEmail/{email}")
+  suspend fun deleteFriend(@Path("userEmail") userEmail: String,
+                           @Path("email") email: String): Boolean
 
-  @GET("friends/{email}/groups")
-  suspend fun getGroups(@Path("email") email: String): NetworkGroupContainer
+  @GET("groups")
+  suspend fun getGroups(@Query("email") email: String): NetworkGroupContainer
 
-  @GET("friends/{email}/quizzes/{quizId}/groups")
-  suspend fun getGroups(@Path("email") email: String,
+  @GET("groups")
+  suspend fun getGroups(@Query("email") email: String,
                         @Query("quizId") quizId: Long): NetworkGroupContainer
 
-  @POST("friends/{email}/groups")
-  suspend fun postGroup(@Body group: NetworkGroup): NetworkGroup
+  @POST("groups")
+  suspend fun postGroup(@Query("email") email: String,
+                        @Body group: NetworkGroup): NetworkGroup
 
-  @POST("friends/{email}")
+  @PUT("groups")
+  suspend fun putGroup(@Query("email") email: String,
+                       @Body group: NetworkGroup): NetworkGroup
 
-  @PUT("friends/{email}/groups")
-  suspend fun putGroup(@Body group: NetworkGroup): NetworkGroup
-
-  @DELETE("friends/{email}/groups/{name}")
-  suspend fun deleteGroup(@Path("email") email: String,
-                          @Path("name") name: String): Boolean
+  @DELETE("groups/{name}/userEmail/{userEmail}/friendEmail/{email}")
+  suspend fun deleteGroup(@Path("name") name: String,
+                          @Path("userEmail") userEmail: String,
+                          @Path("email") email: String): Boolean
 }
 
 object TingXieNetwork {

@@ -24,20 +24,14 @@ open class IndividualViewModel(application: Application) : AndroidViewModel(appl
     get() = _friends
 
   init {
-//    getFriends()
-    val email = FirebaseAuth.getInstance().currentUser?.email
-    if (email == null) {
-      FirebaseCrashlytics.getInstance().recordException(Exception("NO EMAIL."))
-    } else {
-      getIndividuals(email)
-    }
+    getIndividuals()
   }
 
-  private fun getIndividuals(email: String) {
+  private fun getIndividuals() {
     viewModelScope.launch {
       _status.value = Status.LOADING
       try {
-        _friends.value = repository.getFriends(email)
+        _friends.value = repository.getFriends()
         _status.value = Status.DONE
       } catch (e: Exception) {
         _friends.value = ArrayList()

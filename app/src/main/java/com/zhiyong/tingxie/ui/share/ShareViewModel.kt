@@ -37,8 +37,8 @@ class ShareViewModel(quizId: Long, application: Application) : AndroidViewModel(
     }
   }
 
-  fun addShare(share: TingXieShare) {
-    viewModelScope.launch { repository.addShare(share) }
+  fun addShare(quizId: Long, share: TingXieShare) {
+    viewModelScope.launch { repository.addShare(quizId, share) }
   }
 
   fun deleteShare(quizId: Long, email: String) {
