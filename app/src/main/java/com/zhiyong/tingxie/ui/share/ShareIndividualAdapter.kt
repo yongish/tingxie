@@ -3,8 +3,6 @@ package com.zhiyong.tingxie.ui.share
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
@@ -15,17 +13,16 @@ import com.zhiyong.tingxie.databinding.RecyclerviewShareBinding
 import android.view.View.OnTouchListener
 import android.widget.Filter
 import android.widget.Filterable
-import android.widget.Toast
 import com.zhiyong.tingxie.R
 
 enum class IsShared { SHARED, ALL }
 
-class ShareAdapter(private val quizId: Long,
-                   private val shares: List<TingXieShare>,
-                   private val context: Context,
-                   val viewModel: ShareViewModel,
-                   val recyclerView: RecyclerView)
-  : RecyclerView.Adapter<ShareAdapter.ViewHolder>(), Filterable {
+class ShareIndividualAdapter(private val quizId: Long,
+                             private val shares: List<TingXieShare>,
+                             private val context: Context,
+                             val viewModel: ShareViewModel,
+                             val recyclerView: RecyclerView)
+  : RecyclerView.Adapter<ShareIndividualAdapter.ViewHolder>(), Filterable {
 
   var sharesFiltered: List<TingXieShare> = shares.filter { it.isShared }
 

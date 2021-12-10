@@ -3,12 +3,15 @@ package com.zhiyong.tingxie.ui.share
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.zhiyong.tingxie.R
+import com.zhiyong.tingxie.databinding.ShareActivityBinding
 
 class ShareActivity : AppCompatActivity() {
 
   companion object {
     const val EXTRA_QUIZ_ID = "com.zhiyong.tingxie.ui.share.extra.QUIZ_ID"
   }
+
+  private lateinit var binding: ShareActivityBinding
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -25,5 +28,14 @@ class ShareActivity : AppCompatActivity() {
               .replace(R.id.container, shareFragment)
               .commitNow()
     }
+    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+    binding = ShareActivityBinding.inflate(layoutInflater)
+    setContentView(binding.root)
+  }
+
+  override fun onSupportNavigateUp(): Boolean {
+    onBackPressed()
+    return true
   }
 }

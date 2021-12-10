@@ -25,7 +25,7 @@ class ShareFragment : Fragment() {
   }
 
   private lateinit var viewModel: ShareViewModel
-  private lateinit var adapter: ShareAdapter
+  private lateinit var shareIndividualAdapter: ShareIndividualAdapter
   private var _binding: ShareFragmentBinding? = null
   private val binding get() = _binding!!
 
@@ -54,7 +54,7 @@ class ShareFragment : Fragment() {
 
     binding.fab.setOnClickListener {
       // Display all friends.
-      adapter.filter.filter(IsShared.ALL.name)
+      shareIndividualAdapter.filter.filter(IsShared.ALL.name)
       binding.fab.visibility = View.GONE
 
       // todo: Display done check button on menu bar.
@@ -70,7 +70,7 @@ class ShareFragment : Fragment() {
           binding.fab.visibility = if (role == EnumQuizRole.EDITOR) View.VISIBLE else View.GONE
 
           // todo: Pass role into ShareAdapter to fix duplication.
-          binding.recyclerviewShares.adapter = ShareAdapter(
+          binding.recyclerviewShares.adapter = ShareIndividualAdapter(
               quizId,
               shares,
 //              shares.filter { it.isShared },
@@ -80,7 +80,7 @@ class ShareFragment : Fragment() {
           )
 
         }
-        adapter = binding.recyclerviewShares.adapter as ShareAdapter
+        shareIndividualAdapter = binding.recyclerviewShares.adapter as ShareIndividualAdapter
         if (shares.isEmpty()) {
           binding.emptyView.visibility = View.VISIBLE
         } else {
