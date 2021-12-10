@@ -80,9 +80,13 @@ class QuizRepository(val context: Context) {
     }
   }
 
-  suspend fun getGroups(email: String): List<TingXieGroup> {
+  suspend fun getGroups(email: String, quizId: Long): List<TingXieGroup> {
     try {
-      TingXieNetwork.tingxie.getGroups(email).asDomainModel()
+      if (quizId == -1L) {
+        TingXieNetwork.tingxie.getGroups(email).asDomainModel()
+      } else {
+        TingXieNetwork.tingxie.getGroups(email, quizId).asDomainModel()
+      }
     } catch (e: Exception) {
       // todo: Log to Crashlytics.
     }

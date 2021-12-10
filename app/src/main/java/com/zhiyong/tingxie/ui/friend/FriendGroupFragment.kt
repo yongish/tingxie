@@ -11,22 +11,22 @@ import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.zhiyong.tingxie.R
-import com.zhiyong.tingxie.databinding.GroupFragmentBinding
+import com.zhiyong.tingxie.databinding.FriendGroupFragmentBinding
 
-class GroupFragment : Fragment() {
+class FriendGroupFragment : Fragment() {
 
   companion object {
-    fun newInstance() = GroupFragment()
+    fun newInstance() = FriendGroupFragment()
   }
 
   private lateinit var viewModel: GroupViewModel
   private lateinit var groupNames: List<String>
-  private var _binding: GroupFragmentBinding? = null
+  private var _binding: FriendGroupFragmentBinding? = null
   private val binding get() = _binding!!
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View {
-    _binding = GroupFragmentBinding.inflate(inflater, container, false)
+    _binding = FriendGroupFragmentBinding.inflate(inflater, container, false)
     return binding.root
   }
 
@@ -63,7 +63,9 @@ class GroupFragment : Fragment() {
           .create().show()
     }
 
+
     viewModel = ViewModelProvider(this)[GroupViewModel::class.java]
+
     viewModel.groups.observe(viewLifecycleOwner, { groups ->
       groups?.apply {
         binding.recyclerviewGroups.adapter = GroupNameAdapter(

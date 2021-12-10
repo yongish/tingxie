@@ -13,11 +13,6 @@ class FriendActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.friend_activity)
-//    if (savedInstanceState == null) {
-//      supportFragmentManager.beginTransaction()
-//        .replace(R.id.container, IndividualFragment.newInstance())
-//        .commitNow()
-//    }
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
     binding = FriendActivityBinding.inflate(layoutInflater)

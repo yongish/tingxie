@@ -21,8 +21,9 @@ class GroupViewModel(application: Application) : AndroidViewModel(application) {
   val groups: LiveData<List<TingXieGroup>>
     get() = _groups
 
+  val email = FirebaseAuth.getInstance().currentUser?.email
+
   init {
-    val email = FirebaseAuth.getInstance().currentUser?.email
     if (email == null) {
       FirebaseCrashlytics.getInstance().recordException(Exception("NO EMAIL."))
     } else {
@@ -30,11 +31,11 @@ class GroupViewModel(application: Application) : AndroidViewModel(application) {
     }
   }
 
-  private fun getGroups(email: String) {
+  private fun getGroups(email: String, quizId: Long = -1) {
     viewModelScope.launch {
       _status.value = Status.LOADING
       try {
-        _groups.value = repository.getGroups(email)
+        _groups.value = repository.getGroups(email, quizId)
         _status.value = Status.DONE
       } catch (e: Exception) {
         _groups.value = ArrayList()
@@ -43,13 +44,13 @@ class GroupViewModel(application: Application) : AndroidViewModel(application) {
     }
   }
 
-  fun addGroup(group: TingXieGroup) =
+  fun addGroup(group: TingXieGroup, quizId: Long = -1) =
       viewModelScope.launch { repository.addGroup(group) }
 
   fun updateGroup(group: TingXieGroup) =
       viewModelScope.launch { repository.updateGroup(group) }
 
-  fun deleteGroup(name: String) = viewModelScope.launch {
+  fun deleteGroup(name: String, quizId: Long = -1) = viewModelScope.launch {
     val email = FirebaseAuth.getInstance().currentUser?.email
     if (email == null) {
       FirebaseCrashlytics.getInstance().recordException(Exception("NO EMAIL."))

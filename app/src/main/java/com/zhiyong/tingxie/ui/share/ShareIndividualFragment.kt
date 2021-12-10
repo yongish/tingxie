@@ -18,10 +18,10 @@ import com.zhiyong.tingxie.databinding.ShareFragmentBinding
 import com.zhiyong.tingxie.ui.friend.Status
 import com.zhiyong.tingxie.ui.share.ShareActivity.Companion.EXTRA_QUIZ_ID
 
-class ShareFragment : Fragment() {
+class ShareIndividualFragment : Fragment() {
 
   companion object {
-    fun newInstance() = ShareFragment()
+    fun newInstance() = ShareIndividualFragment()
   }
 
   private lateinit var viewModel: ShareViewModel
@@ -53,9 +53,14 @@ class ShareFragment : Fragment() {
     binding.emptyView.text = spannableString
 
     binding.fab.setOnClickListener {
+
+      // todo: Only admin can edit shared.
+
       // Display all friends.
       shareIndividualAdapter.filter.filter(IsShared.ALL.name)
       binding.fab.visibility = View.GONE
+
+      // todo:
 
       // todo: Display done check button on menu bar.
     }

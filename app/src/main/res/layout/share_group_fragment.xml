@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorScreenBackground"
-    tools:context=".ui.friend.GroupFragment">
+    tools:context=".ui.share.ShareGroupFragment">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
@@ -17,10 +17,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_add_black_24dp"
-        android:contentDescription="@string/create_group" />
+        android:contentDescription="@string/add_group" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_groups"
+        android:id="@+id/recyclerview_share_groups"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="8dp"
@@ -33,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="@string/no_groups"
+        android:text="@string/no_group_shares"
         android:textColor="@color/white"
         android:visibility="gone" />
 

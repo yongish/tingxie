@@ -58,6 +58,7 @@
     <string name="no_groups">You haven\'t created any friend groups.\nTap the + button to create a group, then add friends to it.</string>
     <string name="no_members">You haven\'t added any friends to this group.\nTap the + button to add a friend.</string>
     <string name="no_shares">You haven\'t shared this quiz with any friends.\nTap the + button to share it with friends.</string>
+    <string name="no_group_shares">You haven\'t shared this quiz with any groups.\nTap the + button to select a group to share it with.</string>
     <string name="no_quizzes">You haven\'t added any quizzes.\nTap the + button to add a quiz.</string>
     <string name="no_words">You haven\'t added any words.\nTap the + button to add a word.</string>
     <string name="help">Help</string>
@@ -95,6 +96,7 @@
     <string name="add_friend">Add a friend.</string>
     <string name="create_group">Create a friend group.</string>
     <string name="add_share">Add a friend to share.</string>
+    <string name="add_group">Share with a group.</string>
     <string name="username">%s, %s</string>
     <string name="shared">Shared</string>
     <string name="member_count">No. of members: %d</string>

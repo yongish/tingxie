@@ -31,8 +31,14 @@ interface Service {
   @GET("friends/{email}/groups")
   suspend fun getGroups(@Path("email") email: String): NetworkGroupContainer
 
+  @GET("friends/{email}/quizzes/{quizId}/groups")
+  suspend fun getGroups(@Path("email") email: String,
+                        @Query("quizId") quizId: Long): NetworkGroupContainer
+
   @POST("friends/{email}/groups")
   suspend fun postGroup(@Body group: NetworkGroup): NetworkGroup
+
+  @POST("friends/{email}")
 
   @PUT("friends/{email}/groups")
   suspend fun putGroup(@Body group: NetworkGroup): NetworkGroup

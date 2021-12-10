@@ -70,12 +70,11 @@ class GroupMemberFragment : Fragment() {
               .setNegativeButton("Close") { dialog, _ -> dialog.dismiss() }
               .create().show()
         } else {
-          val adapter =
-            ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_spinner_item,
-                unaddedFriends.map { it.firstName + it.lastName + " (" + it.email + ")" }
-            )
+          val adapter = ArrayAdapter(
+              requireContext(),
+              android.R.layout.simple_spinner_item,
+              unaddedFriends.map { it.firstName + it.lastName + " (" + it.email + ")" }
+          )
           adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
           val spinner = Spinner(context)
           spinner.adapter = adapter
