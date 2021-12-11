@@ -12,7 +12,7 @@ import android.text.style.ImageSpan
 import com.google.android.material.snackbar.Snackbar
 import com.zhiyong.tingxie.R
 import androidx.core.content.res.ResourcesCompat
-import com.zhiyong.tingxie.databinding.RecyclerviewIndividualBinding
+import com.zhiyong.tingxie.databinding.RecyclerviewFriendIndividualBinding
 
 
 class FriendIndividualAdapter(private val individuals: List<TingXieIndividual>,
@@ -22,7 +22,7 @@ class FriendIndividualAdapter(private val individuals: List<TingXieIndividual>,
   : RecyclerView.Adapter<FriendIndividualAdapter.ViewHolder>() {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-      ViewHolder(RecyclerviewIndividualBinding.inflate(
+      ViewHolder(RecyclerviewFriendIndividualBinding.inflate(
         LayoutInflater.from(parent.context), parent, false
       ))
 
@@ -65,7 +65,7 @@ class FriendIndividualAdapter(private val individuals: List<TingXieIndividual>,
 
   override fun getItemCount(): Int = individuals.size
 
-  class ViewHolder(private val binding: RecyclerviewIndividualBinding)
+  class ViewHolder(private val binding: RecyclerviewFriendIndividualBinding)
     : RecyclerView.ViewHolder(binding.root) {
     val clIdentifier = binding.clIdentifier
     val ivDelete = binding.ivDelete
