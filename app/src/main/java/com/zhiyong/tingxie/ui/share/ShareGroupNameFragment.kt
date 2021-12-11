@@ -14,13 +14,13 @@ import com.zhiyong.tingxie.databinding.ShareGroupFragmentBinding
 import com.zhiyong.tingxie.ui.friend.Status
 import com.zhiyong.tingxie.ui.share.ShareActivity.Companion.EXTRA_QUIZ_ID
 
-class ShareGroupFragment: Fragment() {
+class ShareGroupNameFragment: Fragment() {
 
   companion object {
-    fun newInstance() = ShareGroupFragment()
+    fun newInstance() = ShareGroupNameFragment()
   }
 
-  private lateinit var viewModel: ShareGroupViewModel
+  private lateinit var viewModel: ShareGroupNameViewModel
   private var _binding: ShareGroupFragmentBinding? = null
   private val binding get() = _binding!!
 
@@ -58,7 +58,7 @@ class ShareGroupFragment: Fragment() {
     } else {
       viewModel = ViewModelProvider(
           this, ShareGroupViewModelFactory(requireActivity().application, quizId)
-      )[ShareGroupViewModel::class.java]
+      )[ShareGroupNameViewModel::class.java]
       viewModel.groups.observe(viewLifecycleOwner, { groups ->
         groups?.apply {
           binding.recyclerviewShareGroups.adapter = ShareGroupNameAdapter(

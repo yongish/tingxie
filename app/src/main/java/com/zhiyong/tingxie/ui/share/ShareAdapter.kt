@@ -15,8 +15,8 @@ class ShareAdapter(activity: AppCompatActivity, private val itemsCount: Int, val
       shareIndividualFragment.arguments = bundle
       return shareIndividualFragment
     }
-    val shareGroupFragment = ShareGroupFragment.newInstance()
+    val shareGroupFragment = ShareGroupNameFragment.newInstance()
     shareGroupFragment.arguments = bundle
-    return ShareGroupFragment.newInstance()
+    return ShareGroupNameFragment.newInstance()
   }
 }

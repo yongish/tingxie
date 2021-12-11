@@ -8,7 +8,7 @@ import com.zhiyong.tingxie.ui.friend.TingXieGroup
 
 class ShareGroupNameAdapter(private val groups: List<TingXieGroup>,
                             private val context: Context,
-                            val viewModel: ShareGroupViewModel,
+                            val viewModel: ShareGroupNameViewModel,
                             val recyclerView: RecyclerView)
   : RecyclerView.Adapter<ShareGroupNameAdapter.ViewHolder>() {
 

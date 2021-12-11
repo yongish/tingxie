@@ -10,7 +10,7 @@ import com.zhiyong.tingxie.QuizRepository
 import com.zhiyong.tingxie.ui.friend.Status
 import com.zhiyong.tingxie.ui.friend.TingXieGroup
 
-class ShareGroupViewModel(application: Application, quizId: Long)
+class ShareGroupNameViewModel(application: Application, quizId: Long)
   : AndroidViewModel(application) {
   private val repository: QuizRepository = QuizRepository(application)
 
