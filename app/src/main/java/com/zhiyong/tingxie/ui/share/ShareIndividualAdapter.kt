@@ -20,7 +20,7 @@ enum class IsShared { SHARED, ALL }
 class ShareIndividualAdapter(private val quizId: Long,
                              private val shares: List<TingXieShare>,
                              private val context: Context,
-                             val viewModel: ShareViewModel,
+                             val viewModel: ShareIndividualViewModel,
                              val recyclerView: RecyclerView)
   : RecyclerView.Adapter<ShareIndividualAdapter.ViewHolder>(), Filterable {
 

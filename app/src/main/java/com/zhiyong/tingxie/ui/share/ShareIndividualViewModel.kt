@@ -9,7 +9,7 @@ import com.zhiyong.tingxie.QuizRepository
 import com.zhiyong.tingxie.ui.friend.Status
 import kotlinx.coroutines.launch
 
-class ShareViewModel(quizId: Long, application: Application) : AndroidViewModel(application) {
+class ShareIndividualViewModel(quizId: Long, application: Application) : AndroidViewModel(application) {
   private val repository: QuizRepository = QuizRepository(application)
 
   private val _status = MutableLiveData<Status>()

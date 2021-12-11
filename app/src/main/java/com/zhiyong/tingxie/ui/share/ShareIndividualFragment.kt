@@ -24,7 +24,7 @@ class ShareIndividualFragment : Fragment() {
     fun newInstance() = ShareIndividualFragment()
   }
 
-  private lateinit var viewModel: ShareViewModel
+  private lateinit var viewModel: ShareIndividualViewModel
   private lateinit var shareIndividualAdapter: ShareIndividualAdapter
   private var _binding: ShareFragmentBinding? = null
   private val binding get() = _binding!!
@@ -66,8 +66,8 @@ class ShareIndividualFragment : Fragment() {
     }
 
     if (quizId != null) {
-      val viewModelFactory = ShareViewModelFactory(quizId, requireNotNull(activity).application)
-      viewModel = ViewModelProvider(this, viewModelFactory)[ShareViewModel::class.java]
+      val viewModelFactory = ShareIndividualViewModelFactory(quizId, requireNotNull(activity).application)
+      viewModel = ViewModelProvider(this, viewModelFactory)[ShareIndividualViewModel::class.java]
 
       viewModel.shares.observe(viewLifecycleOwner, { shares ->
         shares?.apply {
