@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
-import com.zhiyong.tingxie.databinding.RecyclerviewShareBinding
+import com.zhiyong.tingxie.databinding.RecyclerviewShareIndividualBinding
 
 import android.view.View.OnTouchListener
 import android.widget.Filter
@@ -27,7 +27,7 @@ class ShareIndividualAdapter(private val quizId: Long,
   var sharesFiltered: List<TingXieShare> = shares.filter { it.isShared }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-    return ViewHolder(RecyclerviewShareBinding.inflate(
+    return ViewHolder(RecyclerviewShareIndividualBinding.inflate(
         LayoutInflater.from(parent.context), parent, false
     ))
   }
@@ -112,7 +112,7 @@ class ShareIndividualAdapter(private val quizId: Long,
     }
   }
 
-  class ViewHolder(private val binding: RecyclerviewShareBinding)
+  class ViewHolder(private val binding: RecyclerviewShareIndividualBinding)
     : RecyclerView.ViewHolder(binding.root) {
 //    val ivDelete = binding.ivDelete
     val spRole = binding.spRole

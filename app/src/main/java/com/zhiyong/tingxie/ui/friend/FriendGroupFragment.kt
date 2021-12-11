@@ -63,9 +63,7 @@ class FriendGroupFragment : Fragment() {
           .create().show()
     }
 
-
     viewModel = ViewModelProvider(this)[FriendGroupNameViewModel::class.java]
-
     viewModel.groups.observe(viewLifecycleOwner, { groups ->
       groups?.apply {
         binding.recyclerviewGroups.adapter = FriendGroupNameAdapter(
