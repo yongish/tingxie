@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.zhiyong.tingxie.R
-import com.zhiyong.tingxie.databinding.RecyclerviewGroupNameBinding
+import com.zhiyong.tingxie.databinding.RecyclerviewFriendGroupNameBinding
 
 class FriendGroupNameAdapter(private val groups: List<TingXieGroup>,
                              private val context: Context,
@@ -20,7 +20,7 @@ class FriendGroupNameAdapter(private val groups: List<TingXieGroup>,
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-      ViewHolder(RecyclerviewGroupNameBinding.inflate(
+      ViewHolder(RecyclerviewFriendGroupNameBinding.inflate(
         LayoutInflater.from(parent.context), parent, false
       ))
 
@@ -49,7 +49,7 @@ class FriendGroupNameAdapter(private val groups: List<TingXieGroup>,
 
   override fun getItemCount(): Int = groups.size
 
-  class ViewHolder(private val binding: RecyclerviewGroupNameBinding)
+  class ViewHolder(private val binding: RecyclerviewFriendGroupNameBinding)
     : RecyclerView.ViewHolder(binding.root) {
     val clIdentifier = binding.clIdentifier
     val ivDelete = binding.ivDelete

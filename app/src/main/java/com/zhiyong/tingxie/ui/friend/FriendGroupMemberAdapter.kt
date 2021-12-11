@@ -7,7 +7,7 @@ import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.zhiyong.tingxie.R
-import com.zhiyong.tingxie.databinding.RecyclerviewGroupMemberBinding
+import com.zhiyong.tingxie.databinding.RecyclerviewFriendGroupMemberBinding
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
 
 class FriendGroupMemberAdapter(private val group: TingXieGroup,
@@ -17,7 +17,7 @@ class FriendGroupMemberAdapter(private val group: TingXieGroup,
   : RecyclerView.Adapter<FriendGroupMemberAdapter.ViewHolder>() {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-    ViewHolder(RecyclerviewGroupMemberBinding.inflate(
+    ViewHolder(RecyclerviewFriendGroupMemberBinding.inflate(
         LayoutInflater.from(parent.context), parent, false
     ))
 
@@ -52,7 +52,7 @@ class FriendGroupMemberAdapter(private val group: TingXieGroup,
 
   override fun getItemCount(): Int = group.members.size
 
-  class ViewHolder(private val binding: RecyclerviewGroupMemberBinding)
+  class ViewHolder(private val binding: RecyclerviewFriendGroupMemberBinding)
     : RecyclerView.ViewHolder(binding.root) {
     val spRole = binding.spRole
     val ivDelete = binding.ivDelete

@@ -3,7 +3,7 @@ package com.zhiyong.tingxie.ui.share
 import android.content.Context
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.zhiyong.tingxie.databinding.RecyclerviewGroupNameBinding
+import com.zhiyong.tingxie.databinding.RecyclerviewFriendGroupNameBinding
 import com.zhiyong.tingxie.ui.friend.TingXieGroup
 
 class ShareGroupNameAdapter(private val groups: List<TingXieGroup>,
@@ -22,7 +22,7 @@ class ShareGroupNameAdapter(private val groups: List<TingXieGroup>,
 
   override fun getItemCount(): Int = groups.size
 
-  class ViewHolder(private val binding: RecyclerviewGroupNameBinding)
+  class ViewHolder(private val binding: RecyclerviewFriendGroupNameBinding)
     : RecyclerView.ViewHolder(binding.root) {
 
   }
