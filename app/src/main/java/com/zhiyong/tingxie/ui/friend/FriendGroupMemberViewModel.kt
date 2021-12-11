@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.zhiyong.tingxie.QuizRepository
 
-class GroupMemberViewModel(application: Application) : IndividualViewModel(application) {
+class FriendGroupMemberViewModel(application: Application) : FriendIndividualViewModel(application) {
   private val repository: QuizRepository = QuizRepository(application)
 
   private val _members = MutableLiveData<List<TingXieGroupMember>>()

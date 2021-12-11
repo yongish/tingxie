@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.friend.GroupMemberActivity"
+            android:name=".ui.friend.FriendGroupMemberActivity"
             android:exported="false" />
         <activity
             android:name=".ui.friend.GroupActivity"

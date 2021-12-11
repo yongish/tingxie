@@ -10,7 +10,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.zhiyong.tingxie.QuizRepository
 import kotlinx.coroutines.launch
 
-class GroupViewModel(application: Application) : AndroidViewModel(application) {
+class FriendGroupNameViewModel(application: Application) : AndroidViewModel(application) {
   private val repository: QuizRepository = QuizRepository(application)
 
   private val _status = MutableLiveData<Status>()

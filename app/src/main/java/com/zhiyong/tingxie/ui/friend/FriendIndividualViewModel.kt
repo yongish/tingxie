@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 enum class Status { LOADING, ERROR, DONE }
 
-open class IndividualViewModel(application: Application) : AndroidViewModel(application) {
+open class FriendIndividualViewModel(application: Application) : AndroidViewModel(application) {
   private val repository: QuizRepository = QuizRepository(application)
 
   private val _status = MutableLiveData<Status>()

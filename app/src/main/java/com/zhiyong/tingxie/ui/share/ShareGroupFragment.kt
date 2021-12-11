@@ -7,13 +7,9 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.FrameLayout
 import android.widget.Spinner
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.zhiyong.tingxie.databinding.ShareGroupFragmentBinding
-import com.zhiyong.tingxie.ui.friend.GroupNameAdapter
-import com.zhiyong.tingxie.ui.friend.Status
 import com.zhiyong.tingxie.ui.share.ShareActivity.Companion.EXTRA_QUIZ_ID
 
 class ShareGroupFragment: Fragment() {

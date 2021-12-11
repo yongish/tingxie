@@ -19,7 +19,7 @@ class FriendGroupFragment : Fragment() {
     fun newInstance() = FriendGroupFragment()
   }
 
-  private lateinit var viewModel: GroupViewModel
+  private lateinit var viewModel: FriendGroupNameViewModel
   private lateinit var groupNames: List<String>
   private var _binding: FriendGroupFragmentBinding? = null
   private val binding get() = _binding!!
@@ -64,11 +64,11 @@ class FriendGroupFragment : Fragment() {
     }
 
 
-    viewModel = ViewModelProvider(this)[GroupViewModel::class.java]
+    viewModel = ViewModelProvider(this)[FriendGroupNameViewModel::class.java]
 
     viewModel.groups.observe(viewLifecycleOwner, { groups ->
       groups?.apply {
-        binding.recyclerviewGroups.adapter = GroupNameAdapter(
+        binding.recyclerviewGroups.adapter = FriendGroupNameAdapter(
             groups, requireActivity(), viewModel, binding.recyclerviewGroups
         )
         groupNames = groups.map { it.name }

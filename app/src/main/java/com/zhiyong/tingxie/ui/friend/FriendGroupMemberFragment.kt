@@ -14,16 +14,16 @@ import androidx.appcompat.app.AlertDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.GroupMemberFragmentBinding
-import com.zhiyong.tingxie.ui.friend.GroupNameAdapter.Companion.EXTRA_GROUP
+import com.zhiyong.tingxie.ui.friend.FriendGroupNameAdapter.Companion.EXTRA_GROUP
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
 
-class GroupMemberFragment : Fragment() {
+class FriendGroupMemberFragment : Fragment() {
 
   companion object {
-    fun newInstance() = GroupMemberFragment()
+    fun newInstance() = FriendGroupMemberFragment()
   }
 
-  private lateinit var viewModel: GroupMemberViewModel
+  private lateinit var viewModel: FriendGroupMemberViewModel
   private var _binding: GroupMemberFragmentBinding? = null
   private val binding get() = _binding!!
 
@@ -113,11 +113,11 @@ class GroupMemberFragment : Fragment() {
       }
     }
 
-    viewModel = ViewModelProvider(this)[GroupMemberViewModel::class.java]
+    viewModel = ViewModelProvider(this)[FriendGroupMemberViewModel::class.java]
     viewModel.friends.observe(viewLifecycleOwner, { friends ->
       friends?.apply {
         unaddedFriends = friends - group.members.map { TingXieIndividual(it.email, it.firstName, it.lastName) }.toSet()
-        binding.recyclerviewGroups.adapter = GroupMemberAdapter(
+        binding.recyclerviewGroups.adapter = FriendGroupMemberAdapter(
             group, requireContext(), viewModel, binding.recyclerviewGroups
         )
       }

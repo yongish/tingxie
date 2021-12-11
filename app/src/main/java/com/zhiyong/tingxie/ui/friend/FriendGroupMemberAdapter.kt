@@ -10,11 +10,11 @@ import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.RecyclerviewGroupMemberBinding
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
 
-class GroupMemberAdapter(private val group: TingXieGroup,
-                         private val context: Context,
-                         val viewModel: GroupMemberViewModel,
-                         val recyclerView: RecyclerView)
-  : RecyclerView.Adapter<GroupMemberAdapter.ViewHolder>() {
+class FriendGroupMemberAdapter(private val group: TingXieGroup,
+                               private val context: Context,
+                               val viewModel: FriendGroupMemberViewModel,
+                               val recyclerView: RecyclerView)
+  : RecyclerView.Adapter<FriendGroupMemberAdapter.ViewHolder>() {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
     ViewHolder(RecyclerviewGroupMemberBinding.inflate(

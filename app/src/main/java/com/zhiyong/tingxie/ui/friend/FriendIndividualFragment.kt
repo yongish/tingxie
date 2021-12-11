@@ -16,13 +16,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.IndividualFragmentBinding
 
-class IndividualFragment : Fragment() {
+class FriendIndividualFragment : Fragment() {
 
   companion object {
-    fun newInstance() = IndividualFragment()
+    fun newInstance() = FriendIndividualFragment()
   }
 
-  private lateinit var viewModel: IndividualViewModel
+  private lateinit var viewModel: FriendIndividualViewModel
   private var _binding: IndividualFragmentBinding? = null
   private val binding get() = _binding!!
 
@@ -62,10 +62,10 @@ class IndividualFragment : Fragment() {
               .create().show()
     }
 
-    viewModel = ViewModelProvider(this)[IndividualViewModel::class.java]
+    viewModel = ViewModelProvider(this)[FriendIndividualViewModel::class.java]
     viewModel.friends.observe(viewLifecycleOwner, { friends ->
       friends?.apply {
-        binding.recyclerviewIndividuals.adapter = IndividualAdapter(
+        binding.recyclerviewIndividuals.adapter = FriendIndividualAdapter(
           friends, requireActivity(), viewModel, binding.recyclerviewIndividuals
         )
       }

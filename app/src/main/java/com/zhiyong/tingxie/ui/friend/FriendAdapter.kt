@@ -10,7 +10,7 @@ class FriendAdapter(activity: AppCompatActivity, private val itemsCount: Int)
 
   override fun createFragment(position: Int): Fragment {
     if (position == 0) {
-      return IndividualFragment.newInstance()
+      return FriendIndividualFragment.newInstance()
     }
     return FriendGroupFragment.newInstance()
   }

@@ -15,11 +15,11 @@ import androidx.core.content.res.ResourcesCompat
 import com.zhiyong.tingxie.databinding.RecyclerviewIndividualBinding
 
 
-class IndividualAdapter(private val individuals: List<TingXieIndividual>,
-                        private val context: Context,
-                        val viewModel: IndividualViewModel,
-                        val recyclerView: RecyclerView)
-  : RecyclerView.Adapter<IndividualAdapter.ViewHolder>() {
+class FriendIndividualAdapter(private val individuals: List<TingXieIndividual>,
+                              private val context: Context,
+                              val viewModel: FriendIndividualViewModel,
+                              val recyclerView: RecyclerView)
+  : RecyclerView.Adapter<FriendIndividualAdapter.ViewHolder>() {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
       ViewHolder(RecyclerviewIndividualBinding.inflate(

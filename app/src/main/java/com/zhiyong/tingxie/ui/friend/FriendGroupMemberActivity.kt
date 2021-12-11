@@ -3,9 +3,9 @@ package com.zhiyong.tingxie.ui.friend
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.zhiyong.tingxie.R
-import com.zhiyong.tingxie.ui.friend.GroupNameAdapter.Companion.EXTRA_GROUP
+import com.zhiyong.tingxie.ui.friend.FriendGroupNameAdapter.Companion.EXTRA_GROUP
 
-class GroupMemberActivity : AppCompatActivity() {
+class FriendGroupMemberActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -24,7 +24,7 @@ class GroupMemberActivity : AppCompatActivity() {
 
       // todo: Also need to request friends, to add friends as members.
 
-      val groupMemberFragment = GroupMemberFragment.newInstance()
+      val groupMemberFragment = FriendGroupMemberFragment.newInstance()
       groupMemberFragment.arguments = bundle
       supportFragmentManager.beginTransaction()
           .replace(R.id.container, groupMemberFragment)

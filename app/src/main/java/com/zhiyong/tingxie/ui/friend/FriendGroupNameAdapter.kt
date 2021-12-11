@@ -9,11 +9,11 @@ import com.google.android.material.snackbar.Snackbar
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.RecyclerviewGroupNameBinding
 
-class GroupNameAdapter(private val groups: List<TingXieGroup>,
-                       private val context: Context,
-                       val viewModel: GroupViewModel,
-                       val recyclerView: RecyclerView)
-  : RecyclerView.Adapter<GroupNameAdapter.ViewHolder>() {
+class FriendGroupNameAdapter(private val groups: List<TingXieGroup>,
+                             private val context: Context,
+                             val viewModel: FriendGroupNameViewModel,
+                             val recyclerView: RecyclerView)
+  : RecyclerView.Adapter<FriendGroupNameAdapter.ViewHolder>() {
 
   companion object {
     const val EXTRA_GROUP = "com.zhiong.tingxie.ui.friend.extra.GROUP"
@@ -29,7 +29,7 @@ class GroupNameAdapter(private val groups: List<TingXieGroup>,
     holder.bind(group)
     holder.clIdentifier.setOnClickListener {
       // Open GroupMember activity.
-      val intent = Intent(context, GroupMemberActivity::class.java)
+      val intent = Intent(context, FriendGroupMemberActivity::class.java)
       intent.putExtra(EXTRA_GROUP, group)
       context.startActivity(intent)
     }
