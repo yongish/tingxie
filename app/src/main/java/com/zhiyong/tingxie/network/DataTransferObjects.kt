@@ -2,7 +2,7 @@ package com.zhiyong.tingxie.network
 
 import com.squareup.moshi.JsonClass
 import com.zhiyong.tingxie.db.Quiz
-import com.zhiyong.tingxie.ui.friend.group.name.TingXieGroup
+import com.zhiyong.tingxie.ui.friend.group.name.TingXieFriendGroup
 import com.zhiyong.tingxie.ui.friend.group.member.TingXieGroupMember
 import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
@@ -47,8 +47,8 @@ data class NetworkGroupMember(val email: String,
                               val firstName: String,
                               val lastName: String)
 
-fun NetworkGroupContainer.asDomainModel(): List<TingXieGroup> = groups.map {
-  TingXieGroup(it.name, it.individuals.map {
+fun NetworkGroupContainer.asDomainModel(): List<TingXieFriendGroup> = groups.map {
+  TingXieFriendGroup(it.name, it.individuals.map {
     it1 -> TingXieGroupMember(it1.email, it1.role, it1.firstName, it1.lastName)
   } )
 }

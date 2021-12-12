@@ -57,7 +57,7 @@ class FriendGroupNameFragment : Fragment() {
                   context, "Group names must be unique", Toast.LENGTH_LONG
               ).show()
             } else {
-              viewModel.addGroup(TingXieGroup(editText.text.toString()))
+              viewModel.addGroup(TingXieFriendGroup(editText.text.toString()))
             }
           }
           .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }

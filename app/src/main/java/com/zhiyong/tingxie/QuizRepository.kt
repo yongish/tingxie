@@ -7,8 +7,9 @@ import androidx.lifecycle.Transformations
 import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.db.*
 import com.zhiyong.tingxie.network.*
-import com.zhiyong.tingxie.ui.friend.group.name.TingXieGroup
+import com.zhiyong.tingxie.ui.friend.group.name.TingXieFriendGroup
 import com.zhiyong.tingxie.ui.friend.group.member.TingXieGroupMember
+import com.zhiyong.tingxie.ui.friend.group.requests.yours.TingXieYourRequest
 import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
 import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsAdapter
@@ -92,30 +93,26 @@ class QuizRepository(val context: Context) {
     }
   }
 
-  suspend fun getFriendGroups(quizId: Long): List<TingXieGroup> {
+  suspend fun getFriendGroups(): List<TingXieFriendGroup> {
     try {
-      if (quizId == -1L) {
         TingXieNetwork.tingxie.getGroups(email).asDomainModel()
-      } else {
-        TingXieNetwork.tingxie.getGroups(email, quizId).asDomainModel()
-      }
     } catch (e: Exception) {
       // todo: Log to Crashlytics.
     }
     return arrayListOf(
-        TingXieGroup("group0", arrayListOf(
+        TingXieFriendGroup("group0", arrayListOf(
             TingXieGroupMember("g0i0@email.com", EnumQuizRole.EDITOR, "g0f0", "g0l0"),
             TingXieGroupMember("g0i1@email.com", EnumQuizRole.EDITOR, "g0f1", "g0l1"),
             TingXieGroupMember("g0i2@email.com", EnumQuizRole.EDITOR, "g0f2", "g0l2"),
         )),
-        TingXieGroup("group1", arrayListOf(
+        TingXieFriendGroup("group1", arrayListOf(
             TingXieGroupMember("g1i0@email.com", EnumQuizRole.VIEWER, "g1f0", "g1l0"),
             TingXieGroupMember("g1i1@email.com", EnumQuizRole.EDITOR, "g1f1", "g1l1"),
         )),
     )
   }
 
-  suspend fun addGroup(group: TingXieGroup) {
+  suspend fun addGroup(group: TingXieFriendGroup) {
     TingXieNetwork.tingxie.postGroup(email, NetworkGroup(
         group.name,
         group.members.map { NetworkGroupMember(it.email, it.role, it.firstName, it.lastName) }
@@ -145,6 +142,11 @@ class QuizRepository(val context: Context) {
 
   suspend fun deleteFriend(email: String) {
     TingXieNetwork.tingxie.deleteFriend(this.email, email)
+  }
+
+  suspend fun getYourIndividualRequests(): Map<String, Int> {
+    TingXieNetwork.tingxie.getYourIndividualRequests(email)
+    return mapOf("e0@email.com" to 20001010, "e1@email.com" to 20101020)
   }
 
   suspend fun getShares(quizId: Long): List<TingXieShareIndividual> {

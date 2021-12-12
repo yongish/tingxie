@@ -33,12 +33,11 @@ interface Service {
   suspend fun deleteFriend(@Path("userEmail") userEmail: String,
                            @Path("email") email: String): Boolean
 
-  @GET("groups")
-  suspend fun getGroups(@Query("email") email: String): NetworkGroupContainer
+  @GET("yourIndividualRequests")
+  suspend fun getYourIndividualRequests(@Query("email") email: String): Map<String, Int>
 
   @GET("groups")
-  suspend fun getGroups(@Query("email") email: String,
-                        @Query("quizId") quizId: Long): NetworkGroupContainer
+  suspend fun getGroups(@Query("email") email: String): NetworkGroupContainer
 
   @POST("groups")
   suspend fun postGroup(@Query("email") email: String,

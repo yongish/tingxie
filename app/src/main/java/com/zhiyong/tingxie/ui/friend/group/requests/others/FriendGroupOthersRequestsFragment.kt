@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie.ui.friend.group.admin
+package com.zhiyong.tingxie.ui.friend.group.requests.others
 
 import androidx.fragment.app.Fragment
 

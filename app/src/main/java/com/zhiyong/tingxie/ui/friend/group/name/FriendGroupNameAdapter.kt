@@ -10,7 +10,7 @@ import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.RecyclerviewFriendGroupNameBinding
 import com.zhiyong.tingxie.ui.friend.group.member.FriendGroupMemberActivity
 
-class FriendGroupNameAdapter(private val groups: List<TingXieGroup>,
+class FriendGroupNameAdapter(private val groups: List<TingXieFriendGroup>,
                              private val context: Context,
                              val viewModel: FriendGroupNameViewModel,
                              val recyclerView: RecyclerView)
@@ -54,7 +54,7 @@ class FriendGroupNameAdapter(private val groups: List<TingXieGroup>,
     val clIdentifier = binding.clIdentifier
     val ivDelete = binding.ivDelete
 
-    fun bind(group: TingXieGroup) = with(binding) {
+    fun bind(group: TingXieFriendGroup) = with(binding) {
       tvName.text = group.name
       tvMemberCount.text = String.format(
           itemView.context.getString(R.string.member_count), group.members.size

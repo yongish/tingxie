@@ -18,8 +18,8 @@ class FriendGroupNameViewModel(application: Application) : AndroidViewModel(appl
   val status: LiveData<Status>
     get() = _status
 
-  private val _groups = MutableLiveData<List<TingXieGroup>>()
-  val groups: LiveData<List<TingXieGroup>>
+  private val _groups = MutableLiveData<List<TingXieFriendGroup>>()
+  val groups: LiveData<List<TingXieFriendGroup>>
     get() = _groups
 
   val email = FirebaseAuth.getInstance().currentUser?.email
@@ -28,11 +28,11 @@ class FriendGroupNameViewModel(application: Application) : AndroidViewModel(appl
     getGroups()
   }
 
-  private fun getGroups(quizId: Long = -1) {
+  private fun getGroups() {
     viewModelScope.launch {
       _status.value = Status.LOADING
       try {
-        _groups.value = repository.getFriendGroups(quizId)
+        _groups.value = repository.getFriendGroups()
         _status.value = Status.DONE
       } catch (e: Exception) {
         _groups.value = ArrayList()
@@ -41,7 +41,7 @@ class FriendGroupNameViewModel(application: Application) : AndroidViewModel(appl
     }
   }
 
-  fun addGroup(group: TingXieGroup, quizId: Long = -1) =
+  fun addGroup(group: TingXieFriendGroup, quizId: Long = -1) =
       viewModelScope.launch { repository.addGroup(group) }
 
   fun deleteGroup(name: String, quizId: Long = -1) = viewModelScope.launch {

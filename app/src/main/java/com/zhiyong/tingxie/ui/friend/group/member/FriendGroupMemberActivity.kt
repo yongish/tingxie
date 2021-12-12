@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.ui.friend.group.name.FriendGroupNameAdapter.Companion.EXTRA_GROUP
-import com.zhiyong.tingxie.ui.friend.group.name.TingXieGroup
+import com.zhiyong.tingxie.ui.friend.group.name.TingXieFriendGroup
 
 class FriendGroupMemberActivity : AppCompatActivity() {
 
@@ -12,7 +12,7 @@ class FriendGroupMemberActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.group_member_activity)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    val group = intent.getParcelableExtra<TingXieGroup>(EXTRA_GROUP)
+    val group = intent.getParcelableExtra<TingXieFriendGroup>(EXTRA_GROUP)
     title = if (group?.name == null) {
       "Members"
       // Log to Crashlytics.

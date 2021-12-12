@@ -12,7 +12,7 @@ import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.RecyclerviewFriendGroupNameBinding
 import com.zhiyong.tingxie.ui.friend.group.member.FriendGroupMemberActivity
 import com.zhiyong.tingxie.ui.friend.group.name.FriendGroupNameAdapter
-import com.zhiyong.tingxie.ui.friend.group.name.TingXieGroup
+import com.zhiyong.tingxie.ui.friend.group.name.TingXieFriendGroup
 
 class ShareGroupNameAdapter(private val quizId: Long,
                             private val shareGroups: List<TingXieShareGroup>,
@@ -34,7 +34,7 @@ class ShareGroupNameAdapter(private val quizId: Long,
     holder.clIdentifier.setOnClickListener {
       val intent = Intent(context, FriendGroupMemberActivity::class.java)
       intent.putExtra(
-          FriendGroupNameAdapter.EXTRA_GROUP, TingXieGroup(group.name, group.members)
+          FriendGroupNameAdapter.EXTRA_GROUP, TingXieFriendGroup(group.name, group.members)
       )
       context.startActivity(intent)
     }

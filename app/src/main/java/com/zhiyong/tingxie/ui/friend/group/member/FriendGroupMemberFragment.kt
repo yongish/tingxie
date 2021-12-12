@@ -15,7 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.GroupMemberFragmentBinding
 import com.zhiyong.tingxie.ui.friend.group.name.FriendGroupNameAdapter.Companion.EXTRA_GROUP
-import com.zhiyong.tingxie.ui.friend.group.name.TingXieGroup
+import com.zhiyong.tingxie.ui.friend.group.name.TingXieFriendGroup
 import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
 
@@ -40,7 +40,7 @@ class FriendGroupMemberFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    val group = this.arguments?.getParcelable<TingXieGroup>(EXTRA_GROUP)
+    val group = this.arguments?.getParcelable<TingXieFriendGroup>(EXTRA_GROUP)
     if (group == null) {
       Toast.makeText(context, "Please email Zhiyong at yongish@gmail.com and share this hash #GROUPARGS", Toast.LENGTH_LONG).show()
       // todo: Log Crashlytics.

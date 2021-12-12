@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.RecyclerviewFriendGroupMemberBinding
-import com.zhiyong.tingxie.ui.friend.group.name.TingXieGroup
+import com.zhiyong.tingxie.ui.friend.group.name.TingXieFriendGroup
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
 
-class FriendGroupMemberAdapter(private val group: TingXieGroup,
+class FriendGroupMemberAdapter(private val group: TingXieFriendGroup,
                                private val context: Context,
                                val viewModel: FriendGroupMemberViewModel,
                                val recyclerView: RecyclerView)
