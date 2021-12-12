@@ -6,7 +6,7 @@ import com.zhiyong.tingxie.ui.friend.TingXieGroup
 import com.zhiyong.tingxie.ui.friend.TingXieGroupMember
 import com.zhiyong.tingxie.ui.friend.TingXieIndividual
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
-import com.zhiyong.tingxie.ui.share.TingXieShare
+import com.zhiyong.tingxie.ui.share.TingXieShareIndividual
 
 @JsonClass(generateAdapter = true)
 data class NetworkQuizContainer(val quizzes: List<NetworkQuiz>)
@@ -66,8 +66,8 @@ data class NetworkShare(val email: String,
                         val isShared: Boolean,
                         val role: EnumQuizRole)
 
-fun NetworkShareContainer.asDomainModel(): List<TingXieShare> = shares.map {
-  TingXieShare(it.email, it.firstName, it.lastName, it.isShared, it.role)
+fun NetworkShareContainer.asDomainModel(): List<TingXieShareIndividual> = shares.map {
+  TingXieShareIndividual(it.email, it.firstName, it.lastName, it.isShared, it.role)
 }
 
 @JsonClass(generateAdapter = true)

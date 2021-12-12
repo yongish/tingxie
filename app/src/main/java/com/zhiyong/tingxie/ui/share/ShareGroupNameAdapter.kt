@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.zhiyong.tingxie.R
@@ -13,11 +15,13 @@ import com.zhiyong.tingxie.ui.friend.FriendGroupNameAdapter
 import com.zhiyong.tingxie.ui.friend.TingXieGroup
 
 class ShareGroupNameAdapter(private val quizId: Long,
-                            private val groups: List<TingXieShareGroup>,
+                            private val shareGroups: List<TingXieShareGroup>,
                             private val context: Context,
                             val viewModel: ShareGroupNameViewModel,
                             val recyclerView: RecyclerView)
-  : RecyclerView.Adapter<ShareGroupNameAdapter.ViewHolder>() {
+  : RecyclerView.Adapter<ShareGroupNameAdapter.ViewHolder>(), Filterable {
+
+  var sharesFiltered: List<TingXieShareGroup> = shareGroups.filter { it.isShared }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
       ViewHolder(RecyclerviewFriendGroupNameBinding.inflate(
@@ -25,7 +29,7 @@ class ShareGroupNameAdapter(private val quizId: Long,
       ))
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    val group = groups[position]
+    val group = sharesFiltered[position]
     holder.bind(group)
     holder.clIdentifier.setOnClickListener {
       val intent = Intent(context, FriendGroupMemberActivity::class.java)
@@ -48,7 +52,24 @@ class ShareGroupNameAdapter(private val quizId: Long,
     }
   }
 
-  override fun getItemCount(): Int = groups.size
+  override fun getItemCount(): Int = sharesFiltered.size
+
+  override fun getFilter(): Filter = object : Filter() {
+    override fun performFiltering(constraint: CharSequence?): FilterResults =
+        FilterResults().apply {
+          values = if (IsShared.valueOf(constraint.toString()) == IsShared.SHARED) {
+            shareGroups.filter { it.isShared }
+          } else {
+            shareGroups
+          }
+        }
+
+    override fun publishResults(constraint: CharSequence?, results: FilterResults) {
+      sharesFiltered = results.values as List<TingXieShareGroup>
+      notifyDataSetChanged()
+    }
+  }
+
 
   class ViewHolder(private val binding: RecyclerviewFriendGroupNameBinding)
     : RecyclerView.ViewHolder(binding.root) {

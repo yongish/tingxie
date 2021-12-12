@@ -44,8 +44,8 @@ class ShareIndividualFragment : Fragment() {
         resources, R.drawable.ic_baseline_edit_white_24, null
     )
     d?.setBounds(0, 0, d.intrinsicWidth, d.intrinsicHeight)
-    spannableString.setSpan(d?.let {
-      ImageSpan(it, ImageSpan.ALIGN_BOTTOM) },
+    spannableString.setSpan(
+        d?.let { ImageSpan(it, ImageSpan.ALIGN_BOTTOM) },
         spannableString.toString().indexOf("+"),
         spannableString.toString().indexOf("+") + 1,
         Spannable.SPAN_INCLUSIVE_EXCLUSIVE

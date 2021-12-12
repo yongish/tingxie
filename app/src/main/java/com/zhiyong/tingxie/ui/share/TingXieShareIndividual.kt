@@ -4,7 +4,7 @@ enum class EnumQuizRole {
     EDITOR, VIEWER
 }
 
-data class TingXieShare(
+data class TingXieShareIndividual(
     val email: String,
     val firstName: String,
     val lastName: String,

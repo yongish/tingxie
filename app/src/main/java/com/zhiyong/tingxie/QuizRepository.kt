@@ -13,7 +13,7 @@ import com.zhiyong.tingxie.ui.friend.TingXieIndividual
 import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsAdapter
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
-import com.zhiyong.tingxie.ui.share.TingXieShare
+import com.zhiyong.tingxie.ui.share.TingXieShareIndividual
 import com.zhiyong.tingxie.ui.share.TingXieShareGroup
 import com.zhiyong.tingxie.ui.word.WordItem
 import kotlinx.coroutines.Dispatchers
@@ -147,7 +147,7 @@ class QuizRepository(val context: Context) {
     TingXieNetwork.tingxie.deleteFriend(this.email, email)
   }
 
-  suspend fun getShares(quizId: Long): List<TingXieShare> {
+  suspend fun getShares(quizId: Long): List<TingXieShareIndividual> {
     try {
 //            return TingXieNetwork.tingxie.getShares(quizId).asDomainModel()
       TingXieNetwork.tingxie.getShares(email, quizId).asDomainModel()
@@ -155,17 +155,17 @@ class QuizRepository(val context: Context) {
 
     }
     return arrayListOf(
-        TingXieShare("yongish@gmail.com", "firstZ", "lastZ", true, EnumQuizRole.EDITOR),
-        TingXieShare("test0email.com", "first0", "last0", false, EnumQuizRole.EDITOR),
-        TingXieShare("test1email.com", "first1", "last1", false, EnumQuizRole.VIEWER),
-        TingXieShare("test2email.com", "first2", "last2", true, EnumQuizRole.VIEWER),
+        TingXieShareIndividual("yongish@gmail.com", "firstZ", "lastZ", true, EnumQuizRole.EDITOR),
+        TingXieShareIndividual("test0email.com", "first0", "last0", false, EnumQuizRole.EDITOR),
+        TingXieShareIndividual("test1email.com", "first1", "last1", false, EnumQuizRole.VIEWER),
+        TingXieShareIndividual("test2email.com", "first2", "last2", true, EnumQuizRole.VIEWER),
     )
 //    return arrayListOf()
   }
 
-  suspend fun addShare(quizId: Long, share: TingXieShare) {
+  suspend fun addShare(quizId: Long, shareIndividual: TingXieShareIndividual) {
     TingXieNetwork.tingxie.postShare(email, quizId, NetworkShare(
-        share.email, share.firstName, share.lastName, true, share.role
+        shareIndividual.email, shareIndividual.firstName, shareIndividual.lastName, true, shareIndividual.role
     ))
   }
 

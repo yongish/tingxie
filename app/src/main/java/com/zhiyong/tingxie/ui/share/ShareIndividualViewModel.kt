@@ -16,8 +16,8 @@ class ShareIndividualViewModel(quizId: Long, application: Application) : Android
   val status: LiveData<Status>
     get() = _status
 
-  private val _shares = MutableLiveData<List<TingXieShare>>()
-  val shares: LiveData<List<TingXieShare>>
+  private val _shares = MutableLiveData<List<TingXieShareIndividual>>()
+  val shares: LiveData<List<TingXieShareIndividual>>
     get() = _shares
 
   init {
@@ -37,8 +37,8 @@ class ShareIndividualViewModel(quizId: Long, application: Application) : Android
     }
   }
 
-  fun addShare(quizId: Long, share: TingXieShare) {
-    viewModelScope.launch { repository.addShare(quizId, share) }
+  fun addShare(quizId: Long, shareIndividual: TingXieShareIndividual) {
+    viewModelScope.launch { repository.addShare(quizId, shareIndividual) }
   }
 
   fun deleteShare(quizId: Long, email: String) {

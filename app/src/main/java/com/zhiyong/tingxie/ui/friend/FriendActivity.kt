@@ -19,14 +19,15 @@ class FriendActivity : AppCompatActivity() {
     val view = binding.root
     setContentView(view)
 
-    val friendAdapter = FriendAdapter(this, 2)
+    val friendAdapter = FriendAdapter(this, 4)
     binding.vpFriend.adapter = friendAdapter
 
     TabLayoutMediator(binding.tabLayout, binding.vpFriend) { tab, position ->
-      if (position == 0) {
-        tab.text = "Individuals"
-      } else {
-        tab.text = "Groups"
+      when (position) {
+        0 -> tab.text = "Individuals"
+        1 -> tab.text = "Groups"
+        2 -> tab.text = "Your requests"
+        else -> tab.text = "Grant/deny requests"
       }
     }.attach()
   }

@@ -18,13 +18,13 @@ import com.zhiyong.tingxie.R
 enum class IsShared { SHARED, ALL }
 
 class ShareIndividualAdapter(private val quizId: Long,
-                             private val shares: List<TingXieShare>,
+                             private val shareIndividuals: List<TingXieShareIndividual>,
                              private val context: Context,
                              val viewModel: ShareIndividualViewModel,
                              val recyclerView: RecyclerView)
   : RecyclerView.Adapter<ShareIndividualAdapter.ViewHolder>(), Filterable {
 
-  var sharesFiltered: List<TingXieShare> = shares.filter { it.isShared }
+  var sharesFiltered: List<TingXieShareIndividual> = shareIndividuals.filter { it.isShared }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
     return ViewHolder(RecyclerviewShareIndividualBinding.inflate(
@@ -93,22 +93,19 @@ class ShareIndividualAdapter(private val quizId: Long,
 
   override fun getItemCount(): Int = sharesFiltered.size
 
-  override fun getFilter(): Filter {
-    return object : Filter() {
-      override fun performFiltering(constraint: CharSequence?): FilterResults {
-        return FilterResults().apply {
+  override fun getFilter(): Filter = object : Filter() {
+    override fun performFiltering(constraint: CharSequence?): FilterResults =
+        FilterResults().apply {
           values = if (IsShared.valueOf(constraint.toString()) == IsShared.SHARED) {
-            shares.filter { it.isShared }
+            shareIndividuals.filter { it.isShared }
           } else {
-            shares
+            shareIndividuals
           }
         }
-      }
 
-      override fun publishResults(constraint: CharSequence?, results: FilterResults) {
-        sharesFiltered = results.values as List<TingXieShare>
-        notifyDataSetChanged()
-      }
+    override fun publishResults(constraint: CharSequence?, results: FilterResults) {
+      sharesFiltered = results.values as List<TingXieShareIndividual>
+      notifyDataSetChanged()
     }
   }
 
@@ -118,12 +115,12 @@ class ShareIndividualAdapter(private val quizId: Long,
     val spRole = binding.spRole
     val cbIsShared = binding.cbIsShared
 
-    fun bind(share: TingXieShare) = with(binding) {
-      tvEmail.text = share.email
+    fun bind(shareIndividual: TingXieShareIndividual) = with(binding) {
+      tvEmail.text = shareIndividual.email
       tvName.text = String.format(
           itemView.context.getString(R.string.username),
-          share.lastName,
-          share.firstName,
+          shareIndividual.lastName,
+          shareIndividual.firstName,
       )
     }
   }

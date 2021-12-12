@@ -1,12 +1,18 @@
 package com.zhiyong.tingxie.ui.share
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ImageSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.ShareGroupFragmentBinding
 import com.zhiyong.tingxie.ui.friend.Status
 import com.zhiyong.tingxie.ui.share.ShareActivity.Companion.EXTRA_QUIZ_ID
@@ -34,8 +40,22 @@ class ShareGroupNameFragment: Fragment() {
     super.onViewCreated(view, savedInstanceState)
 
 //    val isAdmin = group.
+    val spannableString = SpannableString(resources.getString(R.string.no_group_shares))
+    val d: Drawable? = ResourcesCompat.getDrawable(
+        resources, R.drawable.ic_baseline_edit_white_24, null
+    )
+    d?.setBounds(0, 0, d.intrinsicWidth, d.intrinsicHeight)
+    val plusIndex = spannableString.toString().indexOf("+")
+    spannableString.setSpan(
+        d?.let { ImageSpan(it, ImageSpan.ALIGN_BOTTOM) },
+        plusIndex,
+        plusIndex + 1,
+        Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+    )
+    binding.emptyView.text = spannableString
 
     binding.fab.setOnClickListener {
+      shareGroupNameAdapter.filter.filter(IsShared.ALL.name)
 
     }
 
