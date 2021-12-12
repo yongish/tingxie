@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie.ui.friend
+package com.zhiyong.tingxie.ui.friend.group.member
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -14,7 +14,9 @@ import androidx.appcompat.app.AlertDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.GroupMemberFragmentBinding
-import com.zhiyong.tingxie.ui.friend.FriendGroupNameAdapter.Companion.EXTRA_GROUP
+import com.zhiyong.tingxie.ui.friend.group.name.FriendGroupNameAdapter.Companion.EXTRA_GROUP
+import com.zhiyong.tingxie.ui.friend.group.name.TingXieGroup
+import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
 
 class FriendGroupMemberFragment : Fragment() {

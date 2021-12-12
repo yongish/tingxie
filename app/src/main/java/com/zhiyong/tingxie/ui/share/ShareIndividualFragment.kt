@@ -15,7 +15,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.ShareFragmentBinding
-import com.zhiyong.tingxie.ui.friend.Status
+import com.zhiyong.tingxie.ui.friend.individual.Status
 import com.zhiyong.tingxie.ui.share.ShareActivity.Companion.EXTRA_QUIZ_ID
 
 class ShareIndividualFragment : Fragment() {

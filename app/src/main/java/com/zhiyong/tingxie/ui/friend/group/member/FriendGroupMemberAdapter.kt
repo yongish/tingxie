@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie.ui.friend
+package com.zhiyong.tingxie.ui.friend.group.member
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.RecyclerviewFriendGroupMemberBinding
+import com.zhiyong.tingxie.ui.friend.group.name.TingXieGroup
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
 
 class FriendGroupMemberAdapter(private val group: TingXieGroup,

@@ -2,9 +2,9 @@ package com.zhiyong.tingxie.network
 
 import com.squareup.moshi.JsonClass
 import com.zhiyong.tingxie.db.Quiz
-import com.zhiyong.tingxie.ui.friend.TingXieGroup
-import com.zhiyong.tingxie.ui.friend.TingXieGroupMember
-import com.zhiyong.tingxie.ui.friend.TingXieIndividual
+import com.zhiyong.tingxie.ui.friend.group.name.TingXieGroup
+import com.zhiyong.tingxie.ui.friend.group.member.TingXieGroupMember
+import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
 import com.zhiyong.tingxie.ui.share.TingXieShareIndividual
 

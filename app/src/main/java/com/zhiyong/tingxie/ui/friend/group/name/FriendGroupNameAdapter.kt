@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie.ui.friend
+package com.zhiyong.tingxie.ui.friend.group.name
 
 import android.content.Context
 import android.content.Intent
@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.RecyclerviewFriendGroupNameBinding
+import com.zhiyong.tingxie.ui.friend.group.member.FriendGroupMemberActivity
 
 class FriendGroupNameAdapter(private val groups: List<TingXieGroup>,
                              private val context: Context,

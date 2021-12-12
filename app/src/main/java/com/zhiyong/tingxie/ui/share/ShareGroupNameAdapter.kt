@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.RecyclerviewFriendGroupNameBinding
-import com.zhiyong.tingxie.ui.friend.FriendGroupMemberActivity
-import com.zhiyong.tingxie.ui.friend.FriendGroupNameAdapter
-import com.zhiyong.tingxie.ui.friend.TingXieGroup
+import com.zhiyong.tingxie.ui.friend.group.member.FriendGroupMemberActivity
+import com.zhiyong.tingxie.ui.friend.group.name.FriendGroupNameAdapter
+import com.zhiyong.tingxie.ui.friend.group.name.TingXieGroup
 
 class ShareGroupNameAdapter(private val quizId: Long,
                             private val shareGroups: List<TingXieShareGroup>,

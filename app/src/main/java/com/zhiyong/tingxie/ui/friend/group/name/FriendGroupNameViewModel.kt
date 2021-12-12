@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie.ui.friend
+package com.zhiyong.tingxie.ui.friend.group.name
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.zhiyong.tingxie.QuizRepository
+import com.zhiyong.tingxie.ui.friend.individual.Status
 import kotlinx.coroutines.launch
 
 class FriendGroupNameViewModel(application: Application) : AndroidViewModel(application) {

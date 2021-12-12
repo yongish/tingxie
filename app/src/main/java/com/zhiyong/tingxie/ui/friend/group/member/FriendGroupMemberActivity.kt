@@ -1,9 +1,10 @@
-package com.zhiyong.tingxie.ui.friend
+package com.zhiyong.tingxie.ui.friend.group.member
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.zhiyong.tingxie.R
-import com.zhiyong.tingxie.ui.friend.FriendGroupNameAdapter.Companion.EXTRA_GROUP
+import com.zhiyong.tingxie.ui.friend.group.name.FriendGroupNameAdapter.Companion.EXTRA_GROUP
+import com.zhiyong.tingxie.ui.friend.group.name.TingXieGroup
 
 class FriendGroupMemberActivity : AppCompatActivity() {
 

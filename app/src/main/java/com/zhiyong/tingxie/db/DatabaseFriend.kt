@@ -3,7 +3,7 @@ package com.zhiyong.tingxie.db
 import androidx.annotation.NonNull
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.zhiyong.tingxie.ui.friend.TingXieIndividual
+import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
 
 @Entity
 data class DatabaseFriend constructor(

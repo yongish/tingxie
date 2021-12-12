@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie.ui.friend
+package com.zhiyong.tingxie.ui.friend.group.member
 
 import android.os.Parcelable
 import com.zhiyong.tingxie.ui.share.EnumQuizRole

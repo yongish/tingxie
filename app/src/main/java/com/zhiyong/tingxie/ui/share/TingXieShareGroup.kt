@@ -1,7 +1,7 @@
 package com.zhiyong.tingxie.ui.share
 
 import android.os.Parcelable
-import com.zhiyong.tingxie.ui.friend.TingXieGroupMember
+import com.zhiyong.tingxie.ui.friend.group.member.TingXieGroupMember
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

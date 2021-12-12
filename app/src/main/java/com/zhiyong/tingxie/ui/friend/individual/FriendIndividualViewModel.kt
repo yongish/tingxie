@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie.ui.friend
+package com.zhiyong.tingxie.ui.friend.individual
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie.ui.friend
+package com.zhiyong.tingxie.ui.friend.individual
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

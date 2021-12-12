@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie.ui.friend
+package com.zhiyong.tingxie.ui.friend.group.name
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.FriendGroupFragmentBinding
+import com.zhiyong.tingxie.ui.friend.individual.Status
 
 class FriendGroupNameFragment : Fragment() {
 
