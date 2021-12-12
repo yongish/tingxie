@@ -19,9 +19,6 @@
             android:name=".ui.friend.FriendGroupMemberActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.friend.GroupActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.share.ShareActivity"
             android:exported="false" />
         <activity
