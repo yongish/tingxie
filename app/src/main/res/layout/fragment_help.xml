@@ -9,7 +9,6 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginBottom="10dp"
         android:text="@string/help_options"
@@ -27,7 +26,13 @@
         android:layout_height="match_parent"
         android:text="@string/play_demo_video" />
 
-<!--    <Button-->
+    <Button
+        android:id="@+id/btnEmailZhiyong"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Email Zhiyong (听写 app creator)" />
+
+    <!--    <Button-->
 <!--        android:id="@+id/btnFacebook"-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="match_parent"-->
