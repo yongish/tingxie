@@ -31,7 +31,7 @@ class FriendGroupNameViewModel(application: Application) : AndroidViewModel(appl
     viewModelScope.launch {
       _status.value = Status.LOADING
       try {
-        _groups.value = repository.getGroups(quizId)
+        _groups.value = repository.getFriendGroups(quizId)
         _status.value = Status.DONE
       } catch (e: Exception) {
         _groups.value = ArrayList()
@@ -42,9 +42,6 @@ class FriendGroupNameViewModel(application: Application) : AndroidViewModel(appl
 
   fun addGroup(group: TingXieGroup, quizId: Long = -1) =
       viewModelScope.launch { repository.addGroup(group) }
-
-  fun updateGroup(group: TingXieGroup) =
-      viewModelScope.launch { repository.updateGroup(group) }
 
   fun deleteGroup(name: String, quizId: Long = -1) = viewModelScope.launch {
     val email = FirebaseAuth.getInstance().currentUser?.email

@@ -14,6 +14,7 @@ import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsAdapter
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
 import com.zhiyong.tingxie.ui.share.TingXieShare
+import com.zhiyong.tingxie.ui.share.TingXieShareGroup
 import com.zhiyong.tingxie.ui.word.WordItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -91,7 +92,7 @@ class QuizRepository(val context: Context) {
     }
   }
 
-  suspend fun getGroups(quizId: Long): List<TingXieGroup> {
+  suspend fun getFriendGroups(quizId: Long): List<TingXieGroup> {
     try {
       if (quizId == -1L) {
         TingXieNetwork.tingxie.getGroups(email).asDomainModel()
@@ -116,13 +117,6 @@ class QuizRepository(val context: Context) {
 
   suspend fun addGroup(group: TingXieGroup) {
     TingXieNetwork.tingxie.postGroup(email, NetworkGroup(
-        group.name,
-        group.members.map { NetworkGroupMember(it.email, it.role, it.firstName, it.lastName) }
-    ))
-  }
-
-  suspend fun updateGroup(group: TingXieGroup) {
-    TingXieNetwork.tingxie.putGroup(email, NetworkGroup(
         group.name,
         group.members.map { NetworkGroupMember(it.email, it.role, it.firstName, it.lastName) }
     ))
@@ -177,6 +171,34 @@ class QuizRepository(val context: Context) {
 
   suspend fun deleteShare(quizId: Long, email: String) {
     TingXieNetwork.tingxie.deleteShare(this.email, quizId, email)
+  }
+
+  suspend fun getShareGroups(quizId: Long): List<TingXieShareGroup> {
+    try {
+//      return TingXieNetwork.tingxie.getShareGroups(email, quizId)
+      TingXieNetwork.tingxie.getShareGroups(email, quizId)
+    } catch (e: Exception) {
+
+    }
+    return arrayListOf(
+        TingXieShareGroup("group0", true, arrayListOf(
+            TingXieGroupMember("g0i0@email.com", EnumQuizRole.EDITOR, "g0f0", "g0l0"),
+            TingXieGroupMember("g0i1@email.com", EnumQuizRole.EDITOR, "g0f1", "g0l1"),
+            TingXieGroupMember("g0i2@email.com", EnumQuizRole.EDITOR, "g0f2", "g0l2"),
+        )),
+        TingXieShareGroup("group1", false, arrayListOf(
+            TingXieGroupMember("g1i0@email.com", EnumQuizRole.VIEWER, "g1f0", "g1l0"),
+            TingXieGroupMember("g1i1@email.com", EnumQuizRole.EDITOR, "g1f1", "g1l1"),
+        )),
+    )
+  }
+
+  suspend fun addShareGroup(quizId: Long, name: String) {
+    TingXieNetwork.tingxie.postShareGroup(name, email, quizId)
+  }
+
+  suspend fun deleteShareGroup(quizId: Long, name: String) {
+    TingXieNetwork.tingxie.deleteShareGroup(name, email, quizId)
   }
 
   val allQuizPinyins: LiveData<List<QuizPinyin>> = mQuizDao.allQuizPinyins

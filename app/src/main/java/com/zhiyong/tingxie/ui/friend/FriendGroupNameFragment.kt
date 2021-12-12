@@ -13,10 +13,10 @@ import androidx.appcompat.app.AlertDialog
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.FriendGroupFragmentBinding
 
-class FriendGroupFragment : Fragment() {
+class FriendGroupNameFragment : Fragment() {
 
   companion object {
-    fun newInstance() = FriendGroupFragment()
+    fun newInstance() = FriendGroupNameFragment()
   }
 
   private lateinit var viewModel: FriendGroupNameViewModel

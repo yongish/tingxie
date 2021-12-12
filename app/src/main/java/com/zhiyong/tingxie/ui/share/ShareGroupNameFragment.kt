@@ -4,9 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.FrameLayout
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -21,6 +18,7 @@ class ShareGroupNameFragment: Fragment() {
   }
 
   private lateinit var viewModel: ShareGroupNameViewModel
+  private lateinit var shareGroupNameAdapter: ShareGroupNameAdapter
   private var _binding: ShareGroupFragmentBinding? = null
   private val binding get() = _binding!!
 
@@ -38,17 +36,6 @@ class ShareGroupNameFragment: Fragment() {
 //    val isAdmin = group.
 
     binding.fab.setOnClickListener {
-      val adapter = ArrayAdapter(
-          requireContext(),
-          android.R.layout.simple_spinner_item,
-          groupNames,
-      )
-      val spinner = Spinner(context)
-      spinner.adapter = adapter
-
-      val frameLayout = FrameLayout(requireContext())
-      frameLayout.addView(spinner)
-
 
     }
 
@@ -62,8 +49,13 @@ class ShareGroupNameFragment: Fragment() {
       viewModel.groups.observe(viewLifecycleOwner, { groups ->
         groups?.apply {
           binding.recyclerviewShareGroups.adapter = ShareGroupNameAdapter(
-              groups, requireActivity(), viewModel, binding.recyclerviewShareGroups
+              quizId,
+              groups,
+              requireActivity(),
+              viewModel,
+              binding.recyclerviewShareGroups,
           )
+          shareGroupNameAdapter = binding.recyclerviewShareGroups.adapter as ShareGroupNameAdapter
         }
         if (groups.isEmpty()) {
           binding.emptyView.visibility = View.VISIBLE

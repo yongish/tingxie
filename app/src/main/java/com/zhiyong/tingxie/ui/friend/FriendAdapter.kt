@@ -12,6 +12,6 @@ class FriendAdapter(activity: AppCompatActivity, private val itemsCount: Int)
     if (position == 0) {
       return FriendIndividualFragment.newInstance()
     }
-    return FriendGroupFragment.newInstance()
+    return FriendGroupNameFragment.newInstance()
   }
 }

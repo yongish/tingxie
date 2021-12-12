@@ -4,11 +4,10 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import androidx.lifecycle.viewModelScope
 import com.zhiyong.tingxie.QuizRepository
 import com.zhiyong.tingxie.ui.friend.Status
-import com.zhiyong.tingxie.ui.friend.TingXieGroup
+import kotlinx.coroutines.launch
 
 class ShareGroupNameViewModel(application: Application, quizId: Long)
   : AndroidViewModel(application) {
@@ -18,21 +17,30 @@ class ShareGroupNameViewModel(application: Application, quizId: Long)
   val status: LiveData<Status>
     get() = _status
 
-  private val _groups = MutableLiveData<List<TingXieGroup>>()
-  val groups: LiveData<List<TingXieGroup>>
+  private val _groups = MutableLiveData<List<TingXieShareGroup>>()
+  val groups: LiveData<List<TingXieShareGroup>>
     get() = _groups
 
-  val email = FirebaseAuth.getInstance().currentUser?.email
-
   init {
-    if (email == null) {
-      FirebaseCrashlytics.getInstance().recordException(Exception("NO EMAIL."))
-    } else {
-      getGroups(email, quizId)
+    getShareGroups(quizId)
+  }
+
+  private fun getShareGroups(quizId: Long) {
+    viewModelScope.launch {
+      _status.value = Status.LOADING
+      try {
+        _groups.value = repository.getShareGroups(quizId)
+        _status.value = Status.DONE
+      } catch (e: Exception) {
+        _groups.value = ArrayList()
+        _status.value = Status.ERROR
+      }
     }
   }
 
-  private fun getGroups(email: String, quizId: Long) {
+  fun addShareGroup(quizId: Long, name: String) =
+      viewModelScope.launch { repository.addShareGroup(quizId, name) }
 
-  }
+  fun deleteShareGroup(quizId: Long, name: String) =
+      viewModelScope.launch { repository.deleteShareGroup(quizId, name) }
 }

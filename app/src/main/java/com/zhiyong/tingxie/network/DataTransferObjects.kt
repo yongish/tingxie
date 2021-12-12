@@ -42,7 +42,10 @@ data class NetworkIndividual(val email: String, val firstName: String, val lastN
 data class NetworkGroupContainer(val groups: List<NetworkGroup>)
 
 @JsonClass(generateAdapter = true)
-data class NetworkGroupMember(val email: String, val role: EnumQuizRole, val firstName: String, val lastName: String)
+data class NetworkGroupMember(val email: String,
+                              val role: EnumQuizRole,
+                              val firstName: String,
+                              val lastName: String)
 
 fun NetworkGroupContainer.asDomainModel(): List<TingXieGroup> = groups.map {
   TingXieGroup(it.name, it.individuals.map {
@@ -66,3 +69,13 @@ data class NetworkShare(val email: String,
 fun NetworkShareContainer.asDomainModel(): List<TingXieShare> = shares.map {
   TingXieShare(it.email, it.firstName, it.lastName, it.isShared, it.role)
 }
+
+@JsonClass(generateAdapter = true)
+data class NetworkShareGroupContainer(val shareGroups: List<NetworkShareGroup>)
+
+@JsonClass(generateAdapter = true)
+data class NetworkShareGroup(val name: String,
+                             val isShared: Boolean,
+                             val individuals: List<NetworkGroupMember>)
+
+//fun NetworkShareGroupContainer.asDomainModel(): Lddist<TingXie>

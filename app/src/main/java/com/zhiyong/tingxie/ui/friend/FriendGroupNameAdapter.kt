@@ -28,7 +28,6 @@ class FriendGroupNameAdapter(private val groups: List<TingXieGroup>,
     val group = groups[position]
     holder.bind(group)
     holder.clIdentifier.setOnClickListener {
-      // Open GroupMember activity.
       val intent = Intent(context, FriendGroupMemberActivity::class.java)
       intent.putExtra(EXTRA_GROUP, group)
       context.startActivity(intent)
