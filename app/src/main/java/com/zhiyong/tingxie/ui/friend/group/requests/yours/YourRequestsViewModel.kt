@@ -24,7 +24,7 @@ class YourRequestsViewModel(application: Application) : AndroidViewModel(applica
     viewModelScope.launch {
       _status.value = Status.LOADING
       try {
-        _requests.value = repository.getYourIndividualRequests()
+//        _requests.value = repository.getYourGroupRequests()
         _status.value = Status.DONE
       } catch (e: Exception) {
         _requests.value = mapOf()
