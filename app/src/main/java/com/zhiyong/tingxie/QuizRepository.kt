@@ -9,7 +9,6 @@ import com.zhiyong.tingxie.db.*
 import com.zhiyong.tingxie.network.*
 import com.zhiyong.tingxie.ui.friend.group.name.TingXieFriendGroup
 import com.zhiyong.tingxie.ui.friend.group.member.TingXieGroupMember
-import com.zhiyong.tingxie.ui.friend.group.requests.yours.TingXieYourRequest
 import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
 import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsAdapter

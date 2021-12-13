@@ -61,6 +61,10 @@
     <string name="no_group_shares">You haven\'t shared this quiz with any groups.\nTap the + button to select a group to share it with.</string>
     <string name="no_quizzes">You haven\'t added any quizzes.\nTap the + button to add a quiz.</string>
     <string name="no_words">You haven\'t added any words.\nTap the + button to add a word.</string>
+    <string name="no_group_requests_pending">You have no group admin requests to others.</string>
+    <string name="no_group_responses_pending">You have no group admin requests from others.</string>
+    <string name="no_individual_requests_pending">You have no friend requests to others.</string>
+    <string name="no_individual_responses_pending">You have no friend admin requests from others.</string>
     <string name="help">Help</string>
     <string name="help_options">Help options</string>
     <string name="play_demo_video">Play demo video on YouTube.</string>

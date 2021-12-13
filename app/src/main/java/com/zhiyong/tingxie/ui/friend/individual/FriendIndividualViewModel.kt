@@ -6,9 +6,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.zhiyong.tingxie.QuizRepository
+import com.zhiyong.tingxie.viewmodel.Status
 import kotlinx.coroutines.launch
-
-enum class Status { LOADING, ERROR, DONE }
 
 open class FriendIndividualViewModel(application: Application) : AndroidViewModel(application) {
   private val repository: QuizRepository = QuizRepository(application)

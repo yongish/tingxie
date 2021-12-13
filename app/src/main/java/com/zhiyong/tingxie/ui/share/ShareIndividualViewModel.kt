@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.zhiyong.tingxie.QuizRepository
-import com.zhiyong.tingxie.ui.friend.individual.Status
+import com.zhiyong.tingxie.viewmodel.Status
 import kotlinx.coroutines.launch
 
 class ShareIndividualViewModel(quizId: Long, application: Application) : AndroidViewModel(application) {

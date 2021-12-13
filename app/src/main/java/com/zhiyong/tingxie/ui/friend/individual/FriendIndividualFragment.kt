@@ -15,6 +15,7 @@ import androidx.appcompat.app.AlertDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.IndividualFragmentBinding
+import com.zhiyong.tingxie.viewmodel.Status
 
 class FriendIndividualFragment : Fragment() {
 

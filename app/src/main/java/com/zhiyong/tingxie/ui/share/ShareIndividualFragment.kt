@@ -15,8 +15,8 @@ import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.ShareFragmentBinding
-import com.zhiyong.tingxie.ui.friend.individual.Status
 import com.zhiyong.tingxie.ui.share.ShareActivity.Companion.EXTRA_QUIZ_ID
+import com.zhiyong.tingxie.viewmodel.Status
 
 class ShareIndividualFragment : Fragment() {
 
@@ -93,8 +93,8 @@ class ShareIndividualFragment : Fragment() {
         }
       })
 
-      viewModel.status.observe(viewLifecycleOwner, { status ->
-        if (status.equals(Status.ERROR)) {
+      viewModel.status.observe(viewLifecycleOwner, { status: Status ->
+        if (status == Status.ERROR) {
           // todo: Display an offline error message on the view, instead of a toast.
           Toast.makeText(activity, "Network Error on Friends", Toast.LENGTH_LONG).show()
         }

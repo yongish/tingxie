@@ -12,7 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.FriendGroupFragmentBinding
-import com.zhiyong.tingxie.ui.friend.individual.Status
+import com.zhiyong.tingxie.viewmodel.Status
 
 class FriendGroupNameFragment : Fragment() {
 
@@ -79,8 +79,8 @@ class FriendGroupNameFragment : Fragment() {
       }
     })
 
-    viewModel.status.observe(viewLifecycleOwner, { status ->
-      if (status.equals(Status.ERROR)) {
+    viewModel.status.observe(viewLifecycleOwner, { status: Status ->
+      if (status == Status.ERROR) {
         // todo: Display an offline error message on the view, instead of a toast.
         Toast.makeText(activity, "Network Error on Groups", Toast.LENGTH_LONG).show()
       }

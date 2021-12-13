@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.zhiyong.tingxie.QuizRepository
-import com.zhiyong.tingxie.ui.friend.individual.Status
+import com.zhiyong.tingxie.viewmodel.Status
 import kotlinx.coroutines.launch
 
 class FriendGroupNameViewModel(application: Application) : AndroidViewModel(application) {
