@@ -9,7 +9,7 @@ import com.zhiyong.tingxie.QuizRepository
 import com.zhiyong.tingxie.viewmodel.Status
 import kotlinx.coroutines.launch
 
-class YourIndividualViewModel(application: Application) : AndroidViewModel(application) {
+class YourViewModel(application: Application) : AndroidViewModel(application) {
   private val repository: QuizRepository = QuizRepository(application)
 
   private val _status = MutableLiveData<Status>()

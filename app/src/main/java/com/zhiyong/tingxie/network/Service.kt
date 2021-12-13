@@ -70,5 +70,5 @@ object TingXieNetwork {
     .addConverterFactory(MoshiConverterFactory.create())
     .build()
 
-  val tingxie = retrofit.create(Service::class.java)
+  val tingxie: Service = retrofit.create(Service::class.java)
 }

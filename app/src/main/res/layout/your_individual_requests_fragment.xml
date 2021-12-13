@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorScreenBackground"
-    tools:context=".ui.friend.individual.requests.yours.YourRequestsFragment">
+    tools:context=".ui.friend.individual.requests.yours.YourRequestFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_your_requests"
