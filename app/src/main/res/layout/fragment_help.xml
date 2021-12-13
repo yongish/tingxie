@@ -32,7 +32,7 @@
         android:id="@+id/btnEmailZhiyong"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Email Zhiyong (听写 app creator)" />
+        android:text="@string/email_zhiyong" />
 
     <!--    <Button-->
 <!--        android:id="@+id/btnFacebook"-->

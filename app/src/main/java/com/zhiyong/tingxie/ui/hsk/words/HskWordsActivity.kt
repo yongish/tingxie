@@ -29,11 +29,11 @@ class HskWordsActivity : AppCompatActivity() {
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
     // Inflate the menu; this adds items to the action bar if it is present.
-    menuInflater.inflate(R.menu.menu_hsk_list, menu)
+    menuInflater.inflate(R.menu.menu_help, menu)
     return true
   }
 
-  fun openHelpHsk(item: android.view.MenuItem) {
+  fun openHelp(item: android.view.MenuItem) {
     val builder: AlertDialog.Builder = this.let {
       AlertDialog.Builder(it)
     }

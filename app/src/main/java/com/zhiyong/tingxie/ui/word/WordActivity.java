@@ -231,11 +231,11 @@ public class WordActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_hsk_list, menu);
+        getMenuInflater().inflate(R.menu.menu_help, menu);
         return true;
     }
 
-    public void openHelpHsk(MenuItem item) {
+    public void openHelp(MenuItem item) {
         new AlertDialog.Builder(WordActivity.this)
                 .setTitle("Words are tappable")
                 .setMessage("Tap on a word to search for it in Baidu dictionary.")

@@ -104,4 +104,5 @@
     <string name="username">%s, %s</string>
     <string name="shared">Shared</string>
     <string name="member_count">No. of members: %d</string>
+    <string name="email_zhiyong">Email Zhiyong (听写 app creator)</string>
 </resources>
