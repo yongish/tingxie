@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie.ui.friend.individual.requests.yours
+package com.zhiyong.tingxie.ui.friend.individual.request.yours
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -16,20 +16,32 @@ class YourViewModel(application: Application) : AndroidViewModel(application) {
   val status: LiveData<Status>
     get() = _status
 
-  private val _requests = MutableLiveData<Map<String, Int>>()
-  val requests: LiveData<Map<String, Int>>
+  private val _requests = MutableLiveData<List<TingXieYourIndividualRequest>>()
+  val requests: LiveData<List<TingXieYourIndividualRequest>>
     get() = _requests
 
   init {
+    getRequests()
+  }
+
+  private fun getRequests() {
     viewModelScope.launch {
       _status.value = Status.LOADING
       try {
         _requests.value = repository.getYourIndividualRequests()
         _status.value = Status.DONE
       } catch (e: Exception) {
-        _requests.value = mapOf()
+        _requests.value = arrayListOf()
         _status.value = Status.ERROR
       }
     }
+  }
+
+  fun addRequest(request: TingXieYourIndividualRequest) {
+    viewModelScope.launch { repository.addYourIndividualRequest(request) }
+  }
+
+  fun deleteRequest(email: String) {
+    viewModelScope.launch { repository.deleteYourIndividualRequest(email) }
   }
 }

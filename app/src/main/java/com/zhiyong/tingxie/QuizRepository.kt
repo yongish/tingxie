@@ -10,6 +10,7 @@ import com.zhiyong.tingxie.network.*
 import com.zhiyong.tingxie.ui.friend.group.name.TingXieFriendGroup
 import com.zhiyong.tingxie.ui.friend.group.member.TingXieGroupMember
 import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
+import com.zhiyong.tingxie.ui.friend.individual.request.yours.TingXieYourIndividualRequest
 import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsAdapter
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
@@ -143,10 +144,25 @@ class QuizRepository(val context: Context) {
     TingXieNetwork.tingxie.deleteFriend(this.email, email)
   }
 
-  suspend fun getYourIndividualRequests(): Map<String, Int> {
-    TingXieNetwork.tingxie.getYourIndividualRequests(email)
-    return mapOf("e0@email.com" to 20001010, "e1@email.com" to 20101020)
+  suspend fun getYourIndividualRequests(): List<TingXieYourIndividualRequest> {
+    try {
+      TingXieNetwork.tingxie.getYourIndividualRequests(email)
+    } catch (e: Exception) {
+
+    }
+    return arrayListOf(
+        TingXieYourIndividualRequest("e0@email.com" , 20001010),
+        TingXieYourIndividualRequest("e1@email.com", 20101020)
+    )
   }
+
+  suspend fun addYourIndividualRequest(request: TingXieYourIndividualRequest) =
+      TingXieNetwork.tingxie.postYourIndividualRequest(
+          email, NetworkYourIndividualRequest(request.email, request.date)
+      )
+
+  suspend fun deleteYourIndividualRequest(email: String) =
+      TingXieNetwork.tingxie.deleteYourIndividualRequest(this.email, email)
 
   suspend fun getShares(quizId: Long): List<TingXieShareIndividual> {
     try {

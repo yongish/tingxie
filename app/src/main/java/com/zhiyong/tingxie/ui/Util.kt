@@ -4,8 +4,13 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
+import java.text.SimpleDateFormat
+import java.util.*
 
 object Util {
+  val DB_FORMAT = SimpleDateFormat("yyyyMMdd", Locale.US)
+  val DISPLAY_FORMAT = SimpleDateFormat("dd MMM yyyy", Locale.US)
+
   fun emailZhiyong(activity: FragmentActivity) {
     val i = Intent(Intent.ACTION_SEND)
     i.type = "message/rfc822"
