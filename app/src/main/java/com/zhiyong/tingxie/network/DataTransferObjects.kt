@@ -46,6 +46,17 @@ data class NetworkYourIndividualRequestContainer(
 data class NetworkYourIndividualRequest(val email: String, val date: Int)
 
 @JsonClass(generateAdapter = true)
+data class NetworkOtherIndividualRequestContainer(
+    val requests: List<NetworkOtherIndividualRequest>
+    )
+
+@JsonClass(generateAdapter = true)
+data class NetworkOtherIndividualRequest(val email: String,
+                                         val firstName: String,
+                                         val lastName: String,
+                                         val date: Int)
+
+@JsonClass(generateAdapter = true)
 data class NetworkGroupContainer(val groups: List<NetworkGroup>)
 
 @JsonClass(generateAdapter = true)

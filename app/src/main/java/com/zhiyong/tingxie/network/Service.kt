@@ -48,6 +48,17 @@ interface Service {
       @Path("otherEmail") otherEmail: String
   ): Boolean
 
+  @GET("otherIndividualRequests")
+  suspend fun getOtherIndividualRequests(@Query("email") email: String)
+      : NetworkOtherIndividualRequestContainer
+
+  @PUT("otherIndividualRequest/requesterEmail/{userEmail}/responderEmail/{otherEmail}/accept/{accept}")
+  suspend fun putOtherIndividualRequest(
+      @Path("requesterEmail") requesterEmail: String,
+      @Path("responderEmail") responderEmail: String,
+      @Path("accept") accept: Boolean
+  ): Boolean
+
   @GET("groups")
   suspend fun getGroups(@Query("email") email: String): NetworkGroupContainer
 

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.zhiyong.tingxie.databinding.YourIndividualRequestsFragmentBinding
+import com.zhiyong.tingxie.databinding.YourIndividualRequestFragmentBinding
 import com.zhiyong.tingxie.viewmodel.Status
 
 class YourRequestFragment : Fragment() {
@@ -17,13 +17,13 @@ class YourRequestFragment : Fragment() {
   }
 
   private lateinit var viewModel: YourViewModel
-  private var _binding: YourIndividualRequestsFragmentBinding? = null
+  private var _binding: YourIndividualRequestFragmentBinding? = null
   private val binding get() = _binding!!
 
   override fun onCreateView(
       inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
   ): View {
-    _binding = YourIndividualRequestsFragmentBinding.inflate(inflater, container, false)
+    _binding = YourIndividualRequestFragmentBinding.inflate(inflater, container, false)
     return binding.root
   }
 

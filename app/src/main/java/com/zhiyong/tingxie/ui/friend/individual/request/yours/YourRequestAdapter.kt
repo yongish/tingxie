@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import com.zhiyong.tingxie.databinding.RecyclerviewRequestsIndividualYourBinding
+import com.zhiyong.tingxie.databinding.RecyclerviewRequestIndividualYourBinding
 import com.zhiyong.tingxie.ui.Util
 
 class YourRequestAdapter(private val requests: List<TingXieYourIndividualRequest>,
@@ -13,7 +13,7 @@ class YourRequestAdapter(private val requests: List<TingXieYourIndividualRequest
   : RecyclerView.Adapter<YourRequestAdapter.ViewHolder>() {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-      ViewHolder(RecyclerviewRequestsIndividualYourBinding.inflate(
+      ViewHolder(RecyclerviewRequestIndividualYourBinding.inflate(
           LayoutInflater.from(parent.context), parent, false
       ))
 
@@ -36,7 +36,7 @@ class YourRequestAdapter(private val requests: List<TingXieYourIndividualRequest
 
   override fun getItemCount(): Int = requests.size
 
-  class ViewHolder(private val binding: RecyclerviewRequestsIndividualYourBinding)
+  class ViewHolder(private val binding: RecyclerviewRequestIndividualYourBinding)
     : RecyclerView.ViewHolder(binding.root) {
     val ivDelete = binding.ivDelete
 

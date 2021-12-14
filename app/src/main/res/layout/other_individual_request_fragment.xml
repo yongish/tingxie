@@ -7,10 +7,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorScreenBackground"
-    tools:context=".ui.friend.individual.request.yours.YourRequestFragment">
+    tools:context=".ui.friend.individual.request.others.OtherRequestFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_your_requests"
+        android:id="@+id/recyclerview_other_requests"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="8dp"
@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="@string/no_friends"
+        android:text="@string/no_individual_responses_pending"
         android:textColor="@color/white"
         android:visibility="gone" />
 

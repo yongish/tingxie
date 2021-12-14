@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.zhiyong.tingxie.ui.friend.group.name.FriendGroupNameFragment
 import com.zhiyong.tingxie.ui.friend.individual.FriendIndividualFragment
+import com.zhiyong.tingxie.ui.friend.individual.request.others.OtherRequestFragment
 import com.zhiyong.tingxie.ui.friend.individual.request.yours.YourRequestFragment
 
 class FriendAdapter(activity: AppCompatActivity, private val itemsCount: Int)
@@ -20,6 +21,9 @@ class FriendAdapter(activity: AppCompatActivity, private val itemsCount: Int)
     }
     if (position == 2) {
       return YourRequestFragment.newInstance()
+    }
+    if (position == 3) {
+      return OtherRequestFragment.newInstance()
     }
 
     return FriendGroupNameFragment.newInstance()
