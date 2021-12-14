@@ -2,13 +2,13 @@ package com.zhiyong.tingxie.ui.friend.group.requests.yours
 
 import androidx.fragment.app.Fragment
 
-class YourRequestsFragment : Fragment() {
+class YourGroupRequestFragment : Fragment() {
 
   companion object {
-    fun newInstance() = YourRequestsFragment()
+    fun newInstance() = YourGroupRequestFragment()
   }
 
-  private lateinit var viewModel: YourRequestsViewModel
+  private lateinit var viewModel: YourGroupRequestViewModel
 
   override fun onDestroyView() {
     super.onDestroyView()

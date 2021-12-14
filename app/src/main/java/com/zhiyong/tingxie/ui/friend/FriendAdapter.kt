@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.zhiyong.tingxie.ui.friend.group.name.FriendGroupNameFragment
+import com.zhiyong.tingxie.ui.friend.group.requests.others.OtherGroupRequestFragment
+import com.zhiyong.tingxie.ui.friend.group.requests.yours.YourGroupRequestFragment
 import com.zhiyong.tingxie.ui.friend.individual.FriendIndividualFragment
 import com.zhiyong.tingxie.ui.friend.individual.request.others.OtherRequestFragment
 import com.zhiyong.tingxie.ui.friend.individual.request.yours.YourRequestFragment
@@ -25,7 +27,9 @@ class FriendAdapter(activity: AppCompatActivity, private val itemsCount: Int)
     if (position == 3) {
       return OtherRequestFragment.newInstance()
     }
-
-    return FriendGroupNameFragment.newInstance()
+    if (position == 4) {
+      return YourGroupRequestFragment.newInstance()
+    }
+    return OtherGroupRequestFragment.newInstance()
   }
 }
