@@ -21,10 +21,6 @@ class YourViewModel(application: Application) : AndroidViewModel(application) {
     get() = _requests
 
   init {
-    getRequests()
-  }
-
-  private fun getRequests() {
     viewModelScope.launch {
       _status.value = Status.LOADING
       try {
