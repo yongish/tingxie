@@ -35,7 +35,7 @@ interface Service {
 
   @GET("yourIndividualRequests")
   suspend fun getYourIndividualRequests(@Query("email") email: String)
-  : NetworkYourIndividualRequestContainer
+      : NetworkYourIndividualRequestContainer
 
   @POST("yourIndividualRequest")
   suspend fun postYourIndividualRequest(
@@ -58,33 +58,6 @@ interface Service {
       @Path("responderEmail") responderEmail: String,
       @Path("accept") accept: Boolean
   ): Boolean
-
-  @GET("groups")
-  suspend fun getGroups(@Query("email") email: String): NetworkGroupContainer
-
-  @POST("groups")
-  suspend fun postGroup(@Query("email") email: String,
-                        @Body group: NetworkGroup): NetworkGroup
-
-  @DELETE("groups/{name}/userEmail/{userEmail}/friendEmail/{email}")
-  suspend fun deleteGroup(@Path("name") name: String,
-                          @Path("userEmail") userEmail: String,
-                          @Path("email") email: String): Boolean
-
-  @GET("shareGroups")
-  suspend fun getShareGroups(
-      @Query("email") email: String, @Query("quizId") quizId: Long
-  ): NetworkShareGroupContainer
-
-  @POST("shareGroup/{name}/email/{email}/quizId/{quizId}")
-  suspend fun postShareGroup(@Path("name") name: String,
-                             @Path("email") email: String,
-                             @Path("quizId") quizId: Long)
-
-  @DELETE("shareGroup/{name}/email/{email}/quizId/{quizId}")
-  suspend fun deleteShareGroup(@Path("name") name: String,
-                               @Path("email") email: String,
-                               @Path("quizId") quizId: Long)
 }
 
 object TingXieNetwork {

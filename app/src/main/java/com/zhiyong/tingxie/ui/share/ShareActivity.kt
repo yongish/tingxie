@@ -25,12 +25,10 @@ class ShareActivity : AppCompatActivity() {
     val quizId = intent.getLongExtra(EXTRA_QUIZ_ID, -1)
     val bundle = Bundle()
     bundle.putLong(EXTRA_QUIZ_ID, quizId)
-    binding.vpShare.adapter = ShareAdapter(this, 2, bundle)
+    binding.vpShare.adapter = ShareAdapter(this, 1, bundle)
     TabLayoutMediator(binding.tabLayout, binding.vpShare) { tab, position ->
       if (position == 0) {
         tab.text = "Individuals"
-      } else {
-        tab.text = "Groups"
       }
     }.attach()
   }

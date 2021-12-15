@@ -2,8 +2,6 @@ package com.zhiyong.tingxie.network
 
 import com.squareup.moshi.JsonClass
 import com.zhiyong.tingxie.db.Quiz
-import com.zhiyong.tingxie.ui.friend.group.name.TingXieFriendGroup
-import com.zhiyong.tingxie.ui.friend.group.member.TingXieGroupMember
 import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
 import com.zhiyong.tingxie.ui.share.TingXieShareIndividual
@@ -57,24 +55,6 @@ data class NetworkOtherIndividualRequest(val email: String,
                                          val date: Int)
 
 @JsonClass(generateAdapter = true)
-data class NetworkGroupContainer(val groups: List<NetworkGroup>)
-
-@JsonClass(generateAdapter = true)
-data class NetworkGroupMember(val email: String,
-                              val role: EnumQuizRole,
-                              val firstName: String,
-                              val lastName: String)
-
-fun NetworkGroupContainer.asDomainModel(): List<TingXieFriendGroup> = groups.map {
-  TingXieFriendGroup(it.name, it.individuals.map {
-    it1 -> TingXieGroupMember(it1.email, it1.role, it1.firstName, it1.lastName)
-  } )
-}
-
-@JsonClass(generateAdapter = true)
-data class NetworkGroup(val name: String, val individuals: List<NetworkGroupMember>)
-
-@JsonClass(generateAdapter = true)
 data class NetworkShareContainer(val shares: List<NetworkShare>)
 
 @JsonClass(generateAdapter = true)
@@ -87,13 +67,3 @@ data class NetworkShare(val email: String,
 fun NetworkShareContainer.asDomainModel(): List<TingXieShareIndividual> = shares.map {
   TingXieShareIndividual(it.email, it.firstName, it.lastName, it.isShared, it.role)
 }
-
-@JsonClass(generateAdapter = true)
-data class NetworkShareGroupContainer(val shareGroups: List<NetworkShareGroup>)
-
-@JsonClass(generateAdapter = true)
-data class NetworkShareGroup(val name: String,
-                             val isShared: Boolean,
-                             val individuals: List<NetworkGroupMember>)
-
-//fun NetworkShareGroupContainer.asDomainModel(): Lddist<TingXie>

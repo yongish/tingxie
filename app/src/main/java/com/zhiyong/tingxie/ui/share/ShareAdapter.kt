@@ -10,13 +10,8 @@ class ShareAdapter(activity: AppCompatActivity, private val itemsCount: Int, val
   override fun getItemCount(): Int = itemsCount
 
   override fun createFragment(position: Int): Fragment {
-    if (position == 0) {
       val shareIndividualFragment = ShareIndividualFragment.newInstance()
       shareIndividualFragment.arguments = bundle
       return shareIndividualFragment
-    }
-    val shareGroupFragment = ShareGroupNameFragment.newInstance()
-    shareGroupFragment.arguments = bundle
-    return shareGroupFragment
   }
 }
