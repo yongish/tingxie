@@ -47,7 +47,7 @@ public class RecyclerViewTest {
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
-    private ViewInteraction floatingActionButton = getFAB();
+    private final ViewInteraction floatingActionButton = getFAB();
 
     @Before
     public void before() {

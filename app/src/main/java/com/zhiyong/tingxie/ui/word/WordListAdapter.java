@@ -34,9 +34,9 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
 
     private List<WordItem> mWordItems;
 
-    private WordViewModel viewModel;
-    private RecyclerView recyclerView;
-    private QuizItem quizItem;
+    private final WordViewModel viewModel;
+    private final RecyclerView recyclerView;
+    private final QuizItem quizItem;
 
     WordListAdapter(final Context context, WordViewModel viewModel,
                     RecyclerView recyclerView, QuizItem quizItem) {

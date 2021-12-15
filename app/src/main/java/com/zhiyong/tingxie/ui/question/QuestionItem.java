@@ -1,9 +1,9 @@
 package com.zhiyong.tingxie.ui.question;
 
 public class QuestionItem {
-    private String wordString;
-    private String pinyinString;
-    private boolean correct;
+    private final String wordString;
+    private final String pinyinString;
+    private final boolean correct;
 
     public QuestionItem(String wordString, String pinyinString, boolean correct) {
         this.wordString = wordString;

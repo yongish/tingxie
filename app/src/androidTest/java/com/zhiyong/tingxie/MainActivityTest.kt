@@ -55,12 +55,12 @@ class MainActivityTest {
     removeQuiz(1)
     onView(withText("Undo")).perform(click())
     tapAddViewWordButton(1)
-    onView(withId(R.id.recyclerview_word)).check(RecyclerViewItemCountAssertion(2));
+    onView(withId(R.id.recyclerview_word)).check(RecyclerViewItemCountAssertion(2))
     checkWord(0, "杏")
     checkWord(1, "疫苗")
     tapBackButton()
     tapAddViewWordButton(0)
-    onView(withId(R.id.recyclerview_word)).check(RecyclerViewItemCountAssertion(2));
+    onView(withId(R.id.recyclerview_word)).check(RecyclerViewItemCountAssertion(2))
     checkWord(0, "脚踏实地")
     checkWord(1, "卷心菜")
     tapBackButton()

@@ -55,8 +55,8 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
 
     private List<QuizItem> mQuizItems;
 
-    private QuizViewModel viewModel;
-    private RecyclerView recyclerView;
+    private final QuizViewModel viewModel;
+    private final RecyclerView recyclerView;
 
     // All question and quiz_pinyin rows (for undo deletes). May be suboptimal to get all rows, but
     // getting only question and quiz_pinyin is tricky and may be overengineering.
@@ -109,8 +109,8 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                             QuizItem newItem = current;
 
-                            int newIntDate = Integer.valueOf(String.valueOf(year) +
-                                    String.format("%02d", ++month) + String.valueOf(dayOfMonth));
+                            int newIntDate = Integer.valueOf(year +
+                                    String.format("%02d", ++month) + dayOfMonth);
                             Log.d("newIntDate", String.valueOf(newIntDate));
                             newItem.setDate(newIntDate);
                             mQuizItems.set(i, newItem);

@@ -20,7 +20,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     // Open the quiz activity.
 
     Handler(Looper.getMainLooper()).post {
-      Toast.makeText(getApplicationContext(), "Quiz shared with you.", Toast.LENGTH_SHORT).show()
+      Toast.makeText(applicationContext, "Quiz shared with you.", Toast.LENGTH_SHORT).show()
     }
   }
 
@@ -28,6 +28,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     super.onNewToken(p0)
 
     // todo: Send to server.
-    Log.d("NEW TOKEN", p0);
+    Log.d("NEW TOKEN", p0)
   }
 }

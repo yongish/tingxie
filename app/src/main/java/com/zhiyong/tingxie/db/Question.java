@@ -16,15 +16,15 @@ public class Question {
     @NonNull
     private long id;
 
-    private long timestamp;
+    private final long timestamp;
 
-    private long reset_time;
+    private final long reset_time;
 
-    private String pinyin_string;
+    private final String pinyin_string;
 
-    private boolean correct;
+    private final boolean correct;
 
-    private long quiz_id;
+    private final long quiz_id;
 
     public Question(@NonNull long timestamp, long reset_time,
                     @NonNull String pinyin_string, @NonNull boolean correct,

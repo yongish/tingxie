@@ -13,7 +13,7 @@ import com.zhiyong.tingxie.db.*
         version = 8)
 abstract class PinyinRoomDatabase : RoomDatabase() {
     fun pinyinDao(): QuizDao {
-        return pinyinDao;
+        return pinyinDao
     }
 
     abstract val pinyinDao: QuizDao

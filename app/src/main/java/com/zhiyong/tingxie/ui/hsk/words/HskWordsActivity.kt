@@ -45,7 +45,7 @@ class HskWordsActivity : AppCompatActivity() {
     )
       .setTitle("Tips")
       .setPositiveButton("Open phone speech settings") {
-          _, _ -> startActivity(MainActivity.openSpeechSettingsHelper());
+          _, _ -> startActivity(MainActivity.openSpeechSettingsHelper())
       }
       .setNegativeButton("No need. I can heard the words.") {
           dialog, _ -> dialog.dismiss()

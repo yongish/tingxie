@@ -48,7 +48,7 @@ class HskWordsFragment : Fragment() {
     quizViewModel.allQuizItems.observe(requireActivity()) { adapter.setQuizItems(it) }
 
     val fastScroller: VerticalRecyclerViewFastScroller = requireActivity().findViewById(R.id.fast_scroller)
-    fastScroller.setRecyclerView(recyclerView);
+    fastScroller.setRecyclerView(recyclerView)
     recyclerView.addOnScrollListener(fastScroller.onScrollListener)
   }
 }
