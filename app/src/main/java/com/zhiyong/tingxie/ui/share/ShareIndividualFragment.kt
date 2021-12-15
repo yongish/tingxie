@@ -37,7 +37,7 @@ class ShareIndividualFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    val quizId = arguments?.getLong(EXTRA_QUIZ_ID)
+    val quizId = requireActivity().intent.getLongExtra(EXTRA_QUIZ_ID, -1)
 
     val spannableString = SpannableString(resources.getString(R.string.no_shares))
     val d: Drawable? = ResourcesCompat.getDrawable(
@@ -65,7 +65,7 @@ class ShareIndividualFragment : Fragment() {
       // todo: Display done check button on menu bar.
     }
 
-    if (quizId != null) {
+    if (quizId != -1L) {
       val viewModelFactory = ShareIndividualViewModelFactory(quizId, requireNotNull(activity).application)
       viewModel = ViewModelProvider(this, viewModelFactory)[ShareIndividualViewModel::class.java]
 
