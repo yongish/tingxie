@@ -55,12 +55,8 @@ class FriendActivity : AppCompatActivity() {
           Add other 听写 users as friends and share quizzes with them.
           The various tabs in this page are as follows.<br /><br />
           <b>Friends</b>: View and manage your friends here.<br /><br />
-          <b>Groups</b>: Share a quiz with multiple users at the same time. Create a group, then add friends to it.<br /><br />
           <b>Friend requests made</b>: See your pending friend requests to others.<br /><br />
           <b>Friend requests received</b>: Grant or deny friend requests other users made to you.<br /><br />
-          <b>Group admin requests made</b>: See your pending group admin requests you made.<br />
-          A group has one or more admins. Only admins can add or remove words to a shared quiz.<br /><br />
-          <b>Group admin requests received</b>: Grant or deny requests from others to become group admins.<br /><br />
           Need help? Email Zhiyong with your feedback and questions.
       """, HtmlCompat.FROM_HTML_MODE_LEGACY))
         .setTitle("What is Friends?")
