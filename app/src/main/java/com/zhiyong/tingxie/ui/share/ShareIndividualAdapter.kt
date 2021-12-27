@@ -3,6 +3,7 @@ package com.zhiyong.tingxie.ui.share
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
@@ -25,6 +26,7 @@ class ShareIndividualAdapter(private val quizId: Long,
   : RecyclerView.Adapter<ShareIndividualAdapter.ViewHolder>(), Filterable {
 
   var sharesFiltered: List<TingXieShareIndividual> = shareIndividuals.filter { it.isShared }
+  var editing = false
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
     return ViewHolder(RecyclerviewShareIndividualBinding.inflate(
@@ -60,6 +62,7 @@ class ShareIndividualAdapter(private val quizId: Long,
     holder.spRole.setSelection(EnumQuizRole.values().indexOf(share.role))
 
     holder.cbIsShared.isChecked = share.isShared
+    holder.cbIsShared.visibility = if (editing) View.VISIBLE else View.GONE
 
     val role = sharesFiltered
         .first { it.email == FirebaseAuth.getInstance().currentUser?.email }.role

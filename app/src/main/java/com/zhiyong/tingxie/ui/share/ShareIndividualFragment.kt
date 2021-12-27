@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.toDrawable
 import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.ShareFragmentBinding
@@ -28,6 +29,7 @@ class ShareIndividualFragment : Fragment() {
   private lateinit var shareIndividualAdapter: ShareIndividualAdapter
   private var _binding: ShareFragmentBinding? = null
   private val binding get() = _binding!!
+  private var editing = false
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View {
@@ -56,11 +58,18 @@ class ShareIndividualFragment : Fragment() {
 
       // todo: Only admin can edit shared.
 
-      // Display all friends.
-      shareIndividualAdapter.filter.filter(IsShared.ALL.name)
-      binding.fab.visibility = View.GONE
-
-      // todo:
+      if (editing) {
+        shareIndividualAdapter.filter.filter(IsShared.SHARED.name)
+        binding.fab.setImageResource(R.drawable.ic_baseline_edit_black_24)
+        shareIndividualAdapter.editing = false
+        editing = false
+      } else {
+        // Display all friends.
+        shareIndividualAdapter.filter.filter(IsShared.ALL.name)
+        binding.fab.setImageResource(R.drawable.ic_baseline_done_24)
+        shareIndividualAdapter.editing = true
+        editing = true
+      }
 
       // todo: Display done check button on menu bar.
     }
