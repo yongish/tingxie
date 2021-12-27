@@ -6,18 +6,16 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ImageSpan
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.drawable.toDrawable
 import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.ShareFragmentBinding
 import com.zhiyong.tingxie.ui.share.ShareActivity.Companion.EXTRA_QUIZ_ID
 import com.zhiyong.tingxie.viewmodel.Status
+
 
 class ShareIndividualFragment : Fragment() {
 
@@ -27,6 +25,7 @@ class ShareIndividualFragment : Fragment() {
 
   private lateinit var viewModel: ShareIndividualViewModel
   private lateinit var shareIndividualAdapter: ShareIndividualAdapter
+  private lateinit var menuItem: MenuItem
   private var _binding: ShareFragmentBinding? = null
   private val binding get() = _binding!!
   private var editing = false
@@ -35,6 +34,11 @@ class ShareIndividualFragment : Fragment() {
                             savedInstanceState: Bundle?): View {
     _binding = ShareFragmentBinding.inflate(inflater, container, false)
     return binding.root
+  }
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    setHasOptionsMenu(true)
+    super.onCreate(savedInstanceState)
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -62,16 +66,23 @@ class ShareIndividualFragment : Fragment() {
         shareIndividualAdapter.filter.filter(IsShared.SHARED.name)
         binding.fab.setImageResource(R.drawable.ic_baseline_edit_black_24)
         shareIndividualAdapter.editing = false
+        menuItem.isVisible = false
         editing = false
       } else {
         // Display all friends.
         shareIndividualAdapter.filter.filter(IsShared.ALL.name)
         binding.fab.setImageResource(R.drawable.ic_baseline_done_24)
         shareIndividualAdapter.editing = true
+        menuItem.isVisible = true
         editing = true
       }
 
       // todo: Display done check button on menu bar.
+    }
+
+    menuItem.setOnMenuItemClickListener {
+      viewModel.setAllShared(quizId, it.isChecked)
+      true
     }
 
     if (quizId != -1L) {
@@ -87,7 +98,6 @@ class ShareIndividualFragment : Fragment() {
           binding.recyclerviewShares.adapter = ShareIndividualAdapter(
               quizId,
               shares,
-//              shares.filter { it.isShared },
               requireActivity(),
               viewModel,
               binding.recyclerviewShares,
@@ -109,6 +119,16 @@ class ShareIndividualFragment : Fragment() {
         }
       })
     }
+  }
+
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//    inflater.inflate(R.menu.menu_share, menu)
+    menuItem = menu.add("Item1")
+    menuItem.setActionView(R.layout.action_layout_checkbox)
+        .setVisible(false)
+        .setCheckable(true)
+        .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+    super.onCreateOptionsMenu(menu, inflater)
   }
 
   override fun onDestroyView() {

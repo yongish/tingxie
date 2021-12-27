@@ -17,6 +17,11 @@ interface Service {
                         @Path("quizId") quizId: Long,
                         @Body share: NetworkShare): NetworkShare
 
+  @PUT("shares/userEmail/{userEmail}/quizzes/{quizId}/shared/{shared}")
+  suspend fun putShareAll(@Path("email") email: String,
+                          @Path("quizId") quizId: Long,
+                          @Path("shared") shared: Boolean): NetworkShare
+
   @DELETE("shares/userEmail/{userEmail}/quizzes/{quizId}/email/{email}")
   suspend fun deleteShare(@Path("userEmail") userEmail: String,
                           @Path("quizId") quizId: Long,

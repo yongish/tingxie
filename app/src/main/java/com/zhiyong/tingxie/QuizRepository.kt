@@ -172,6 +172,10 @@ class QuizRepository(val context: Context) {
     ))
   }
 
+  suspend fun shareAll(quizId: Long, shared: Boolean): List<TingXieShareIndividual> {
+    TingXieNetwork.tingxie.putShareAll(email, quizId, shared)
+  }
+
   suspend fun deleteShare(quizId: Long, email: String) {
     TingXieNetwork.tingxie.deleteShare(this.email, quizId, email)
   }

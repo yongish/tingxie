@@ -41,6 +41,19 @@ class ShareIndividualViewModel(quizId: Long, application: Application) : Android
     viewModelScope.launch { repository.addShare(quizId, shareIndividual) }
   }
 
+  fun setAllShared(quizId: Long, shared: Boolean) {
+    viewModelScope.launch {
+      _status.value = Status.LOADING
+      try {
+        _shares.value = repository.shareAll(quizId, shared)
+        _status.value = Status.DONE
+      } catch (e: Exception) {
+        _shares.value = ArrayList()
+        _status.value = Status.ERROR
+      }
+    }
+  }
+
   fun deleteShare(quizId: Long, email: String) {
     viewModelScope.launch {
       _status.value = Status.LOADING

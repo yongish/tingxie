@@ -60,4 +60,5 @@
     <string name="shared">Shared</string>
     <string name="email_zhiyong">Email Zhiyong (听写 app creator)</string>
     <string name="accept_or_reject">Accept or reject</string>
+    <string name="share_with_all">Share with all    </string>
 </resources>
