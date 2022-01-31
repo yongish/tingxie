@@ -73,21 +73,32 @@ class QuizRepository(val context: Context) {
 
   }
 
-  suspend fun refreshQuizzes() {
+  suspend fun refreshQuizzes(quizItems: List<QuizItem>) {
     withContext(Dispatchers.IO) {
-      // Insert quizzes in local DB not in remote DB.
+      // Send local quizIds to server.
+      // Server responds with new remote quizzes and missing remote quizIds.
+      val refreshQuizzesResponse = TingXieNetwork.tingxie.getNewQuizzes(
+          email, NetworkQuizIdContainer(quizItems.map { it.id })
+      )
+      // Insert these new quizzes into local DB.
+      mQuizDao.insertAll(refreshQuizzesResponse.newQuizzesRemote.map {
+        Quiz(it.id, it.date, it.title, it.total_words, it.not_learned, it.round)
+      })
+      // Send missing quizzes to server.
+      TingXieNetwork.tingxie.putQuizzes(
+          email,
+          NetworkQuizContainer(
+              quizItems.filter { refreshQuizzesResponse.missingQuizIds.contains(it.id) }
+                  .map { NetworkQuiz(
+                      it.id, it.date, it.title, it.totalWords, it.notLearned, it.round
+                  ) }
+          )
+      )
 
+      // Insert quizzes in local DB not in remote DB.
       // status flag. inserted (0), updated (1), deleted (-1).
       // sync flag. synced (1), unsynced (0).
-
       // Local rows marked as -1 should be deleted
-
-
-      // Insert quizzes in remote DB not in local DB.
-      val quizzes = TingXieNetwork.tingxie.getQuizzes(email)
-
-
-      mQuizDao.insertAll(quizzes.asDatabaseModel())
     }
   }
 

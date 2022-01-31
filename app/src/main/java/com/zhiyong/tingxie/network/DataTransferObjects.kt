@@ -7,6 +7,14 @@ import com.zhiyong.tingxie.ui.share.EnumQuizRole
 import com.zhiyong.tingxie.ui.share.TingXieShareIndividual
 
 @JsonClass(generateAdapter = true)
+data class NetworkQuizIdContainer(val quizIds: List<Long>)
+
+@JsonClass(generateAdapter = true)
+data class NetworkQuizRefreshContainer(
+    val newQuizzesRemote: List<NetworkQuiz>, val missingQuizIds: List<Long>
+    )
+
+@JsonClass(generateAdapter = true)
 data class NetworkQuizContainer(val quizzes: List<NetworkQuiz>)
 
 @JsonClass(generateAdapter = true)

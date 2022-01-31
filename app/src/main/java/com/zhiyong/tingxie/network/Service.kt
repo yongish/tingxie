@@ -8,6 +8,16 @@ interface Service {
   @GET("quizzes")
   suspend fun getQuizzes(@Query("email") email: String): NetworkQuizContainer
 
+  @PUT("refreshQuizzes")
+  suspend fun getNewQuizzes(
+      @Query("email") email: String,
+      @Body quizIds: NetworkQuizIdContainer
+  ): NetworkQuizRefreshContainer
+
+  @PUT("quizzes")
+  suspend fun putQuizzes(@Query("email") email: String,
+                         @Body quizzes: NetworkQuizContainer): Boolean
+
   @GET("shares")
   suspend fun getShares(@Query("email") email: String,
                         @Query("quizId") quizId: Long): NetworkShareContainer

@@ -17,8 +17,8 @@ import java.io.IOException
 
 class QuizViewModel(application: Application) : UpdateQuizViewModel(application) {
     val allQuizItems: LiveData<List<QuizItem>> = mRepository.quizzes
-    val allQuizPinyins: LiveData<List<QuizPinyin>> = mRepository.allQuizPinyins
-    val allQuestions: LiveData<List<Question>> = mRepository.allQuestions
+//    val allQuizPinyins: LiveData<List<QuizPinyin>> = mRepository.allQuizPinyins
+//    val allQuestions: LiveData<List<Question>> = mRepository.allQuestions
 
     private var _eventNetworkError = MutableLiveData(false)
     val eventNetworkError: LiveData<Boolean>
@@ -31,14 +31,28 @@ class QuizViewModel(application: Application) : UpdateQuizViewModel(application)
     private val repository = QuizRepository(application)
     val quizzes = repository.quizzes
 
-    init {
-        refreshDataFromRepository()
-    }
+//    init {
+//        refreshDataFromRepository()
+//    }
 
-    private fun refreshDataFromRepository() {
+//    private fun refreshDataFromRepository() {
+//        viewModelScope.launch {
+//            try {
+//                repository.refreshQuizzes()
+//                _eventNetworkError.value = false
+//                _isNetworkErrorShown.value = false
+//            } catch (networkError: IOException) {
+//                if (quizzes.value.isNullOrEmpty()) {
+//                    _eventNetworkError.value = true
+//                }
+//            }
+//        }
+//    }
+
+    fun refreshQuizzes(quizItems: List<QuizItem>) {
         viewModelScope.launch {
             try {
-                repository.refreshQuizzes()
+                repository.refreshQuizzes(quizItems)
                 _eventNetworkError.value = false
                 _isNetworkErrorShown.value = false
             } catch (networkError: IOException) {

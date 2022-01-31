@@ -6,7 +6,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +24,7 @@ import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.ui.friend.FriendActivity;
 import com.zhiyong.tingxie.ui.hsk.buttons.HskButtonsActivity;
 import com.zhiyong.tingxie.ui.login.LoginActivity;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -61,24 +61,26 @@ public class MainActivity extends AppCompatActivity {
                 emptyView.setVisibility(View.VISIBLE);
             } else {
                 emptyView.setVisibility(View.INVISIBLE);
+
+                mQuizViewModel.refreshQuizzes(quizItems);
             }
         });
 
-        mQuizViewModel.getEventNetworkError().observe(this, isNetworkError -> {
-            if (isNetworkError) onNetworkError();
-        });
+//        mQuizViewModel.getEventNetworkError().observe(this, isNetworkError -> {
+//            if (isNetworkError) onNetworkError();
+//        });
 //        mQuizViewModel.getQuizzes().observe(this, quizzes -> {
 //            adapter.setQuizItems();
 //        });
 
         /* todo: getAllQuestions() and getAllQuizPinyins() here may be unnecessary.
          */
-        mQuizViewModel.getAllQuestions().observe(this, questions ->
-                adapter.setQuestions(questions)
-        );
-        mQuizViewModel.getAllQuizPinyins().observe(this, quizPinyins ->
-                adapter.setQuizPinyins(quizPinyins)
-        );
+//        mQuizViewModel.getAllQuestions().observe(this, questions ->
+//                adapter.setQuestions(questions)
+//        );
+//        mQuizViewModel.getAllQuizPinyins().observe(this, quizPinyins ->
+//                adapter.setQuizPinyins(quizPinyins)
+//        );
 
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
                 0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT
@@ -167,10 +169,10 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    private void onNetworkError() {
-        if(!mQuizViewModel.isNetworkErrorShown().getValue()) {
-            Toast.makeText(this, "Network Error", Toast.LENGTH_LONG).show();
-            mQuizViewModel.onNetworkErrorShown();
-        }
-    }
+//    private void onNetworkError() {
+//        if(!mQuizViewModel.isNetworkErrorShown().getValue()) {
+//            Toast.makeText(this, "Network Error", Toast.LENGTH_LONG).show();
+//            mQuizViewModel.onNetworkErrorShown();
+//        }
+//    }
 }
