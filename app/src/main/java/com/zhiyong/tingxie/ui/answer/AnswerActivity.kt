@@ -88,7 +88,9 @@ class AnswerActivity: AppCompatActivity() {
       startActivity(intent)
     }
 
-    val remainingCount = intent.getIntExtra(QuestionActivity.EXTRA_REMAINING_QUESTION_COUNT, -1)
+    val remainingCount = intent.getIntExtra(
+        QuestionActivity.EXTRA_REMAINING_QUESTION_COUNT, -1
+    )
 
     val quizItem: QuizItem? = intent.getParcelableExtra(EXTRA_QUIZ_ITEM)
     val intentQuestion = Intent(this, QuestionActivity::class.java)
@@ -115,6 +117,7 @@ class AnswerActivity: AppCompatActivity() {
         AnswerViewModel::class.java
       )
 
+      val id = intent.getLongExtra(QuestionActivity.EXTRA_QUIZ_PINYIN_ID, -1)
       val pinyinString = intent.getStringExtra(QuestionActivity.EXTRA_PINYIN_STRING)
 
       val ts = System.currentTimeMillis()
@@ -127,7 +130,7 @@ class AnswerActivity: AppCompatActivity() {
         // Insert new question with boolean correct.
         val question = questionBuilder.correct(true).build()
         mAnswerViewModel.onAnswer(question, WordItem(
-          quizItem.id, wordsString, pinyinString, true
+          id, quizItem.id, wordsString, pinyinString, true
         ))
         // Go to Completed Alert Dialog or QuestionActivity.
         // Was this the last word in current round?
@@ -142,7 +145,7 @@ class AnswerActivity: AppCompatActivity() {
         // Insert new question with boolean wrong.
         val question = questionBuilder.correct(false).build()
         mAnswerViewModel.onAnswer(question, WordItem(
-          quizItem.id, wordsString, pinyinString, false
+          id, quizItem.id, wordsString, pinyinString, false
         ))
         Toast.makeText(
           this, "Keep going.",

@@ -152,6 +152,7 @@ class QuestionActivity: AppCompatActivity() {
             val intent = Intent(applicationContext, AnswerActivity::class.java)
             intent.putExtra(EXTRA_QUIZ_ITEM, quizItem)
 
+            intent.putExtra(EXTRA_QUIZ_PINYIN_ID, wordItem.id)
             intent.putExtra(EXTRA_WORDS_STRING, sb.deleteCharAt(0).toString())
             intent.putExtra(EXTRA_PINYIN_STRING, pinyinString)
             intent.putExtra(EXTRA_REMAINING_QUESTION_COUNT, wordItems.size)
@@ -197,6 +198,7 @@ class QuestionActivity: AppCompatActivity() {
     const val EXTRA_HSK_ID = "com.zhiyong.tingxie.ui.question.extra.HSK_ID"
 
     const val EXTRA_QUIZ_ITEM = "com.zhiyong.tingxie.ui.question.extra.QUIZ_ITEM"
+    const val EXTRA_QUIZ_PINYIN_ID = "com.zhiyong.tingxie.ui.question.extra.QUIZ_PINYIN_ID"
     const val EXTRA_WORDS_STRING = "com.zhiyong.tingxie.ui.question.extra.WORDS_STRING"
     const val EXTRA_PINYIN_STRING = "com.zhiyong.tingxie.ui.question.extra.PINYIN_STRING"
     const val EXTRA_REMAINING_QUESTION_COUNT =

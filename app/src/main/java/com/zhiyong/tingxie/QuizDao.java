@@ -65,6 +65,7 @@ public interface QuizDao {
     LiveData<Integer> getCorrectCount(long quizId, String pinyin);
 
     @Query("SELECT DISTINCT q.id AS quizId,\n" +
+            "                qp.id AS id,\n" +
             "                qp.word_string AS wordString,\n" +
             "                qp.pinyin_string AS pinyinString,\n" +
             "                qp.asked\n" +
@@ -90,7 +91,9 @@ public interface QuizDao {
             "FROM quiz WHERE id = :id")
     LiveData<QuizItem> getQuizItem(long id);
 
-    @Query("SELECT :quizId AS quizId, word_string AS wordString, pinyin_string AS pinyinString, asked " +
+    @Query("SELECT :quizId AS quizId," +
+            "qp.id AS id," +
+            "word_string AS wordString, pinyin_string AS pinyinString, asked " +
             "FROM quiz_pinyin qp WHERE qp.asked = 0 AND qp.quiz_id = :quizId")
     LiveData<List<WordItem>> getRemainingQuestions(long quizId);
 }

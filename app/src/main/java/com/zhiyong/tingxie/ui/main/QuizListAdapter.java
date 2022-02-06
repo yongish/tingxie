@@ -245,8 +245,13 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         final List<WordItem> deletedWordItems = new ArrayList<>();
         for (QuizPinyin quizPinyin : mQuizPinyins) {
             if (quizPinyin.getQuizId() == quizId) {
-                deletedWordItems.add(new WordItem(quizId, quizPinyin.getWordString(),
-                        quizPinyin.getPinyinString(), quizPinyin.getAsked()));
+                deletedWordItems.add(new WordItem(
+                        quizPinyin.getId(),
+                        quizId,
+                        quizPinyin.getWordString(),
+                        quizPinyin.getPinyinString(),
+                        quizPinyin.getAsked()
+                ));
             }
         }
 
