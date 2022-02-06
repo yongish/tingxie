@@ -102,6 +102,14 @@ class QuizRepository(val context: Context) {
     }
   }
 
+//  suspend fun refreshWordItemsOfQuiz(wordItemsOfQuiz: List<WordItem>) {
+//    withContext(Dispatchers.IO) {
+//      val refreshWordItemsResponse = TingXieNetwork.tingxie.getWordItemsOfQuiz(
+//          email, NetworkQuizIdContainer(wordItemsOfQuiz.map { it.id })
+//      )
+//    }
+//  }
+
   suspend fun getFriends(): List<TingXieIndividual> {
 //        return TingXieNetwork.tingxie.getFriends().asDomainModel()
     try {

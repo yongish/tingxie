@@ -196,18 +196,16 @@ public class WordActivity extends AppCompatActivity {
 //        ContentWordBinding binding = ContentWordBinding.inflate(getLayoutInflater());
 //        final TextView emptyView = binding.emptyView;
         final TextView emptyView = findViewById(R.id.empty_view);
-        mWordViewModel.getWordItemsOfQuiz().observe(this,
-                new Observer<List<WordItem>>() {
-                    @Override
-                    public void onChanged(@Nullable List<WordItem> wordItems) {
-                        adapter.setWordItems(wordItems);
-                        if (wordItems == null || wordItems.isEmpty()) {
-                            emptyView.setVisibility(View.VISIBLE);
-                        } else {
-                            emptyView.setVisibility(View.INVISIBLE);
-                        }
-                    }
-                });
+        mWordViewModel.getWordItemsOfQuiz().observe(this, wordItems -> {
+            adapter.setWordItems(wordItems);
+            if (wordItems == null || wordItems.isEmpty()) {
+                emptyView.setVisibility(View.VISIBLE);
+            } else {
+                emptyView.setVisibility(View.INVISIBLE);
+
+                mWordViewModel.refreshWordItemsOfQuiz(wordItems);
+            }
+        });
 
 
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(

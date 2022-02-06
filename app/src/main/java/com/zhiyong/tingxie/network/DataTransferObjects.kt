@@ -15,7 +15,16 @@ data class NetworkQuizRefreshContainer(
     )
 
 @JsonClass(generateAdapter = true)
+data class NetworkWordItemRefreshContainer(
+    val newWordItemsRemote: List<NetworkWordItem>, val missingWordIds: List<Long>
+)
+
+@JsonClass(generateAdapter = true)
 data class NetworkQuizContainer(val quizzes: List<NetworkQuiz>)
+
+fun NetworkQuizContainer.asDatabaseModel(): List<Quiz> = quizzes.map {
+  Quiz(it.id, it.date, it.title, it.total_words, it.not_learned, it.round)
+}
 
 @JsonClass(generateAdapter = true)
 data class NetworkQuiz(val id: Long,
@@ -25,9 +34,12 @@ data class NetworkQuiz(val id: Long,
                        val not_learned: Int,
                        val round: Int)
 
-fun NetworkQuizContainer.asDatabaseModel(): List<Quiz> = quizzes.map {
-  Quiz(it.id, it.date, it.title, it.total_words, it.not_learned, it.round)
-}
+@JsonClass(generateAdapter = true)
+data class NetworkWordItem(val id: Long,
+                           val quizId: Long,
+                           val wordString: String,
+                           val pinyinString: String,
+                           val asked: Boolean)
 
 @JsonClass(generateAdapter = true)
 data class NetworkIndividualContainer(val individuals: List<NetworkIndividual>)
