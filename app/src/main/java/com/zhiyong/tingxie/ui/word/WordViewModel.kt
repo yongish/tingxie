@@ -54,6 +54,8 @@ internal class WordViewModel(application: Application, quizId: Long) : AndroidVi
         viewModelScope.launch {
             try {
                 mRepository.refreshWordItemsOfQuiz(wordItems)
+                _eventNetworkError.value = false
+                _isNetworkErrorShown.value = false
             } catch (networkError: IOException) {
                 if (wordItemsOfQuiz.value.isNullOrEmpty()) {
                     _eventNetworkError.value = true

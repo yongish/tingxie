@@ -108,9 +108,9 @@ class QuizRepository(val context: Context) {
       val refreshWordItemsResponse = TingXieNetwork.tingxie.getWordItemsOfQuiz(
           email, quizId, NetworkPinyinContainer(wordItemsOfQuiz.map { it.pinyinString })
       )
-//      mQuizDao.insertQuizPinyins(refreshWordItemsResponse.newWordItemsRemote.map {
-//        QuizPinyin(it.id, it.quizId)
-//      })
+      mQuizDao.insertQuizPinyins(refreshWordItemsResponse.newWordItemsRemote.map {
+        QuizPinyin(it.id, it.quizId, it.pinyinString, it.wordString, it.asked)
+      })
     }
   }
 
@@ -359,7 +359,7 @@ class QuizRepository(val context: Context) {
       mQuizDao.updateQuizPinyin(
           quizPinyin.quizId,
           quizPinyin.pinyinString,
-          quizPinyin.isAsked
+          quizPinyin.asked
       )
     }
   }
