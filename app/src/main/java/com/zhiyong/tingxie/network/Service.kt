@@ -25,6 +25,10 @@ interface Service {
   suspend fun putQuizzes(@Query("email") email: String,
                          @Body quizzes: NetworkQuizContainer): Boolean
 
+  @PUT("wordItems")
+  suspend fun putWordItems(@Query("email") email: String,
+                           @Body wordItems: NetworkWordItemContainer): Boolean
+
   @GET("shares")
   suspend fun getShares(@Query("email") email: String,
                         @Query("quizId") quizId: Long): NetworkShareContainer

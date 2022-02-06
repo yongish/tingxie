@@ -16,13 +16,12 @@ data class NetworkQuizRefreshContainer(
 
 @JsonClass(generateAdapter = true)
 data class NetworkWordItemIdentifierContainer(
-    val quizId: Long, val wordItemIdentifiers: List<Long>
+    val quizId: Long, val pinyins: List<String>
     )
 
 @JsonClass(generateAdapter = true)
 data class NetworkWordItemRefreshContainer(
-    val newWordItemsRemote: List<NetworkWordItem>,
-    val missingWordIdentifiers: List<Long>
+    val newWordItemsRemote: List<NetworkWordItem>, val missingPinyins: List<String>
 )
 
 @JsonClass(generateAdapter = true)
@@ -42,6 +41,9 @@ data class NetworkQuiz(val id: Long,
 
 @JsonClass(generateAdapter = true)
 data class NetworkPinyinContainer(val pinyins: List<String>)
+
+@JsonClass(generateAdapter = true)
+data class NetworkWordItemContainer(val wordItems: List<NetworkWordItem>)
 
 @JsonClass(generateAdapter = true)
 data class NetworkWordItem(val id: Long,

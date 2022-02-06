@@ -124,23 +124,23 @@ class QuestionActivity: AppCompatActivity() {
       mQuestionViewModel = ViewModelProviders
         .of(this, QuestionViewModelFactory(this.application, quizItem.id))
         .get(QuestionViewModel::class.java)
-      mQuestionViewModel.remainingQuestions.observe(this,
-        { wordItems: List<WordItem>? ->
-          if (wordItems != null && wordItems.isNotEmpty()) {
-            val wordItem = wordItems.random()
-            val pinyinString = wordItem.pinyinString
+      mQuestionViewModel.remainingQuestions.observe(this) {
+        wordItems: List<WordItem>? ->
+        if (wordItems != null && wordItems.isNotEmpty()) {
+          val wordItem = wordItems.random()
+          val pinyinString = wordItem.pinyinString
 
-            val sb = StringBuilder()
-            wordItems.filter { it.pinyinString == pinyinString }
+          val sb = StringBuilder()
+          wordItems.filter { it.pinyinString == pinyinString }
               .forEach { sb.append("\n${it.wordString}") }
 
-            initializeCommonComponents(
+          initializeCommonComponents(
               wordItem.wordString, pinyinString, wordItems.size, quizItem.totalWords
-            )
+          )
 
-            btnReset.visibility = View.GONE
-            // resetAsked causes remainingQuestions to change, which will cause a new
-            // question to be fetched
+          btnReset.visibility = View.GONE
+          // resetAsked causes remainingQuestions to change, which will cause a new
+          // question to be fetched
 //            btnReset.setOnClickListener {
 //              mQuestionViewModel.resetAsked(quizItem.id)
 //              tvRemaining.text = this.getString(
@@ -148,27 +148,29 @@ class QuestionActivity: AppCompatActivity() {
 //                )
 //            }
 
-            btnShowAnswer.setOnClickListener {
-              val intent = Intent(applicationContext, AnswerActivity::class.java)
-              intent.putExtra(EXTRA_QUIZ_ITEM, quizItem)
+          btnShowAnswer.setOnClickListener {
+            val intent = Intent(applicationContext, AnswerActivity::class.java)
+            intent.putExtra(EXTRA_QUIZ_ITEM, quizItem)
 
-              intent.putExtra(EXTRA_WORDS_STRING, sb.deleteCharAt(0).toString())
-              intent.putExtra(EXTRA_PINYIN_STRING, pinyinString)
-              intent.putExtra(EXTRA_REMAINING_QUESTION_COUNT, wordItems.size)
-              intent.putExtra(EXTRA_BYTE_ARRAY, myCanvasView.getByteArray())
-              startActivity(intent)
-            }
-          } else {
-            // todo: There should always be questions. Should log this issue.
-            Log.e("NO_QUESTIONS", "onChanged: ")
-            Toast.makeText(
-              applicationContext,
-              "Error. Please contact Zhiyong by Facebook or email if you see this.",
-              Toast.LENGTH_LONG
-            ).show()
-            startActivity(Intent(applicationContext, MainActivity::class.java))
+            intent.putExtra(EXTRA_WORDS_STRING, sb.deleteCharAt(0).toString())
+            intent.putExtra(EXTRA_PINYIN_STRING, pinyinString)
+            intent.putExtra(EXTRA_REMAINING_QUESTION_COUNT, wordItems.size)
+            intent.putExtra(EXTRA_BYTE_ARRAY, myCanvasView.getByteArray())
+            startActivity(intent)
           }
-        })
+
+
+        } else {
+          // todo: There should always be questions. Should log this issue.
+          Log.e("NO_QUESTIONS", "onChanged: ")
+          Toast.makeText(
+              applicationContext,
+              "Error. Please contact Zhiyong by email (yongish@gmail.com) if you see this.",
+              Toast.LENGTH_LONG
+          ).show()
+          startActivity(Intent(applicationContext, MainActivity::class.java))
+        }
+      }
     }
   }
 

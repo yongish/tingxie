@@ -80,20 +80,24 @@ class QuizRepository(val context: Context) {
       val refreshQuizzesResponse = TingXieNetwork.tingxie.getNewQuizzes(
           email, NetworkQuizIdContainer(quizItems.map { it.id })
       )
-      // Insert these new quizzes into local DB.
-      mQuizDao.insertAll(refreshQuizzesResponse.newQuizzesRemote.map {
-        Quiz(it.id, it.date, it.title, it.total_words, it.not_learned, it.round)
-      })
-      // Send missing quizzes to server.
-      TingXieNetwork.tingxie.putQuizzes(
-          email,
-          NetworkQuizContainer(
-              quizItems.filter { refreshQuizzesResponse.missingQuizIds.contains(it.id) }
-                  .map { NetworkQuiz(
-                      it.id, it.date, it.title, it.totalWords, it.notLearned, it.round
-                  ) }
-          )
-      )
+      if (refreshQuizzesResponse.newQuizzesRemote.isNotEmpty()) {
+        // Insert these new quizzes into local DB.
+        mQuizDao.insertAll(refreshQuizzesResponse.newQuizzesRemote.map {
+          Quiz(it.id, it.date, it.title, it.total_words, it.not_learned, it.round)
+        })
+      }
+      if (refreshQuizzesResponse.missingQuizIds.isNotEmpty()) {
+        // Send missing quizzes to server.
+        TingXieNetwork.tingxie.putQuizzes(
+            email,
+            NetworkQuizContainer(quizItems
+                .filter { refreshQuizzesResponse.missingQuizIds.contains(it.id) }
+                .map { NetworkQuiz(
+                    it.id, it.date, it.title, it.totalWords, it.notLearned, it.round
+                ) }
+            )
+        )
+      }
 
       // Insert quizzes in local DB not in remote DB.
       // status flag. inserted (0), updated (1), deleted (-1).
@@ -108,9 +112,20 @@ class QuizRepository(val context: Context) {
       val refreshWordItemsResponse = TingXieNetwork.tingxie.getWordItemsOfQuiz(
           email, quizId, NetworkPinyinContainer(wordItemsOfQuiz.map { it.pinyinString })
       )
-      mQuizDao.insertQuizPinyins(refreshWordItemsResponse.newWordItemsRemote.map {
-        QuizPinyin(it.id, it.quizId, it.pinyinString, it.wordString, it.asked)
-      })
+      if (refreshWordItemsResponse.newWordItemsRemote.isNotEmpty()) {
+        mQuizDao.insertQuizPinyins(refreshWordItemsResponse.newWordItemsRemote.map {
+          QuizPinyin(it.id, it.quizId, it.pinyinString, it.wordString, it.asked)
+        })
+      }
+      if (refreshWordItemsResponse.missingPinyins.isNotEmpty()) {
+//        TingXieNetwork.tingxie.putWordItems(
+//            email,
+//            NetworkWordItemContainer(wordItemsOfQuiz
+//                .filter { refreshWordItemsResponse.missingPinyins.contains(it.pinyinString) }
+//                .map { NetworkWordItem(it.) }
+//            )
+//        )
+      }
     }
   }
 
