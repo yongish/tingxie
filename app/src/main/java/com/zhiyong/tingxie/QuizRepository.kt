@@ -102,13 +102,17 @@ class QuizRepository(val context: Context) {
     }
   }
 
-//  suspend fun refreshWordItemsOfQuiz(wordItemsOfQuiz: List<WordItem>) {
-//    withContext(Dispatchers.IO) {
-//      val refreshWordItemsResponse = TingXieNetwork.tingxie.getWordItemsOfQuiz(
-//          email, NetworkQuizIdContainer(wordItemsOfQuiz.map { it.id })
-//      )
-//    }
-//  }
+  suspend fun refreshWordItemsOfQuiz(wordItemsOfQuiz: List<WordItem>) {
+    withContext(Dispatchers.IO) {
+      val quizId = wordItemsOfQuiz.first().quizId
+      val refreshWordItemsResponse = TingXieNetwork.tingxie.getWordItemsOfQuiz(
+          email, quizId, NetworkPinyinContainer(wordItemsOfQuiz.map { it.pinyinString })
+      )
+//      mQuizDao.insertQuizPinyins(refreshWordItemsResponse.newWordItemsRemote.map {
+//        QuizPinyin(it.id, it.quizId)
+//      })
+    }
+  }
 
   suspend fun getFriends(): List<TingXieIndividual> {
 //        return TingXieNetwork.tingxie.getFriends().asDomainModel()
