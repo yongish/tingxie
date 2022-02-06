@@ -118,13 +118,17 @@ class QuizRepository(val context: Context) {
         })
       }
       if (refreshWordItemsResponse.missingPinyins.isNotEmpty()) {
-//        TingXieNetwork.tingxie.putWordItems(
-//            email,
-//            NetworkWordItemContainer(wordItemsOfQuiz
-//                .filter { refreshWordItemsResponse.missingPinyins.contains(it.pinyinString) }
-//                .map { NetworkWordItem(it.) }
-//            )
-//        )
+        TingXieNetwork.tingxie.putWordItems(
+            email,
+            NetworkWordItemContainer(wordItemsOfQuiz
+                .filter {
+                  refreshWordItemsResponse.missingPinyins.contains(it.pinyinString)
+                }
+                .map { NetworkWordItem(
+                    it.id, it.quizId, it.wordString, it.pinyinString, it.isAsked
+                ) }
+            )
+        )
       }
     }
   }

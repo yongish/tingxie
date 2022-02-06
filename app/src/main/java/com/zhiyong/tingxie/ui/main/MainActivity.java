@@ -57,12 +57,11 @@ public class MainActivity extends AppCompatActivity {
 
         mQuizViewModel.getAllQuizItems().observe(this, quizItems -> {
             adapter.setQuizItems(quizItems, recyclerView);
+            mQuizViewModel.refreshQuizzes(quizItems);
             if (quizItems.isEmpty()) {
                 emptyView.setVisibility(View.VISIBLE);
             } else {
                 emptyView.setVisibility(View.INVISIBLE);
-
-                mQuizViewModel.refreshQuizzes(quizItems);
             }
         });
 
