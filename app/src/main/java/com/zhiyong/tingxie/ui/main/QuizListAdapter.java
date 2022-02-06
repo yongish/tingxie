@@ -113,7 +113,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                                     String.format("%02d", ++month) + dayOfMonth);
                             Log.d("newIntDate", String.valueOf(newIntDate));
                             newItem.setDate(newIntDate);
-                            mQuizItems.set(i, newItem);
+                            mQuizItems.set(holder.getAdapterPosition(), newItem);
                             notifyDataSetChanged();
                         }
                     };
@@ -143,7 +143,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
                         QuizItem newItem = current;
                         newItem.setTitle(v.getText().toString());
-                        mQuizItems.set(i, newItem);
+                        mQuizItems.set(holder.getAdapterPosition(), newItem);
                         notifyDataSetChanged();
 
                         viewModel.updateQuiz(new Quiz(
