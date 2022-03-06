@@ -5,9 +5,6 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
 
 interface Service {
-  @GET("quizzes")
-  suspend fun getQuizzes(@Query("email") email: String): NetworkQuizContainer
-
   @PUT("refreshQuizzes")
   suspend fun getNewQuizzes(
       @Query("email") email: String,
