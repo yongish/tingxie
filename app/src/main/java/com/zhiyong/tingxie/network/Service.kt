@@ -5,10 +5,10 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
 
 interface Service {
-  @PUT("refreshQuizzes")
-  suspend fun getNewQuizzes(
-      @Query("email") email: String,
-      @Body quizIds: NetworkQuizIdContainer
+  @PUT("quizzes/{email}")
+  suspend fun refreshQuizzes(
+      @Path("email") email: String,
+      @Body quizIds: List<Long>
   ): NetworkQuizRefreshContainer
 
   @PUT("refreshWordItemsOfQuiz")
@@ -18,9 +18,10 @@ interface Service {
       @Body pinyinContainer: NetworkPinyinContainer
   ): NetworkWordItemRefreshContainer
 
-  @PUT("quizzes")
-  suspend fun putQuizzes(@Query("email") email: String,
-                         @Body quizzes: NetworkQuizContainer): Boolean
+  @POST("quizzes")
+  suspend fun postQuizzes(@Body quizzes: List<NetworkQuiz>): Int
+//  suspend fun postQuizzes(@Query("email") email: String,
+//                          @Body quizzes: NetworkQuizContainer): Boolean
 
   @PUT("wordItems")
   suspend fun putWordItems(@Query("email") email: String,
@@ -85,7 +86,7 @@ interface Service {
 
 object TingXieNetwork {
   private val retrofit = Retrofit.Builder()
-    .baseUrl("http://10.0.2.2:3000/") // todo: Replace with production URL.
+    .baseUrl("http://10.0.2.2:8000/") // todo: Replace with production URL.
     .addConverterFactory(MoshiConverterFactory.create())
     .build()
 

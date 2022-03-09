@@ -77,32 +77,30 @@ class QuizRepository(val context: Context) {
     withContext(Dispatchers.IO) {
       // Send local quizIds to server.
       // Server responds with new remote quizzes and missing remote quizIds.
-      val refreshQuizzesResponse = TingXieNetwork.tingxie.getNewQuizzes(
-          email, NetworkQuizIdContainer(quizItems.map { it.id })
+      val refreshQuizzesResponse = TingXieNetwork.tingxie.refreshQuizzes(
+          email, quizItems.map { it.id }
       )
-      if (refreshQuizzesResponse.newQuizzesRemote.isNotEmpty()) {
+      if (refreshQuizzesResponse.new_quizzes_remote.isNotEmpty()) {
         // Insert these new quizzes into local DB.
-        mQuizDao.insertAll(refreshQuizzesResponse.newQuizzesRemote.map {
-          Quiz(it.id, it.date, it.title, it.total_words, it.not_learned, it.round)
+        mQuizDao.insertAll(refreshQuizzesResponse.new_quizzes_remote.map {
+          Quiz(it.quiz_id, it.date, it.title, it.total_words, it.not_learned, it.round)
         })
       }
-      if (refreshQuizzesResponse.missingQuizIds.isNotEmpty()) {
+      if (refreshQuizzesResponse.missing_quiz_ids.isNotEmpty()) {
         // Send missing quizzes to server.
-        TingXieNetwork.tingxie.putQuizzes(
-            email,
-            NetworkQuizContainer(quizItems
-                .filter { refreshQuizzesResponse.missingQuizIds.contains(it.id) }
+        TingXieNetwork.tingxie.postQuizzes(
+            quizItems.filter { refreshQuizzesResponse.missing_quiz_ids.contains(it.id) }
                 .map { NetworkQuiz(
-                    it.id, it.date, it.title, it.totalWords, it.notLearned, it.round
+                    email,
+                    it.id,
+                    it.date,
+                    it.title,
+                    it.totalWords,
+                    it.notLearned,
+                    it.round
                 ) }
-            )
         )
       }
-
-      // Insert quizzes in local DB not in remote DB.
-      // status flag. inserted (0), updated (1), deleted (-1).
-      // sync flag. synced (1), unsynced (0).
-      // Local rows marked as -1 should be deleted
     }
   }
 

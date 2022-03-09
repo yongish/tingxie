@@ -11,7 +11,7 @@ data class NetworkQuizIdContainer(val quizIds: List<Long>)
 
 @JsonClass(generateAdapter = true)
 data class NetworkQuizRefreshContainer(
-    val newQuizzesRemote: List<NetworkQuiz>, val missingQuizIds: List<Long>
+    val new_quizzes_remote: List<NetworkQuiz>, val missing_quiz_ids: List<Long>
     )
 
 @JsonClass(generateAdapter = true)
@@ -28,11 +28,12 @@ data class NetworkWordItemRefreshContainer(
 data class NetworkQuizContainer(val quizzes: List<NetworkQuiz>)
 
 fun NetworkQuizContainer.asDatabaseModel(): List<Quiz> = quizzes.map {
-  Quiz(it.id, it.date, it.title, it.total_words, it.not_learned, it.round)
+  Quiz(it.quiz_id, it.date, it.title, it.total_words, it.not_learned, it.round)
 }
 
 @JsonClass(generateAdapter = true)
-data class NetworkQuiz(val id: Long,
+data class NetworkQuiz(val email: String,
+                       val quiz_id: Long,
                        val date: Int,
                        val title: String,
                        val total_words: Int,
