@@ -198,10 +198,10 @@ public class WordActivity extends AppCompatActivity {
         final TextView emptyView = findViewById(R.id.empty_view);
         mWordViewModel.getWordItemsOfQuiz().observe(this, wordItems -> {
             adapter.setWordItems(wordItems);
-            mWordViewModel.refreshWordItemsOfQuiz(wordItems);
             if (wordItems == null || wordItems.isEmpty()) {
                 emptyView.setVisibility(View.VISIBLE);
             } else {
+                mWordViewModel.refreshWordItemsOfQuiz(wordItems);
                 emptyView.setVisibility(View.INVISIBLE);
             }
         });

@@ -90,15 +90,17 @@ class QuizRepository(val context: Context) {
         // Send missing quizzes to server.
         TingXieNetwork.tingxie.postQuizzes(
             quizItems.filter { refreshQuizzesResponse.missing_quiz_ids.contains(it.id) }
-                .map { NetworkQuiz(
-                    email,
-                    it.id,
-                    it.date,
-                    it.title,
-                    it.totalWords,
-                    it.notLearned,
-                    it.round
-                ) }
+                .map {
+                  NetworkQuiz(
+                      email,
+                      it.id,
+                      it.date,
+                      it.title,
+                      it.totalWords,
+                      it.notLearned,
+                      it.round
+                  )
+                }
         )
       }
     }
@@ -107,25 +109,23 @@ class QuizRepository(val context: Context) {
   suspend fun refreshWordItemsOfQuiz(wordItemsOfQuiz: List<WordItem>) {
     withContext(Dispatchers.IO) {
       val quizId = wordItemsOfQuiz.first().quizId
-      val refreshWordItemsResponse = TingXieNetwork.tingxie.getWordItemsOfQuiz(
-          email, quizId, NetworkPinyinContainer(wordItemsOfQuiz.map { it.pinyinString })
+      val refreshWordItemsResponse = TingXieNetwork.tingxie.refreshWords(
+          email, quizId, wordItemsOfQuiz.map { it.pinyinString }
       )
-      if (refreshWordItemsResponse.newWordItemsRemote.isNotEmpty()) {
-        mQuizDao.insertQuizPinyins(refreshWordItemsResponse.newWordItemsRemote.map {
-          QuizPinyin(it.id, it.quizId, it.pinyinString, it.wordString, it.asked)
+      if (refreshWordItemsResponse.new_word_items_remote.isNotEmpty()) {
+        mQuizDao.insertQuizPinyins(refreshWordItemsResponse.new_word_items_remote.map {
+          QuizPinyin(it.word_id, it.quiz_id, it.pinyin_string, it.word_string, it.asked)
         })
       }
-      if (refreshWordItemsResponse.missingPinyins.isNotEmpty()) {
-        TingXieNetwork.tingxie.putWordItems(
-            email,
-            NetworkWordItemContainer(wordItemsOfQuiz
-                .filter {
-                  refreshWordItemsResponse.missingPinyins.contains(it.pinyinString)
-                }
-                .map { NetworkWordItem(
-                    it.id, it.quizId, it.wordString, it.pinyinString, it.isAsked
-                ) }
-            )
+      if (refreshWordItemsResponse.missing_pinyins.isNotEmpty()) {
+        TingXieNetwork.tingxie.postWordItems(
+            wordItemsOfQuiz.filter {
+              refreshWordItemsResponse.missing_pinyins.contains(it.pinyinString)
+            }.map {
+              NetworkWordItem(
+                  it.id, email, it.quizId, it.wordString, it.pinyinString, it.isAsked
+              )
+            }
         )
       }
     }
@@ -159,7 +159,7 @@ class QuizRepository(val context: Context) {
 
     }
     return arrayListOf(
-        TingXieYourIndividualRequest("e0@email.com" , 20001010),
+        TingXieYourIndividualRequest("e0@email.com", 20001010),
         TingXieYourIndividualRequest("e1@email.com", 20101020)
     )
   }
@@ -179,7 +179,7 @@ class QuizRepository(val context: Context) {
 
     }
     return arrayListOf(
-        TingXieOtherIndividualRequest("e0@email.com" , "f0", "l0", 20001010),
+        TingXieOtherIndividualRequest("e0@email.com", "f0", "l0", 20001010),
         TingXieOtherIndividualRequest("e1@email.com", "f1", "l1", 20101020)
     )
   }

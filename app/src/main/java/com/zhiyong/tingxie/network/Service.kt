@@ -11,11 +11,11 @@ interface Service {
       @Body quizIds: List<Long>
   ): NetworkQuizRefreshContainer
 
-  @PUT("refreshWordItemsOfQuiz")
-  suspend fun getWordItemsOfQuiz(
-      @Query("email") email: String,
-      @Query("quizId") quizId: Long,
-      @Body pinyinContainer: NetworkPinyinContainer
+  @PUT("words/{email}/{quizId}")
+  suspend fun refreshWords(
+      @Path("email") email: String,
+      @Path("quizId") quizId: Long,
+      @Body pinyinContainer: List<String>
   ): NetworkWordItemRefreshContainer
 
   @POST("quizzes")
@@ -23,9 +23,8 @@ interface Service {
 //  suspend fun postQuizzes(@Query("email") email: String,
 //                          @Body quizzes: NetworkQuizContainer): Boolean
 
-  @PUT("wordItems")
-  suspend fun putWordItems(@Query("email") email: String,
-                           @Body wordItems: NetworkWordItemContainer): Boolean
+  @POST("words")
+  suspend fun postWordItems(@Body wordItems: List<NetworkWordItem>): Int
 
   @GET("shares")
   suspend fun getShares(@Query("email") email: String,
