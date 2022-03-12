@@ -1,5 +1,6 @@
 package com.zhiyong.tingxie.ui.share
 
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -13,6 +14,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.ShareFragmentBinding
+import com.zhiyong.tingxie.ui.friend.FriendActivity
 import com.zhiyong.tingxie.ui.share.ShareActivity.Companion.EXTRA_QUIZ_ID
 import com.zhiyong.tingxie.viewmodel.Status
 
@@ -101,6 +103,9 @@ class ShareIndividualFragment : Fragment() {
               menuItem.isVisible = false
               editing = false
             } else {
+              if (shares.isEmpty()) {
+                startActivity(Intent(context, FriendActivity::class.java))
+              }
               // Display all friends.
               shareIndividualAdapter.filter.filter(IsShared.ALL.name)
               binding.fab.setImageResource(R.drawable.ic_baseline_done_24)
@@ -108,7 +113,6 @@ class ShareIndividualFragment : Fragment() {
               menuItem.isVisible = true
               editing = true
             }
-
             // todo: Display done check button on menu bar.
           }
         }

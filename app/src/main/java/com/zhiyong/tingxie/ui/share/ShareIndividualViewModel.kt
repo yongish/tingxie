@@ -44,7 +44,6 @@ class ShareIndividualViewModel(quizId: Long, application: Application) : Android
             _status.value = Status.ERROR
           }
         }
-
       }
     }
   }
