@@ -45,8 +45,8 @@ interface Service {
                           @Path("quizId") quizId: Long,
                           @Path("email") email: String): Boolean
 
-  @GET("friends")
-  suspend fun getFriends(@Query("email") email: String): NetworkIndividualContainer
+  @GET("friends/{email}")
+  suspend fun getFriends(@Path("email") email: String): List<NetworkIndividual>
 
   @POST("friends")
   suspend fun postFriend(@Query("email") email: String,

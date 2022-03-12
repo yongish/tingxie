@@ -32,7 +32,10 @@ open class FriendIndividualViewModel(application: Application) : AndroidViewMode
         _status.value = Status.DONE
       } catch (e: Exception) {
         _friends.value = ArrayList()
-        _status.value = Status.ERROR
+        when(e) {
+          is NoSuchElementException -> _status.value = Status.DONE
+          else -> _status.value = Status.ERROR
+        }
       }
     }
   }

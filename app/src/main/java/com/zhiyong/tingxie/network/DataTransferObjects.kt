@@ -57,11 +57,13 @@ data class NetworkWordItem(val word_id: Long,
 @JsonClass(generateAdapter = true)
 data class NetworkIndividualContainer(val individuals: List<NetworkIndividual>)
 
-fun NetworkIndividualContainer.asDomainModel(): List<TingXieIndividual> =
-    individuals.map { TingXieIndividual(it.email, it.firstName, it.lastName) }
+fun NetworkIndividual.asDomainModel(): TingXieIndividual =
+    TingXieIndividual(friend_email, first_name, last_name)
 
 @JsonClass(generateAdapter = true)
-data class NetworkIndividual(val email: String, val firstName: String, val lastName: String)
+data class NetworkIndividual(
+    val friend_email: String, val first_name: String, val last_name: String
+    )
 
 //fun NetworkFriendContainer.asDatabaseModel(): List<DatabaseFriend> {
 //  return friends.map {

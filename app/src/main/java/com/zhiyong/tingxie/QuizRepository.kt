@@ -131,15 +131,8 @@ class QuizRepository(val context: Context) {
     }
   }
 
-  suspend fun getFriends(): List<TingXieIndividual> {
-//        return TingXieNetwork.tingxie.getFriends().asDomainModel()
-    try {
-      TingXieNetwork.tingxie.getFriends(email).asDomainModel()
-    } catch (e: Exception) {
-
-    }
-    return arrayListOf(TingXieIndividual("test0@email.com", "first0", "last0"), TingXieIndividual("test1@email.com", "first1", "last1"))
-  }
+  suspend fun getFriends(): List<TingXieIndividual> =
+      TingXieNetwork.tingxie.getFriends(email).map { it.asDomainModel() }
 
   suspend fun addFriend(individual: TingXieIndividual) {
     TingXieNetwork.tingxie.postFriend(

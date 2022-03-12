@@ -33,7 +33,6 @@ class ShareIndividualViewModel(quizId: Long, application: Application) : Android
         _shares.value = repository.getShares(quizId)
         _status.value = Status.DONE
       } catch (e: Exception) {
-        e.message?.let { Log.e("SHARES", it) }
         _shares.value = ArrayList()
         when(e) {
           is NoSuchElementException -> {

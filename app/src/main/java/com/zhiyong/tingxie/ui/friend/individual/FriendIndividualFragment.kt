@@ -57,16 +57,18 @@ class FriendIndividualFragment : Fragment() {
               .setView(frameLayout)
               .setPositiveButton(R.string.ok) { dialog, _ ->
                 // todo Search for email after API is implemented.
+
+
               }
               .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
               .create().show()
     }
 
     viewModel = ViewModelProvider(this)[FriendIndividualViewModel::class.java]
-    viewModel.friends.observe(viewLifecycleOwner, { friends ->
+    viewModel.friends.observe(viewLifecycleOwner) { friends ->
       friends?.apply {
         binding.recyclerviewIndividuals.adapter = FriendIndividualAdapter(
-          friends, requireActivity(), viewModel, binding.recyclerviewIndividuals
+            friends, requireActivity(), viewModel, binding.recyclerviewIndividuals
         )
       }
       if (friends.isEmpty()) {
@@ -74,14 +76,14 @@ class FriendIndividualFragment : Fragment() {
       } else {
         binding.emptyView.visibility = View.INVISIBLE
       }
-    })
+    }
 
-    viewModel.status.observe(viewLifecycleOwner, { status ->
+    viewModel.status.observe(viewLifecycleOwner) { status ->
       if (status.equals(Status.ERROR)) {
         // todo: Display an offline error message on the view, instead of a toast.
         Toast.makeText(activity, "Network Error on Friends", Toast.LENGTH_LONG).show()
       }
-    })
+    }
   }
 
   override fun onDestroyView() {
