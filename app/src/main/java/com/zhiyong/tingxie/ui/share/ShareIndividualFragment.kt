@@ -70,12 +70,10 @@ class ShareIndividualFragment : Fragment() {
       viewModel.shares.observe(viewLifecycleOwner) { shares ->
         if (shares.isEmpty()) {
           binding.emptyView.visibility = View.VISIBLE
-          binding.fab.visibility = View.GONE
         } else {
           binding.emptyView.visibility = View.INVISIBLE
         }
 
-        // todo: BUG. SHARES MAY BE EMPTY.
         shares?.apply {
           if (shares.isNotEmpty()) {
             val role = shares.first { it.email == FirebaseAuth.getInstance().currentUser?.email }.role
