@@ -58,41 +58,29 @@ class ShareIndividualFragment : Fragment() {
     )
     binding.emptyView.text = spannableString
 
-    binding.fab.setOnClickListener {
-
-      // todo: Only admin can edit shared.
-
-      if (editing) {
-        shareIndividualAdapter.filter.filter(IsShared.SHARED.name)
-        binding.fab.setImageResource(R.drawable.ic_baseline_edit_black_24)
-        shareIndividualAdapter.editing = false
-        menuItem.isVisible = false
-        editing = false
-      } else {
-        // Display all friends.
-        shareIndividualAdapter.filter.filter(IsShared.ALL.name)
-        binding.fab.setImageResource(R.drawable.ic_baseline_done_24)
-        shareIndividualAdapter.editing = true
-        menuItem.isVisible = true
-        editing = true
-      }
-
-      // todo: Display done check button on menu bar.
-    }
-
-    menuItem.setOnMenuItemClickListener {
-      viewModel.setAllShared(quizId, it.isChecked)
-      true
-    }
+//    menuItem.setOnMenuItemClickListener {
+//      viewModel.setAllShared(quizId, it.isChecked)
+//      true
+//    }
 
     if (quizId != -1L) {
       val viewModelFactory = ShareIndividualViewModelFactory(quizId, requireNotNull(activity).application)
       viewModel = ViewModelProvider(this, viewModelFactory)[ShareIndividualViewModel::class.java]
 
-      viewModel.shares.observe(viewLifecycleOwner, { shares ->
+      viewModel.shares.observe(viewLifecycleOwner) { shares ->
+        if (shares.isEmpty()) {
+          binding.emptyView.visibility = View.VISIBLE
+          binding.fab.visibility = View.GONE
+        } else {
+          binding.emptyView.visibility = View.INVISIBLE
+        }
+
+        // todo: BUG. SHARES MAY BE EMPTY.
         shares?.apply {
-          val role = shares.first { it.email == FirebaseAuth.getInstance().currentUser?.email }.role
-          binding.fab.visibility = if (role == EnumQuizRole.EDITOR) View.VISIBLE else View.GONE
+          if (shares.isNotEmpty()) {
+            val role = shares.first { it.email == FirebaseAuth.getInstance().currentUser?.email }.role
+            binding.fab.visibility = if (role == EnumQuizRole.EDITOR) View.VISIBLE else View.GONE
+          }
 
           // todo: Pass role into ShareAdapter to fix duplication.
           binding.recyclerviewShares.adapter = ShareIndividualAdapter(
@@ -103,21 +91,38 @@ class ShareIndividualFragment : Fragment() {
               binding.recyclerviewShares,
           )
 
-        }
-        shareIndividualAdapter = binding.recyclerviewShares.adapter as ShareIndividualAdapter
-        if (shares.isEmpty()) {
-          binding.emptyView.visibility = View.VISIBLE
-        } else {
-          binding.emptyView.visibility = View.INVISIBLE
-        }
-      })
+          shareIndividualAdapter = binding.recyclerviewShares.adapter as ShareIndividualAdapter
+          binding.fab.setOnClickListener {
 
-      viewModel.status.observe(viewLifecycleOwner, { status: Status ->
+            // todo: Only admin can edit shared.
+
+            if (editing) {
+              shareIndividualAdapter.filter.filter(IsShared.SHARED.name)
+              binding.fab.setImageResource(R.drawable.ic_baseline_edit_black_24)
+              shareIndividualAdapter.editing = false
+              menuItem.isVisible = false
+              editing = false
+            } else {
+              // Display all friends.
+              shareIndividualAdapter.filter.filter(IsShared.ALL.name)
+              binding.fab.setImageResource(R.drawable.ic_baseline_done_24)
+              shareIndividualAdapter.editing = true
+              menuItem.isVisible = true
+              editing = true
+            }
+
+            // todo: Display done check button on menu bar.
+          }
+        }
+      }
+
+      viewModel.status.observe(viewLifecycleOwner) { status: Status ->
         if (status == Status.ERROR) {
           // todo: Display an offline error message on the view, instead of a toast.
-          Toast.makeText(activity, "Network Error on Friends", Toast.LENGTH_LONG).show()
+          Toast.makeText(activity, "Network Error on Shares", Toast.LENGTH_LONG).show()
         }
-      })
+      }
+
     }
   }
 

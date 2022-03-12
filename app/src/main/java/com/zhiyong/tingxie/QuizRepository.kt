@@ -190,21 +190,17 @@ class QuizRepository(val context: Context) {
   suspend fun rejectOtherIndividualRequest(email: String) =
       TingXieNetwork.tingxie.putOtherIndividualRequest(email, this.email, false)
 
-  suspend fun getShares(quizId: Long): List<TingXieShareIndividual> {
-    try {
-//            return TingXieNetwork.tingxie.getShares(quizId).asDomainModel()
-      TingXieNetwork.tingxie.getShares(email, quizId).asDomainModel()
-    } catch (e: Exception) {
-
-    }
-    return arrayListOf(
-        TingXieShareIndividual("yongish@gmail.com", "firstZ", "lastZ", true, EnumQuizRole.EDITOR),
-        TingXieShareIndividual("test0email.com", "first0", "last0", false, EnumQuizRole.EDITOR),
-        TingXieShareIndividual("test1email.com", "first1", "last1", false, EnumQuizRole.VIEWER),
-        TingXieShareIndividual("test2email.com", "first2", "last2", true, EnumQuizRole.VIEWER),
-    )
+  suspend fun getShares(quizId: Long): List<TingXieShareIndividual> =
+      TingXieNetwork.tingxie.getShares(email, quizId).map {
+        TingXieShareIndividual(it.email, it.firstName, it.lastName, it.isShared, it.role)
+      }
+//    return arrayListOf(
+//        TingXieShareIndividual("yongish@gmail.com", "firstZ", "lastZ", true, EnumQuizRole.EDITOR),
+//        TingXieShareIndividual("test0email.com", "first0", "last0", false, EnumQuizRole.EDITOR),
+//        TingXieShareIndividual("test1email.com", "first1", "last1", false, EnumQuizRole.VIEWER),
+//        TingXieShareIndividual("test2email.com", "first2", "last2", true, EnumQuizRole.VIEWER),
+//    )
 //    return arrayListOf()
-  }
 
   suspend fun addShare(quizId: Long, shareIndividual: TingXieShareIndividual) {
     TingXieNetwork.tingxie.postShare(email, quizId, NetworkShare(

@@ -1,6 +1,8 @@
 package com.zhiyong.tingxie.ui.share
 
 import android.app.Application
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -31,8 +33,18 @@ class ShareIndividualViewModel(quizId: Long, application: Application) : Android
         _shares.value = repository.getShares(quizId)
         _status.value = Status.DONE
       } catch (e: Exception) {
+        e.message?.let { Log.e("SHARES", it) }
         _shares.value = ArrayList()
-        _status.value = Status.ERROR
+        when(e) {
+          is NoSuchElementException -> {
+            _status.value = Status.DONE
+          }
+          else -> {
+            Toast.makeText(getApplication(), e.message, Toast.LENGTH_LONG).show()
+            _status.value = Status.ERROR
+          }
+        }
+
       }
     }
   }
