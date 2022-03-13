@@ -9,6 +9,10 @@ import com.zhiyong.tingxie.QuizRepository
 import com.zhiyong.tingxie.viewmodel.Status
 import kotlinx.coroutines.launch
 
+data class AddFriendStatus(
+    val modalOpen: Boolean, val friendExists: Boolean, val status: Status
+    )
+
 open class FriendIndividualViewModel(application: Application) : AndroidViewModel(application) {
   private val repository: QuizRepository = QuizRepository(application)
 
@@ -20,8 +24,17 @@ open class FriendIndividualViewModel(application: Application) : AndroidViewMode
   val friends: LiveData<List<TingXieIndividual>>
     get() = _friends
 
+//  private val _addFriendStatus = MutableLiveData<AddFriendStatus>()
+//  val addFriendStatus: LiveData<AddFriendStatus>
+//    get() = _addFriendStatus
+  private val _addFriendStatus = MutableLiveData<Boolean>()
+  val addFriendStatus: LiveData<Boolean>
+    get() = _addFriendStatus
+
   init {
     getIndividuals()
+//    _addFriendStatus.value = AddFriendStatus(false, false, Status.DONE)
+    _addFriendStatus.value = false
   }
 
   private fun getIndividuals() {
@@ -38,6 +51,20 @@ open class FriendIndividualViewModel(application: Application) : AndroidViewMode
         }
       }
     }
+  }
+
+  fun checkUserExists(email: String) {
+    viewModelScope.launch {
+      try {
+        _addFriendStatus.value = !repository.checkUserExists(email)
+      } catch (e: NoSuchElementException) {
+        _addFriendStatus.value = true
+      }
+    }
+  }
+
+  fun closeAddFriendModal() {
+    _addFriendStatus.value = false
   }
 
   fun addIndividual(individual: TingXieIndividual) {

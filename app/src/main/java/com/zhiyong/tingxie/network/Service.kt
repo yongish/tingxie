@@ -45,6 +45,9 @@ interface Service {
                           @Path("quizId") quizId: Long,
                           @Path("email") email: String): Boolean
 
+  @GET("checkUserExists/{email}")
+  suspend fun checkUserExists(@Path("email") email: String): Boolean
+
   @GET("friends/{email}")
   suspend fun getFriends(@Path("email") email: String): List<NetworkIndividual>
 

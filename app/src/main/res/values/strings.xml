@@ -52,7 +52,7 @@
     <string name="search_email">Search for email</string>
     <string name="your_email_address">Your email address:</string>
     <string name="enter_friend_email">Enter friend\'s email</string>
-    <string name="friend_connect_instructions">To connect with your friend, search for her email address.</string>
+    <string name="friend_connect_instructions">To connect with your friend, enter her email address.</string>
     <string name="add_friend">Add a friend.</string>
     <string name="add_share">Add a friend to share.</string>
     <string name="username">%s, %s</string>

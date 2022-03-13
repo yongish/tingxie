@@ -131,6 +131,9 @@ class QuizRepository(val context: Context) {
     }
   }
 
+  suspend fun checkUserExists(email: String): Boolean =
+      TingXieNetwork.tingxie.checkUserExists(email)
+
   suspend fun getFriends(): List<TingXieIndividual> =
       TingXieNetwork.tingxie.getFriends(email).map { it.asDomainModel() }
 
