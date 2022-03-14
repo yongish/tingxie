@@ -27,14 +27,14 @@ open class FriendIndividualViewModel(application: Application) : AndroidViewMode
 //  private val _addFriendStatus = MutableLiveData<AddFriendStatus>()
 //  val addFriendStatus: LiveData<AddFriendStatus>
 //    get() = _addFriendStatus
-  private val _addFriendStatus = MutableLiveData<Boolean>()
-  val addFriendStatus: LiveData<Boolean>
-    get() = _addFriendStatus
+  private val _shouldReopen = MutableLiveData<Boolean>()
+  val shouldReopen: LiveData<Boolean>
+    get() = _shouldReopen
 
   init {
     getIndividuals()
 //    _addFriendStatus.value = AddFriendStatus(false, false, Status.DONE)
-    _addFriendStatus.value = false
+    _shouldReopen.value = false
   }
 
   private fun getIndividuals() {
@@ -53,18 +53,18 @@ open class FriendIndividualViewModel(application: Application) : AndroidViewMode
     }
   }
 
-  fun checkUserExists(email: String) {
+  fun checkIfShouldReopen(email: String) {
     viewModelScope.launch {
       try {
-        _addFriendStatus.value = !repository.checkUserExists(email)
+        _shouldReopen.value = !repository.checkUserExists(email)
       } catch (e: NoSuchElementException) {
-        _addFriendStatus.value = true
+        _shouldReopen.value = true
       }
     }
   }
 
   fun closeAddFriendModal() {
-    _addFriendStatus.value = false
+    _shouldReopen.value = false
   }
 
   fun addIndividual(individual: TingXieIndividual) {

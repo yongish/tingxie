@@ -64,7 +64,7 @@ class FriendIndividualFragment : Fragment() {
         .setView(frameLayout)
         .setPositiveButton(R.string.ok) { _, _ ->
           email = editText.text.toString()
-          viewModel.checkUserExists(email)
+          viewModel.checkIfShouldReopen(email)
         }
         .setNegativeButton(R.string.cancel) { dialog, _ ->
           viewModel.closeAddFriendModal()
@@ -109,7 +109,7 @@ class FriendIndividualFragment : Fragment() {
       }
     }
 
-    viewModel.addFriendStatus.observe(viewLifecycleOwner) { status ->
+    viewModel.shouldReopen.observe(viewLifecycleOwner) { status ->
       if (status == true) {
         openAddFriendDialog(true)
       }
