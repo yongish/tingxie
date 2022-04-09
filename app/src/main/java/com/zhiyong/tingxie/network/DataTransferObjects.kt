@@ -7,6 +7,9 @@ import com.zhiyong.tingxie.ui.share.EnumQuizRole
 import com.zhiyong.tingxie.ui.share.TingXieShareIndividual
 
 @JsonClass(generateAdapter = true)
+data class NetworkToken(val uid: String, val email: String, val token: String)
+
+@JsonClass(generateAdapter = true)
 data class NetworkQuizIdContainer(val quizIds: List<Long>)
 
 @JsonClass(generateAdapter = true)

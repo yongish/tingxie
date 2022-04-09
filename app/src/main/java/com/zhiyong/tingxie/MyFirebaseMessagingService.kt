@@ -4,10 +4,15 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.zhiyong.tingxie.network.NetworkToken
+import com.zhiyong.tingxie.network.TingXieNetwork
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
+  val repository = QuizRepository(application)
+
   override fun onMessageReceived(p0: RemoteMessage) {
     super.onMessageReceived(p0)
 
@@ -29,5 +34,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     // todo: Send to server.
     Log.d("NEW TOKEN", p0)
+    val currentUser = FirebaseAuth.getInstance().currentUser
+    val uid = currentUser?.uid
+    val email = currentUser?.email
+//    if (uid != null && email != null) {
+//      TingXieNetwork.tingxie.putToken(NetworkToken(uid, email, p0))
+//    }
   }
 }
