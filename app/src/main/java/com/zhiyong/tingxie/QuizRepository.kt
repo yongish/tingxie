@@ -86,6 +86,9 @@ class QuizRepository(val context: Context) {
           Quiz(it.quiz_id, it.date, it.title, it.total_words, it.not_learned, it.round)
         })
       }
+      if (refreshQuizzesResponse.deleted_quiz_ids.isNotEmpty()) {
+        mQuizDao.setQuizDeleted(refreshQuizzesResponse.deleted_quiz_ids)
+      }
       if (refreshQuizzesResponse.missing_quiz_ids.isNotEmpty()) {
         // Send missing quizzes to server.
         TingXieNetwork.tingxie.postQuizzes(
@@ -131,8 +134,10 @@ class QuizRepository(val context: Context) {
     }
   }
 
-  suspend fun checkUserExists(email: String): Boolean =
-      TingXieNetwork.tingxie.checkUserExists(email)
+//  suspend fun checkUserExists(email: String): Boolean {
+//    FirebaseAuth.getInstance().
+//  }
+//      TingXieNetwork.tingxie.checkUserExists(email)
 
   suspend fun getFriends(): List<TingXieIndividual> =
       TingXieNetwork.tingxie.getFriends(email).map { it.asDomainModel() }

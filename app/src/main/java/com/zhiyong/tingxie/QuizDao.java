@@ -28,6 +28,9 @@ public interface QuizDao {
     @Update
     void update(Quiz quiz);
 
+    @Query("UPDATE quiz SET status = 'DELETED_SERVER' WHERE id IN (:quizIds)")
+    void setQuizDeleted(List<Long> quizIds);
+
     @Insert
     long insert(QuizPinyin quizPinyin);
 
@@ -77,7 +80,7 @@ public interface QuizDao {
 //            "ORDER BY w.pinyin_string")
     LiveData<List<WordItem>> getWordItemsOfQuiz(long quizId);
 
-    @Query("SELECT id, date, title, total_words, not_learned, round " +
+    @Query("SELECT id, date, title, total_words, not_learned, round, status " +
             "FROM quiz ORDER BY date DESC")
     LiveData<List<Quiz>> getAllQuizItems();
 
@@ -87,7 +90,7 @@ public interface QuizDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertQuizPinyins(List<QuizPinyin> quizPinyins);
 
-    @Query("SELECT id, date, title, total_words AS totalWords, not_learned AS notLearned, round " +
+    @Query("SELECT id, date, title, total_words AS totalWords, not_learned AS notLearned, round, status " +
             "FROM quiz WHERE id = :id")
     LiveData<QuizItem> getQuizItem(long id);
 

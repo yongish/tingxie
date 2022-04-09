@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 8,
-    "identityHash": "ad8dff189a92bbc3a3d4ed6e88fdb493",
+    "version": 9,
+    "identityHash": "7d55c07259ef3e345efb1322311efefa",
     "entities": [
       {
         "tableName": "Question",
@@ -177,7 +177,7 @@
       },
       {
         "tableName": "quiz_pinyin",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `quiz_id` INTEGER NOT NULL, `pinyin_string` TEXT NOT NULL, `word_string` TEXT NOT NULL, `asked` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `quiz_id` INTEGER NOT NULL, `pinyin_string` TEXT NOT NULL, `word_string` TEXT NOT NULL, `asked` INTEGER NOT NULL, `status` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -207,6 +207,12 @@
             "fieldPath": "asked",
             "columnName": "asked",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
             "notNull": true
           }
         ],
@@ -278,7 +284,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ad8dff189a92bbc3a3d4ed6e88fdb493')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7d55c07259ef3e345efb1322311efefa')"
     ]
   }
 }

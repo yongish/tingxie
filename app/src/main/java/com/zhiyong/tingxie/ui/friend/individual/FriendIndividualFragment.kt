@@ -64,7 +64,7 @@ class FriendIndividualFragment : Fragment() {
         .setView(frameLayout)
         .setPositiveButton(R.string.ok) { _, _ ->
           email = editText.text.toString()
-          viewModel.checkIfShouldReopen(email)
+//          viewModel.checkIfShouldReopen(email)
         }
         .setNegativeButton(R.string.cancel) { dialog, _ ->
           viewModel.closeAddFriendModal()

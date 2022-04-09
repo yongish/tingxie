@@ -17,8 +17,8 @@ import java.io.IOException
 
 class QuizViewModel(application: Application) : UpdateQuizViewModel(application) {
     val allQuizItems: LiveData<List<QuizItem>> = mRepository.quizzes
-//    val allQuizPinyins: LiveData<List<QuizPinyin>> = mRepository.allQuizPinyins
-//    val allQuestions: LiveData<List<Question>> = mRepository.allQuestions
+    val allQuizPinyins: LiveData<List<QuizPinyin>> = mRepository.allQuizPinyins
+    val allQuestions: LiveData<List<Question>> = mRepository.allQuestions
 
     private var _eventNetworkError = MutableLiveData(false)
     val eventNetworkError: LiveData<Boolean>

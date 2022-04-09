@@ -74,12 +74,12 @@ public class MainActivity extends AppCompatActivity {
 
         /* todo: getAllQuestions() and getAllQuizPinyins() here may be unnecessary.
          */
-//        mQuizViewModel.getAllQuestions().observe(this, questions ->
-//                adapter.setQuestions(questions)
-//        );
-//        mQuizViewModel.getAllQuizPinyins().observe(this, quizPinyins ->
-//                adapter.setQuizPinyins(quizPinyins)
-//        );
+        mQuizViewModel.getAllQuestions().observe(this, questions ->
+                adapter.setQuestions(questions)
+        );
+        mQuizViewModel.getAllQuizPinyins().observe(this, quizPinyins ->
+                adapter.setQuizPinyins(quizPinyins)
+        );
 
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
                 0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT

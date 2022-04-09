@@ -155,7 +155,7 @@ public class WordActivity extends AppCompatActivity {
                                         quizItem.setTotalWords(totalWords);
                                         quizItem.setNotLearned(totalWords);
                                         quizItem.setRound(1);
-                                        mWordViewModel.updateQuiz(new Quiz(quizItem.getId(), quizItem.getDate(), quizItem.getTitle(), quizItem.getTotalWords(), quizItem.getNotLearned(), quizItem.getRound()));
+                                        mWordViewModel.updateQuiz(new Quiz(quizItem.getId(), quizItem.getDate(), quizItem.getTitle(), quizItem.getTotalWords(), quizItem.getNotLearned(), quizItem.getRound(), quizItem.getStatus().toString()));
                                         // 10/10/21. Using this line and removing the
                                         // quizItem.set... calls above cause the word to
                                         // not be added. I don't know why. Seems to work

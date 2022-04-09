@@ -11,7 +11,9 @@ data class NetworkQuizIdContainer(val quizIds: List<Long>)
 
 @JsonClass(generateAdapter = true)
 data class NetworkQuizRefreshContainer(
-    val new_quizzes_remote: List<NetworkQuiz>, val missing_quiz_ids: List<Long>
+    val new_quizzes_remote: List<NetworkQuiz>,
+    val deleted_quiz_ids: List<Long>,
+    val missing_quiz_ids: List<Long>
     )
 
 @JsonClass(generateAdapter = true)
