@@ -73,6 +73,12 @@ class QuizRepository(val context: Context) {
 
   }
 
+  suspend fun putToken(uid: String, email: String, token: String) {
+    withContext(Dispatchers.IO) {
+      TingXieNetwork.tingxie.putToken(NetworkToken(uid, email, token))
+    }
+  }
+
   suspend fun refreshQuizzes(quizItems: List<QuizItem>) {
     withContext(Dispatchers.IO) {
       // Send local quizIds to server.

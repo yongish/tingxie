@@ -1,7 +1,9 @@
 package com.zhiyong.tingxie.ui.main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +21,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.ui.friend.FriendActivity;
@@ -57,7 +62,8 @@ public class MainActivity extends AppCompatActivity {
 
         mQuizViewModel.getAllQuizItems().observe(this, quizItems -> {
             adapter.setQuizItems(quizItems, recyclerView);
-            mQuizViewModel.refreshQuizzes(quizItems);
+            // todo: Uncomment this.
+//            mQuizViewModel.refreshQuizzes(quizItems);
             if (quizItems.isEmpty()) {
                 emptyView.setVisibility(View.VISIBLE);
             } else {
@@ -97,6 +103,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         helper.attachToRecyclerView(recyclerView);
+
+        // todo: Do we need to send the token everytime the user opens the app?
+        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(token -> {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null && user.getEmail() != null) {
+                mQuizViewModel.putToken(user.getUid(), user.getEmail(), token);
+            }
+        });
     }
 
     @Override

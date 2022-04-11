@@ -5,8 +5,9 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
 
 interface Service {
-//  @PUT("token")
-//  fun putToken(@Body token: NetworkToken): Boolean
+  @PUT("token")
+  suspend fun putToken(@Body token: NetworkToken): String
+//  suspend fun putToken(@Path("uid") uid: String, @Path("email") email: String, @Path("token") token: String): String
 
   @PUT("quizzes/{email}")
   suspend fun refreshQuizzes(
@@ -93,7 +94,7 @@ object TingXieNetwork {
   private val retrofit = Retrofit.Builder()
 //    .baseUrl("http://10.0.2.2:8000/") // todo: Replace with production URL.
       .baseUrl("http://10.0.2.2:9000/") // todo: Replace with production URL.
-    .addConverterFactory(MoshiConverterFactory.create())
+    .addConverterFactory(MoshiConverterFactory.create().asLenient())
     .build()
 
   val tingxie: Service = retrofit.create(Service::class.java)

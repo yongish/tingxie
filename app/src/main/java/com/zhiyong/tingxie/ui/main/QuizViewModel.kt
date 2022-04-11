@@ -34,7 +34,7 @@ class QuizViewModel(application: Application) : UpdateQuizViewModel(application)
 //    init {
 //        refreshDataFromRepository()
 //    }
-
+//
 //    private fun refreshDataFromRepository() {
 //        viewModelScope.launch {
 //            try {
@@ -48,6 +48,12 @@ class QuizViewModel(application: Application) : UpdateQuizViewModel(application)
 //            }
 //        }
 //    }
+
+    fun putToken(uid: String, email: String, token: String) {
+        viewModelScope.launch {
+            repository.putToken(uid, email, token)
+        }
+    }
 
     fun refreshQuizzes(quizItems: List<QuizItem>) {
         viewModelScope.launch {
