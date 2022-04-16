@@ -7,12 +7,11 @@ import retrofit2.http.*
 interface Service {
   @PUT("token")
   suspend fun putToken(@Body token: NetworkToken): String
-//  suspend fun putToken(@Path("uid") uid: String, @Path("email") email: String, @Path("token") token: String): String
 
   @PUT("quizzes/{email}")
   suspend fun refreshQuizzes(
       @Path("email") email: String,
-      @Body quizIds: List<Long>
+      @Body quizIds: List<NetworkQuizDeleted>
   ): NetworkQuizRefreshContainer
 
   @PUT("words/{email}/{quizId}")
@@ -22,10 +21,13 @@ interface Service {
       @Body pinyinContainer: List<String>
   ): NetworkWordItemRefreshContainer
 
-  @POST("quizzes")
-  suspend fun postQuizzes(@Body quizzes: List<NetworkQuiz>): Int
+//  @POST("quizzes")
+//  suspend fun postQuizzes(@Body quizzes: List<NetworkQuiz>): Int
 //  suspend fun postQuizzes(@Query("email") email: String,
 //                          @Body quizzes: NetworkQuizContainer): Boolean
+
+  @POST("quiz")
+  suspend fun postQuiz(@Body quiz: NetworkCreateQuiz): Long
 
   @POST("words")
   suspend fun postWordItems(@Body wordItems: List<NetworkWordItem>): Int
@@ -48,9 +50,6 @@ interface Service {
   suspend fun deleteShare(@Path("userEmail") userEmail: String,
                           @Path("quizId") quizId: Long,
                           @Path("email") email: String): Boolean
-
-  @GET("checkUserExists/{email}")
-  suspend fun checkUserExists(@Path("email") email: String): Boolean
 
   @GET("friends/{email}")
   suspend fun getFriends(@Path("email") email: String): List<NetworkIndividual>

@@ -35,13 +35,17 @@ class QuizRepository(val context: Context) {
   private val executor: ExecutorService = Executors.newSingleThreadExecutor()
 
   private lateinit var email: String
+  private lateinit var name: String
 
   init {
-    val email = FirebaseAuth.getInstance().currentUser?.email
-    if (email == null) {
+    val user = FirebaseAuth.getInstance().currentUser
+    val email = user?.email
+    val name = user?.displayName
+    if (email == null || name == null) {
       // todo Log Crashlytics
     } else {
       this.email = email
+      this.name = name
     }
   }
 
@@ -84,7 +88,7 @@ class QuizRepository(val context: Context) {
       // Send local quizIds to server.
       // Server responds with new remote quizzes and missing remote quizIds.
       val refreshQuizzesResponse = TingXieNetwork.tingxie.refreshQuizzes(
-          email, quizItems.map { it.id }
+          email, quizItems.map { NetworkQuizDeleted(it.id, it.status == "CLIENT_DELETED") }
       )
       if (refreshQuizzesResponse.new_quizzes_remote.isNotEmpty()) {
         // Insert these new quizzes into local DB.
@@ -97,20 +101,18 @@ class QuizRepository(val context: Context) {
       }
       if (refreshQuizzesResponse.missing_quiz_ids.isNotEmpty()) {
         // Send missing quizzes to server.
-        TingXieNetwork.tingxie.postQuizzes(
-            quizItems.filter { refreshQuizzesResponse.missing_quiz_ids.contains(it.id) }
-                .map {
-                  NetworkQuiz(
-                      email,
-                      it.id,
-                      it.date,
-                      it.title,
-                      it.totalWords,
-                      it.notLearned,
-                      it.round
-                  )
-                }
-        )
+        quizItems.filter { refreshQuizzesResponse.missing_quiz_ids.contains(it.id) }
+          .forEach { TingXieNetwork.tingxie.postQuiz(NetworkCreateQuiz(
+            it.id,
+            it.title,
+            it.totalWords,
+            it.notLearned,
+            it.round,
+            it.date,
+            email,
+            name,
+            "EDITOR"
+          )) }
       }
     }
   }
@@ -140,18 +142,13 @@ class QuizRepository(val context: Context) {
     }
   }
 
-//  suspend fun checkUserExists(email: String): Boolean {
-//    FirebaseAuth.getInstance().
-//  }
-//      TingXieNetwork.tingxie.checkUserExists(email)
-
   suspend fun getFriends(): List<TingXieIndividual> =
       TingXieNetwork.tingxie.getFriends(email).map { it.asDomainModel() }
 
   suspend fun addFriend(individual: TingXieIndividual) {
     TingXieNetwork.tingxie.postFriend(
         email,
-        NetworkIndividual(individual.email, individual.firstName, individual.lastName)
+        NetworkIndividual(individual.email, individual.name)
     )
   }
 
@@ -186,8 +183,8 @@ class QuizRepository(val context: Context) {
 
     }
     return arrayListOf(
-        TingXieOtherIndividualRequest("e0@email.com", "f0", "l0", 20001010),
-        TingXieOtherIndividualRequest("e1@email.com", "f1", "l1", 20101020)
+        TingXieOtherIndividualRequest("e0@email.com", "f0", 20001010),
+        TingXieOtherIndividualRequest("e1@email.com", "f1", 20101020)
     )
   }
 
@@ -199,7 +196,7 @@ class QuizRepository(val context: Context) {
 
   suspend fun getShares(quizId: Long): List<TingXieShareIndividual> =
       TingXieNetwork.tingxie.getShares(email, quizId).map {
-        TingXieShareIndividual(it.email, it.firstName, it.lastName, it.isShared, it.role)
+        TingXieShareIndividual(it.email, it.name, it.isShared, it.role)
       }
 //    return arrayListOf(
 //        TingXieShareIndividual("yongish@gmail.com", "firstZ", "lastZ", true, EnumQuizRole.EDITOR),
@@ -211,7 +208,7 @@ class QuizRepository(val context: Context) {
 
   suspend fun addShare(quizId: Long, shareIndividual: TingXieShareIndividual) {
     TingXieNetwork.tingxie.postShare(email, quizId, NetworkShare(
-        shareIndividual.email, shareIndividual.firstName, shareIndividual.lastName, true, shareIndividual.role
+        shareIndividual.email, shareIndividual.name, true, shareIndividual.role
     ))
   }
 

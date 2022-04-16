@@ -4,4 +4,4 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-class TingXieIndividual(val email: String, val firstName: String, val lastName: String): Parcelable
+class TingXieIndividual(val email: String, val name: String): Parcelable

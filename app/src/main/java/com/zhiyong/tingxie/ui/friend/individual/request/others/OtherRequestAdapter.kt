@@ -28,8 +28,7 @@ class OtherRequestAdapter(private val requests: List<TingXieOtherIndividualReque
       val builder = AlertDialog.Builder(context)
       builder.setMessage("Accept or reject friend request from " + String.format(
           context.getString(R.string.username),
-          request.lastName,
-          request.firstName
+          request.name,
       )).setTitle("Respond to friend request")
           .setPositiveButton("Accept") { _, _ ->
             viewModel.acceptRequest(request.email)
@@ -53,8 +52,7 @@ class OtherRequestAdapter(private val requests: List<TingXieOtherIndividualReque
       )
       tvName.text = String.format(
           itemView.context.getString(R.string.username),
-          request.lastName,
-          request.firstName
+          request.name,
       )
       tvDate.text = Util.DISPLAY_FORMAT.format(Util.DB_FORMAT.parse(request.date.toString())!!)
     }

@@ -6,8 +6,7 @@ enum class EnumQuizRole {
 
 data class TingXieShareIndividual(
     val email: String,
-    val firstName: String,
-    val lastName: String,
+    val name: String,
     val isShared: Boolean,
     val role: EnumQuizRole
     )

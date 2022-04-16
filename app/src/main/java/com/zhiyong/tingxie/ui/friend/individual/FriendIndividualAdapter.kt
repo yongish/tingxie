@@ -52,7 +52,7 @@ class FriendIndividualAdapter(private val individuals: List<TingXieIndividual>,
     holder.ivDelete.setOnClickListener {
       val adapterPosition = holder.adapterPosition
       Snackbar
-        .make(recyclerView, "Removed ${individual.firstName}", Snackbar.LENGTH_LONG)
+        .make(recyclerView, "Removed ${individual.name}", Snackbar.LENGTH_LONG)
         .setAction("Undo") {
           viewModel.addIndividual(individual)
           notifyItemInserted(adapterPosition)
@@ -74,8 +74,7 @@ class FriendIndividualAdapter(private val individuals: List<TingXieIndividual>,
       tvSub.text = individual.email
       tvName.text = String.format(
           itemView.context.getString(R.string.username),
-          individual.lastName,
-          individual.firstName,
+          individual.name,
       )
     }
   }

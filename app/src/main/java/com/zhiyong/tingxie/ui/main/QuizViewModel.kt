@@ -31,24 +31,6 @@ class QuizViewModel(application: Application) : UpdateQuizViewModel(application)
     private val repository = QuizRepository(application)
     val quizzes = repository.quizzes
 
-//    init {
-//        refreshDataFromRepository()
-//    }
-//
-//    private fun refreshDataFromRepository() {
-//        viewModelScope.launch {
-//            try {
-//                repository.refreshQuizzes()
-//                _eventNetworkError.value = false
-//                _isNetworkErrorShown.value = false
-//            } catch (networkError: IOException) {
-//                if (quizzes.value.isNullOrEmpty()) {
-//                    _eventNetworkError.value = true
-//                }
-//            }
-//        }
-//    }
-
     fun putToken(uid: String, email: String, token: String) {
         viewModelScope.launch {
             repository.putToken(uid, email, token)

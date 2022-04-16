@@ -1,13 +1,12 @@
 package com.zhiyong.tingxie.ui.main;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,11 +29,16 @@ import com.zhiyong.tingxie.ui.friend.FriendActivity;
 import com.zhiyong.tingxie.ui.hsk.buttons.HskButtonsActivity;
 import com.zhiyong.tingxie.ui.login.LoginActivity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
 
     private QuizViewModel mQuizViewModel;
     RecyclerView recyclerView;
+
+    private List<QuizItem> quizItems = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +67,10 @@ public class MainActivity extends AppCompatActivity {
         mQuizViewModel.getAllQuizItems().observe(this, quizItems -> {
             adapter.setQuizItems(quizItems, recyclerView);
             // todo: Uncomment this.
-//            mQuizViewModel.refreshQuizzes(quizItems);
+            if (!this.quizItems.equals(quizItems)) {
+                this.quizItems = quizItems;
+                mQuizViewModel.refreshQuizzes(quizItems);
+            }
             if (quizItems.isEmpty()) {
                 emptyView.setVisibility(View.VISIBLE);
             } else {

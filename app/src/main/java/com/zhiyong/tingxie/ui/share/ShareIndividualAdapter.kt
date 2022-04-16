@@ -42,7 +42,7 @@ class ShareIndividualAdapter(private val quizId: Long,
 //    holder.ivDelete.setOnClickListener {
 //      val adapterPosition = holder.adapterPosition
 //      Snackbar
-//          .make(recyclerView, "Removed ${share.firstName}", Snackbar.LENGTH_LONG)
+//          .make(recyclerView, "Removed ${share.name}", Snackbar.LENGTH_LONG)
 //          .setAction("Undo") {
 //            viewModel.addShare(share)
 //            notifyItemInserted(adapterPosition)
@@ -122,8 +122,7 @@ class ShareIndividualAdapter(private val quizId: Long,
       tvEmail.text = shareIndividual.email
       tvName.text = String.format(
           itemView.context.getString(R.string.username),
-          shareIndividual.lastName,
-          shareIndividual.firstName,
+          shareIndividual.name,
       )
     }
   }
