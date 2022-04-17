@@ -50,6 +50,7 @@ import java.util.Objects;
 public class WordActivity extends AppCompatActivity {
 
     private WordViewModel mWordViewModel;
+    private List<WordItem> wordItems = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,10 +199,13 @@ public class WordActivity extends AppCompatActivity {
         final TextView emptyView = findViewById(R.id.empty_view);
         mWordViewModel.getWordItemsOfQuiz().observe(this, wordItems -> {
             adapter.setWordItems(wordItems);
+//            if (!this.wordItems.equals(wordItems)) {
+            // stopped here.
+                mWordViewModel.refreshWordItemsOfQuiz(quizId, wordItems);
+//            }
             if (wordItems == null || wordItems.isEmpty()) {
                 emptyView.setVisibility(View.VISIBLE);
             } else {
-                mWordViewModel.refreshWordItemsOfQuiz(wordItems);
                 emptyView.setVisibility(View.INVISIBLE);
             }
         });

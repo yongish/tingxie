@@ -14,12 +14,10 @@ interface Service {
       @Body quizIds: List<NetworkQuizDeleted>
   ): NetworkQuizRefreshContainer
 
-  @PUT("words/{email}/{quizId}")
+  @PUT("words")
   suspend fun refreshWords(
-      @Path("email") email: String,
-      @Path("quizId") quizId: Long,
-      @Body pinyinContainer: List<String>
-  ): NetworkWordItemRefreshContainer
+      @Body refreshWordsContainer: NetworkRefreshWords
+  ): List<NetworkWordItem>
 
 //  @POST("quizzes")
 //  suspend fun postQuizzes(@Body quizzes: List<NetworkQuiz>): Int

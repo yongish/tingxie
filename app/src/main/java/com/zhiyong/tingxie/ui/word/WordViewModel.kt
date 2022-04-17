@@ -50,10 +50,10 @@ internal class WordViewModel(application: Application, quizId: Long) : AndroidVi
         mRepository.updateQuiz(quiz)
     }
 
-    fun refreshWordItemsOfQuiz(wordItems: List<WordItem>) {
+    fun refreshWordItemsOfQuiz(quizId: Long, wordItems: List<WordItem>) {
         viewModelScope.launch {
             try {
-                mRepository.refreshWordItemsOfQuiz(wordItems)
+                mRepository.refreshWordItemsOfQuiz(quizId, wordItems)
                 _eventNetworkError.value = false
                 _isNetworkErrorShown.value = false
             } catch (networkError: IOException) {

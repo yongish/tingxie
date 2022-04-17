@@ -117,28 +117,31 @@ class QuizRepository(val context: Context) {
     }
   }
 
-  suspend fun refreshWordItemsOfQuiz(wordItemsOfQuiz: List<WordItem>) {
+  suspend fun refreshWordItemsOfQuiz(quizId: Long, wordItemsOfQuiz: List<WordItem>) {
     withContext(Dispatchers.IO) {
-      val quizId = wordItemsOfQuiz.first().quizId
       val refreshWordItemsResponse = TingXieNetwork.tingxie.refreshWords(
-          email, quizId, wordItemsOfQuiz.map { it.pinyinString }
-      )
-      if (refreshWordItemsResponse.new_word_items_remote.isNotEmpty()) {
-        mQuizDao.insertQuizPinyins(refreshWordItemsResponse.new_word_items_remote.map {
-          QuizPinyin(it.word_id, it.quiz_id, it.pinyin_string, it.word_string, it.asked)
+        NetworkRefreshWords(email, quizId, wordItemsOfQuiz.map {
+          NetworkWordItem(it.id, it.wordString, it.pinyinString, it.isAsked)
         })
-      }
-      if (refreshWordItemsResponse.missing_pinyins.isNotEmpty()) {
-        TingXieNetwork.tingxie.postWordItems(
-            wordItemsOfQuiz.filter {
-              refreshWordItemsResponse.missing_pinyins.contains(it.pinyinString)
-            }.map {
-              NetworkWordItem(
-                  it.id, email, it.quizId, it.wordString, it.pinyinString, it.isAsked
-              )
-            }
-        )
-      }
+      )
+//          email, quizId, wordItemsOfQuiz.map { it.pinyinString }
+//      if (refreshWordItemsResponse.new_word_items_remote.isNotEmpty()) {
+//        mQuizDao.insertQuizPinyins(refreshWordItemsResponse.new_word_items_remote.map {
+//          QuizPinyin(it.word_id, it.quiz_id, it.pinyin_string, it.word_string, it.asked)
+//        })
+//      }
+//      if (refreshWordItemsResponse.missing_pinyins.isNotEmpty()) {
+//        TingXieNetwork.tingxie.postWordItems(
+//      quizId,
+//            wordItemsOfQuiz.filter {
+//              refreshWordItemsResponse.missing_pinyins.contains(it.pinyinString)
+//            }.map {
+//              NetworkWordItem(
+//                  it.id, email, it.quizId, it.wordString, it.pinyinString, it.isAsked
+//              )
+//            }
+//        )
+//      }
     }
   }
 
