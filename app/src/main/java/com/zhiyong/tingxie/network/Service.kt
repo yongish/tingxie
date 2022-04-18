@@ -27,9 +27,6 @@ interface Service {
   @POST("quiz")
   suspend fun postQuiz(@Body quiz: NetworkCreateQuiz): Long
 
-  @POST("words")
-  suspend fun postWordItems(@Body wordItems: List<NetworkWordItem>): Int
-
   @GET("shares/email/{email}/quiz_id/{quizId}")
   suspend fun getShares(@Path("email") email: String,
                         @Path("quizId") quizId: Long): List<NetworkShare>

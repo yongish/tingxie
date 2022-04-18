@@ -124,24 +124,11 @@ class QuizRepository(val context: Context) {
           NetworkWordItem(it.id, it.wordString, it.pinyinString, it.isAsked)
         })
       )
-//          email, quizId, wordItemsOfQuiz.map { it.pinyinString }
-//      if (refreshWordItemsResponse.new_word_items_remote.isNotEmpty()) {
-//        mQuizDao.insertQuizPinyins(refreshWordItemsResponse.new_word_items_remote.map {
-//          QuizPinyin(it.word_id, it.quiz_id, it.pinyin_string, it.word_string, it.asked)
-//        })
-//      }
-//      if (refreshWordItemsResponse.missing_pinyins.isNotEmpty()) {
-//        TingXieNetwork.tingxie.postWordItems(
-//      quizId,
-//            wordItemsOfQuiz.filter {
-//              refreshWordItemsResponse.missing_pinyins.contains(it.pinyinString)
-//            }.map {
-//              NetworkWordItem(
-//                  it.id, email, it.quizId, it.wordString, it.pinyinString, it.isAsked
-//              )
-//            }
-//        )
-//      }
+      if (refreshWordItemsResponse.isNotEmpty()) {
+        mQuizDao.insertQuizPinyins(refreshWordItemsResponse.map {
+          QuizPinyin(quizId, it.pinyin, it.characters, it.asked)
+        })
+      }
     }
   }
 
