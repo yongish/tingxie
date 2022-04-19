@@ -69,6 +69,12 @@ data class NetworkWordItem(val word_id: Long,
                            val asked: Boolean)
 
 @JsonClass(generateAdapter = true)
+data class NetworkCreateWord(val email: String,
+                             val quizId: Long,
+                             val characters: String,
+                             val pinyin: String)
+
+@JsonClass(generateAdapter = true)
 data class NetworkIndividualContainer(val individuals: List<NetworkIndividual>)
 
 fun NetworkIndividual.asDomainModel(): TingXieIndividual =

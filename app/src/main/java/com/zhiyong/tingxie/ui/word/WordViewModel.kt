@@ -31,7 +31,9 @@ internal class WordViewModel(application: Application, quizId: Long) : AndroidVi
     }
 
     fun addWord(quizId: Long, word: String?, pinyin: String?) {
-        mRepository.addWord(quizId, word, pinyin)
+        viewModelScope.launch {
+            mRepository.addWord(quizId, word, pinyin)
+        }
     }
 
     fun deleteWord(quizPinyin: QuizPinyin?) {

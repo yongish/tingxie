@@ -319,7 +319,7 @@ class QuizRepository(val context: Context) {
     }
   }
 
-  fun addWord(quizId: Long, wordString: String?, pinyinString: String?) {
+  suspend fun addWord(quizId: Long, wordString: String?, pinyinString: String?) {
     // todo: Think Word table is not used anymore can be deleted.
     if (wordString == null || pinyinString == null) {
       throw IllegalArgumentException("Null wordString or pinyinString.")
@@ -328,6 +328,9 @@ class QuizRepository(val context: Context) {
       mQuizDao.insert(Word(wordString, pinyinString))
       mQuizDao.insert(QuizPinyin(quizId, pinyinString, wordString, false))
     }
+    TingXieNetwork.tingxie.postWord(
+      NetworkCreateWord(email, quizId, wordString, pinyinString)
+    )
   }
 
   // Only delete QuizPinyin object.

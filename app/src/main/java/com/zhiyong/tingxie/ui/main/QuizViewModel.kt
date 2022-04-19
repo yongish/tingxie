@@ -73,7 +73,9 @@ class QuizViewModel(application: Application) : UpdateQuizViewModel(application)
 
     fun addWords(quizId: Long, wordItems: List<WordItem>) {
         for (wordItem in wordItems) {
-            mRepository.addWord(quizId, wordItem.wordString, wordItem.pinyinString)
+            viewModelScope.launch {
+                mRepository.addWord(quizId, wordItem.wordString, wordItem.pinyinString)
+            }
         }
     }
 
