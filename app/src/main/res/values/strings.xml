@@ -55,7 +55,7 @@
     <string name="friend_connect_instructions">To connect with your friend, enter her email address.</string>
     <string name="add_friend">Add a friend.</string>
     <string name="add_share">Add a friend to share.</string>
-    <string name="username">%s, %s</string>
+    <string name="username">%s</string>
     <string name="braces">(%s)</string>
     <string name="shared">Shared</string>
     <string name="email_zhiyong">Email Zhiyong (听写 app creator)</string>
