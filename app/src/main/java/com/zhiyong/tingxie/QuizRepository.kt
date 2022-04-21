@@ -374,7 +374,10 @@ class QuizRepository(val context: Context) {
     }
   }
 
-  fun deleteQuiz(quizId: Long) = mQuizDao.deleteQuiz(quizId)
+  suspend fun deleteQuiz(quizId: Long) {
+    mQuizDao.deleteQuiz(quizId)
+    TingXieNetwork.tingxie.deleteQuiz(email, quizId)
+  }
 
   companion object {
     private const val TAG = "QuizRepository"

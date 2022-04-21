@@ -17,6 +17,10 @@ interface Service {
   @POST("quiz")
   suspend fun postQuiz(@Body quiz: NetworkCreateQuiz): Long
 
+  @DELETE("quiz/email/{email}/quiz_id/{quizId}")
+  suspend fun deleteQuiz(@Path("email") email: String,
+                         @Path("quizId") quizId: Long): String
+
   @PUT("words")
   suspend fun refreshWords(
     @Body refreshWordsContainer: NetworkRefreshWords
