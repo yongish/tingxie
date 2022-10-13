@@ -53,15 +53,15 @@ open class FriendIndividualViewModel(application: Application) : AndroidViewMode
     }
   }
 
-//  fun checkIfShouldReopen(email: String) {
-//    viewModelScope.launch {
-//      try {
-//        _shouldReopen.value = !repository.checkUserExists(email)
-//      } catch (e: NoSuchElementException) {
-//        _shouldReopen.value = true
-//      }
-//    }
-//  }
+  fun checkIfShouldReopen(email: String) {
+    viewModelScope.launch {
+      try {
+        _shouldReopen.value = !repository.checkUserExists(email)
+      } catch (e: NoSuchElementException) {
+        _shouldReopen.value = true
+      }
+    }
+  }
 
   fun closeAddFriendModal() {
     _shouldReopen.value = false

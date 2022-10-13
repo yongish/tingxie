@@ -55,16 +55,16 @@ class FriendIndividualFragment : Fragment() {
     builder.setMessage(HtmlCompat.fromHtml(
         (if (showError) "<p style=\"color:red\">No such email: ${email}</p>\n" +
             "Please check that the email address is correct. " +
-            "If it is correct, please ask your friend to install 听写 and create an account.\n" else "") +
+            "If it is correct, please ask your friend to install 听写 and create an account.<br />" else "") +
         "To connect with a friend, search for her email address." +
-            if (yourEmail == null) "" else "\nYour email address: $yourEmail",
+            if (yourEmail == null) "" else "\n<br />Your email address: $yourEmail",
         HtmlCompat.FROM_HTML_MODE_LEGACY
     ))
         .setTitle("Add friend")
         .setView(frameLayout)
         .setPositiveButton(R.string.ok) { _, _ ->
           email = editText.text.toString()
-//          viewModel.checkIfShouldReopen(email)
+          viewModel.checkIfShouldReopen(email)
         }
         .setNegativeButton(R.string.cancel) { dialog, _ ->
           viewModel.closeAddFriendModal()
