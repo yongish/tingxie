@@ -48,6 +48,7 @@ android {
     viewBinding {
         enabled = true
     }
+    namespace 'com.zhiyong.tingxie'
 }
 
 dependencies {
