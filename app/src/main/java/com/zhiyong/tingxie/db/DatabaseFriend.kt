@@ -9,10 +9,11 @@ import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
 data class DatabaseFriend constructor(
     @PrimaryKey var email: String,
     @NonNull val name: String,
+    @NonNull val status: String
 )
 
 fun List<DatabaseFriend>.asDomainModel(): List<TingXieIndividual> {
   return map {
-    TingXieIndividual(it.email, it.name)
+    TingXieIndividual(it.email, it.name, it.status)
   }
 }

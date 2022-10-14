@@ -49,14 +49,18 @@ interface Service {
                           @Path("email") email: String): Boolean
 
   @GET("userExists/{email}")
-  suspend fun checkUserExists(@Path("email") email: String): Boolean
+  suspend fun checkUserExists(@Path("email") email: String): String
 
-  @GET("friends/{email}")
-  suspend fun getFriends(@Path("email") email: String): List<NetworkIndividual>
+  @GET("friends/{email}/status/:status")
+  suspend fun getFriends(
+    @Path("email") email: String, @Path("status") status: String
+  ): List<NetworkIndividual>
 
+//  @POST("friends")
+//  suspend fun postFriend(@Query("email") email: String,
+//                         @Body individual: NetworkIndividual): NetworkIndividual
   @POST("friends")
-  suspend fun postFriend(@Query("email") email: String,
-                         @Body individual: NetworkIndividual): NetworkIndividual
+  suspend fun postFriend(@Body individual: NetworkIndividual): NetworkIndividual
 
   @DELETE("friends/userEmail/{userEmail}/friendEmail/{email}")
   suspend fun deleteFriend(@Path("userEmail") userEmail: String,
@@ -68,7 +72,8 @@ interface Service {
 
   @POST("yourIndividualRequest")
   suspend fun postYourIndividualRequest(
-      @Query("email") email: String, @Body request: NetworkYourIndividualRequest
+//      @Query("email") email: String, @Body request: NetworkYourIndividualRequest
+    @Body request: NetworkYourIndividualRequest
   ): NetworkYourIndividualRequest
 
   @DELETE("yourIndividualRequest/userEmail/{userEmail}/otherEmail/{otherEmail}")

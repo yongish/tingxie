@@ -7,6 +7,7 @@ import androidx.lifecycle.Transformations
 import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.db.*
 import com.zhiyong.tingxie.network.*
+import com.zhiyong.tingxie.ui.friend.individual.FriendStatus
 import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
 import com.zhiyong.tingxie.ui.friend.individual.request.others.TingXieOtherIndividualRequest
 import com.zhiyong.tingxie.ui.friend.individual.request.yours.TingXieYourIndividualRequest
@@ -133,15 +134,14 @@ class QuizRepository(val context: Context) {
   }
 
   suspend fun checkUserExists(email: String): Boolean =
-    TingXieNetwork.tingxie.checkUserExists(email)
+    TingXieNetwork.tingxie.checkUserExists(email).toBoolean()
 
-  suspend fun getFriends(): List<TingXieIndividual> =
-      TingXieNetwork.tingxie.getFriends(email).map { it.asDomainModel() }
+  suspend fun getFriends(friendStatus: String): List<TingXieIndividual> =
+      TingXieNetwork.tingxie.getFriends(email, friendStatus).map { it.asDomainModel() }
 
   suspend fun addFriend(individual: TingXieIndividual) {
     TingXieNetwork.tingxie.postFriend(
-        email,
-        NetworkIndividual(individual.email, individual.name)
+        NetworkIndividual(email, individual.email, individual.name, individual.status)
     )
   }
 
@@ -161,10 +161,14 @@ class QuizRepository(val context: Context) {
     )
   }
 
-  suspend fun addYourIndividualRequest(request: TingXieYourIndividualRequest) =
-      TingXieNetwork.tingxie.postYourIndividualRequest(
-          email, NetworkYourIndividualRequest(request.email, request.date)
-      )
+//  suspend fun addYourIndividualRequest(request: TingXieYourIndividualRequest) =
+//      TingXieNetwork.tingxie.postYourIndividualRequest(
+//          email, NetworkYourIndividualRequest(request.email, request.date)
+//      )
+  suspend fun addYourIndividualRequest(requestEmail: String) =
+    TingXieNetwork.tingxie.postYourIndividualRequest(
+      NetworkYourIndividualRequest(email, requestEmail)
+    )
 
   suspend fun deleteYourIndividualRequest(email: String) =
       TingXieNetwork.tingxie.deleteYourIndividualRequest(this.email, email)

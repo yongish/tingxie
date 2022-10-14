@@ -9,11 +9,16 @@ import com.zhiyong.tingxie.QuizRepository
 import com.zhiyong.tingxie.viewmodel.Status
 import kotlinx.coroutines.launch
 
-data class AddFriendStatus(
-    val modalOpen: Boolean, val friendExists: Boolean, val status: Status
-    )
+// may delete this
+//data class AddFriendStatus(
+//  val modalOpen: Boolean, val friendExists: Boolean, val status: Status
+//)
+enum class FriendStatus {
+  REQUEST, FRIEND, BLOCKED
+}
 
-open class FriendIndividualViewModel(application: Application) : AndroidViewModel(application) {
+open class FriendIndividualViewModel(application: Application) :
+  AndroidViewModel(application) {
   private val repository: QuizRepository = QuizRepository(application)
 
   private val _status = MutableLiveData<Status>()
@@ -24,7 +29,7 @@ open class FriendIndividualViewModel(application: Application) : AndroidViewMode
   val friends: LiveData<List<TingXieIndividual>>
     get() = _friends
 
-//  private val _addFriendStatus = MutableLiveData<AddFriendStatus>()
+  //  private val _addFriendStatus = MutableLiveData<AddFriendStatus>()
 //  val addFriendStatus: LiveData<AddFriendStatus>
 //    get() = _addFriendStatus
   private val _shouldReopen = MutableLiveData<Boolean>()
@@ -41,11 +46,11 @@ open class FriendIndividualViewModel(application: Application) : AndroidViewMode
     viewModelScope.launch {
       _status.value = Status.LOADING
       try {
-        _friends.value = repository.getFriends()
+        _friends.value = repository.getFriends(FriendStatus.FRIEND.name)
         _status.value = Status.DONE
       } catch (e: Exception) {
         _friends.value = ArrayList()
-        when(e) {
+        when (e) {
           is NoSuchElementException -> _status.value = Status.DONE
           else -> _status.value = Status.ERROR
         }
@@ -53,19 +58,25 @@ open class FriendIndividualViewModel(application: Application) : AndroidViewMode
     }
   }
 
-  fun checkIfShouldReopen(email: String) {
-    viewModelScope.launch {
-      try {
-        _shouldReopen.value = !repository.checkUserExists(email)
-      } catch (e: NoSuchElementException) {
-        _shouldReopen.value = true
+  fun checkIfShouldReopen(email: String) = viewModelScope.launch {
+    try {
+      val userExists = repository.checkUserExists(email)
+      _shouldReopen.value = !userExists
+      if (userExists) {
+        repository.addFriend(TingXieIndividual(email, "", FriendStatus.REQUEST.name))
       }
+    } catch (e: NoSuchElementException) {
+      _shouldReopen.value = true
     }
   }
 
   fun closeAddFriendModal() {
     _shouldReopen.value = false
   }
+
+//  fun addFriendRequest(email: String) = viewModelScope.launch {
+//    repository.addFriend(TingXieIndividual(email, "", FriendStatus.REQUEST.name))
+//  }
 
   fun addIndividual(individual: TingXieIndividual) {
     viewModelScope.launch {
