@@ -7,10 +7,8 @@ import androidx.lifecycle.Transformations
 import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.db.*
 import com.zhiyong.tingxie.network.*
-import com.zhiyong.tingxie.ui.friend.individual.FriendStatus
 import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
 import com.zhiyong.tingxie.ui.friend.individual.request.others.TingXieOtherIndividualRequest
-import com.zhiyong.tingxie.ui.friend.individual.request.yours.TingXieYourIndividualRequest
 import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsAdapter
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
@@ -148,27 +146,6 @@ class QuizRepository(val context: Context) {
   suspend fun deleteFriend(email: String) {
     TingXieNetwork.tingxie.deleteFriend(this.email, email)
   }
-
-  suspend fun getYourIndividualRequests(): List<TingXieYourIndividualRequest> {
-    try {
-      TingXieNetwork.tingxie.getYourIndividualRequests(email)
-    } catch (e: Exception) {
-
-    }
-    return arrayListOf(
-        TingXieYourIndividualRequest("e0@email.com", 20001010),
-        TingXieYourIndividualRequest("e1@email.com", 20101020)
-    )
-  }
-
-//  suspend fun addYourIndividualRequest(request: TingXieYourIndividualRequest) =
-//      TingXieNetwork.tingxie.postYourIndividualRequest(
-//          email, NetworkYourIndividualRequest(request.email, request.date)
-//      )
-  suspend fun addYourIndividualRequest(requestEmail: String) =
-    TingXieNetwork.tingxie.postYourIndividualRequest(
-      NetworkYourIndividualRequest(email, requestEmail)
-    )
 
   suspend fun deleteYourIndividualRequest(email: String) =
       TingXieNetwork.tingxie.deleteYourIndividualRequest(this.email, email)

@@ -75,14 +75,6 @@ interface Service {
     @Path("email") email: String
   ): Boolean
 
-  @GET("yourIndividualRequests")
-  suspend fun getYourIndividualRequests(@Query("email") email: String)
-      : NetworkYourIndividualRequestContainer
-
-  @POST("yourIndividualRequest")
-  suspend fun postYourIndividualRequest(@Body request: NetworkYourIndividualRequest)
-      : NetworkYourIndividualRequest
-
   @DELETE("yourIndividualRequest/userEmail/{userEmail}/otherEmail/{otherEmail}")
   suspend fun deleteYourIndividualRequest(
     @Path("userEmail") userEmail: String,

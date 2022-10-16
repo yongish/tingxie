@@ -31,20 +31,24 @@ class YourRequestFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
 
     viewModel = ViewModelProvider(this)[YourViewModel::class.java]
-    viewModel.requests.observe(viewLifecycleOwner, { requests ->
+    viewModel.requests.observe(viewLifecycleOwner) { requests ->
       requests?.apply {
         binding.recyclerviewYourRequests.adapter = YourRequestAdapter(
-            requests, viewModel, binding.recyclerviewYourRequests
+          requests, viewModel, binding.recyclerviewYourRequests
         )
       }
-    })
+    }
 
-    viewModel.status.observe(viewLifecycleOwner, { status ->
+    viewModel.status.observe(viewLifecycleOwner) { status ->
       if (status.equals(Status.ERROR)) {
         // todo: Display an offline error message on the view, instead of a toast.
-        Toast.makeText(activity, "Network Error on YourRequestFragment", Toast.LENGTH_LONG).show()
+        Toast.makeText(
+          activity,
+          "Network Error on YourRequestFragment",
+          Toast.LENGTH_LONG
+        ).show()
       }
-    })
+    }
   }
 
   override fun onDestroyView() {

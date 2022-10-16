@@ -6,9 +6,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.zhiyong.tingxie.QuizRepository
+import com.zhiyong.tingxie.ui.friend.individual.FriendStatus
+import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
 import com.zhiyong.tingxie.viewmodel.Status
 import kotlinx.coroutines.launch
 
+// may deduplicate with FriendIndividualViewModel.
 class YourViewModel(application: Application) : AndroidViewModel(application) {
   private val repository: QuizRepository = QuizRepository(application)
 
@@ -16,15 +19,15 @@ class YourViewModel(application: Application) : AndroidViewModel(application) {
   val status: LiveData<Status>
     get() = _status
 
-  private val _requests = MutableLiveData<List<TingXieYourIndividualRequest>>()
-  val requests: LiveData<List<TingXieYourIndividualRequest>>
+  private val _requests = MutableLiveData<List<TingXieIndividual>>()
+  val requests: LiveData<List<TingXieIndividual>>
     get() = _requests
 
   init {
     viewModelScope.launch {
       _status.value = Status.LOADING
       try {
-        _requests.value = repository.getYourIndividualRequests()
+        _requests.value = repository.getFriends(FriendStatus.REQUEST.name)
         _status.value = Status.DONE
       } catch (e: Exception) {
         _requests.value = arrayListOf()
@@ -33,9 +36,8 @@ class YourViewModel(application: Application) : AndroidViewModel(application) {
     }
   }
 
-  fun addRequest(request: TingXieYourIndividualRequest) =
-    viewModelScope.launch { repository.addYourIndividualRequest(request.email) }
-//  viewModelScope.launch { repository.addYourIndividualRequest(request) }
+  fun addRequest(request: TingXieIndividual) =
+    viewModelScope.launch { repository.addFriend(request) }
 
   fun deleteRequest(email: String) {
     viewModelScope.launch { repository.deleteYourIndividualRequest(email) }

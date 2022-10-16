@@ -37,7 +37,6 @@ fun NetworkQuizContainer.asDatabaseModel(): List<Quiz> = quizzes.map {
 }
 
 @JsonClass(generateAdapter = true)
-//data class NetworkQuiz(val email: String,
 data class NetworkQuiz(
   val quiz_id: Long,
   val date: Int,
@@ -93,19 +92,12 @@ data class NetworkIndividual(
   val self_email: String, val friend_email: String, val name: String, val status: String
 )
 
-//fun NetworkFriendContainer.asDatabaseModel(): List<DatabaseFriend> {
-//  return friends.map {
-//    DatabaseFriend(it.email)
-//  }
-//}
-
 @JsonClass(generateAdapter = true)
 data class NetworkYourIndividualRequestContainer(
   val requests: List<NetworkYourIndividualRequest>
 )
 
 @JsonClass(generateAdapter = true)
-//data class NetworkYourIndividualRequest(val email: String, val date: Int)
 data class NetworkYourIndividualRequest(val email: String, val requestEmail: String)
 
 @JsonClass(generateAdapter = true)
@@ -131,6 +123,7 @@ data class NetworkShare(
   val role: EnumQuizRole
 )
 
+// may delete this.
 fun NetworkShareContainer.asDomainModel(): List<TingXieShareIndividual> = shares.map {
   TingXieShareIndividual(it.email, it.name, it.isShared, it.role)
 }

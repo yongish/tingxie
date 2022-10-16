@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.zhiyong.tingxie.databinding.RecyclerviewRequestIndividualYourBinding
-import com.zhiyong.tingxie.ui.Util
+import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
 
-class YourRequestAdapter(private val requests: List<TingXieYourIndividualRequest>,
+class YourRequestAdapter(private val requests: List<TingXieIndividual>,
                          val viewModel: YourViewModel,
                          val recyclerView: RecyclerView)
   : RecyclerView.Adapter<YourRequestAdapter.ViewHolder>() {
@@ -40,9 +40,8 @@ class YourRequestAdapter(private val requests: List<TingXieYourIndividualRequest
     : RecyclerView.ViewHolder(binding.root) {
     val ivDelete = binding.ivDelete
 
-    fun bind(request: TingXieYourIndividualRequest) = with(binding) {
+    fun bind(request: TingXieIndividual) = with(binding) {
       tvEmail.text = request.email
-      tvDate.text = Util.DISPLAY_FORMAT.format(Util.DB_FORMAT.parse(request.date.toString())!!)
     }
   }
 }

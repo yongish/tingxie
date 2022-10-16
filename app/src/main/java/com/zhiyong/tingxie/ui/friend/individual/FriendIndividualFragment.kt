@@ -10,14 +10,12 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.EditText
 import android.widget.FrameLayout
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ShareCompat
 import androidx.core.text.HtmlCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.IndividualFragmentBinding
-import com.zhiyong.tingxie.viewmodel.Status
 
 class FriendIndividualFragment : Fragment() {
 
