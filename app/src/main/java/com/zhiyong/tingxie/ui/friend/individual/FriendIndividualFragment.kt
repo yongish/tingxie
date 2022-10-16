@@ -102,13 +102,14 @@ class FriendIndividualFragment : Fragment() {
       }
     }
 
-    viewModel.status.observe(viewLifecycleOwner) { status ->
-      if (status.equals(Status.ERROR)) {
-        // todo: Display an offline error message on the view, instead of a toast.
-        Toast.makeText(activity, "Network Error on Friends", Toast.LENGTH_LONG).show()
-      }
-    }
+//    viewModel.status.observe(viewLifecycleOwner) { status ->
+//      if (status.equals(Status.ERROR)) {
+//        // todo: Display an offline error message on the view, instead of a toast.
+//        Toast.makeText(activity, "Network Error on FriendIndividualFragment", Toast.LENGTH_LONG).show()
+//      }
+//    }
 
+    // what is this? may delete.
     viewModel.shouldReopen.observe(viewLifecycleOwner) { status ->
       if (status == true) {
         openAddFriendDialog(true)

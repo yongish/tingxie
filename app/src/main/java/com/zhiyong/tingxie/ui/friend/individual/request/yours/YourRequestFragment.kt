@@ -42,7 +42,7 @@ class YourRequestFragment : Fragment() {
     viewModel.status.observe(viewLifecycleOwner, { status ->
       if (status.equals(Status.ERROR)) {
         // todo: Display an offline error message on the view, instead of a toast.
-        Toast.makeText(activity, "Network Error on Friends", Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, "Network Error on YourRequestFragment", Toast.LENGTH_LONG).show()
       }
     })
   }

@@ -1,6 +1,7 @@
 package com.zhiyong.tingxie.ui.friend.individual
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,10 +10,6 @@ import com.zhiyong.tingxie.QuizRepository
 import com.zhiyong.tingxie.viewmodel.Status
 import kotlinx.coroutines.launch
 
-// may delete this
-//data class AddFriendStatus(
-//  val modalOpen: Boolean, val friendExists: Boolean, val status: Status
-//)
 enum class FriendStatus {
   REQUEST, FRIEND, BLOCKED
 }
@@ -29,16 +26,12 @@ open class FriendIndividualViewModel(application: Application) :
   val friends: LiveData<List<TingXieIndividual>>
     get() = _friends
 
-  //  private val _addFriendStatus = MutableLiveData<AddFriendStatus>()
-//  val addFriendStatus: LiveData<AddFriendStatus>
-//    get() = _addFriendStatus
   private val _shouldReopen = MutableLiveData<Boolean>()
   val shouldReopen: LiveData<Boolean>
     get() = _shouldReopen
 
   init {
     getIndividuals()
-//    _addFriendStatus.value = AddFriendStatus(false, false, Status.DONE)
     _shouldReopen.value = false
   }
 
@@ -67,16 +60,14 @@ open class FriendIndividualViewModel(application: Application) :
       }
     } catch (e: NoSuchElementException) {
       _shouldReopen.value = true
+    } catch (e: Exception) {
+      Log.e("FIVM cISR", e.message.toString())
     }
   }
 
   fun closeAddFriendModal() {
     _shouldReopen.value = false
   }
-
-//  fun addFriendRequest(email: String) = viewModelScope.launch {
-//    repository.addFriend(TingXieIndividual(email, "", FriendStatus.REQUEST.name))
-//  }
 
   fun addIndividual(individual: TingXieIndividual) {
     viewModelScope.launch {
