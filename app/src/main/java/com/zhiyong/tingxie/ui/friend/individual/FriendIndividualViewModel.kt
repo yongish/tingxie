@@ -74,10 +74,8 @@ open class FriendIndividualViewModel(application: Application) :
     _shouldReopen.value = false
   }
 
-  fun addIndividual(individual: TingXieIndividual) {
-    viewModelScope.launch {
-      repository.addFriend(individual)
-    }
+  fun addIndividual(individual: TingXieIndividual) = viewModelScope.launch {
+    repository.addFriend(individual)
   }
 
   fun deleteIndividual(email: String) {

@@ -71,7 +71,7 @@ interface Service {
   @POST("friends")
   suspend fun postFriend(@Body individual: NetworkIndividual): NetworkIndividual
 
-  @DELETE("friends/userEmail/{userEmail}/friendEmail/{email}")
+  @DELETE("friends/{userEmail}/friendEmail/{email}")
   suspend fun deleteFriend(
     @Path("userEmail") userEmail: String,
     @Path("email") email: String
