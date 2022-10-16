@@ -1,6 +1,7 @@
 package com.zhiyong.tingxie.ui.friend.individual.request.yours
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -24,6 +25,8 @@ class YourViewModel(application: Application) : AndroidViewModel(application) {
   val requests: LiveData<List<TingXieIndividual>>
     get() = _requests
 
+  private val _shouldReopen = MutableLiveData<Boolean>()
+
   init {
     viewModelScope.launch {
       _status.value = Status.LOADING
@@ -36,6 +39,24 @@ class YourViewModel(application: Application) : AndroidViewModel(application) {
         _status.value = Status.ERROR
       }
     }
+  }
+
+  fun checkIfShouldReopen(email: String) = viewModelScope.launch {
+    try {
+      val userExists = repository.checkUserExists(email)
+      _shouldReopen.value = !userExists
+      if (userExists) {
+        repository.addFriend(TingXieIndividual(email, "", FriendStatus.REQUEST.name))
+      }
+    } catch (e: NoSuchElementException) {
+      _shouldReopen.value = true
+    } catch (e: Exception) {
+      Log.e("FIVM cISR", e.message.toString())
+    }
+  }
+
+  fun closeAddFriendModal() {
+    _shouldReopen.value = false
   }
 
   fun addRequest(request: TingXieIndividual) =

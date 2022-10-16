@@ -17,7 +17,8 @@
     <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
     <string name="facebook_application_id" translatable="false">1500181530138959</string>
 
-    <string name="no_friends">You don\'t have any friends yet.\nTap the + button to add a friend and share quizzes.</string>
+    <string name="no_friends">You don\'t have any friends yet.\nGo to "Friend Requests Made" to add a friend and share quizzes.</string>
+    <string name="no_friend_requests">You don\'t have any friends yet.\nTap the + button to add a friend and share quizzes.</string>
     <string name="no_shares">You haven\'t shared this quiz with any friends.\nTap the + button to share it with friends.</string>
     <string name="no_quizzes">You haven\'t added any quizzes.\nTap the + button to add a quiz.</string>
     <string name="no_words">You haven\'t added any words.\nTap the + button to add a word.</string>
