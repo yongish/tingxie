@@ -14,6 +14,10 @@ enum class FriendStatus {
   REQUEST, FRIEND, BLOCKED
 }
 
+enum class Party {
+  SELF, OTHERS
+}
+
 open class FriendIndividualViewModel(application: Application) :
   AndroidViewModel(application) {
   private val repository: QuizRepository = QuizRepository(application)
@@ -39,7 +43,8 @@ open class FriendIndividualViewModel(application: Application) :
     viewModelScope.launch {
       _status.value = Status.LOADING
       try {
-        _friends.value = repository.getFriends(FriendStatus.FRIEND.name)
+        _friends.value = repository.getFriends(Party.SELF.name, FriendStatus.FRIEND.name)
+        Log.d("FIVM", _friends.value!!.map { it.toString() }.toString())
         _status.value = Status.DONE
       } catch (e: Exception) {
         _friends.value = ArrayList()

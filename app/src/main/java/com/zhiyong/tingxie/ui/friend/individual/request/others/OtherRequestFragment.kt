@@ -27,12 +27,12 @@ class OtherRequestFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
 
     viewModel = ViewModelProvider(this)[OtherViewModel::class.java]
-    viewModel.requests.observe(viewLifecycleOwner, { requests ->
+    viewModel.requests.observe(viewLifecycleOwner) { requests ->
       requests?.apply {
         binding.recyclerviewOtherRequests.adapter = OtherRequestAdapter(
-            requests, requireActivity(), viewModel, binding.recyclerviewOtherRequests
+          requests, requireActivity(), viewModel, binding.recyclerviewOtherRequests
         )
       }
-    })
+    }
   }
 }

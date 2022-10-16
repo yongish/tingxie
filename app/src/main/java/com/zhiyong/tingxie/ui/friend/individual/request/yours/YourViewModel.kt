@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.zhiyong.tingxie.QuizRepository
 import com.zhiyong.tingxie.ui.friend.individual.FriendStatus
+import com.zhiyong.tingxie.ui.friend.individual.Party
 import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
 import com.zhiyong.tingxie.viewmodel.Status
 import kotlinx.coroutines.launch
@@ -27,7 +28,8 @@ class YourViewModel(application: Application) : AndroidViewModel(application) {
     viewModelScope.launch {
       _status.value = Status.LOADING
       try {
-        _requests.value = repository.getFriends(FriendStatus.REQUEST.name)
+        _requests.value =
+          repository.getFriends(Party.SELF.name, FriendStatus.REQUEST.name)
         _status.value = Status.DONE
       } catch (e: Exception) {
         _requests.value = arrayListOf()

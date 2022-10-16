@@ -8,7 +8,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.db.*
 import com.zhiyong.tingxie.network.*
 import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
-import com.zhiyong.tingxie.ui.friend.individual.request.others.TingXieOtherIndividualRequest
 import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsAdapter
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
@@ -87,7 +86,7 @@ class QuizRepository(val context: Context) {
       // Send local quizIds to server.
       // Server responds with new remote quizzes and missing remote quizIds.
       val refreshQuizzesResponse = TingXieNetwork.tingxie.refreshQuizzes(
-          email, quizItems.map { NetworkQuizDeleted(it.id, it.status == "CLIENT_DELETED") }
+        email, quizItems.map { NetworkQuizDeleted(it.id, it.status == "CLIENT_DELETED") }
       )
       if (refreshQuizzesResponse.new_quizzes_remote.isNotEmpty()) {
         // Insert these new quizzes into local DB.
@@ -101,17 +100,21 @@ class QuizRepository(val context: Context) {
       if (refreshQuizzesResponse.missing_quiz_ids.isNotEmpty()) {
         // Send missing quizzes to server.
         quizItems.filter { refreshQuizzesResponse.missing_quiz_ids.contains(it.id) }
-          .forEach { TingXieNetwork.tingxie.postQuiz(NetworkCreateQuiz(
-            it.id,
-            it.title,
-            it.totalWords,
-            it.notLearned,
-            it.round,
-            it.date,
-            email,
-            name,
-            "EDITOR"
-          )) }
+          .forEach {
+            TingXieNetwork.tingxie.postQuiz(
+              NetworkCreateQuiz(
+                it.id,
+                it.title,
+                it.totalWords,
+                it.notLearned,
+                it.round,
+                it.date,
+                email,
+                name,
+                "EDITOR"
+              )
+            )
+          }
       }
     }
   }
@@ -134,12 +137,13 @@ class QuizRepository(val context: Context) {
   suspend fun checkUserExists(email: String): Boolean =
     TingXieNetwork.tingxie.checkUserExists(email).toBoolean()
 
-  suspend fun getFriends(friendStatus: String): List<TingXieIndividual> =
-      TingXieNetwork.tingxie.getFriends(email, friendStatus).map { it.asDomainModel() }
+  suspend fun getFriends(party: String, friendStatus: String): List<TingXieIndividual> =
+    TingXieNetwork.tingxie.getFriends(email, party, friendStatus)
+      .map { it.asDomainModel() }
 
   suspend fun addFriend(individual: TingXieIndividual) {
     TingXieNetwork.tingxie.postFriend(
-        NetworkIndividual(email, individual.email, individual.name, individual.status)
+      NetworkIndividual(email, individual.email, individual.name, individual.status)
     )
   }
 
@@ -148,30 +152,18 @@ class QuizRepository(val context: Context) {
   }
 
   suspend fun deleteYourIndividualRequest(email: String) =
-      TingXieNetwork.tingxie.deleteYourIndividualRequest(this.email, email)
-
-  suspend fun getOtherIndividualRequests(): List<TingXieOtherIndividualRequest> {
-    try {
-      TingXieNetwork.tingxie.getOtherIndividualRequests(email)
-    } catch (e: Exception) {
-
-    }
-    return arrayListOf(
-        TingXieOtherIndividualRequest("e0@email.com", "f0", 20001010),
-        TingXieOtherIndividualRequest("e1@email.com", "f1", 20101020)
-    )
-  }
+    TingXieNetwork.tingxie.deleteYourIndividualRequest(this.email, email)
 
   suspend fun acceptOtherIndividualRequest(email: String) =
-      TingXieNetwork.tingxie.putOtherIndividualRequest(email, this.email, true)
+    TingXieNetwork.tingxie.putOtherIndividualRequest(email, this.email, true)
 
   suspend fun rejectOtherIndividualRequest(email: String) =
-      TingXieNetwork.tingxie.putOtherIndividualRequest(email, this.email, false)
+    TingXieNetwork.tingxie.putOtherIndividualRequest(email, this.email, false)
 
   suspend fun getShares(quizId: Long): List<TingXieShareIndividual> =
-      TingXieNetwork.tingxie.getShares(email, quizId).map {
-        TingXieShareIndividual(it.email, it.name, it.isShared, it.role)
-      }
+    TingXieNetwork.tingxie.getShares(email, quizId).map {
+      TingXieShareIndividual(it.email, it.name, it.isShared, it.role)
+    }
 //    return arrayListOf(
 //        TingXieShareIndividual("yongish@gmail.com", "firstZ", "lastZ", true, EnumQuizRole.EDITOR),
 //        TingXieShareIndividual("test0email.com", "first0", "last0", false, EnumQuizRole.EDITOR),
@@ -181,9 +173,11 @@ class QuizRepository(val context: Context) {
 //    return arrayListOf()
 
   suspend fun addShare(quizId: Long, shareIndividual: TingXieShareIndividual) {
-    TingXieNetwork.tingxie.postShare(email, quizId, NetworkShare(
+    TingXieNetwork.tingxie.postShare(
+      email, quizId, NetworkShare(
         shareIndividual.email, shareIndividual.name, true, shareIndividual.role
-    ))
+      )
+    )
   }
 
   suspend fun shareAll(quizId: Long, shared: Boolean): List<TingXieShareIndividual> {
@@ -215,9 +209,9 @@ class QuizRepository(val context: Context) {
   init {
     for (level in 1..6) {
       val wordArray = JSONArray(context.assets
-          .open("hsk-vocab-json/hsk-level-$level.json").bufferedReader().use {
-            it.readText()
-          }
+        .open("hsk-vocab-json/hsk-level-$level.json").bufferedReader().use {
+          it.readText()
+        }
       )
       val hskWords: MutableList<HskWordsAdapter.HskWord> = mutableListOf()
       for (i in 0 until wordArray.length()) {
@@ -240,7 +234,8 @@ class QuizRepository(val context: Context) {
     val unaskedIds = HashSet(wordList.map { word -> word.index })
     // todo: Deduplicate this shared preferences code.
     val sharedPreferences = context.getSharedPreferences("hsk", Context.MODE_PRIVATE)
-    val askedIds = HashSet(sharedPreferences.getStringSet("askedHskIds", setOf())!!.map { id -> id.toInt() })
+    val askedIds = HashSet(
+      sharedPreferences.getStringSet("askedHskIds", setOf())!!.map { id -> id.toInt() })
     unaskedIds.removeAll(askedIds)
     return wordList.filter { it.index in unaskedIds }
   }
@@ -254,7 +249,9 @@ class QuizRepository(val context: Context) {
     val wordList = getHsk(level)
     val ids = HashSet(wordList.map { word -> word.index })
     val sharedPreferences = context.getSharedPreferences("hsk", Context.MODE_PRIVATE)
-    val askedIds = HashSet(sharedPreferences.getStringSet("askedHskIds", setOf())!!.filter { it.toInt() !in ids })
+    val askedIds = HashSet(
+      sharedPreferences.getStringSet("askedHskIds", setOf())!!
+        .filter { it.toInt() !in ids })
     val editor = sharedPreferences.edit()
     editor.putStringSet("askedHskIds", askedIds)
     return editor.commit()
@@ -262,7 +259,8 @@ class QuizRepository(val context: Context) {
 
   fun setAsked(index: Int) {
     val sharedPreferences = context.getSharedPreferences("hsk", Context.MODE_PRIVATE)
-    val askedIds = HashSet(sharedPreferences.getStringSet("askedHskIds", setOf())!!.map { id -> id.toInt() })
+    val askedIds = HashSet(
+      sharedPreferences.getStringSet("askedHskIds", setOf())!!.map { id -> id.toInt() })
     askedIds.add(index)
     val editor = sharedPreferences.edit()
     editor.putStringSet("askedHskIds", HashSet(askedIds.map { id -> id.toString() }))
@@ -351,9 +349,9 @@ class QuizRepository(val context: Context) {
     }
     executor.execute {
       mQuizDao.updateQuizPinyin(
-          quizPinyin.quizId,
-          quizPinyin.pinyinString,
-          quizPinyin.asked
+        quizPinyin.quizId,
+        quizPinyin.pinyinString,
+        quizPinyin.asked
       )
     }
   }

@@ -61,9 +61,11 @@ interface Service {
   @GET("userExists/{email}")
   suspend fun checkUserExists(@Path("email") email: String): String
 
-  @GET("friends/{email}/status/{status}")
+  @GET("friends/{email}/party/{party}/status/{status}")
   suspend fun getFriends(
-    @Path("email") email: String, @Path("status") status: String
+    @Path("email") email: String,
+    @Path("party") party: String,
+    @Path("status") status: String
   ): List<NetworkIndividual>
 
   @POST("friends")
@@ -80,10 +82,6 @@ interface Service {
     @Path("userEmail") userEmail: String,
     @Path("otherEmail") otherEmail: String
   ): Boolean
-
-  @GET("otherIndividualRequests")
-  suspend fun getOtherIndividualRequests(@Query("email") email: String)
-      : NetworkOtherIndividualRequestContainer
 
   @PUT("otherIndividualRequest/requesterEmail/{userEmail}/responderEmail/{otherEmail}/accept/{accept}")
   suspend fun putOtherIndividualRequest(
