@@ -147,12 +147,8 @@ class QuizRepository(val context: Context) {
     )
   }
 
-  suspend fun deleteFriend(email: String) {
+  suspend fun deleteFriend(email: String) =
     TingXieNetwork.tingxie.deleteFriend(this.email, email)
-  }
-
-  suspend fun deleteYourIndividualRequest(email: String) =
-    TingXieNetwork.tingxie.deleteYourIndividualRequest(this.email, email)
 
   suspend fun acceptOtherIndividualRequest(email: String) =
     TingXieNetwork.tingxie.putOtherIndividualRequest(email, this.email, true)

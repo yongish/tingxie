@@ -42,11 +42,16 @@ class YourRequestFragment : Fragment() {
     binding.fab.setOnClickListener { openAddFriendDialog() }
 
     viewModel = ViewModelProvider(this)[YourViewModel::class.java]
-    viewModel.requests.observe(viewLifecycleOwner) { requests ->
-      requests?.apply {
-        binding.recyclerviewYourRequests.adapter = YourRequestAdapter(
-          requests, viewModel, binding.recyclerviewYourRequests
-        )
+    val adapter = YourRequestAdapter(viewModel, binding.recyclerviewYourRequests)
+    binding.recyclerviewYourRequests.adapter = adapter
+    viewModel.requests.observe(viewLifecycleOwner) {
+      it?.let {
+        adapter.requests = it
+        if (it.isEmpty()) {
+          binding.emptyView.visibility = View.VISIBLE
+        } else {
+          binding.emptyView.visibility = View.INVISIBLE
+        }
       }
     }
 

@@ -75,13 +75,7 @@ interface Service {
   suspend fun deleteFriend(
     @Path("userEmail") userEmail: String,
     @Path("email") email: String
-  ): Boolean
-
-  @DELETE("yourIndividualRequest/userEmail/{userEmail}/otherEmail/{otherEmail}")
-  suspend fun deleteYourIndividualRequest(
-    @Path("userEmail") userEmail: String,
-    @Path("otherEmail") otherEmail: String
-  ): Boolean
+  ): String
 
   @PUT("otherIndividualRequest/requesterEmail/{userEmail}/responderEmail/{otherEmail}/accept/{accept}")
   suspend fun putOtherIndividualRequest(

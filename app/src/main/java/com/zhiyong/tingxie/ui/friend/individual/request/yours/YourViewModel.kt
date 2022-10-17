@@ -62,7 +62,6 @@ class YourViewModel(application: Application) : AndroidViewModel(application) {
   fun addRequest(request: TingXieIndividual) =
     viewModelScope.launch { repository.addFriend(request) }
 
-  fun deleteRequest(email: String) {
-    viewModelScope.launch { repository.deleteYourIndividualRequest(email) }
-  }
+  fun deleteRequest(email: String) =
+    viewModelScope.launch { repository.deleteFriend(email) }
 }
