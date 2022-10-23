@@ -6,7 +6,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -66,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
 
         mQuizViewModel.getAllQuizItems().observe(this, quizItems -> {
             adapter.setQuizItems(quizItems, recyclerView);
-            // todo: Uncomment this.
             if (!this.quizItems.equals(quizItems)) {
                 this.quizItems = quizItems;
                 mQuizViewModel.refreshQuizzes(quizItems);

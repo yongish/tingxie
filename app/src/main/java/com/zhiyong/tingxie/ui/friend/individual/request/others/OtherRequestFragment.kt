@@ -26,6 +26,10 @@ class OtherRequestFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
+    binding.swipeLayout.setOnRefreshListener {
+      viewModel.refreshRequests(binding.swipeLayout)
+    }
+
     viewModel = ViewModelProvider(this)[OtherViewModel::class.java]
     val adapter = OtherRequestAdapter(requireActivity(), viewModel, binding.recyclerviewOtherRequests)
     binding.recyclerviewOtherRequests.adapter = adapter
