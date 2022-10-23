@@ -85,11 +85,15 @@ data class NetworkCreateWord(
 data class NetworkIndividualContainer(val individuals: List<NetworkIndividual>)
 
 fun NetworkIndividual.asDomainModel(): TingXieIndividual =
-  TingXieIndividual(friend_email, name, status)
+  TingXieIndividual(to_email, to_name, status)
 
 @JsonClass(generateAdapter = true)
 data class NetworkIndividual(
-  val self_email: String, val friend_email: String, val name: String, val status: String
+  val from_email: String,
+  val to_email: String,
+  val from_name: String,
+  val to_name: String,
+  val status: String
 )
 
 @JsonClass(generateAdapter = true)

@@ -47,6 +47,8 @@ class YourViewModel(application: Application) : AndroidViewModel(application) {
       _shouldReopen.value = !userExists
       if (userExists) {
         repository.addFriend(TingXieIndividual(email, "", FriendStatus.REQUEST.name))
+        _requests.value =
+          repository.getFriends(Party.SELF.name, FriendStatus.REQUEST.name)
       }
     } catch (e: NoSuchElementException) {
       _shouldReopen.value = true

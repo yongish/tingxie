@@ -29,7 +29,7 @@ class FriendActivity : AppCompatActivity() {
     TabLayoutMediator(binding.tabLayout, binding.vpFriend) { tab, position ->
       when (position) {
         0 -> tab.text = "Friends"
-        1 -> tab.text = "Friend requests made"
+        1 -> tab.text = "Pending requests"
         2 -> tab.text = "Friend requests received"
       }
     }.attach()
@@ -55,7 +55,7 @@ class FriendActivity : AppCompatActivity() {
           Add other 听写 users as friends and share quizzes with them.
           The various tabs in this page are as follows.<br /><br />
           <b>Friends</b>: View and manage your friends here.<br /><br />
-          <b>Friend requests made</b>: See your pending friend requests to others.<br /><br />
+          <b>Pending requests</b>: See your pending friend requests to others.<br /><br />
           <b>Friend requests received</b>: Grant or deny friend requests other users made to you.<br /><br />
           Need help? Email Zhiyong with your feedback and questions.
       """, HtmlCompat.FROM_HTML_MODE_LEGACY))

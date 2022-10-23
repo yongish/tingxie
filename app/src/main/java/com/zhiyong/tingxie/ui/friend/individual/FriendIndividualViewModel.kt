@@ -30,10 +30,6 @@ open class FriendIndividualViewModel(application: Application) :
     get() = _friends
 
   init {
-    getIndividuals()
-  }
-
-  private fun getIndividuals() {
     viewModelScope.launch {
       _status.value = Status.LOADING
       try {

@@ -27,11 +27,16 @@ class OtherRequestFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
 
     viewModel = ViewModelProvider(this)[OtherViewModel::class.java]
-    viewModel.requests.observe(viewLifecycleOwner) { requests ->
-      requests?.apply {
-        binding.recyclerviewOtherRequests.adapter = OtherRequestAdapter(
-          requests, requireActivity(), viewModel, binding.recyclerviewOtherRequests
-        )
+    val adapter = OtherRequestAdapter(requireActivity(), viewModel, binding.recyclerviewOtherRequests)
+    binding.recyclerviewOtherRequests.adapter = adapter
+    viewModel.requests.observe(viewLifecycleOwner) {
+      it?.let {
+        adapter.requests = it
+        if (it.isEmpty()) {
+          binding.emptyView.visibility = View.VISIBLE
+        } else {
+          binding.emptyView.visibility = View.INVISIBLE
+        }
       }
     }
   }

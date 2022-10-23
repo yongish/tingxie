@@ -27,7 +27,8 @@ class OtherViewModel(application: Application) : AndroidViewModel(application) {
     viewModelScope.launch {
       _status.value = Status.LOADING
       try {
-        _requests.value = repository.getFriends(Party.OTHERS.name, FriendStatus.REQUEST.name)
+        _requests.value =
+          repository.getFriends(Party.OTHERS.name, FriendStatus.REQUEST.name)
         _status.value = Status.DONE
       } catch (e: Exception) {
         _requests.value = arrayListOf()
@@ -36,11 +37,19 @@ class OtherViewModel(application: Application) : AndroidViewModel(application) {
     }
   }
 
-  fun acceptRequest(email: String) {
-    viewModelScope.launch { repository.acceptOtherIndividualRequest(email) }
-  }
+  fun acceptRequest(request: TingXieIndividual) =
+    viewModelScope.launch {
+      repository.updateFriend(
+        TingXieIndividual(
+          request.email,
+          request.name,
+          "FRIEND"
+        )
+      )
+      _requests.value =
+        repository.getFriends(Party.OTHERS.name, FriendStatus.REQUEST.name)
+    }
 
-  fun rejectRequest(email: String) {
-    viewModelScope.launch { repository.rejectOtherIndividualRequest(email) }
-  }
+  fun rejectRequest(email: String) =
+    viewModelScope.launch { repository.deleteFriend(email) }
 }

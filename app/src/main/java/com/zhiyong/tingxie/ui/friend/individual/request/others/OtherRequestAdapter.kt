@@ -10,11 +10,16 @@ import com.zhiyong.tingxie.databinding.RecyclerviewRequestIndividualOtherBinding
 import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
 
 class OtherRequestAdapter(
-  private val requests: List<TingXieIndividual>,
   private val context: Context,
   val viewModel: OtherViewModel,
   val recyclerView: RecyclerView
 ) : RecyclerView.Adapter<OtherRequestAdapter.ViewHolder>() {
+
+  var requests = listOf<TingXieIndividual>()
+  set(value) {
+    field = value
+    notifyDataSetChanged()
+  }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
     ViewHolder(
@@ -29,17 +34,26 @@ class OtherRequestAdapter(
     holder.bind(request)
     holder.btnRespond.setOnClickListener {
       val builder = AlertDialog.Builder(context)
+      val adapterPosition = holder.adapterPosition
       builder.setMessage(
         "Accept or reject friend request from " + String.format(
           context.getString(R.string.username),
-          request.name,
+          request.name.ifEmpty { "No Name" }
         )
       ).setTitle("Respond to friend request")
         .setPositiveButton("Accept") { _, _ ->
-          viewModel.acceptRequest(request.email)
+          viewModel.acceptRequest(request)
+          requests = requests.subList(0, adapterPosition) + request + requests.subList(
+            adapterPosition,
+            requests.size
+          )
         }
         .setNegativeButton("Reject") { _, _ ->
           viewModel.rejectRequest(request.email)
+          requests = requests.subList(0, adapterPosition) + requests.subList(
+            adapterPosition + 1,
+            requests.size
+          )
         }
         .create().show()
     }

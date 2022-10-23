@@ -71,18 +71,20 @@ interface Service {
   @POST("friends")
   suspend fun postFriend(@Body individual: NetworkIndividual): NetworkIndividual
 
-  @DELETE("friends/{userEmail}/friendEmail/{email}")
-  suspend fun deleteFriend(
-    @Path("userEmail") userEmail: String,
-    @Path("email") email: String
-  ): String
+  @PUT("friends")
+  suspend fun putFriend(@Body friend: NetworkIndividual): NetworkIndividual
 
-  @PUT("otherIndividualRequest/requesterEmail/{userEmail}/responderEmail/{otherEmail}/accept/{accept}")
-  suspend fun putOtherIndividualRequest(
-    @Path("requesterEmail") requesterEmail: String,
-    @Path("responderEmail") responderEmail: String,
-    @Path("accept") accept: Boolean
-  ): Boolean
+  @DELETE("friends/{from_email}/to_email/{to_email}")
+  suspend fun deleteFriend(
+    @Path("from_email") from_email: String,
+    @Path("to_email") to_email: String
+  ): String
+//  @PUT("otherIndividualRequest/requesterEmail/{userEmail}/responderEmail/{otherEmail}/accept/{accept}")
+//  suspend fun putOtherIndividualRequest(
+//    @Path("requesterEmail") requesterEmail: String,
+//    @Path("responderEmail") responderEmail: String,
+//    @Path("accept") accept: Boolean
+//  ): Boolean
 }
 
 object TingXieNetwork {

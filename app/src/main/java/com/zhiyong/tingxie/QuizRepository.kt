@@ -141,20 +141,24 @@ class QuizRepository(val context: Context) {
     TingXieNetwork.tingxie.getFriends(email, party, friendStatus)
       .map { it.asDomainModel() }
 
-  suspend fun addFriend(individual: TingXieIndividual) {
+  suspend fun addFriend(individual: TingXieIndividual) =
     TingXieNetwork.tingxie.postFriend(
-      NetworkIndividual(email, individual.email, individual.name, individual.status)
+      NetworkIndividual(email, individual.email, name, individual.name, individual.status)
     )
-  }
+
+  suspend fun updateFriend(individual: TingXieIndividual) =
+    TingXieNetwork.tingxie.putFriend(
+      NetworkIndividual(individual.email, email, name, individual.name, individual.status)
+    )
 
   suspend fun deleteFriend(email: String) =
     TingXieNetwork.tingxie.deleteFriend(this.email, email)
 
-  suspend fun acceptOtherIndividualRequest(email: String) =
-    TingXieNetwork.tingxie.putOtherIndividualRequest(email, this.email, true)
-
-  suspend fun rejectOtherIndividualRequest(email: String) =
-    TingXieNetwork.tingxie.putOtherIndividualRequest(email, this.email, false)
+//  suspend fun acceptOtherIndividualRequest(email: String) =
+//    TingXieNetwork.tingxie.putOtherIndividualRequest(email, this.email, true)
+//
+//  suspend fun rejectOtherIndividualRequest(email: String) =
+//    TingXieNetwork.tingxie.putOtherIndividualRequest(email, this.email, false)
 
   suspend fun getShares(quizId: Long): List<TingXieShareIndividual> =
     TingXieNetwork.tingxie.getShares(email, quizId).map {
