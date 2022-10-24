@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     private QuizViewModel mQuizViewModel;
     RecyclerView recyclerView;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     private List<QuizItem> quizItems = new ArrayList<>();
 
@@ -75,6 +77,9 @@ public class MainActivity extends AppCompatActivity {
                 emptyView.setVisibility(View.INVISIBLE);
             }
         });
+
+        swipeRefreshLayout = findViewById(R.id.swipe_layout);
+        swipeRefreshLayout.setOnRefreshListener(() -> mQuizViewModel.refreshQuizzes(quizItems));
 
 //        mQuizViewModel.getEventNetworkError().observe(this, isNetworkError -> {
 //            if (isNetworkError) onNetworkError();

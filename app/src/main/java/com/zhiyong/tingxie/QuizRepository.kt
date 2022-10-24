@@ -47,6 +47,7 @@ class QuizRepository(val context: Context) {
     }
   }
 
+  // stopped here. next step is to request from remote, not local. Then sync with local.
   val quizzes: LiveData<List<QuizItem>> = Transformations.map(mQuizDao.allQuizItems) {
     it.asDomainModel()
   }

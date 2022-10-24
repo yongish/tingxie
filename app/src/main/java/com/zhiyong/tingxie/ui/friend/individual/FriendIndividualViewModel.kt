@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.zhiyong.tingxie.QuizRepository
 import com.zhiyong.tingxie.viewmodel.Status
 import kotlinx.coroutines.launch
@@ -60,4 +61,21 @@ open class FriendIndividualViewModel(application: Application) :
       }
     }
   }
+
+  fun refreshFriends(swipeRefreshLayout: SwipeRefreshLayout) =
+    viewModelScope.launch {
+      _status.value = Status.LOADING
+      try {
+        _friends.value = repository.getFriends(Party.SELF.name, FriendStatus.FRIEND.name)
+        _status.value = Status.DONE
+      } catch (e: Exception) {
+        _friends.value = ArrayList()
+        when (e) {
+          is NoSuchElementException -> _status.value = Status.DONE
+          else -> _status.value = Status.ERROR
+        }
+      } finally {
+        swipeRefreshLayout.isRefreshing = false
+      }
+    }
 }

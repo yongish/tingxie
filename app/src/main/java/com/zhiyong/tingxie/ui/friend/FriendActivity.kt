@@ -3,6 +3,7 @@ package com.zhiyong.tingxie.ui.friend
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.text.HtmlCompat
 import com.google.android.material.tabs.TabLayoutMediator
@@ -16,6 +17,11 @@ class FriendActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+
+    if (!Util.isOnline(this)) {
+      Toast.makeText(this, "Internet connection required.", Toast.LENGTH_LONG).show()
+    }
+
     setContentView(R.layout.friend_activity)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
 

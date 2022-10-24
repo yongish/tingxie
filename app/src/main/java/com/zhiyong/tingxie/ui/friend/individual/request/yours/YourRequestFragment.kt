@@ -38,8 +38,11 @@ class YourRequestFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-
     binding.fab.setOnClickListener { openAddFriendDialog() }
+
+    binding.swipeLayout.setOnRefreshListener {
+      viewModel.refreshRequests(binding.swipeLayout)
+    }
 
     viewModel = ViewModelProvider(this)[YourViewModel::class.java]
     val adapter = YourRequestAdapter(viewModel, binding.recyclerviewYourRequests)

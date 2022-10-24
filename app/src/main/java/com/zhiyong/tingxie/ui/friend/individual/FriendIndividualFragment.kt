@@ -28,6 +28,10 @@ class FriendIndividualFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
+    binding.swipeLayout.setOnRefreshListener {
+      viewModel.refreshFriends(binding.swipeLayout)
+    }
+
     viewModel = ViewModelProvider(this)[FriendIndividualViewModel::class.java]
     val adapter = FriendIndividualAdapter(
       requireActivity(), viewModel, binding.recyclerviewIndividuals
