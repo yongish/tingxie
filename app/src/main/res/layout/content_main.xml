@@ -9,18 +9,12 @@
     tools:context="com.zhiyong.tingxie.ui.main.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_layout"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerview_main"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            tools:listitem="@layout/recyclerview_quiz" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        tools:listitem="@layout/recyclerview_quiz" />
 
     <TextView
         android:id="@+id/empty_view"

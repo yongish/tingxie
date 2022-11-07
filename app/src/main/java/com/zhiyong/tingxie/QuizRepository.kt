@@ -52,73 +52,63 @@ class QuizRepository(val context: Context) {
     it.asDomainModel()
   }
 
-  private fun syncLocalDeletedRows() {
-
-  }
-
-  private fun syncLocalInsertedRows() {
-
-  }
-
-  private fun syncLocalUpdatedRows() {
-
-  }
-
-  private fun syncRemoteDeletedRows() {
-
-  }
-
-  private fun syncRemoteInsertedRows() {
-
-  }
-
-  private fun syncRemoteUpdatedRows() {
-
-  }
-
   suspend fun putToken(uid: String, email: String, token: String) {
     withContext(Dispatchers.IO) {
       TingXieNetwork.tingxie.putToken(NetworkToken(uid, email, token))
     }
   }
 
-  suspend fun refreshQuizzes(quizItems: List<QuizItem>) {
-    withContext(Dispatchers.IO) {
-      // Send local quizIds to server.
-      // Server responds with new remote quizzes and missing remote quizIds.
-      val refreshQuizzesResponse = TingXieNetwork.tingxie.refreshQuizzes(
-        email, quizItems.map { NetworkQuizDeleted(it.id, it.status == "CLIENT_DELETED") }
-      )
-      if (refreshQuizzesResponse.new_quizzes_remote.isNotEmpty()) {
-        // Insert these new quizzes into local DB.
-        mQuizDao.insertAll(refreshQuizzesResponse.new_quizzes_remote.map {
-          Quiz(it.quiz_id, it.date, it.title, it.total_words, it.not_learned, it.round)
-        })
-      }
-      if (refreshQuizzesResponse.deleted_quiz_ids.isNotEmpty()) {
-        mQuizDao.setQuizDeleted(refreshQuizzesResponse.deleted_quiz_ids)
-      }
-      if (refreshQuizzesResponse.missing_quiz_ids.isNotEmpty()) {
-        // Send missing quizzes to server.
-        quizItems.filter { refreshQuizzesResponse.missing_quiz_ids.contains(it.id) }
-          .forEach {
-            TingXieNetwork.tingxie.postQuiz(
-              NetworkCreateQuiz(
-                it.id,
-                it.title,
-                it.totalWords,
-                it.notLearned,
-                it.round,
-                it.date,
-                email,
-                name,
-                "EDITOR"
-              )
-            )
-          }
-      }
-    }
-  }
+  suspend fun postQuiz(quiz: Quiz) = TingXieNetwork.tingxie.postQuiz(
+    NetworkCreateQuiz(
+      quiz.id,
+      quiz.title,
+      quiz.totalWords,
+      quiz.notLearned,
+      quiz.round,
+      quiz.date,
+      email,
+      name,
+      "EDITOR"
+    )
+  )
+
+//  suspend fun refreshQuizzes(quizItems: List<QuizItem>) {
+//    withContext(Dispatchers.IO) {
+//      // Send local quizIds to server.
+//      // Server responds with new remote quizzes and missing remote quizIds.
+//      val refreshQuizzesResponse = TingXieNetwork.tingxie.refreshQuizzes(
+//        email, quizItems.map { NetworkQuizDeleted(it.id, it.status == "CLIENT_DELETED") }
+//      )
+//      if (refreshQuizzesResponse.new_quizzes_remote.isNotEmpty()) {
+//        // Insert these new quizzes into local DB.
+//        mQuizDao.insertAll(refreshQuizzesResponse.new_quizzes_remote.map {
+//          Quiz(it.quiz_id, it.date, it.title, it.total_words, it.not_learned, it.round)
+//        })
+//      }
+//      if (refreshQuizzesResponse.deleted_quiz_ids.isNotEmpty()) {
+//        mQuizDao.setQuizDeleted(refreshQuizzesResponse.deleted_quiz_ids)
+//      }
+//      if (refreshQuizzesResponse.missing_quiz_ids.isNotEmpty()) {
+//        // Send missing quizzes to server.
+//        quizItems.filter { refreshQuizzesResponse.missing_quiz_ids.contains(it.id) }
+//          .forEach {
+//            TingXieNetwork.tingxie.postQuiz(
+//              NetworkCreateQuiz(
+//                it.id,
+//                it.title,
+//                it.totalWords,
+//                it.notLearned,
+//                it.round,
+//                it.date,
+//                email,
+//                name,
+//                "EDITOR"
+//              )
+//            )
+//          }
+//      }
+//    }
+//  }
 
   suspend fun refreshWordItemsOfQuiz(quizId: Long, wordItemsOfQuiz: List<WordItem>) {
     withContext(Dispatchers.IO) {
@@ -144,12 +134,24 @@ class QuizRepository(val context: Context) {
 
   suspend fun addFriend(individual: TingXieIndividual) =
     TingXieNetwork.tingxie.postFriend(
-      NetworkIndividual(email, individual.email, name, individual.name, individual.status)
+      NetworkIndividual(
+        email,
+        individual.email,
+        name,
+        individual.name,
+        individual.status
+      )
     )
 
   suspend fun updateFriend(individual: TingXieIndividual) =
     TingXieNetwork.tingxie.putFriend(
-      NetworkIndividual(individual.email, email, name, individual.name, individual.status)
+      NetworkIndividual(
+        individual.email,
+        email,
+        name,
+        individual.name,
+        individual.status
+      )
     )
 
   suspend fun deleteFriend(email: String) =

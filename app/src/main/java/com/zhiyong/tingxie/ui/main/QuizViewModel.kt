@@ -13,7 +13,6 @@ import com.zhiyong.tingxie.ui.word.WordItem
 import com.zhiyong.tingxie.viewmodel.UpdateQuizViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.IOException
 
 class QuizViewModel(application: Application) : UpdateQuizViewModel(application) {
     val allQuizItems: LiveData<List<QuizItem>> = mRepository.quizzes
@@ -37,19 +36,19 @@ class QuizViewModel(application: Application) : UpdateQuizViewModel(application)
         }
     }
 
-    fun refreshQuizzes(quizItems: List<QuizItem>) {
-        viewModelScope.launch {
-            try {
-                repository.refreshQuizzes(quizItems)
-                _eventNetworkError.value = false
-                _isNetworkErrorShown.value = false
-            } catch (networkError: IOException) {
-                if (quizzes.value.isNullOrEmpty()) {
-                    _eventNetworkError.value = true
-                }
-            }
-        }
-    }
+//    fun refreshQuizzes(quizItems: List<QuizItem>) {
+//        viewModelScope.launch {
+//            try {
+//                repository.refreshQuizzes(quizItems)
+//                _eventNetworkError.value = false
+//                _isNetworkErrorShown.value = false
+//            } catch (networkError: IOException) {
+//                if (quizzes.value.isNullOrEmpty()) {
+//                    _eventNetworkError.value = true
+//                }
+//            }
+//        }
+//    }
 
     fun onNetworkErrorShown() {
         _isNetworkErrorShown.value = true
@@ -60,6 +59,8 @@ class QuizViewModel(application: Application) : UpdateQuizViewModel(application)
             mRepository.insertQuiz(quiz)
         }
     }
+
+    fun postQuiz(quizItem: QuizItem) = viewModelScope.launch { mRepository.postQuiz(quiz) }
 
     fun insertQuizFuture(quiz: Quiz?): Long {
         val quizIdFuture = mRepository.insertQuizFuture(quiz)

@@ -22,7 +22,6 @@ import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.ui.main.QuizItem;
-import com.zhiyong.tingxie.ui.main.QuizStatus;
 
 import java.util.List;
 import java.util.Locale;
@@ -110,8 +109,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
 
         final Quiz quizCopy = new Quiz(
                 quizItem.getId(), quizItem.getDate(), quizItem.getTitle(),
-                quizItem.getTotalWords(), quizItem.getNotLearned(), quizItem.getRound(),
-                quizItem.getStatus().toString()
+                quizItem.getTotalWords(), quizItem.getNotLearned(), quizItem.getRound()
         );
         Snackbar snackbar = Snackbar
                 .make(recyclerView, "Removed word", Snackbar.LENGTH_LONG)
@@ -134,8 +132,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         quizItem.setRound(1);
         viewModel.updateQuiz(new Quiz(
                 quizItem.getId(), quizItem.getDate(), quizItem.getTitle(),
-                quizItem.getTotalWords(), quizItem.getNotLearned(), quizItem.getRound(),
-                quizItem.getStatus().toString()
+                quizItem.getTotalWords(), quizItem.getNotLearned(), quizItem.getRound()
         ));
         notifyItemRemoved(adapterPosition);
     }

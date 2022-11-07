@@ -82,8 +82,8 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         if (mQuizItems != null) {
             final QuizItem current = mQuizItems.get(i);
             QuizItem quizItem = new QuizItem(current.getId(), current.getDate(), current.getTitle(),
-                    current.getTotalWords(), current.getNotLearned(), current.getRound(),
-                    current.getStatus());
+                    current.getTotalWords(), current.getNotLearned(), current.getRound()
+                    );
 
             String displayDate = String.valueOf(current.getDate());
             try {
@@ -149,8 +149,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
 
                         viewModel.updateQuiz(new Quiz(
                                 newItem.getId(), newItem.getDate(), newItem.getTitle(),
-                                newItem.getTotalWords(), newItem.getNotLearned(), newItem.getRound(),
-                                newItem.getStatus()
+                                newItem.getTotalWords(), newItem.getNotLearned(), newItem.getRound()
                         ));
 
                         InputMethodManager inputManager = (InputMethodManager)
@@ -268,7 +267,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                         // Reinsert deleted quiz, question, quiz_pinyin rows.
                         Quiz quiz = new Quiz(quizId, quizItem.getDate(), quizItem.getTitle(),
                                 quizItem.getTotalWords(), quizItem.getNotLearned(),
-                                quizItem.getRound(), quizItem.getStatus());
+                                quizItem.getRound());
                         viewModel.insertQuiz(quiz);
                         viewModel.insertQuestions(getQuestionsOfQuiz(quizId));
                         viewModel.addWords(quizId, deletedWordItems);

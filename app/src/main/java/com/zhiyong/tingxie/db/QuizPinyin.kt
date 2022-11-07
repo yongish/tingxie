@@ -12,8 +12,7 @@ data class QuizPinyin(
     @ColumnInfo(name = "quiz_id") @NonNull val quizId: Long,
     @ColumnInfo(name = "pinyin_string") @NonNull val pinyinString: String,
     @ColumnInfo(name = "word_string") @NonNull val wordString: String,
-    @NonNull val asked: Boolean,
-    @NonNull val status: String = "NOT_DELETED",
+    @NonNull val asked: Boolean
     ) {
     @Ignore
     constructor(quizId: Long, pinyinString: String, wordString: String, asked: Boolean):

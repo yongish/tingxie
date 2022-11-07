@@ -37,9 +37,6 @@ public class MainActivity extends AppCompatActivity {
 
     private QuizViewModel mQuizViewModel;
     RecyclerView recyclerView;
-    SwipeRefreshLayout swipeRefreshLayout;
-
-    private List<QuizItem> quizItems = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,19 +64,24 @@ public class MainActivity extends AppCompatActivity {
 
         mQuizViewModel.getAllQuizItems().observe(this, quizItems -> {
             adapter.setQuizItems(quizItems, recyclerView);
-            if (!this.quizItems.equals(quizItems)) {
-                this.quizItems = quizItems;
-                mQuizViewModel.refreshQuizzes(quizItems);
-            }
             if (quizItems.isEmpty()) {
                 emptyView.setVisibility(View.VISIBLE);
             } else {
                 emptyView.setVisibility(View.INVISIBLE);
             }
+
+            // POST quizzes.
+            for (QuizItem quizItem : quizItems) {
+                mQuizViewModel.postQuiz(quizItem);
+            }
+            // POST words.
+            // POST questions.
+
+
         });
 
-        swipeRefreshLayout = findViewById(R.id.swipe_layout);
-        swipeRefreshLayout.setOnRefreshListener(() -> mQuizViewModel.refreshQuizzes(quizItems));
+//        swipeRefreshLayout = findViewById(R.id.swipe_layout);
+//        swipeRefreshLayout.setOnRefreshListener(() -> mQuizViewModel.refreshQuizzes(quizItems));
 
 //        mQuizViewModel.getEventNetworkError().observe(this, isNetworkError -> {
 //            if (isNetworkError) onNetworkError();

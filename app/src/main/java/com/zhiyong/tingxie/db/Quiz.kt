@@ -3,7 +3,6 @@ package com.zhiyong.tingxie.db
 import androidx.annotation.NonNull
 import androidx.room.*
 import com.zhiyong.tingxie.ui.main.QuizItem
-import com.zhiyong.tingxie.ui.main.QuizStatus
 
 @Entity(indices = [Index("id")])
 data class Quiz (
@@ -15,8 +14,7 @@ data class Quiz (
     @NonNull val title: String = "No title",
     @ColumnInfo(name = "total_words") @NonNull val totalWords: Int = 0,
     @ColumnInfo(name = "not_learned") @NonNull val notLearned: Int = 0,
-    @NonNull val round: Int = 1,
-    @NonNull val status: String = "NOT_DELETED",
+    @NonNull val round: Int = 1
 ) {
   @Ignore
   constructor(date: Int) : this(0, date)
@@ -30,9 +28,7 @@ fun List<Quiz>.asDomainModel(): List<QuizItem> {
         title = it.title,
         totalWords = it.totalWords,
         notLearned = it.notLearned,
-        round = it.round,
-//        status = QuizStatus.valueOf(it.status),
-        status = it.status,
+        round = it.round
     )
   }
 }
