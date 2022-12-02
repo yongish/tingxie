@@ -59,12 +59,18 @@ class HskWordsAdapter(
           Log.i("numQuizItems", "0")
           val sdf = SimpleDateFormat("yyyymmdd")
           val currentDate = sdf.format(Date())
-          val quizId = quizViewModel.insertQuizFuture(
-            Quiz(Integer.valueOf(currentDate))
-          )
-          quizViewModel.insertQuizPinyin(
-            QuizPinyin(quizId, wordItem.pinyin, word, false)
-          )
+
+
+          // todo FIX THIS!!!
+//          val quizId = quizViewModel.insertQuizFuture(
+//            Quiz(Integer.valueOf(currentDate))
+//          )
+//          quizViewModel.insertQuizPinyin(
+//            QuizPinyin(quizId, wordItem.pinyin, word, false)
+//          )
+
+
+
           Toast.makeText(context, "Added to a new quiz", Toast.LENGTH_SHORT).show()
         }
         1 -> {

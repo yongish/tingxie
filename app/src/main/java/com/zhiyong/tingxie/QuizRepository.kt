@@ -69,61 +69,6 @@ class QuizRepository(val context: Context) {
     TingXieNetwork.tingxie.getWordItemsOfQuiz(quizId)
       .map { it.asDomainModel(quizId) }
 
-  // DELETE THIS. SHIFTING ALL READS/WRITES TO REMOTE.
-//  suspend fun refreshQuizzes(quizItems: List<QuizItem>) {
-//    withContext(Dispatchers.IO) {
-//      // Send local quizIds to server.
-//      // Server responds with new remote quizzes and missing remote quizIds.
-//      val refreshQuizzesResponse = TingXieNetwork.tingxie.refreshQuizzes(
-////        email, quizItems.map { NetworkQuizDeleted(it.id, it.status == "CLIENT_DELETED") }
-//            email, quizItems.map { NetworkQuizDeleted(it.id, true) }
-//      )
-//      if (refreshQuizzesResponse.new_quizzes_remote.isNotEmpty()) {
-//        // Insert these new quizzes into local DB.
-//        mQuizDao.insertAll(refreshQuizzesResponse.new_quizzes_remote.map {
-//          Quiz(it.quiz_id, it.date, it.title, it.total_words, it.not_learned, it.round)
-//        })
-//      }
-//      if (refreshQuizzesResponse.deleted_quiz_ids.isNotEmpty()) {
-////        mQuizDao.setQuizDeleted(refreshQuizzesResponse.deleted_quiz_ids)
-//      }
-//      if (refreshQuizzesResponse.missing_quiz_ids.isNotEmpty()) {
-//        // Send missing quizzes to server.
-//        quizItems.filter { refreshQuizzesResponse.missing_quiz_ids.contains(it.id) }
-//          .forEach {
-//            TingXieNetwork.tingxie.postQuiz(
-//              NetworkCreateQuiz(
-//                it.id,
-//                it.title,
-//                it.totalWords,
-//                it.notLearned,
-//                it.round,
-//                it.date,
-//                email,
-//                name,
-//                "EDITOR"
-//              )
-//            )
-//          }
-//      }
-//    }
-//  }
-
-//  suspend fun refreshWordItemsOfQuiz(quizId: Long, wordItemsOfQuiz: List<WordItem>) {
-//    withContext(Dispatchers.IO) {
-//      val refreshWordItemsResponse = TingXieNetwork.tingxie.refreshWords(
-//        NetworkRefreshWords(email, quizId, wordItemsOfQuiz.map {
-//          NetworkWordItem(it.id, it.wordString, it.pinyinString, it.isAsked)
-//        })
-//      )
-//      if (refreshWordItemsResponse.isNotEmpty()) {
-//        mQuizDao.insertQuizPinyins(refreshWordItemsResponse.map {
-//          QuizPinyin(quizId, it.pinyin, it.characters, it.asked)
-//        })
-//      }
-//    }
-//  }
-
   suspend fun checkUserExists(email: String): Boolean =
     TingXieNetwork.tingxie.checkUserExists(email).toBoolean()
 
@@ -260,15 +205,8 @@ class QuizRepository(val context: Context) {
     editor.apply()
   }
 
-  fun insertQuiz(quiz: Quiz?) {
-    mQuizDao.insert(quiz)
-    // todo: Current user should be an editor of this newly-created quiz.
-    val email = FirebaseAuth.getInstance().currentUser?.email
-    if (email == null || quiz == null) {
-      throw IllegalStateException("Quiz or email is null.")
-    } else {
-      mQuizDao.insert(QuizRole(quiz.id, email, EnumQuizRole.EDITOR))
-    }
+  suspend fun createQuiz(title: String, date: Int) {
+    TingXieNetwork.tingxie.postQuiz(NetworkCreateQuiz(title, date, name, email))
   }
 
   fun insertQuizFuture(quiz: Quiz?): Future<Long> = executor.submit(Callable {
@@ -359,8 +297,7 @@ class QuizRepository(val context: Context) {
   }
 
   suspend fun deleteQuiz(quizId: Long) {
-    mQuizDao.deleteQuiz(quizId)
-    TingXieNetwork.tingxie.deleteQuiz(email, quizId)
+    TingXieNetwork.tingxie.deleteQuiz(quizId, name, email, email)
   }
 
   companion object {

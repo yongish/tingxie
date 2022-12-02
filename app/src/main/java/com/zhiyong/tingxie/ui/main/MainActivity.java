@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.db.Quiz;
+import com.zhiyong.tingxie.network.NetworkCreateQuiz;
 import com.zhiyong.tingxie.ui.friend.FriendActivity;
 import com.zhiyong.tingxie.ui.hsk.buttons.HskButtonsActivity;
 import com.zhiyong.tingxie.ui.login.LoginActivity;
@@ -189,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
       mQuizViewModel.updateQuiz(quiz);
       return;
     }
-    mQuizViewModel.insertQuiz(quiz);
+    mQuizViewModel.createQuiz("No title", date);
   }
 
   public void openHelp(MenuItem item) {

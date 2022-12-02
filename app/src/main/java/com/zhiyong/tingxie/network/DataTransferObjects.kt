@@ -58,15 +58,14 @@ fun NetworkQuiz.asDomainModel(): QuizItem =
 
 @JsonClass(generateAdapter = true)
 data class NetworkCreateQuiz(
-  val client_quiz_id: Long,
   val title: String,
-  val total_words: Int,
-  val not_learned: Int,
-  val round: Int,
   val date: Int,
-  val email: String,
   val name: String,
-  val role: String
+  val email: String,
+//  val total_words: Int,
+//  val not_learned: Int,
+//  val round: Int,
+//  val role: String
 )
 
 @JsonClass(generateAdapter = true)
@@ -77,9 +76,9 @@ data class NetworkPinyinContainer(val pinyins: List<String>)
 
 @JsonClass(generateAdapter = true)
 data class NetworkWordItem(
-  val id: kotlin.Long,
-  val pinyin: kotlin.String,
-  val characters: kotlin.String
+  val id: Long,
+  val pinyin: String,
+  val characters: String
 )
 
 fun NetworkWordItem.asDomainModel(quizId: Long): WordItem =

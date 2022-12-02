@@ -9,6 +9,7 @@ import com.zhiyong.tingxie.QuizRepository
 import com.zhiyong.tingxie.db.Question
 import com.zhiyong.tingxie.db.Quiz
 import com.zhiyong.tingxie.db.QuizPinyin
+import com.zhiyong.tingxie.network.NetworkCreateQuiz
 import com.zhiyong.tingxie.ui.word.WordItem
 import com.zhiyong.tingxie.viewmodel.Status
 import com.zhiyong.tingxie.viewmodel.UpdateQuizViewModel
@@ -66,39 +67,31 @@ class QuizViewModel(application: Application) : UpdateQuizViewModel(application)
         }
     }
 
-//    fun refreshQuizzes(quizItems: List<QuizItem>) {
-//        viewModelScope.launch {
-//            try {
-//                repository.refreshQuizzes(quizItems)
-//                _eventNetworkError.value = false
-//                _isNetworkErrorShown.value = false
-//            } catch (networkError: IOException) {
-//                if (quizzes.value.isNullOrEmpty()) {
-//                    _eventNetworkError.value = true
-//                }
-//            }
-//        }
-//    }
+    fun createQuiz(title: String, date: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.createQuiz(title, date)
+        }
+    }
 
     fun onNetworkErrorShown() {
         _isNetworkErrorShown.value = true
     }
 
-    fun insertQuiz(quiz: Quiz?) {
-        viewModelScope.launch (Dispatchers.IO) {
-            mRepository.insertQuiz(quiz)
-        }
-    }
+//    fun insertQuiz(quiz: Quiz?) {
+//        viewModelScope.launch (Dispatchers.IO) {
+//            mRepository.insertQuiz(quiz)
+//        }
+//    }
 
-    fun insertQuizFuture(quiz: Quiz?): Long {
-        val quizIdFuture = mRepository.insertQuizFuture(quiz)
-        try {
-            return quizIdFuture.get()
-        } catch (e: Exception) {
-            Log.e("insertQuiz1", "error")
-        }
-        return -2
-    }
+//    fun insertQuizFuture(quiz: Quiz?): Long {
+//        val quizIdFuture = mRepository.insertQuizFuture(quiz)
+//        try {
+//            return quizIdFuture.get()
+//        } catch (e: Exception) {
+//            Log.e("insertQuiz1", "error")
+//        }
+//        return -2
+//    }
 
     fun addWords(quizId: Long, wordItems: List<WordItem>) {
         for (wordItem in wordItems) {
@@ -113,7 +106,7 @@ class QuizViewModel(application: Application) : UpdateQuizViewModel(application)
             mRepository.deleteQuiz(quizId)
 
             // todo: 12/1/22. Deleting a quiz remotely no longer deletes all the words.
-            mRepository.deleteQuizPinyins(quizId)
+//            mRepository.deleteQuizPinyins(quizId)
         }
     }
 

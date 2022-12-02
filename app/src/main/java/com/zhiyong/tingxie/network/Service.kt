@@ -14,10 +14,12 @@ interface Service {
   @POST("quizzes")
   suspend fun postQuiz(@Body quiz: NetworkCreateQuiz): Long
 
-  @DELETE("quiz/email/{email}/quiz_id/{quizId}")
+  @DELETE("quizzes/{quizId}")
   suspend fun deleteQuiz(
-    @Path("email") email: String,
-    @Path("quizId") quizId: Long
+    @Path("quizId") quizId: Long,
+    @Query("requesterName") requesterName: String,
+    @Query("requesterEmail") requesterEmail: String,
+    @Query("email") email: String
   ): String
 
   @GET("/quizzes/{quizId}/words")
