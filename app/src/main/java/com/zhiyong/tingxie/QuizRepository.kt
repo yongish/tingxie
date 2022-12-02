@@ -3,13 +3,13 @@ package com.zhiyong.tingxie
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.db.*
 import com.zhiyong.tingxie.network.*
 import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
 import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsAdapter
+import com.zhiyong.tingxie.ui.question.QuestionItem
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
 import com.zhiyong.tingxie.ui.share.TingXieShareIndividual
 import com.zhiyong.tingxie.ui.word.WordItem
@@ -47,93 +47,82 @@ class QuizRepository(val context: Context) {
     }
   }
 
-  // stopped here. next step is to request from remote, not local. Then sync with local.
-  val quizzes: LiveData<List<QuizItem>> = Transformations.map(mQuizDao.allQuizItems) {
-    it.asDomainModel()
-  }
-
-  private fun syncLocalDeletedRows() {
-
-  }
-
-  private fun syncLocalInsertedRows() {
-
-  }
-
-  private fun syncLocalUpdatedRows() {
-
-  }
-
-  private fun syncRemoteDeletedRows() {
-
-  }
-
-  private fun syncRemoteInsertedRows() {
-
-  }
-
-  private fun syncRemoteUpdatedRows() {
-
-  }
+//  val quizzes: LiveData<List<QuizItem>> = Transformations.map(mQuizDao.allQuizItems) {
+//    it.asDomainModel()
+//  }
 
   suspend fun putToken(uid: String, email: String, token: String) {
     withContext(Dispatchers.IO) {
-      TingXieNetwork.tingxie.putToken(NetworkToken(uid, email, token))
+      TingXieNetwork.tingxie.putToken(NetworkToken(
+        uid,
+        email,
+        token
+      ))
     }
   }
 
-  suspend fun refreshQuizzes(quizItems: List<QuizItem>) {
-    withContext(Dispatchers.IO) {
-      // Send local quizIds to server.
-      // Server responds with new remote quizzes and missing remote quizIds.
-      val refreshQuizzesResponse = TingXieNetwork.tingxie.refreshQuizzes(
-        email, quizItems.map { NetworkQuizDeleted(it.id, it.status == "CLIENT_DELETED") }
-      )
-      if (refreshQuizzesResponse.new_quizzes_remote.isNotEmpty()) {
-        // Insert these new quizzes into local DB.
-        mQuizDao.insertAll(refreshQuizzesResponse.new_quizzes_remote.map {
-          Quiz(it.quiz_id, it.date, it.title, it.total_words, it.not_learned, it.round)
-        })
-      }
-      if (refreshQuizzesResponse.deleted_quiz_ids.isNotEmpty()) {
-        mQuizDao.setQuizDeleted(refreshQuizzesResponse.deleted_quiz_ids)
-      }
-      if (refreshQuizzesResponse.missing_quiz_ids.isNotEmpty()) {
-        // Send missing quizzes to server.
-        quizItems.filter { refreshQuizzesResponse.missing_quiz_ids.contains(it.id) }
-          .forEach {
-            TingXieNetwork.tingxie.postQuiz(
-              NetworkCreateQuiz(
-                it.id,
-                it.title,
-                it.totalWords,
-                it.notLearned,
-                it.round,
-                it.date,
-                email,
-                name,
-                "EDITOR"
-              )
-            )
-          }
-      }
-    }
-  }
+  suspend fun getQuizzes(): List<QuizItem> =
+    TingXieNetwork.tingxie.getQuizzes(email)
+      .map { it.asDomainModel() }
 
-  suspend fun refreshWordItemsOfQuiz(quizId: Long, wordItemsOfQuiz: List<WordItem>) {
-    withContext(Dispatchers.IO) {
-      val refreshWordItemsResponse = TingXieNetwork.tingxie.refreshWords(
-        NetworkRefreshWords(email, quizId, wordItemsOfQuiz.map {
-          NetworkWordItem(it.id, it.wordString, it.pinyinString, it.isAsked)
-        })
-      )
-      if (refreshWordItemsResponse.isNotEmpty()) {
-        mQuizDao.insertQuizPinyins(refreshWordItemsResponse.map {
-          QuizPinyin(quizId, it.pinyin, it.characters, it.asked)
-        })
-      }
-    }
-  }
+  suspend fun getWordItemsOfQuiz(quizId: Long): List<WordItem> =
+    TingXieNetwork.tingxie.getWordItemsOfQuiz(quizId)
+      .map { it.asDomainModel(quizId) }
+
+  // DELETE THIS. SHIFTING ALL READS/WRITES TO REMOTE.
+//  suspend fun refreshQuizzes(quizItems: List<QuizItem>) {
+//    withContext(Dispatchers.IO) {
+//      // Send local quizIds to server.
+//      // Server responds with new remote quizzes and missing remote quizIds.
+//      val refreshQuizzesResponse = TingXieNetwork.tingxie.refreshQuizzes(
+////        email, quizItems.map { NetworkQuizDeleted(it.id, it.status == "CLIENT_DELETED") }
+//            email, quizItems.map { NetworkQuizDeleted(it.id, true) }
+//      )
+//      if (refreshQuizzesResponse.new_quizzes_remote.isNotEmpty()) {
+//        // Insert these new quizzes into local DB.
+//        mQuizDao.insertAll(refreshQuizzesResponse.new_quizzes_remote.map {
+//          Quiz(it.quiz_id, it.date, it.title, it.total_words, it.not_learned, it.round)
+//        })
+//      }
+//      if (refreshQuizzesResponse.deleted_quiz_ids.isNotEmpty()) {
+////        mQuizDao.setQuizDeleted(refreshQuizzesResponse.deleted_quiz_ids)
+//      }
+//      if (refreshQuizzesResponse.missing_quiz_ids.isNotEmpty()) {
+//        // Send missing quizzes to server.
+//        quizItems.filter { refreshQuizzesResponse.missing_quiz_ids.contains(it.id) }
+//          .forEach {
+//            TingXieNetwork.tingxie.postQuiz(
+//              NetworkCreateQuiz(
+//                it.id,
+//                it.title,
+//                it.totalWords,
+//                it.notLearned,
+//                it.round,
+//                it.date,
+//                email,
+//                name,
+//                "EDITOR"
+//              )
+//            )
+//          }
+//      }
+//    }
+//  }
+
+//  suspend fun refreshWordItemsOfQuiz(quizId: Long, wordItemsOfQuiz: List<WordItem>) {
+//    withContext(Dispatchers.IO) {
+//      val refreshWordItemsResponse = TingXieNetwork.tingxie.refreshWords(
+//        NetworkRefreshWords(email, quizId, wordItemsOfQuiz.map {
+//          NetworkWordItem(it.id, it.wordString, it.pinyinString, it.isAsked)
+//        })
+//      )
+//      if (refreshWordItemsResponse.isNotEmpty()) {
+//        mQuizDao.insertQuizPinyins(refreshWordItemsResponse.map {
+//          QuizPinyin(quizId, it.pinyin, it.characters, it.asked)
+//        })
+//      }
+//    }
+//  }
 
   suspend fun checkUserExists(email: String): Boolean =
     TingXieNetwork.tingxie.checkUserExists(email).toBoolean()
@@ -190,16 +179,19 @@ class QuizRepository(val context: Context) {
     TingXieNetwork.tingxie.deleteShare(this.email, quizId, email)
   }
 
-  val allQuizPinyins: LiveData<List<QuizPinyin>> = mQuizDao.allQuizPinyins
-  val allQuestions: LiveData<List<Question>> = mQuizDao.allQuestions
+//  val allQuizPinyins: LiveData<List<QuizPinyin>> = mQuizDao.allQuizPinyins
+//  val allQuestions: LiveData<List<Question>> = mQuizDao.allQuestions
 
-  fun getQuizItem(quizId: Long): LiveData<QuizItem> {
-    return mQuizDao.getQuizItem(quizId)
-  }
+//  fun getQuizItem(quizId: Long): LiveData<QuizItem> {
+//    return mQuizDao.getQuizItem(quizId)
+//  }
 
-  fun getWordItemsOfQuiz(quizId: Long): LiveData<List<WordItem>> {
-    return mQuizDao.getWordItemsOfQuiz(quizId)
-  }
+//  fun getWordItemsOfQuiz(quizId: Long): LiveData<List<WordItem>> {
+//    return mQuizDao.getWordItemsOfQuiz(quizId)
+//  }
+
+  suspend fun getRemainingQuestionsNew(quizId: Long): List<QuestionItem> =
+    TingXieNetwork.tingxie.getUnasked(quizId, email).map { it.asDomainModel() }
 
   fun getRemainingQuestions(quizId: Long): LiveData<List<WordItem>> {
     return mQuizDao.getRemainingQuestions(quizId)
@@ -302,28 +294,31 @@ class QuizRepository(val context: Context) {
     }
   }
 
-  suspend fun addWord(quizId: Long, wordString: String?, pinyinString: String?) {
+  suspend fun addWord(quizId: Long, wordString: String?, pinyinString: String?): Long {
     // todo: Think Word table is not used anymore can be deleted.
     if (wordString == null || pinyinString == null) {
       throw IllegalArgumentException("Null wordString or pinyinString.")
     }
-    executor.execute {
-      mQuizDao.insert(Word(wordString, pinyinString))
-      mQuizDao.insert(QuizPinyin(quizId, pinyinString, wordString, false))
-    }
-    TingXieNetwork.tingxie.postWord(
-      NetworkCreateWord(email, quizId, wordString, pinyinString)
+//    executor.execute {
+//      mQuizDao.insert(Word(wordString, pinyinString))
+//      mQuizDao.insert(QuizPinyin(quizId, pinyinString, wordString, false))
+//    }
+    return TingXieNetwork.tingxie.postWord(
+      NetworkCreateWord(wordString, pinyinString)
     )
   }
 
-  // Only delete QuizPinyin object.
-  fun deleteWord(quizPinyin: QuizPinyin?) {
-    if (quizPinyin == null) {
-      throw IllegalArgumentException("Null quizPinyin.")
-    }
-    executor.execute {
-      mQuizDao.deleteQuizPinyin(quizPinyin.quizId, quizPinyin.pinyinString)
-    }
+  suspend fun deleteWord(id: Long) {
+    TingXieNetwork.tingxie.deleteWord(id)
+//  suspend fun deleteWord(quizPinyin: QuizPinyin) {
+//    TingXieNetwork.tingxie.deleteWord(quizPinyin.quizId, quizPinyin.characters)
+    // Only delete QuizPinyin object.
+//    if (quizPinyin == null) {
+//      throw IllegalArgumentException("Null quizPinyin.")
+//    }
+//    executor.execute {
+//      mQuizDao.deleteQuizPinyin(quizPinyin.quizId, quizPinyin.pinyinString)
+//    }
   }
 
   // Undo a just deleted word.
@@ -331,6 +326,9 @@ class QuizRepository(val context: Context) {
     mQuizDao.insert(quizPinyin)
   }
 
+//  suspend fun resetAsked(quizId: Long) {
+//    TingXieNetwork.tingxie.deleteQuiz()
+//  }
   fun resetAsked(quizId: Long?) {
     if (quizId == null) {
       val message = "Null quizId in resetAsked."
@@ -341,6 +339,9 @@ class QuizRepository(val context: Context) {
       mQuizDao.resetAsked(quizId)
     }
   }
+
+  suspend fun updateAsked(asked: NetworkAsked) =
+    TingXieNetwork.tingxie.updateAsked(asked)
 
   fun updateQuizPinyin(quizPinyin: QuizPinyin?) {
     if (quizPinyin == null) {

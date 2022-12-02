@@ -3,11 +3,18 @@ package com.zhiyong.tingxie.network
 import com.squareup.moshi.JsonClass
 import com.zhiyong.tingxie.db.Quiz
 import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
+import com.zhiyong.tingxie.ui.main.QuizItem
+import com.zhiyong.tingxie.ui.question.QuestionItem
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
 import com.zhiyong.tingxie.ui.share.TingXieShareIndividual
+import com.zhiyong.tingxie.ui.word.WordItem
 
 @JsonClass(generateAdapter = true)
-data class NetworkToken(val uid: String, val email: String, val token: String)
+data class NetworkToken(
+  val uid: String,
+  val email: String,
+  val token: String
+)
 
 @JsonClass(generateAdapter = true)
 data class NetworkQuizIdContainer(val quizIds: List<Long>)
@@ -33,18 +40,21 @@ data class NetworkRefreshWords(
 data class NetworkQuizContainer(val quizzes: List<NetworkQuiz>)
 
 fun NetworkQuizContainer.asDatabaseModel(): List<Quiz> = quizzes.map {
-  Quiz(it.quiz_id, it.date, it.title, it.total_words, it.not_learned, it.round)
+  Quiz(it.quizId, it.date, it.title, it.numWords, it.numNotCorrect, it.round)
 }
 
 @JsonClass(generateAdapter = true)
 data class NetworkQuiz(
-  val quiz_id: Long,
+  val quizId: Long,
   val date: Int,
   val title: String,
-  val total_words: Int,
-  val not_learned: Int,
+  val numWords: Int,
+  val numNotCorrect: Int,
   val round: Int
 )
+
+fun NetworkQuiz.asDomainModel(): QuizItem =
+  QuizItem(quizId, date, title, numWords, numNotCorrect, round)
 
 @JsonClass(generateAdapter = true)
 data class NetworkCreateQuiz(
@@ -67,18 +77,33 @@ data class NetworkPinyinContainer(val pinyins: List<String>)
 
 @JsonClass(generateAdapter = true)
 data class NetworkWordItem(
-  val word_id: Long,
-  val characters: String,
-  val pinyin: String,
-  val asked: Boolean
+  val id: kotlin.Long,
+  val pinyin: kotlin.String,
+  val characters: kotlin.String
 )
+
+fun NetworkWordItem.asDomainModel(quizId: Long): WordItem =
+  WordItem(id, quizId, characters, pinyin)
 
 @JsonClass(generateAdapter = true)
 data class NetworkCreateWord(
-  val email: String,
-  val quizId: Long,
   val characters: String,
   val pinyin: String
+)
+
+@JsonClass(generateAdapter = true)
+data class NetworkQuestion(
+  val pinyin: String,
+  val characters: String
+)
+fun NetworkQuestion.asDomainModel(): QuestionItem = QuestionItem(characters, pinyin)
+
+@JsonClass(generateAdapter = true)
+data class NetworkAsked(
+  val quizId: Long,
+  val wordId: Long,
+  val email: String,
+  val asked: Boolean
 )
 
 @JsonClass(generateAdapter = true)

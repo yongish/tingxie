@@ -9,4 +9,7 @@ import com.zhiyong.tingxie.ui.word.WordItem
 class QuestionViewModel(application: Application, quizId: Long) : AndroidViewModel(application) {
     private val mRepository: QuizRepository = QuizRepository(application)
     val remainingQuestions: LiveData<List<WordItem>> = mRepository.getRemainingQuestions(quizId)
+
+    // STOPPED HERE.
+//    private fun getQuestions
 }

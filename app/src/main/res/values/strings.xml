@@ -61,4 +61,6 @@
     <string name="email_zhiyong">Email Zhiyong (听写 app creator)</string>
     <string name="accept_or_reject">Accept or reject</string>
     <string name="share_with_all">Share with all    </string>
+    <string name="errorQuizDownload">Error in downloading quizzes. Check your Internet connection or email yongish@gmail.com for help.</string>
+    <string name="errorWordsDownload">Error in downloading words. Check your Internet connection or email yongish@gmail.com for help.</string>
 </resources>

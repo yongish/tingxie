@@ -129,9 +129,12 @@ class AnswerActivity: AppCompatActivity() {
       btnAnswerCorrect.setOnClickListener {
         // Insert new question with boolean correct.
         val question = questionBuilder.correct(true).build()
-        mAnswerViewModel.onAnswer(question, WordItem(
-          id, quizItem.id, wordsString, pinyinString, true
-        ))
+
+        // todo: 12/1/22 Convert to remote.
+//        mAnswerViewModel.onAnswer(question, WordItem(
+//          quizItem.id, wordsString, pinyinString, true
+//        ))
+
         // Go to Completed Alert Dialog or QuestionActivity.
         // Was this the last word in current round?
         Log.d("REMAINING_QN", remainingCount.toString())
@@ -144,9 +147,12 @@ class AnswerActivity: AppCompatActivity() {
       btnAnswerWrong.setOnClickListener { v: View? ->
         // Insert new question with boolean wrong.
         val question = questionBuilder.correct(false).build()
-        mAnswerViewModel.onAnswer(question, WordItem(
-          id, quizItem.id, wordsString, pinyinString, false
-        ))
+
+        // todo: 12/1/22 Update to remote.
+//        mAnswerViewModel.onAnswer(question, WordItem(
+//          quizItem.id, wordsString, pinyinString, false
+//        ))
+
         Toast.makeText(
           this, "Keep going.",
           Toast.LENGTH_SHORT

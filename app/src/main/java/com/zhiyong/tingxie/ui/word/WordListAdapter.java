@@ -105,37 +105,42 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
     void onItemRemove(RecyclerView.ViewHolder viewHolder) {
         final int adapterPosition = viewHolder.getAdapterPosition();
         final WordItem wordItem = mWordItems.get(adapterPosition);
+
+        // todo: 12/1/22 Stubbed out asked with false. To correct this.
         final QuizPinyin quizPinyin = new QuizPinyin(wordItem.getQuizId(),
-                wordItem.getPinyinString(), wordItem.getWordString(), wordItem.isAsked());
+                wordItem.getPinyinString(), wordItem.getWordString(), false);
 
         final Quiz quizCopy = new Quiz(
                 quizItem.getId(), quizItem.getDate(), quizItem.getTitle(),
-                quizItem.getTotalWords(), quizItem.getNotLearned(), quizItem.getRound(),
-                quizItem.getStatus().toString()
+                quizItem.getTotalWords(), quizItem.getNotLearned(), quizItem.getRound()
         );
         Snackbar snackbar = Snackbar
                 .make(recyclerView, "Removed word", Snackbar.LENGTH_LONG)
                 .setAction("Undo", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mWordItems.add(adapterPosition, wordItem);
-                        notifyItemInserted(adapterPosition);
-                        viewModel.addQuizPinyin(quizPinyin);
+//                        viewModel.addQuizPinyin(quizPinyin);
+
+                        viewModel.addWord(quizPinyin.getQuizId(), quizPinyin.getCharacters(), quizPinyin.getPinyinString());
+
                         viewModel.updateQuiz(quizCopy);
+//                        mWordItems.add(adapterPosition, wordItem);
+//                        notifyItemInserted(adapterPosition);
                         recyclerView.scrollToPosition(adapterPosition);
                     }
                 });
         snackbar.show();
+
+        viewModel.deleteWord(wordItem);
         mWordItems.remove(adapterPosition);
-        viewModel.deleteWord(quizPinyin);
+
         int totalWords = quizItem.getTotalWords() - 1;
         quizItem.setTotalWords(totalWords);
         quizItem.setNotLearned(totalWords);
         quizItem.setRound(1);
         viewModel.updateQuiz(new Quiz(
                 quizItem.getId(), quizItem.getDate(), quizItem.getTitle(),
-                quizItem.getTotalWords(), quizItem.getNotLearned(), quizItem.getRound(),
-                quizItem.getStatus().toString()
+                quizItem.getTotalWords(), quizItem.getNotLearned(), quizItem.getRound()
         ));
         notifyItemRemoved(adapterPosition);
     }

@@ -10,6 +10,4 @@ data class QuizItem(val id: Long,
                     var totalWords: Int,
                     var notLearned: Int,
                     var round: Int,
-//                    var status: QuizStatus,
-                    var status: String,
-                    ) : Parcelable
+) : Parcelable

@@ -10,15 +10,17 @@ import com.zhiyong.tingxie.db.Question
 import com.zhiyong.tingxie.db.Quiz
 import com.zhiyong.tingxie.db.QuizPinyin
 import com.zhiyong.tingxie.ui.word.WordItem
+import com.zhiyong.tingxie.viewmodel.Status
 import com.zhiyong.tingxie.viewmodel.UpdateQuizViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.IOException
 
 class QuizViewModel(application: Application) : UpdateQuizViewModel(application) {
-    val allQuizItems: LiveData<List<QuizItem>> = mRepository.quizzes
-    val allQuizPinyins: LiveData<List<QuizPinyin>> = mRepository.allQuizPinyins
-    val allQuestions: LiveData<List<Question>> = mRepository.allQuestions
+    // todo: After implementing fetch from remote, use these to update remote DB.
+    // Have a flag to check if remote DB has been successfully updated.
+//    val allQuizItems: LiveData<List<QuizItem>> = mRepository.quizzes
+//    val allQuizPinyins: LiveData<List<QuizPinyin>> = mRepository.allQuizPinyins
+//    val allQuestions: LiveData<List<Question>> = mRepository.allQuestions
 
     private var _eventNetworkError = MutableLiveData(false)
     val eventNetworkError: LiveData<Boolean>
@@ -29,27 +31,54 @@ class QuizViewModel(application: Application) : UpdateQuizViewModel(application)
         get() = _isNetworkErrorShown
 
     private val repository = QuizRepository(application)
-    val quizzes = repository.quizzes
+//    val quizzes = repository.quizzes
 
-    fun putToken(uid: String, email: String, token: String) {
+    fun putToken(
+        uid: String,
+        email: String,
+        token: String,
+    ) {
         viewModelScope.launch {
             repository.putToken(uid, email, token)
         }
     }
 
-    fun refreshQuizzes(quizItems: List<QuizItem>) {
+    private val _quizItems = MutableLiveData<List<QuizItem>>()
+    val allQuizItems: LiveData<List<QuizItem>> = _quizItems
+
+    private val _quizzesStatus = MutableLiveData<Status>()
+    val quizzesStatus: LiveData<Status> = _quizzesStatus
+
+    init {
+        getQuizzes()
+    }
+
+    private fun getQuizzes() {
         viewModelScope.launch {
+            _quizzesStatus.value = Status.LOADING
             try {
-                repository.refreshQuizzes(quizItems)
-                _eventNetworkError.value = false
-                _isNetworkErrorShown.value = false
-            } catch (networkError: IOException) {
-                if (quizzes.value.isNullOrEmpty()) {
-                    _eventNetworkError.value = true
-                }
+                _quizItems.value = repository.getQuizzes()
+                _quizzesStatus.value = Status.DONE
+            } catch (e: Exception) {
+                _quizzesStatus.value = Status.ERROR
+                _quizItems.value = listOf()
             }
         }
     }
+
+//    fun refreshQuizzes(quizItems: List<QuizItem>) {
+//        viewModelScope.launch {
+//            try {
+//                repository.refreshQuizzes(quizItems)
+//                _eventNetworkError.value = false
+//                _isNetworkErrorShown.value = false
+//            } catch (networkError: IOException) {
+//                if (quizzes.value.isNullOrEmpty()) {
+//                    _eventNetworkError.value = true
+//                }
+//            }
+//        }
+//    }
 
     fun onNetworkErrorShown() {
         _isNetworkErrorShown.value = true
@@ -82,6 +111,8 @@ class QuizViewModel(application: Application) : UpdateQuizViewModel(application)
     fun deleteQuiz(quizId: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             mRepository.deleteQuiz(quizId)
+
+            // todo: 12/1/22. Deleting a quiz remotely no longer deletes all the words.
             mRepository.deleteQuizPinyins(quizId)
         }
     }

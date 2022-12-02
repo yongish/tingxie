@@ -152,7 +152,7 @@ class QuestionActivity: AppCompatActivity() {
             val intent = Intent(applicationContext, AnswerActivity::class.java)
             intent.putExtra(EXTRA_QUIZ_ITEM, quizItem)
 
-            intent.putExtra(EXTRA_QUIZ_PINYIN_ID, wordItem.id)
+//            intent.putExtra(EXTRA_QUIZ_PINYIN_ID, wordItem.id)
             intent.putExtra(EXTRA_WORDS_STRING, sb.deleteCharAt(0).toString())
             intent.putExtra(EXTRA_PINYIN_STRING, pinyinString)
             intent.putExtra(EXTRA_REMAINING_QUESTION_COUNT, wordItems.size)

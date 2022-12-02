@@ -5,16 +5,13 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
 
 interface Service {
-  @PUT("token")
+  @PUT("tokens")
   suspend fun putToken(@Body token: NetworkToken): String
 
-  @PUT("quizzes/{email}")
-  suspend fun refreshQuizzes(
-    @Path("email") email: String,
-    @Body quizIds: List<NetworkQuizDeleted>
-  ): NetworkQuizRefreshContainer
+  @GET("users/{email}/quizzes")
+  suspend fun getQuizzes(@Path("email") email: String): List<NetworkQuiz>
 
-  @POST("quiz")
+  @POST("quizzes")
   suspend fun postQuiz(@Body quiz: NetworkCreateQuiz): Long
 
   @DELETE("quiz/email/{email}/quiz_id/{quizId}")
@@ -23,13 +20,23 @@ interface Service {
     @Path("quizId") quizId: Long
   ): String
 
-  @PUT("words")
-  suspend fun refreshWords(
-    @Body refreshWordsContainer: NetworkRefreshWords
+  @GET("/quizzes/{quizId}/words")
+  suspend fun getWordItemsOfQuiz(
+    @Path("quizId") quizId: Long
   ): List<NetworkWordItem>
 
-  @POST("word")
+  @POST("/quizzes/{quizId}/words")
   suspend fun postWord(@Body word: NetworkCreateWord): Long
+
+  @DELETE("words/{id}")
+  suspend fun deleteWord(@Path("id") id: Long): String
+
+  @GET("unasked/quiz_id/{quizId}/email/{email}")
+  suspend fun getUnasked(@Path("quizId") quizId: Long, @Path("email") email: String):
+      List<NetworkQuestion>
+
+  @PUT("asked")
+  suspend fun updateAsked(@Body asked: NetworkAsked): Long
 
   @GET("shares/email/{email}/quiz_id/{quizId}")
   suspend fun getShares(
@@ -85,6 +92,17 @@ interface Service {
 //    @Path("responderEmail") responderEmail: String,
 //    @Path("accept") accept: Boolean
 //  ): Boolean
+
+//  @PUT("quizzes/{email}")
+//  suspend fun refreshQuizzes(
+//    @Path("email") email: String,
+//    @Body quizIds: List<NetworkQuizDeleted>
+//  ): NetworkQuizRefreshContainer
+//@PUT("words")
+//suspend fun refreshWords(
+//  @Body refreshWordsContainer: NetworkRefreshWords
+//): List<NetworkWordItem>
+
 }
 
 object TingXieNetwork {

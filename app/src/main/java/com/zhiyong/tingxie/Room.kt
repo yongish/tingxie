@@ -29,7 +29,7 @@ fun getDatabase(context: Context): PinyinRoomDatabase {
                     PinyinRoomDatabase::class.java, "pinyin_database")
                     .addMigrations(
                         MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5,
-                        MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9
+                        MIGRATION_5_6
                     )
                     .build()
         }
@@ -130,23 +130,23 @@ val MIGRATION_5_6: Migration = object : Migration(5, 6) {
         database.execSQL("CREATE INDEX index_quiz_pinyin_pinyin_string ON quiz_pinyin(pinyin_string)")
     }
 }
-val MIGRATION_6_7: Migration = object : Migration(6, 7) {
-  override fun migrate(database: SupportSQLiteDatabase) {
-    database.execSQL("CREATE TABLE quiz_temp (id INTEGER NOT NULL PRIMARY KEY, date INTEGER NOT NULL, title TEXT NOT NULL, total_words INTEGER NOT NULL, not_learned INTEGER NOT NULL, round INTEGER NOT NULL, synced INTEGER NOT NULL, status INTEGER NOT NULL)")
-    database.execSQL("INSERT INTO quiz_temp SELECT id, date, title, total_words, not_learned, round, 0, 0 FROM quiz")
-    database.execSQL("DROP TABLE quiz")
-    database.execSQL("ALTER TABLE quiz_temp RENAME TO quiz")
-    database.execSQL("CREATE INDEX index_Quiz_id ON quiz(id)")
-  }
-}
-val MIGRATION_7_8: Migration = object : Migration(7, 8) {
-  override fun migrate(database: SupportSQLiteDatabase) {
-    database.execSQL("CREATE TABLE quiz_role (id INTEGER PRIMARY KEY, quiz_id INTEGER NOT NULL, email TEXT NOT NULL, role TEXT NOT NULL)")
-  }
-}
-val MIGRATION_8_9: Migration = object : Migration(8, 9) {
-  override fun migrate(database: SupportSQLiteDatabase) {
-    database.execSQL("ALTER TABLE quiz ADD COLUMN status TEXT NOT NULL DEFAULT 'NOT_DELETED'")
-    database.execSQL("ALTER TABLE quiz_pinyin ADD COLUMN status TEXT NOT NULL DEFAULT 'NOT_DELETED'")
-  }
-}
+//val MIGRATION_6_7: Migration = object : Migration(6, 7) {
+//  override fun migrate(database: SupportSQLiteDatabase) {
+//    database.execSQL("CREATE TABLE quiz_temp (id INTEGER NOT NULL PRIMARY KEY, date INTEGER NOT NULL, title TEXT NOT NULL, total_words INTEGER NOT NULL, not_learned INTEGER NOT NULL, round INTEGER NOT NULL, synced INTEGER NOT NULL, status INTEGER NOT NULL)")
+//    database.execSQL("INSERT INTO quiz_temp SELECT id, date, title, total_words, not_learned, round, 0, 0 FROM quiz")
+//    database.execSQL("DROP TABLE quiz")
+//    database.execSQL("ALTER TABLE quiz_temp RENAME TO quiz")
+//    database.execSQL("CREATE INDEX index_Quiz_id ON quiz(id)")
+//  }
+//}
+//val MIGRATION_7_8: Migration = object : Migration(7, 8) {
+//  override fun migrate(database: SupportSQLiteDatabase) {
+//    database.execSQL("CREATE TABLE quiz_role (id INTEGER PRIMARY KEY, quiz_id INTEGER NOT NULL, email TEXT NOT NULL, role TEXT NOT NULL)")
+//  }
+//}
+//val MIGRATION_8_9: Migration = object : Migration(8, 9) {
+//  override fun migrate(database: SupportSQLiteDatabase) {
+//    database.execSQL("ALTER TABLE quiz ADD COLUMN status TEXT NOT NULL DEFAULT 'NOT_DELETED'")
+//    database.execSQL("ALTER TABLE quiz_pinyin ADD COLUMN status TEXT NOT NULL DEFAULT 'NOT_DELETED'")
+//  }
+//}
