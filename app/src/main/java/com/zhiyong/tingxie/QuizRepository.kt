@@ -205,8 +205,8 @@ class QuizRepository(val context: Context) {
     editor.apply()
   }
 
-  suspend fun createQuiz(title: String, date: Int) {
-    TingXieNetwork.tingxie.postQuiz(NetworkCreateQuiz(title, date, name, email))
+  suspend fun createQuiz(title: String, date: Int): Long {
+    return TingXieNetwork.tingxie.postQuiz(NetworkCreateQuiz(title, date, name, email))
   }
 
   fun insertQuizFuture(quiz: Quiz?): Future<Long> = executor.submit(Callable {

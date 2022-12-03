@@ -67,10 +67,13 @@ class QuizViewModel(application: Application) : UpdateQuizViewModel(application)
         }
     }
 
-    fun createQuiz(title: String, date: Int) {
+    fun createQuiz(title: String, date: Int): LiveData<Long> {
+        val result = MutableLiveData<Long>()
         viewModelScope.launch(Dispatchers.IO) {
-            repository.createQuiz(title, date)
+            val newId = repository.createQuiz(title, date)
+            result.postValue(newId)
         }
+        return result
     }
 
     fun onNetworkErrorShown() {

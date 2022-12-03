@@ -238,12 +238,13 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         final int position = scrollPosition;
         Log.d("SCROLL POSITION: ", String.valueOf(scrollPosition));
         notifyDataSetChanged();
-        mRecyclerView.post(new Runnable() {
-            @Override
-            public void run() {
-                mRecyclerView.smoothScrollToPosition(position);
-            }
-        });
+        mRecyclerView.post(() -> mRecyclerView.smoothScrollToPosition(position));
+    }
+
+    void addQuizItem(QuizItem newQuizItem, RecyclerView recyclerView) {
+        mQuizItems.add(0, newQuizItem);
+        notifyItemInserted(0);
+        recyclerView.post(() -> recyclerView.smoothScrollToPosition(0));
     }
 
     void setQuestions(List<Question> questions) {
