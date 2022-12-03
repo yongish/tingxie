@@ -140,7 +140,9 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                     }
 
                     DialogFragment newFragment = DatePickerFragment.newInstance(
-                            current.getId(),
+//                            current.getId(),
+                            current,
+                            i,
                             c.get(Calendar.YEAR),
                             c.get(Calendar.MONTH),
                             c.get(Calendar.DAY_OF_MONTH)
@@ -245,6 +247,10 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         mQuizItems.add(0, newQuizItem);
         notifyItemInserted(0);
         recyclerView.post(() -> recyclerView.smoothScrollToPosition(0));
+    }
+
+    void replaceQuizItem(QuizItem newQuizItem, int i, RecyclerView recyclerView) {
+        mQuizItems.set(i, newQuizItem);
     }
 
     void setQuestions(List<Question> questions) {

@@ -215,8 +215,8 @@ class QuizRepository(val context: Context) {
 
   fun deleteQuizPinyins(quizId: Long) = mQuizDao.deleteQuizPinyins(quizId)
 
-  fun updateQuiz(quiz: Quiz?) = executor.execute {
-    mQuizDao.update(quiz)
+  suspend fun updateQuiz(quiz: NetworkQuiz): Long {
+    return TingXieNetwork.tingxie.putQuiz(quiz)
   }
 
   fun insertQuestion(question: Question?) = executor.execute {

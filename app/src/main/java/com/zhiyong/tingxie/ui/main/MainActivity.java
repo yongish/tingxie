@@ -26,10 +26,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.db.Quiz;
+import com.zhiyong.tingxie.network.NetworkQuiz;
 import com.zhiyong.tingxie.ui.friend.FriendActivity;
 import com.zhiyong.tingxie.ui.hsk.buttons.HskButtonsActivity;
 import com.zhiyong.tingxie.ui.login.LoginActivity;
 import com.zhiyong.tingxie.viewmodel.Status;
+
+import java.util.Optional;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -181,21 +184,24 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, HskButtonsActivity.class));
     }
 
-    public void processDatePickerResult(long quizId, int year, int month, int day) {
+//    public void processDatePickerResult(long quizId, int year, int month, int day) {
+    public void processDatePickerResult(Optional<QuizItem> optionalQuizItem, int year, int month, int day) {
         int date = Integer.valueOf(year + String.format("%02d", ++month) +
                 String.format("%02d", day));
-        Quiz quiz = new Quiz(date);
-        if (quizId != -1) {
-            quiz.setId(quizId);
-            mQuizViewModel.updateQuiz(quiz);
-            return;
+        if (optionalQuizItem.isPresent()) {
+            QuizItem quizItem = optionalQuizItem.get();
+            mQuizViewModel.updateQuiz(
+                    new NetworkQuiz(quizItem.getId(), quizItem.getDate(), quizItem.getTitle(), quizItem.getTotalWords(), quizItem.getNotLearned(), quizItem.getRound())
+            ).observe(this, quizId -> {
+                adapter.ad
+
+            })
+        } else {
+            mQuizViewModel.createQuiz("No title", date).observe(this,
+                    newQuizId -> adapter.addQuizItem(new QuizItem(newQuizId, date, "No" +
+                                    " title", 0, 0, 1),
+                            recyclerView));
         }
-
-        mQuizViewModel.createQuiz("No title", date).observe(this, newQuizId -> {
-            adapter.addQuizItem(new QuizItem(newQuizId, date, "No title", 0, 0, 1),
-                    recyclerView);
-        });
-
     }
 
     public void openHelp(MenuItem item) {

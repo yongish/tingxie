@@ -17,6 +17,7 @@ import com.zhiyong.tingxie.ui.word.WordItem;
 
 import java.util.List;
 
+// todo: 12/2/22. Delete this file after finish porting from local to remote.
 @Dao
 public interface QuizDao {
     @Insert
