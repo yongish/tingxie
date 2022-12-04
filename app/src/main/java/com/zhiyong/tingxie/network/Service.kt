@@ -31,7 +31,7 @@ interface Service {
   ): List<NetworkWordItem>
 
   @POST("/quizzes/{quizId}/words")
-  suspend fun postWord(@Body word: NetworkCreateWord): Long
+  suspend fun postWord(@Path("quizId") quizId: Long, @Body word: NetworkCreateWord): Long
 
   @DELETE("words/{id}")
   suspend fun deleteWord(@Path("id") id: Long): String

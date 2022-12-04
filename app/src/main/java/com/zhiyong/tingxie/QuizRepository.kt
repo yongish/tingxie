@@ -247,41 +247,17 @@ class QuizRepository(val context: Context) {
     mQuizDao.insert(question)
   }
 
-  fun updateQuestions(quizId: Long?) {
-    if (quizId == null) {
-      throw IllegalArgumentException("Null quizId.")
-    }
-    executor.execute {
-      mQuizDao.updateQuestions(quizId, System.currentTimeMillis())
-    }
-  }
-
   suspend fun addWord(quizId: Long, wordString: String?, pinyinString: String?): Long {
-    // todo: Think Word table is not used anymore can be deleted.
     if (wordString == null || pinyinString == null) {
       throw IllegalArgumentException("Null wordString or pinyinString.")
     }
-//    executor.execute {
-//      mQuizDao.insert(Word(wordString, pinyinString))
-//      mQuizDao.insert(QuizPinyin(quizId, pinyinString, wordString, false))
-//    }
     return TingXieNetwork.tingxie.postWord(
+      quizId,
       NetworkCreateWord(wordString, pinyinString)
     )
   }
 
-  suspend fun deleteWord(id: Long) {
-    TingXieNetwork.tingxie.deleteWord(id)
-//  suspend fun deleteWord(quizPinyin: QuizPinyin) {
-//    TingXieNetwork.tingxie.deleteWord(quizPinyin.quizId, quizPinyin.characters)
-    // Only delete QuizPinyin object.
-//    if (quizPinyin == null) {
-//      throw IllegalArgumentException("Null quizPinyin.")
-//    }
-//    executor.execute {
-//      mQuizDao.deleteQuizPinyin(quizPinyin.quizId, quizPinyin.pinyinString)
-//    }
-  }
+  suspend fun deleteWord(id: Long) = TingXieNetwork.tingxie.deleteWord(id)
 
   // Undo a just deleted word.
   fun insertQuizPinyin(quizPinyin: QuizPinyin?) = executor.execute {

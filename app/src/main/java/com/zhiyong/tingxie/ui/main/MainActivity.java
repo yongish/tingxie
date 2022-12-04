@@ -181,8 +181,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, HskButtonsActivity.class));
     }
 
-    //    public void processDatePickerResult(long quizId, int year, int month, int
-    //    day) {
     public void processDatePickerResult(Optional<QuizItem> optionalQuizItem,
                                         int position, int year, int month, int day) {
         int date = Integer.valueOf(year + String.format("%02d", ++month) +

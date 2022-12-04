@@ -76,9 +76,9 @@ internal class WordViewModel(application: Application, quizId: Long) : UpdateQui
 //        mRepository.insertQuizPinyin(quizPinyin)
 //    }
 
-    fun updateQuestions(quizId: Long) {
-        mRepository.updateQuestions(quizId)
-    }
+//    fun updateQuestions(quizId: Long) {
+//        mRepository.updateQuestions(quizId)
+//    }
 
 //    fun refreshWordItemsOfQuiz(quizId: Long, wordItems: List<WordItem>) {
 //        viewModelScope.launch {
