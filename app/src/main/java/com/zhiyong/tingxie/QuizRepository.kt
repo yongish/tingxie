@@ -243,10 +243,6 @@ class QuizRepository(val context: Context) {
     )
   }
 
-  fun insertQuestion(question: Question?) = executor.execute {
-    mQuizDao.insert(question)
-  }
-
   suspend fun addWord(quizId: Long, wordString: String?, pinyinString: String?): Long {
     if (wordString == null || pinyinString == null) {
       throw IllegalArgumentException("Null wordString or pinyinString.")

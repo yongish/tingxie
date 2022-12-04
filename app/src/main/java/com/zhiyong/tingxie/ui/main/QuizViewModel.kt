@@ -113,12 +113,6 @@ class QuizViewModel(application: Application) : UpdateQuizViewModel(application)
         }
     }
 
-    fun insertQuestions(questions: List<Question?>) {
-        for (question in questions) {
-            mRepository.insertQuestion(question)
-        }
-    }
-
     fun insertQuizPinyin(quizPinyin: QuizPinyin) {
         mRepository.insertQuizPinyin(quizPinyin)
     }

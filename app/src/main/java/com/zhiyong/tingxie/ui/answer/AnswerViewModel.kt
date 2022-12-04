@@ -11,7 +11,7 @@ class AnswerViewModel(application: Application) : UpdateQuizViewModel(applicatio
     fun resetAsked(quizId: Long) = mRepository.resetAsked(quizId)
 
     fun onAnswer(question: Question, wordItem: WordItem) {
-      mRepository.insertQuestion(question)
+//      mRepository.insertQuestion(question)
 
       // todo: 12/1/22. Replace this with the appropriate remote request.
 //      mRepository.updateQuizPinyin(QuizPinyin(wordItem.quizId, wordItem.pinyinString, wordItem.wordString, wordItem.isAsked))
