@@ -88,7 +88,7 @@ public interface QuizDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertQuizPinyins(List<QuizPinyin> quizPinyins);
 
-    @Query("SELECT id, date, title, total_words AS totalWords, not_learned AS notLearned, round " +
+    @Query("SELECT id, date, title, total_words AS numWords, not_learned AS numNotCorrect, round " +
             "FROM quiz WHERE id = :id")
     LiveData<QuizItem> getQuizItem(long id);
 

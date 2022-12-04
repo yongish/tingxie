@@ -10,7 +10,6 @@ import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
 import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsAdapter
 import com.zhiyong.tingxie.ui.question.QuestionItem
-import com.zhiyong.tingxie.ui.share.EnumQuizRole
 import com.zhiyong.tingxie.ui.share.TingXieShareIndividual
 import com.zhiyong.tingxie.ui.word.WordItem
 import kotlinx.coroutines.Dispatchers
@@ -53,11 +52,13 @@ class QuizRepository(val context: Context) {
 
   suspend fun putToken(uid: String, email: String, token: String) {
     withContext(Dispatchers.IO) {
-      TingXieNetwork.tingxie.putToken(NetworkToken(
-        uid,
-        email,
-        token
-      ))
+      TingXieNetwork.tingxie.putToken(
+        NetworkToken(
+          uid,
+          email,
+          token
+        )
+      )
     }
   }
 
@@ -78,12 +79,24 @@ class QuizRepository(val context: Context) {
 
   suspend fun addFriend(individual: TingXieIndividual) =
     TingXieNetwork.tingxie.postFriend(
-      NetworkIndividual(email, individual.email, name, individual.name, individual.status)
+      NetworkIndividual(
+        email,
+        individual.email,
+        name,
+        individual.name,
+        individual.status
+      )
     )
 
   suspend fun updateFriend(individual: TingXieIndividual) =
     TingXieNetwork.tingxie.putFriend(
-      NetworkIndividual(individual.email, email, name, individual.name, individual.status)
+      NetworkIndividual(
+        individual.email,
+        email,
+        name,
+        individual.name,
+        individual.status
+      )
     )
 
   suspend fun deleteFriend(email: String) =
@@ -215,8 +228,19 @@ class QuizRepository(val context: Context) {
 
   fun deleteQuizPinyins(quizId: Long) = mQuizDao.deleteQuizPinyins(quizId)
 
-  suspend fun updateQuiz(quiz: NetworkQuiz): Long {
-    return TingXieNetwork.tingxie.putQuiz(quiz)
+  suspend fun updateQuiz(quiz: QuizItem): Int {
+    return TingXieNetwork.tingxie.putQuiz(
+      NetworkQuiz(
+        quiz.id,
+        quiz.title,
+        quiz.date,
+        email,
+        "STUB. REPLACE THIS",
+        quiz.numWords,
+        quiz.numNotCorrect,
+        quiz.round
+      )
+    )
   }
 
   fun insertQuestion(question: Question?) = executor.execute {
@@ -264,7 +288,7 @@ class QuizRepository(val context: Context) {
     mQuizDao.insert(quizPinyin)
   }
 
-//  suspend fun resetAsked(quizId: Long) {
+  //  suspend fun resetAsked(quizId: Long) {
 //    TingXieNetwork.tingxie.deleteQuiz()
 //  }
   fun resetAsked(quizId: Long?) {

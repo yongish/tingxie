@@ -19,10 +19,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zhiyong.tingxie.R;
-import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.ui.main.QuizItem;
-import com.zhiyong.tingxie.ui.main.QuizStatus;
 
 import java.util.List;
 import java.util.Locale;
@@ -110,9 +108,9 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         final QuizPinyin quizPinyin = new QuizPinyin(wordItem.getQuizId(),
                 wordItem.getPinyinString(), wordItem.getWordString(), false);
 
-        final Quiz quizCopy = new Quiz(
+        final QuizItem quizCopy = new QuizItem(
                 quizItem.getId(), quizItem.getDate(), quizItem.getTitle(),
-                quizItem.getTotalWords(), quizItem.getNotLearned(), quizItem.getRound()
+                quizItem.getNumWords(), quizItem.getNumNotCorrect(), quizItem.getRound()
         );
         Snackbar snackbar = Snackbar
                 .make(recyclerView, "Removed word", Snackbar.LENGTH_LONG)
@@ -134,13 +132,13 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         viewModel.deleteWord(wordItem);
         mWordItems.remove(adapterPosition);
 
-        int totalWords = quizItem.getTotalWords() - 1;
-        quizItem.setTotalWords(totalWords);
-        quizItem.setNotLearned(totalWords);
+        int totalWords = quizItem.getNumWords() - 1;
+        quizItem.setNumWords(totalWords);
+        quizItem.setNumNotCorrect(totalWords);
         quizItem.setRound(1);
-        viewModel.updateQuiz(new Quiz(
+        viewModel.updateQuiz(new QuizItem(
                 quizItem.getId(), quizItem.getDate(), quizItem.getTitle(),
-                quizItem.getTotalWords(), quizItem.getNotLearned(), quizItem.getRound()
+                quizItem.getNumWords(), quizItem.getNumNotCorrect(), quizItem.getRound()
         ));
         notifyItemRemoved(adapterPosition);
     }

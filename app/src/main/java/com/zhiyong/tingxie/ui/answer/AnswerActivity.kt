@@ -16,16 +16,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.db.Question.QuestionBuilder
-import com.zhiyong.tingxie.db.Quiz
 import com.zhiyong.tingxie.ui.hsk.buttons.HskButtonsFragment.Companion.EXTRA_LEVEL
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsViewModel
 import com.zhiyong.tingxie.ui.main.MainActivity
 import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.ui.question.QuestionActivity
 import com.zhiyong.tingxie.ui.question.QuestionActivity.Companion.EXTRA_QUIZ_ITEM
-import com.zhiyong.tingxie.ui.word.WordItem
 
-class AnswerActivity: AppCompatActivity() {
+class AnswerActivity : AppCompatActivity() {
   private lateinit var tvAnswerWords: TextView
   private lateinit var btnAnswerCorrect: Button
   private lateinit var btnAnswerWrong: Button
@@ -42,10 +40,10 @@ class AnswerActivity: AppCompatActivity() {
   ) {
     if (remainingCount < 2) {
       if (quizItem == null) {
-          viewModel.resetAsked(level)
+        viewModel.resetAsked(level)
       } else {
         quizItem.round = quizItem.round + 1
-        quizItem.notLearned = quizItem.totalWords
+        quizItem.numNotCorrect = quizItem.numWords
         mAnswerViewModel.resetAsked(quizItem.id)
       }
 
@@ -89,7 +87,7 @@ class AnswerActivity: AppCompatActivity() {
     }
 
     val remainingCount = intent.getIntExtra(
-        QuestionActivity.EXTRA_REMAINING_QUESTION_COUNT, -1
+      QuestionActivity.EXTRA_REMAINING_QUESTION_COUNT, -1
     )
 
     val quizItem: QuizItem? = intent.getParcelableExtra(EXTRA_QUIZ_ITEM)
@@ -139,10 +137,12 @@ class AnswerActivity: AppCompatActivity() {
         // Was this the last word in current round?
         Log.d("REMAINING_QN", remainingCount.toString())
         handleCorrect(remainingCount, intentQuestion, quizItem = quizItem)
-        mAnswerViewModel.updateQuiz(Quiz(
-          quizItem.id, quizItem.date, quizItem.title,
-          quizItem.totalWords, quizItem.notLearned - 1, quizItem.round
-        ))
+        mAnswerViewModel.updateQuiz(
+          QuizItem(
+            quizItem.id, quizItem.date, quizItem.title,
+            quizItem.numWords, quizItem.numNotCorrect - 1, quizItem.round
+          )
+        )
       }
       btnAnswerWrong.setOnClickListener { v: View? ->
         // Insert new question with boolean wrong.

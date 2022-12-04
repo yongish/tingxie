@@ -7,7 +7,7 @@ import kotlinx.android.parcel.Parcelize
 data class QuizItem(val id: Long,
                     var date: Int,
                     var title: String,
-                    var totalWords: Int,
-                    var notLearned: Int,
+                    var numWords: Int,
+                    var numNotCorrect: Int,
                     var round: Int,
 ) : Parcelable

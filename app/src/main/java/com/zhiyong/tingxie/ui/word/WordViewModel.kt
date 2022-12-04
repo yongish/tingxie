@@ -1,19 +1,15 @@
 package com.zhiyong.tingxie.ui.word
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.zhiyong.tingxie.QuizRepository
-import com.zhiyong.tingxie.db.Quiz
-import com.zhiyong.tingxie.db.QuizPinyin
 import com.zhiyong.tingxie.viewmodel.CrudStatus
+import com.zhiyong.tingxie.viewmodel.UpdateQuizViewModel
 import kotlinx.coroutines.launch
 
-internal class WordViewModel(application: Application, quizId: Long) : AndroidViewModel(application) {
+internal class WordViewModel(application: Application, quizId: Long) : UpdateQuizViewModel(application) {
 //    val wordItemsOfQuiz: LiveData<List<WordItem>>
-    private val mRepository: QuizRepository = QuizRepository(application)
 
     private var _eventNetworkError = MutableLiveData(false)
     val eventNetworkError: LiveData<Boolean>
@@ -82,10 +78,6 @@ internal class WordViewModel(application: Application, quizId: Long) : AndroidVi
 
     fun updateQuestions(quizId: Long) {
         mRepository.updateQuestions(quizId)
-    }
-
-    fun updateQuiz(quiz: Quiz) {
-        mRepository.updateQuiz(quiz)
     }
 
 //    fun refreshWordItemsOfQuiz(quizId: Long, wordItems: List<WordItem>) {

@@ -15,7 +15,7 @@ interface Service {
   suspend fun postQuiz(@Body quiz: NetworkCreateQuiz): Long
 
   @PUT("quizzes")
-  suspend fun putQuiz(@Body quiz: NetworkQuiz): Long
+  suspend fun putQuiz(@Body quiz: NetworkQuiz): Int
 
   @DELETE("quizzes/{quizId}")
   suspend fun deleteQuiz(

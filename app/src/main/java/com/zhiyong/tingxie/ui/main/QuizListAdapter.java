@@ -33,13 +33,10 @@ import android.widget.Toast;
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.Util;
 import com.zhiyong.tingxie.db.Question;
-import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.db.QuizPinyin;
-import com.zhiyong.tingxie.network.NetworkCreateQuiz;
 import com.zhiyong.tingxie.ui.question.QuestionActivity;
 import com.zhiyong.tingxie.ui.share.ShareActivity;
 import com.zhiyong.tingxie.ui.word.WordActivity;
-import com.zhiyong.tingxie.ui.word.WordItem;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -89,7 +86,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
             final QuizItem current = mQuizItems.get(i);
             QuizItem quizItem = new QuizItem(current.getId(), current.getDate(),
                     current.getTitle(),
-                    current.getTotalWords(), current.getNotLearned(), current.getRound()
+                    current.getNumWords(), current.getNumNotCorrect(), current.getRound()
             );
 
             String displayDate = String.valueOf(current.getDate());
@@ -107,7 +104,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
 //                    "%d words",
 //                    current.getTotalWords()));
                     "%d/%d remaining on round %d",
-                    current.getNotLearned(), current.getTotalWords(),
+                    current.getNumNotCorrect(), current.getNumWords(),
                     current.getRound()));
 
             holder.ivEditDate.setOnClickListener(new View.OnClickListener() {
@@ -162,9 +159,9 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                         mQuizItems.set(holder.getAdapterPosition(), newItem);
                         notifyDataSetChanged();
 
-                        viewModel.updateQuiz(new Quiz(
+                        viewModel.updateQuiz(new QuizItem(
                                 newItem.getId(), newItem.getDate(), newItem.getTitle(),
-                                newItem.getTotalWords(), newItem.getNotLearned(),
+                                newItem.getNumWords(), newItem.getNumNotCorrect(),
                                 newItem.getRound()
                         ));
 
@@ -190,7 +187,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
             holder.btnStartResume.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (current.getTotalWords() > 0) {
+                    if (current.getNumWords() > 0) {
                         Intent intent = new Intent(context, QuestionActivity.class);
                         intent.putExtra(EXTRA_QUIZ_ITEM, quizItem);
                         ((Activity) context).startActivityForResult(
@@ -249,8 +246,10 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         recyclerView.post(() -> recyclerView.smoothScrollToPosition(0));
     }
 
-    void replaceQuizItem(QuizItem newQuizItem, int i, RecyclerView recyclerView) {
+    void replaceQuizItem(QuizItem newQuizItem, RecyclerView recyclerView, int i) {
         mQuizItems.set(i, newQuizItem);
+        notifyItemChanged(i);
+        recyclerView.post(() -> recyclerView.smoothScrollToPosition(i));
     }
 
     void setQuestions(List<Question> questions) {

@@ -15,7 +15,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.zhiyong.tingxie.R
-import com.zhiyong.tingxie.db.Quiz
 import com.zhiyong.tingxie.db.QuizPinyin
 import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.ui.main.QuizViewModel
@@ -28,14 +27,14 @@ class HskWordsAdapter(
   private var context: Context,
   var viewModel: HskWordsViewModel,
   var quizViewModel: QuizViewModel
-  ) : RecyclerView.Adapter<HskWordsAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<HskWordsAdapter.ViewHolder>() {
   private lateinit var mWordItems: List<HskWord>
   private lateinit var quizItems: List<QuizItem>
   private lateinit var textToSpeech: TextToSpeech
 
   init {
     textToSpeech = TextToSpeech(context, TextToSpeech.OnInitListener { status ->
-      if (status != TextToSpeech.ERROR){
+      if (status != TextToSpeech.ERROR) {
         //if there is no error then set language
         textToSpeech.language = Locale.SIMPLIFIED_CHINESE
       }
@@ -47,10 +46,12 @@ class HskWordsAdapter(
     val wordItem = mWordItems[position]
     val word = wordItem.hanzi
     holder.tvHanzi.setOnClickListener {
-      context.startActivity(Intent(
-        Intent.ACTION_VIEW,
-        Uri.parse("https://baike.baidu.com/item/$word")
-      ))
+      context.startActivity(
+        Intent(
+          Intent.ACTION_VIEW,
+          Uri.parse("https://baike.baidu.com/item/$word")
+        )
+      )
     }
     holder.ivPlay.setOnClickListener { QuestionActivity.speak(textToSpeech, word) }
     holder.ibAdd.setOnClickListener {
@@ -70,7 +71,6 @@ class HskWordsAdapter(
 //          )
 
 
-
           Toast.makeText(context, "Added to a new quiz", Toast.LENGTH_SHORT).show()
         }
         1 -> {
@@ -84,8 +84,8 @@ class HskWordsAdapter(
           Log.i("numQuizItems", ">1")
           val b: AlertDialog.Builder = AlertDialog.Builder(context)
           b.setTitle("Select a quiz to add this word to.")
-          val quizItemStrings: Array<String> = quizItems.map {
-              quizItem -> "${quizItem.date} | ${quizItem.title}"
+          val quizItemStrings: Array<String> = quizItems.map { quizItem ->
+            "${quizItem.date} | ${quizItem.title}"
           }.toTypedArray()
           b.setItems(quizItemStrings) { dialog, which ->
             dialog.dismiss()
@@ -93,14 +93,16 @@ class HskWordsAdapter(
             quizViewModel.insertQuizPinyin(
               QuizPinyin(updatedQuizItem.id, wordItem.pinyin, word, false)
             )
-            quizViewModel.updateQuiz(Quiz(
-              updatedQuizItem.id,
-              updatedQuizItem.date,
-              updatedQuizItem.title,
-              updatedQuizItem.totalWords + 1,
-              updatedQuizItem.totalWords + 1,
-              1
-            ))
+            quizViewModel.updateQuiz(
+              QuizItem(
+                updatedQuizItem.id,
+                updatedQuizItem.date,
+                updatedQuizItem.title,
+                updatedQuizItem.numWords + 1,
+                updatedQuizItem.numWords + 1,
+                1
+              )
+            )
             Toast.makeText(context, "Added to selected quiz", Toast.LENGTH_SHORT).show()
           }
           b.show()
@@ -137,8 +139,8 @@ class HskWordsAdapter(
 
   data class HskWord(val index: Int, val hanzi: String, val pinyin: String)
 
-  class ViewHolder private constructor(itemView: View, val context: Context)
-    : RecyclerView.ViewHolder(itemView) {
+  class ViewHolder private constructor(itemView: View, val context: Context) :
+    RecyclerView.ViewHolder(itemView) {
     private val tvIndex: TextView = itemView.findViewById(R.id.tvIndex)
     val tvHanzi: TextView = itemView.findViewById(R.id.tvHanzi)
     private val tvPinyin: TextView = itemView.findViewById(R.id.tvPinyin)

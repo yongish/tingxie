@@ -29,11 +29,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.zhiyong.tingxie.R;
-import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.ui.main.MainActivity;
 import com.zhiyong.tingxie.ui.main.QuizItem;
-import com.zhiyong.tingxie.viewmodel.CrudStatus;
-import com.zhiyong.tingxie.viewmodel.Status;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -151,13 +148,13 @@ public class WordActivity extends AppCompatActivity {
                     mWordViewModel.updateQuestions(quizId);
 
                     // Update totalWords. Reset notLearned and round.
-                    int totalWords = quizItem.getTotalWords() + 1;
-                    quizItem.setTotalWords(totalWords);
-                    quizItem.setNotLearned(totalWords);
+                    int totalWords = quizItem.getNumWords() + 1;
+                    quizItem.setNumWords(totalWords);
+                    quizItem.setNumNotCorrect(totalWords);
                     quizItem.setRound(1);
-                    mWordViewModel.updateQuiz(new Quiz(quizItem.getId(),
+                    mWordViewModel.updateQuiz(new QuizItem(quizItem.getId(),
                         quizItem.getDate(), quizItem.getTitle(),
-                        quizItem.getTotalWords(), quizItem.getNotLearned(),
+                        quizItem.getNumWords(), quizItem.getNumNotCorrect(),
                         quizItem.getRound()));
                     // 10/10/21. Using this line and removing the
                     // quizItem.set... calls above cause the word to

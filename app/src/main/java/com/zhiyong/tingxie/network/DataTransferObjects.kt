@@ -46,8 +46,10 @@ fun NetworkQuizContainer.asDatabaseModel(): List<Quiz> = quizzes.map {
 @JsonClass(generateAdapter = true)
 data class NetworkQuiz(
   val quizId: Long,
-  val date: Int,
   val title: String,
+  val date: Int,
+  val email: String,
+  val role: String,
   val numWords: Int,
   val numNotCorrect: Int,
   val round: Int

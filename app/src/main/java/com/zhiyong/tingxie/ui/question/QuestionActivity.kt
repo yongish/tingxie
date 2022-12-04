@@ -135,7 +135,7 @@ class QuestionActivity: AppCompatActivity() {
               .forEach { sb.append("\n${it.wordString}") }
 
           initializeCommonComponents(
-              wordItem.wordString, pinyinString, wordItems.size, quizItem.totalWords
+              wordItem.wordString, pinyinString, wordItems.size, quizItem.numWords
           )
 
           btnReset.visibility = View.GONE

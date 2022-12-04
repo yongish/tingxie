@@ -26,8 +26,8 @@ fun List<Quiz>.asDomainModel(): List<QuizItem> {
         id = it.id,
         date = it.date,
         title = it.title,
-        totalWords = it.totalWords,
-        notLearned = it.notLearned,
+        numWords = it.totalWords,
+        numNotCorrect = it.notLearned,
         round = it.round,
     )
   }
