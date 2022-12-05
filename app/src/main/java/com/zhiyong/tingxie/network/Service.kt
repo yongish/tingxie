@@ -45,6 +45,17 @@ interface Service {
   @PUT("questions")
   suspend fun upsertCorrectRecord(@Body asked: NetworkCorrectRecord): Int
 
+  @GET("users/{email}/groups")
+  suspend fun getGroups(@Path("email") email: String): List<NetworkGroup>
+
+  @POST("groups/{groupId}/members")
+  suspend fun postGroupMember(
+    @Path("groupId") groupId: Long,
+    @Body userProps: NetworkGroupMember
+  ): Long
+
+
+  // todo: Not developing these endpoints below. Should clean up.
   @GET("shares/email/{email}/quiz_id/{quizId}")
   suspend fun getShares(
     @Path("email") email: String,

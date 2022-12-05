@@ -236,6 +236,11 @@ class QuizRepository(val context: Context) {
   suspend fun upsertCorrectRecord(wordId: Long) =
     TingXieNetwork.tingxie.upsertCorrectRecord(NetworkCorrectRecord(wordId, email))
 
+  suspend fun getGroups() = TingXieNetwork.tingxie.getGroups(email)
+
+  suspend fun addUserToGroup(groupId: Long, userProps: NetworkGroupMember) =
+    TingXieNetwork.tingxie.postGroupMember(groupId, userProps)
+
   companion object {
     private const val TAG = "QuizRepository"
   }
