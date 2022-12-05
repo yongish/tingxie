@@ -2,33 +2,30 @@ package com.zhiyong.tingxie.ui.question
 
 import android.content.DialogInterface
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.zhiyong.tingxie.R
-import com.zhiyong.tingxie.ui.answer.AnswerActivity
+import com.zhiyong.tingxie.network.NetworkWordItem
+import com.zhiyong.tingxie.ui.answer.HskAnswerActivity
 import com.zhiyong.tingxie.ui.hsk.buttons.HskButtonsFragment.Companion.EXTRA_LEVEL
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsViewModel
 import com.zhiyong.tingxie.ui.main.MainActivity
 import com.zhiyong.tingxie.ui.main.QuizItem
-import com.zhiyong.tingxie.ui.word.WordItem
 import java.util.*
 import kotlin.text.StringBuilder
 
-class QuestionActivity: AppCompatActivity() {
+class HskQuestionActivity : AppCompatActivity() {
   private lateinit var btnErase: Button
   private lateinit var btnReset: Button
   private lateinit var btnShowAnswer: Button
@@ -110,7 +107,7 @@ class QuestionActivity: AppCompatActivity() {
       hanzisMatchingPinyin.forEach { sb.append("\n$it") }
 
       btnShowAnswer.setOnClickListener {
-        val intent = Intent(applicationContext, AnswerActivity::class.java)
+        val intent = Intent(applicationContext, HskAnswerActivity::class.java)
         intent.putExtra(EXTRA_LEVEL, level)
         intent.putExtra(EXTRA_HSK_ID, unaskedWord.index)
 
@@ -122,54 +119,29 @@ class QuestionActivity: AppCompatActivity() {
       }
     } else {
       mQuestionViewModel = ViewModelProviders
-        .of(this, QuestionViewModelFactory(this.application, quizItem.id))
-        .get(QuestionViewModel::class.java)
-      mQuestionViewModel.remainingQuestions.observe(this) {
-        wordItems: List<WordItem>? ->
-        if (wordItems != null && wordItems.isNotEmpty()) {
-          val wordItem = wordItems.random()
-          val pinyinString = wordItem.pinyinString
-
-          val sb = StringBuilder()
-          wordItems.filter { it.pinyinString == pinyinString }
-              .forEach { sb.append("\n${it.wordString}") }
-
+        .of(
+          this,
+          QuestionViewModelFactory(this.application, quizItem.id)
+        )[QuestionViewModel::class.java]
+      mQuestionViewModel.notCorrectWordsRandomOrder.observe(this) { words: List<NetworkWordItem> ->
+        run {
+          val word = words[0]
           initializeCommonComponents(
-              wordItem.wordString, pinyinString, wordItems.size, quizItem.numWords
+            word.characters,
+            word.pinyin,
+            quizItem.numNotCorrect,
+            quizItem.numWords
           )
-
           btnReset.visibility = View.GONE
-          // resetAsked causes remainingQuestions to change, which will cause a new
-          // question to be fetched
-//            btnReset.setOnClickListener {
-//              mQuestionViewModel.resetAsked(quizItem.id)
-//              tvRemaining.text = this.getString(
-//                  R.string.remaining, quizItem.totalWords, quizItem.totalWords
-//                )
-//            }
-
           btnShowAnswer.setOnClickListener {
-            val intent = Intent(applicationContext, AnswerActivity::class.java)
+            val intent = Intent(applicationContext, HskAnswerActivity::class.java)
             intent.putExtra(EXTRA_QUIZ_ITEM, quizItem)
-
-//            intent.putExtra(EXTRA_QUIZ_PINYIN_ID, wordItem.id)
-            intent.putExtra(EXTRA_WORDS_STRING, sb.deleteCharAt(0).toString())
-            intent.putExtra(EXTRA_PINYIN_STRING, pinyinString)
-            intent.putExtra(EXTRA_REMAINING_QUESTION_COUNT, wordItems.size)
+            intent.putExtra(EXTRA_WORDS_STRING, word.characters)
+            intent.putExtra(EXTRA_PINYIN_STRING, word.pinyin)
+            intent.putExtra(EXTRA_REMAINING_QUESTION_COUNT, words.size)
             intent.putExtra(EXTRA_BYTE_ARRAY, myCanvasView.getByteArray())
             startActivity(intent)
           }
-
-
-        } else {
-          // todo: There should always be questions. Should log this issue.
-          Log.e("NO_QUESTIONS", "onChanged: ")
-          Toast.makeText(
-              applicationContext,
-              "Error. Please contact Zhiyong by email (yongish@gmail.com) if you see this.",
-              Toast.LENGTH_LONG
-          ).show()
-          startActivity(Intent(applicationContext, MainActivity::class.java))
         }
       }
     }
@@ -198,7 +170,6 @@ class QuestionActivity: AppCompatActivity() {
     const val EXTRA_HSK_ID = "com.zhiyong.tingxie.ui.question.extra.HSK_ID"
 
     const val EXTRA_QUIZ_ITEM = "com.zhiyong.tingxie.ui.question.extra.QUIZ_ITEM"
-    const val EXTRA_QUIZ_PINYIN_ID = "com.zhiyong.tingxie.ui.question.extra.QUIZ_PINYIN_ID"
     const val EXTRA_WORDS_STRING = "com.zhiyong.tingxie.ui.question.extra.WORDS_STRING"
     const val EXTRA_PINYIN_STRING = "com.zhiyong.tingxie.ui.question.extra.PINYIN_STRING"
     const val EXTRA_REMAINING_QUESTION_COUNT =
@@ -206,11 +177,7 @@ class QuestionActivity: AppCompatActivity() {
     const val EXTRA_BYTE_ARRAY = "com.zhiyong.tingxie.ui.question.extra.BYTE_ARRAY"
 
     fun speak(textToSpeech: TextToSpeech, hanzi: String) {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        textToSpeech.speak(hanzi, TextToSpeech.QUEUE_FLUSH,null,null)
-      } else {
-        textToSpeech.speak(hanzi, TextToSpeech.QUEUE_FLUSH, null)
-      }
+      textToSpeech.speak(hanzi, TextToSpeech.QUEUE_FLUSH, null, null)
     }
   }
 }

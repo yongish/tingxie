@@ -1,6 +1,6 @@
 package com.zhiyong.tingxie.ui.word;
 
-import static com.zhiyong.tingxie.ui.question.QuestionActivity.EXTRA_QUIZ_ITEM;
+import static com.zhiyong.tingxie.ui.question.RemoteQuestionActivity.EXTRA_QUIZ_ITEM;
 
 import android.content.DialogInterface;
 import android.content.Intent;

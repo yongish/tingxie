@@ -4,7 +4,6 @@ import com.squareup.moshi.JsonClass
 import com.zhiyong.tingxie.db.Quiz
 import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
 import com.zhiyong.tingxie.ui.main.QuizItem
-import com.zhiyong.tingxie.ui.question.QuestionItem
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
 import com.zhiyong.tingxie.ui.share.TingXieShareIndividual
 import com.zhiyong.tingxie.ui.word.WordItem
@@ -79,6 +78,7 @@ data class NetworkPinyinContainer(val pinyins: List<String>)
 @JsonClass(generateAdapter = true)
 data class NetworkWordItem(
   val id: Long,
+  val quizId: Long,
   val pinyin: String,
   val characters: String
 )
@@ -97,14 +97,11 @@ data class NetworkQuestion(
   val pinyin: String,
   val characters: String
 )
-fun NetworkQuestion.asDomainModel(): QuestionItem = QuestionItem(characters, pinyin)
 
 @JsonClass(generateAdapter = true)
-data class NetworkAsked(
-  val quizId: Long,
+data class NetworkCorrectRecord(
   val wordId: Long,
   val email: String,
-  val asked: Boolean
 )
 
 @JsonClass(generateAdapter = true)

@@ -36,12 +36,14 @@ interface Service {
   @DELETE("words/{id}")
   suspend fun deleteWord(@Path("id") id: Long): String
 
-  @GET("unasked/quiz_id/{quizId}/email/{email}")
-  suspend fun getUnasked(@Path("quizId") quizId: Long, @Path("email") email: String):
-      List<NetworkQuestion>
+  @GET("notCorrectWordsRandomOrder")
+  suspend fun notCorrectWordsRandomOrder(
+    @Query("quizId") quizId: Long,
+    @Query("email") email: String
+  ): List<NetworkWordItem>
 
-  @PUT("asked")
-  suspend fun updateAsked(@Body asked: NetworkAsked): Long
+  @PUT("questions")
+  suspend fun upsertCorrectRecord(@Body asked: NetworkCorrectRecord): Int
 
   @GET("shares/email/{email}/quiz_id/{quizId}")
   suspend fun getShares(

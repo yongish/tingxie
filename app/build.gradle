@@ -9,7 +9,7 @@ android {
     compileSdkVersion 33
     defaultConfig {
         applicationId "com.zhiyong.tingxie"
-        minSdkVersion 26
+        minSdkVersion 28
         targetSdkVersion 33
         versionCode 49
         versionName "1.0"

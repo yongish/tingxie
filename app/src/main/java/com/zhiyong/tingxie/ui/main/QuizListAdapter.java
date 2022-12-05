@@ -1,6 +1,6 @@
 package com.zhiyong.tingxie.ui.main;
 
-import static com.zhiyong.tingxie.ui.question.QuestionActivity.EXTRA_QUIZ_ITEM;
+import static com.zhiyong.tingxie.ui.question.RemoteQuestionActivity.EXTRA_QUIZ_ITEM;
 import static com.zhiyong.tingxie.ui.share.ShareActivity.EXTRA_QUIZ_ID;
 
 import android.app.Activity;
@@ -34,7 +34,7 @@ import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.Util;
 import com.zhiyong.tingxie.db.Question;
 import com.zhiyong.tingxie.db.QuizPinyin;
-import com.zhiyong.tingxie.ui.question.QuestionActivity;
+import com.zhiyong.tingxie.ui.question.RemoteQuestionActivity;
 import com.zhiyong.tingxie.ui.share.ShareActivity;
 import com.zhiyong.tingxie.ui.word.WordActivity;
 
@@ -188,7 +188,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                 @Override
                 public void onClick(View v) {
                     if (current.getNumWords() > 0) {
-                        Intent intent = new Intent(context, QuestionActivity.class);
+                        Intent intent = new Intent(context, RemoteQuestionActivity.class);
                         intent.putExtra(EXTRA_QUIZ_ITEM, quizItem);
                         ((Activity) context).startActivityForResult(
                                 intent, QUESTION_ACTIVITY_REQUEST_CODE

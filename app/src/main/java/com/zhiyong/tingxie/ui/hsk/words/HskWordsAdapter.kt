@@ -18,7 +18,7 @@ import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.db.QuizPinyin
 import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.ui.main.QuizViewModel
-import com.zhiyong.tingxie.ui.question.QuestionActivity
+import com.zhiyong.tingxie.ui.question.HskQuestionActivity
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -53,7 +53,7 @@ class HskWordsAdapter(
         )
       )
     }
-    holder.ivPlay.setOnClickListener { QuestionActivity.speak(textToSpeech, word) }
+    holder.ivPlay.setOnClickListener { HskQuestionActivity.speak(textToSpeech, word) }
     holder.ibAdd.setOnClickListener {
       when (quizItems.size) {
         0 -> {

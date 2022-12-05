@@ -97,7 +97,8 @@ public class Question {
         }
 
         public Question build() {
-            return new Question(nestedTimestamp, nestedTimestamp, nestedPinyinString, nestedCorrect,
+            return new Question(nestedTimestamp, nestedTimestamp, nestedPinyinString,
+                    nestedCorrect,
                     nestedQuizId);
         }
     }

@@ -1,24 +1,19 @@
 package com.zhiyong.tingxie
 
 import android.content.Context
-import android.util.Log
-import androidx.lifecycle.LiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.db.*
 import com.zhiyong.tingxie.network.*
 import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
 import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsAdapter
-import com.zhiyong.tingxie.ui.question.QuestionItem
 import com.zhiyong.tingxie.ui.share.TingXieShareIndividual
 import com.zhiyong.tingxie.ui.word.WordItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
-import java.util.concurrent.Callable
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import java.util.concurrent.Future
 
 
 /* A Repository is a class that abstracts access to multiple data sources.
@@ -45,10 +40,6 @@ class QuizRepository(val context: Context) {
       this.name = name
     }
   }
-
-//  val quizzes: LiveData<List<QuizItem>> = Transformations.map(mQuizDao.allQuizItems) {
-//    it.asDomainModel()
-//  }
 
   suspend fun putToken(uid: String, email: String, token: String) {
     withContext(Dispatchers.IO) {
@@ -137,23 +128,8 @@ class QuizRepository(val context: Context) {
     TingXieNetwork.tingxie.deleteShare(this.email, quizId, email)
   }
 
-//  val allQuizPinyins: LiveData<List<QuizPinyin>> = mQuizDao.allQuizPinyins
-//  val allQuestions: LiveData<List<Question>> = mQuizDao.allQuestions
-
-//  fun getQuizItem(quizId: Long): LiveData<QuizItem> {
-//    return mQuizDao.getQuizItem(quizId)
-//  }
-
-//  fun getWordItemsOfQuiz(quizId: Long): LiveData<List<WordItem>> {
-//    return mQuizDao.getWordItemsOfQuiz(quizId)
-//  }
-
-  suspend fun getRemainingQuestionsNew(quizId: Long): List<QuestionItem> =
-    TingXieNetwork.tingxie.getUnasked(quizId, email).map { it.asDomainModel() }
-
-  fun getRemainingQuestions(quizId: Long): LiveData<List<WordItem>> {
-    return mQuizDao.getRemainingQuestions(quizId)
-  }
+  suspend fun notCorrectWordsRandomOrder(quizId: Long): List<NetworkWordItem> =
+    TingXieNetwork.tingxie.notCorrectWordsRandomOrder(quizId, email)
 
   private var hskWordMap: MutableMap<Int, List<HskWordsAdapter.HskWord>> = mutableMapOf()
 
@@ -222,12 +198,6 @@ class QuizRepository(val context: Context) {
     return TingXieNetwork.tingxie.postQuiz(NetworkCreateQuiz(title, date, name, email))
   }
 
-  fun insertQuizFuture(quiz: Quiz?): Future<Long> = executor.submit(Callable {
-    mQuizDao.insert(quiz)
-  })
-
-  fun deleteQuizPinyins(quizId: Long) = mQuizDao.deleteQuizPinyins(quizId)
-
   suspend fun updateQuiz(quiz: QuizItem): Int {
     return TingXieNetwork.tingxie.putQuiz(
       NetworkQuiz(
@@ -260,41 +230,11 @@ class QuizRepository(val context: Context) {
     mQuizDao.insert(quizPinyin)
   }
 
-  //  suspend fun resetAsked(quizId: Long) {
-//    TingXieNetwork.tingxie.deleteQuiz()
-//  }
-  fun resetAsked(quizId: Long?) {
-    if (quizId == null) {
-      val message = "Null quizId in resetAsked."
-      Log.e(TAG, message)
-      throw IllegalArgumentException(message)
-    }
-    executor.execute {
-      mQuizDao.resetAsked(quizId)
-    }
-  }
-
-  suspend fun updateAsked(asked: NetworkAsked) =
-    TingXieNetwork.tingxie.updateAsked(asked)
-
-  fun updateQuizPinyin(quizPinyin: QuizPinyin?) {
-    if (quizPinyin == null) {
-      val message = "Null quizPinyin in updateQuizPinyin."
-      Log.e(TAG, message)
-      throw IllegalArgumentException(message)
-    }
-    executor.execute {
-      mQuizDao.updateQuizPinyin(
-        quizPinyin.quizId,
-        quizPinyin.pinyinString,
-        quizPinyin.asked
-      )
-    }
-  }
-
-  suspend fun deleteQuiz(quizId: Long) {
+  suspend fun deleteQuiz(quizId: Long) =
     TingXieNetwork.tingxie.deleteQuiz(quizId, name, email, email)
-  }
+
+  suspend fun upsertCorrectRecord(wordId: Long) =
+    TingXieNetwork.tingxie.upsertCorrectRecord(NetworkCorrectRecord(wordId, email))
 
   companion object {
     private const val TAG = "QuizRepository"
