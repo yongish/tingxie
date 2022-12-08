@@ -3,6 +3,7 @@ package com.zhiyong.tingxie.ui.answer
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -16,6 +17,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsViewModel
 import com.zhiyong.tingxie.ui.main.MainActivity
+import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.ui.question.RemoteQuestionActivity
 
 class RemoteAnswerActivity : AppCompatActivity() {
@@ -56,6 +58,17 @@ class RemoteAnswerActivity : AppCompatActivity() {
     }
 
     val intentQuestion = Intent(this, RemoteQuestionActivity::class.java)
+    intentQuestion.putExtra(
+      RemoteQuestionActivity.EXTRA_QUIZ_ITEM,
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        intent.getParcelableExtra(
+          RemoteQuestionActivity.EXTRA_QUIZ_ITEM,
+          QuizItem::class.java
+        )
+      } else {
+        intent.getParcelableExtra(RemoteQuestionActivity.EXTRA_QUIZ_ITEM)
+      }
+    )
 
     btnAnswerCorrect.setOnClickListener {
       mAnswerViewModel = ViewModelProviders.of(this)[AnswerViewModel::class.java]
@@ -67,7 +80,6 @@ class RemoteAnswerActivity : AppCompatActivity() {
       // Was this the last word in current round?
       Log.d("REMAINING_QN", remainingCount.toString())
 
-      val intentQuestion = Intent(this, RemoteQuestionActivity::class.java)
       if (remainingCount < 2) {
         AlertDialog.Builder(this)
           .setTitle("Round Completed.")

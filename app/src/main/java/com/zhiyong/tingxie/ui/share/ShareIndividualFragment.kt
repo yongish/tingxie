@@ -65,67 +65,67 @@ class ShareIndividualFragment : Fragment() {
 //      true
 //    }
 
-    if (quizId != -1L) {
-      val viewModelFactory = ShareIndividualViewModelFactory(quizId, requireNotNull(activity).application)
-      viewModel = ViewModelProvider(this, viewModelFactory)[ShareIndividualViewModel::class.java]
+//    if (quizId != -1L) {
+//      val viewModelFactory = ShareIndividualViewModelFactory(quizId, requireNotNull(activity).application)
+//      viewModel = ViewModelProvider(this, viewModelFactory)[ShareIndividualViewModel::class.java]
 
-      viewModel.shares.observe(viewLifecycleOwner) { shares ->
-        if (shares.isEmpty()) {
-          binding.emptyView.visibility = View.VISIBLE
-        } else {
-          binding.emptyView.visibility = View.INVISIBLE
-        }
-
-        shares?.apply {
-          if (shares.isNotEmpty()) {
-            val role = shares.first { it.email == FirebaseAuth.getInstance().currentUser?.email }.role
-            binding.fab.visibility = if (role == EnumQuizRole.EDITOR) View.VISIBLE else View.GONE
-          }
-
-          // todo: Pass role into ShareAdapter to fix duplication.
-          binding.recyclerviewShares.adapter = ShareIndividualAdapter(
-              quizId,
-              shares,
-              requireActivity(),
-              viewModel,
-              binding.recyclerviewShares,
-          )
-
-          shareIndividualAdapter = binding.recyclerviewShares.adapter as ShareIndividualAdapter
-          binding.fab.setOnClickListener {
-
-            // todo: Only admin can edit shared.
-
-            if (editing) {
-              shareIndividualAdapter.filter.filter(IsShared.SHARED.name)
-              binding.fab.setImageResource(R.drawable.ic_baseline_edit_black_24)
-              shareIndividualAdapter.editing = false
-              menuItem.isVisible = false
-              editing = false
-            } else {
-              if (shares.isEmpty()) {
-                startActivity(Intent(context, FriendActivity::class.java))
-              }
-              // Display all friends.
-              shareIndividualAdapter.filter.filter(IsShared.ALL.name)
-              binding.fab.setImageResource(R.drawable.ic_baseline_done_24)
-              shareIndividualAdapter.editing = true
-              menuItem.isVisible = true
-              editing = true
-            }
-            // todo: Display done check button on menu bar.
-          }
-        }
-      }
-
-      viewModel.status.observe(viewLifecycleOwner) { status: Status ->
-        if (status == Status.ERROR) {
-          // todo: Display an offline error message on the view, instead of a toast.
-          Toast.makeText(activity, "Network Error on Shares", Toast.LENGTH_LONG).show()
-        }
-      }
-
-    }
+//      viewModel.shares.observe(viewLifecycleOwner) { shares ->
+//        if (shares.isEmpty()) {
+//          binding.emptyView.visibility = View.VISIBLE
+//        } else {
+//          binding.emptyView.visibility = View.INVISIBLE
+//        }
+//
+//        shares?.apply {
+//          if (shares.isNotEmpty()) {
+//            val role = shares.first { it.email == FirebaseAuth.getInstance().currentUser?.email }.role
+//            binding.fab.visibility = if (role == EnumQuizRole.EDITOR) View.VISIBLE else View.GONE
+//          }
+//
+//          // todo: Pass role into ShareAdapter to fix duplication.
+//          binding.recyclerviewShares.adapter = ShareIndividualAdapter(
+//              quizId,
+//              shares,
+//              requireActivity(),
+//              viewModel,
+//              binding.recyclerviewShares,
+//          )
+//
+//          shareIndividualAdapter = binding.recyclerviewShares.adapter as ShareIndividualAdapter
+//          binding.fab.setOnClickListener {
+//
+//            // todo: Only admin can edit shared.
+//
+//            if (editing) {
+//              shareIndividualAdapter.filter.filter(IsShared.SHARED.name)
+//              binding.fab.setImageResource(R.drawable.ic_baseline_edit_black_24)
+//              shareIndividualAdapter.editing = false
+//              menuItem.isVisible = false
+//              editing = false
+//            } else {
+//              if (shares.isEmpty()) {
+//                startActivity(Intent(context, FriendActivity::class.java))
+//              }
+//              // Display all friends.
+//              shareIndividualAdapter.filter.filter(IsShared.ALL.name)
+//              binding.fab.setImageResource(R.drawable.ic_baseline_done_24)
+//              shareIndividualAdapter.editing = true
+//              menuItem.isVisible = true
+//              editing = true
+//            }
+//            // todo: Display done check button on menu bar.
+//          }
+//        }
+//      }
+//
+//      viewModel.status.observe(viewLifecycleOwner) { status: Status ->
+//        if (status == Status.ERROR) {
+//          // todo: Display an offline error message on the view, instead of a toast.
+//          Toast.makeText(activity, "Network Error on Shares", Toast.LENGTH_LONG).show()
+//        }
+//      }
+//
+//    }
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

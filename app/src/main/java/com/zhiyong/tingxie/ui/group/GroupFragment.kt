@@ -41,34 +41,34 @@ class GroupFragment : Fragment() {
 
     // stopped here
 
-    binding.swipeLayout.setOnRefreshListener {
-      viewModel.refreshRequests(binding.swipeLayout)
-    }
-
-    viewModel = ViewModelProvider(this)[GroupViewModel::class.java]
-    val adapter = GroupAdapter(viewModel, binding.recyclerviewGroup)
-    binding.recyclerviewGroup.adapter = adapter
-    viewModel.groups.observe(viewLifecycleOwner) {
-      it?.let {
-        adapter.requests = it
-        if (it.isEmpty()) {
-          binding.emptyView.visibility = View.VISIBLE
-        } else {
-          binding.emptyView.visibility = View.INVISIBLE
-        }
-      }
-    }
-
-    viewModel.status.observe(viewLifecycleOwner) { status ->
-      if (status.equals(Status.ERROR)) {
-        // todo: Display an offline error message on the view, instead of a toast.
-        Toast.makeText(
-          activity,
-          "Network Error on YourRequestFragment",
-          Toast.LENGTH_LONG
-        ).show()
-      }
-    }
+//    binding.swipeLayout.setOnRefreshListener {
+//      viewModel.refreshRequests(binding.swipeLayout)
+//    }
+//
+//    viewModel = ViewModelProvider(this)[GroupViewModel::class.java]
+//    val adapter = GroupAdapter(viewModel, binding.recyclerviewGroup)
+//    binding.recyclerviewGroup.adapter = adapter
+//    viewModel.groups.observe(viewLifecycleOwner) {
+//      it?.let {
+//        adapter.requests = it
+//        if (it.isEmpty()) {
+//          binding.emptyView.visibility = View.VISIBLE
+//        } else {
+//          binding.emptyView.visibility = View.INVISIBLE
+//        }
+//      }
+//    }
+//
+//    viewModel.status.observe(viewLifecycleOwner) { status ->
+//      if (status.equals(Status.ERROR)) {
+//        // todo: Display an offline error message on the view, instead of a toast.
+//        Toast.makeText(
+//          activity,
+//          "Network Error on YourRequestFragment",
+//          Toast.LENGTH_LONG
+//        ).show()
+//      }
+//    }
   }
 
   override fun onDestroyView() {
@@ -96,35 +96,35 @@ class GroupFragment : Fragment() {
 
     // 12/4/22 refer to wordactivity to make this builder. should be simple.
 
-    builder.setMessage(
-      HtmlCompat.fromHtml(
-        (if (showError) "<p style=\"color:red\">No such email: ${email}</p>\n" +
-            "Please check that the email address is correct. " +
-            "If it is correct, please ask your friend to install 听写 and create an account.<br />" else "") +
-            "To connect with a friend, search for her email address." +
-            if (yourEmail == null) "" else "\n<br />Your email address: $yourEmail",
-        HtmlCompat.FROM_HTML_MODE_LEGACY
-      )
-    )
-      .setTitle("Add friend")
-      .setView(frameLayout)
-      .setPositiveButton(R.string.ok) { _, _ ->
-        email = editText.text.toString()
-        viewModel.checkIfShouldReopen(email)
-      }
-      .setNegativeButton(R.string.cancel) { dialog, _ ->
-        viewModel.closeAddFriendModal()
-        dialog.cancel()
-      }
-      .setNeutralButton("Share 听写") { _, _ ->
-        context?.let {
-          ShareCompat.IntentBuilder(it)
-            .setType("text/plain")
-            .setChooserTitle("Chooser title")
-            .setText("http://play.google.com/store/apps/details?id=" + it.packageName)
-            .startChooser()
-        }
-      }
-      .create().show()
+//    builder.setMessage(
+//      HtmlCompat.fromHtml(
+//        (if (showError) "<p style=\"color:red\">No such email: ${email}</p>\n" +
+//            "Please check that the email address is correct. " +
+//            "If it is correct, please ask your friend to install 听写 and create an account.<br />" else "") +
+//            "To connect with a friend, search for her email address." +
+//            if (yourEmail == null) "" else "\n<br />Your email address: $yourEmail",
+//        HtmlCompat.FROM_HTML_MODE_LEGACY
+//      )
+//    )
+//      .setTitle("Add friend")
+//      .setView(frameLayout)
+//      .setPositiveButton(R.string.ok) { _, _ ->
+//        email = editText.text.toString()
+//        viewModel.checkIfShouldReopen(email)
+//      }
+//      .setNegativeButton(R.string.cancel) { dialog, _ ->
+//        viewModel.closeAddFriendModal()
+//        dialog.cancel()
+//      }
+//      .setNeutralButton("Share 听写") { _, _ ->
+//        context?.let {
+//          ShareCompat.IntentBuilder(it)
+//            .setType("text/plain")
+//            .setChooserTitle("Chooser title")
+//            .setText("http://play.google.com/store/apps/details?id=" + it.packageName)
+//            .startChooser()
+//        }
+//      }
+//      .create().show()
   }
 }

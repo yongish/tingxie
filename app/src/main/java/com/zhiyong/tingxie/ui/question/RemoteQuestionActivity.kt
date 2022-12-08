@@ -5,18 +5,19 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.zhiyong.tingxie.R
-import com.zhiyong.tingxie.network.NetworkWordItem
 import com.zhiyong.tingxie.ui.answer.RemoteAnswerActivity
 import com.zhiyong.tingxie.ui.main.MainActivity
 import com.zhiyong.tingxie.ui.main.QuizItem
@@ -34,36 +35,6 @@ class RemoteQuestionActivity : AppCompatActivity() {
 
   private lateinit var mQuestionViewModel: QuestionViewModel
 
-  private fun initializeCommonComponents(
-    hanzi: String, pinyin: String, numUnasked: Int, numTotal: Int?
-  ) {
-    // Same behavior for user-defined quiz and HSK.
-    myCanvasView = findViewById(R.id.view)
-
-    btnErase = findViewById(R.id.btnErase)
-    btnErase.setOnClickListener { myCanvasView.erase() }
-
-    textToSpeech = TextToSpeech(applicationContext) { status ->
-      if (status != TextToSpeech.ERROR) {
-        //if there is no error then set language
-        textToSpeech.language = Locale.SIMPLIFIED_CHINESE
-        speak(textToSpeech, hanzi)
-      }
-    }
-    ivPlay = findViewById(R.id.ivPlay)
-    ivPlay.setOnClickListener { speak(textToSpeech, hanzi) }
-
-    tvQuestionPinyin = findViewById(R.id.tvQuestionPinyin)
-    tvQuestionPinyin.text = pinyin
-
-    tvRemaining = findViewById(R.id.tvRemaining)
-    tvRemaining.text = this.getString(R.string.remaining, numUnasked, numTotal)
-
-    // Different behavior for user-defined quiz and HSK.
-    btnReset = findViewById(R.id.btnReset)
-    btnShowAnswer = findViewById(R.id.btnShowAnswer)
-  }
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_question)
@@ -75,6 +46,25 @@ class RemoteQuestionActivity : AppCompatActivity() {
       startActivity(Intent(this, MainActivity::class.java))
     }
 
+    // Same behavior for user-defined quiz and HSK.
+    myCanvasView = findViewById(R.id.view)
+
+    btnErase = findViewById(R.id.btnErase)
+    btnErase.setOnClickListener {
+      Toast.makeText(this, "AAAAAAAAAAAAAAAAAAAAAAAAAAA", Toast.LENGTH_LONG).show()
+      myCanvasView.erase()
+    }
+
+    ivPlay = findViewById(R.id.ivPlay)
+    tvQuestionPinyin = findViewById(R.id.tvQuestionPinyin)
+
+
+    tvRemaining = findViewById(R.id.tvRemaining)
+
+    // Different behavior for user-defined quiz and HSK.
+    btnReset = findViewById(R.id.btnReset)
+    btnShowAnswer = findViewById(R.id.btnShowAnswer)
+
     // From AnswerActivity.
     val quizItem: QuizItem? =
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -83,31 +73,36 @@ class RemoteQuestionActivity : AppCompatActivity() {
         intent.getParcelableExtra(EXTRA_QUIZ_ITEM)
       }
     if (quizItem != null) {
-      mQuestionViewModel = ViewModelProviders
-        .of(
-          this,
-          QuestionViewModelFactory(this.application, quizItem.id)
-        )[QuestionViewModel::class.java]
-      mQuestionViewModel.notCorrectWordsRandomOrder.observe(this) { words: List<NetworkWordItem> ->
-        run {
-          val word = words[0]
-          initializeCommonComponents(
-            word.characters,
-            word.pinyin,
-            quizItem.numNotCorrect,
-            quizItem.numWords
-          )
-          btnReset.visibility = View.GONE
-          btnShowAnswer.setOnClickListener {
-            val intent = Intent(applicationContext, RemoteAnswerActivity::class.java)
-            intent.putExtra(EXTRA_QUIZ_ITEM, quizItem)
-            intent.putExtra(EXTRA_WORD_ID, word.id)
-            intent.putExtra(EXTRA_WORD_STRING, word.characters)
-            intent.putExtra(EXTRA_PINYIN_STRING, word.pinyin)
-            intent.putExtra(EXTRA_REMAINING_QUESTION_COUNT, words.size)
-            intent.putExtra(EXTRA_BYTE_ARRAY, myCanvasView.getByteArray())
-            startActivity(intent)
+      val viewModelFactory = QuestionViewModelFactory(this.application, quizItem.id)
+      mQuestionViewModel =
+        ViewModelProvider(this, viewModelFactory)[QuestionViewModel::class.java]
+      mQuestionViewModel.notCorrectWordsRandomOrder.observe(this) { words ->
+        val word = words[0]
+
+        textToSpeech = TextToSpeech(applicationContext) { status ->
+          if (status != TextToSpeech.ERROR) {
+            //if there is no error then set language
+            textToSpeech.language = Locale.SIMPLIFIED_CHINESE
+            speak(textToSpeech, word.characters)
           }
+        }
+
+        ivPlay.setOnClickListener { speak(textToSpeech, word.characters) }
+
+        tvQuestionPinyin.text = word.pinyin
+
+        tvRemaining.text = this.getString(R.string.remaining, quizItem.numNotCorrect, quizItem.numWords)
+
+        btnReset.visibility = View.GONE
+        btnShowAnswer.setOnClickListener {
+          val intent = Intent(applicationContext, RemoteAnswerActivity::class.java)
+          intent.putExtra(EXTRA_QUIZ_ITEM, quizItem)
+          intent.putExtra(EXTRA_WORD_ID, word.id)
+          intent.putExtra(EXTRA_WORD_STRING, word.characters)
+          intent.putExtra(EXTRA_PINYIN_STRING, word.pinyin)
+          intent.putExtra(EXTRA_REMAINING_QUESTION_COUNT, words.size)
+          intent.putExtra(EXTRA_BYTE_ARRAY, myCanvasView.getByteArray())
+          startActivity(intent)
         }
       }
     }
