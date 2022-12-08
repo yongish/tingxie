@@ -38,7 +38,6 @@ class GroupViewModel(application: Application) : AndroidViewModel(application) {
     }
   }
 
-  // stopped here
   // todo: This should be in GroupMemberViewModel that will be created soon.
   fun addUser(groupId: Long, userProps: NetworkGroupMember): LiveData<Long> {
     val result = MutableLiveData<Long>()

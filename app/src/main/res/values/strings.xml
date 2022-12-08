@@ -17,6 +17,7 @@
     <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
     <string name="facebook_application_id" translatable="false">1500181530138959</string>
 
+    <string name="no_groups">You are not a member of any group.</string>
     <string name="no_friends">You don\'t have any friends yet.\nGo to "Pending Requests" to add a friend and share quizzes.</string>
     <string name="no_shares">You haven\'t shared this quiz with any friends.\nTap the + button to share it with friends.</string>
     <string name="no_quizzes">You haven\'t added any quizzes.\nTap the + button to add a quiz.</string>
@@ -72,4 +73,5 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="details">Details</string>
 </resources>

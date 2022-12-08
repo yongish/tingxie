@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.YourIndividualRequestFragmentBinding
+import com.zhiyong.tingxie.ui.Util
 import com.zhiyong.tingxie.viewmodel.Status
 
 class GroupFragment : Fragment() {
@@ -36,10 +37,14 @@ class GroupFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+
     binding.fab.setOnClickListener { openAddGroupDialog() }
 
 
-    // stopped here
+    viewModel = ViewModelProvider(this)[GroupViewModel::class.java]
+    val adapter = GroupAdapter()
+
+
 
 //    binding.swipeLayout.setOnRefreshListener {
 //      viewModel.refreshRequests(binding.swipeLayout)

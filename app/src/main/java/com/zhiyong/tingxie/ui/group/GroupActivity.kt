@@ -24,19 +24,26 @@ class GroupActivity : AppCompatActivity() {
       Toast.makeText(this, "Internet connection required.", Toast.LENGTH_LONG).show()
     }
 
-    binding = ActivityGroupBinding.inflate(layoutInflater)
-    setContentView(binding.root)
-
-    setSupportActionBar(binding.toolbar)
-
-    val navController = findNavController(R.id.nav_host_fragment_content_group)
-    appBarConfiguration = AppBarConfiguration(navController.graph)
-    setupActionBarWithNavController(navController, appBarConfiguration)
-
-    binding.fab.setOnClickListener { view ->
-      Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-        .setAction("Action", null).show()
+    if (savedInstanceState == null) {
+      supportFragmentManager.beginTransaction()
+        .replace(R.id.container, GroupFragment.newInstance())
+        .commitNow()
     }
+    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+//    binding = ActivityGroupBinding.inflate(layoutInflater)
+//    setContentView(binding.root)
+//
+//    setSupportActionBar(binding.toolbar)
+//
+//    val navController = findNavController(R.id.nav_host_fragment_content_group)
+//    appBarConfiguration = AppBarConfiguration(navController.graph)
+//    setupActionBarWithNavController(navController, appBarConfiguration)
+//
+//    binding.fab.setOnClickListener { view ->
+//      Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//        .setAction("Action", null).show()
+//    }
   }
 
   override fun onSupportNavigateUp(): Boolean {
