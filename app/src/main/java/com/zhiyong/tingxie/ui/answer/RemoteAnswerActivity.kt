@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.zhiyong.tingxie.R
+import com.zhiyong.tingxie.network.NetworkQuiz
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsViewModel
 import com.zhiyong.tingxie.ui.main.MainActivity
 import com.zhiyong.tingxie.ui.main.QuizItem
@@ -88,6 +89,8 @@ class RemoteAnswerActivity : AppCompatActivity() {
       if (remainingCount < 2) {
         if (quizItem != null) {
           quizItem.numNotCorrect = quizItem.numWords
+          quizItem.round += 1
+          mAnswerViewModel.updateQuiz(quizItem)
         }
         AlertDialog.Builder(this)
           .setTitle("Round Completed.")
