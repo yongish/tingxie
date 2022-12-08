@@ -57,20 +57,25 @@ class RemoteAnswerActivity : AppCompatActivity() {
       startActivity(intent)
     }
 
+    val quizItem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      intent.getParcelableExtra(
+        RemoteQuestionActivity.EXTRA_QUIZ_ITEM,
+        QuizItem::class.java
+      )
+    } else {
+      intent.getParcelableExtra(RemoteQuestionActivity.EXTRA_QUIZ_ITEM)
+    }
     val intentQuestion = Intent(this, RemoteQuestionActivity::class.java)
-    intentQuestion.putExtra(
-      RemoteQuestionActivity.EXTRA_QUIZ_ITEM,
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        intent.getParcelableExtra(
-          RemoteQuestionActivity.EXTRA_QUIZ_ITEM,
-          QuizItem::class.java
-        )
-      } else {
-        intent.getParcelableExtra(RemoteQuestionActivity.EXTRA_QUIZ_ITEM)
-      }
-    )
 
     btnAnswerCorrect.setOnClickListener {
+      if (quizItem != null) {
+        quizItem.numNotCorrect = quizItem.numNotCorrect - 1
+      }
+      intentQuestion.putExtra(
+        RemoteQuestionActivity.EXTRA_QUIZ_ITEM,
+        quizItem
+      )
+
       mAnswerViewModel = ViewModelProviders.of(this)[AnswerViewModel::class.java]
       mAnswerViewModel.upsertCorrectRecord(
         intent.getLongExtra(RemoteQuestionActivity.EXTRA_WORD_ID, -1)
@@ -81,6 +86,9 @@ class RemoteAnswerActivity : AppCompatActivity() {
       Log.d("REMAINING_QN", remainingCount.toString())
 
       if (remainingCount < 2) {
+        if (quizItem != null) {
+          quizItem.numNotCorrect = quizItem.numWords
+        }
         AlertDialog.Builder(this)
           .setTitle("Round Completed.")
           .setMessage("Great. You completed a round with all questions correct.")
@@ -96,6 +104,10 @@ class RemoteAnswerActivity : AppCompatActivity() {
     }
 
     btnAnswerWrong.setOnClickListener {
+      intentQuestion.putExtra(
+        RemoteQuestionActivity.EXTRA_QUIZ_ITEM,
+        quizItem
+      )
       Toast.makeText(
         this, "Keep going.",
         Toast.LENGTH_SHORT
