@@ -8,7 +8,7 @@
     android:background="@color/colorPrimaryLight">
 
     <ImageView
-        android:id="@+id/btnDetails"
+        android:id="@+id/ivDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -20,7 +20,7 @@
         app:srcCompat="@android:drawable/ic_menu_delete" />
 
     <TextView
-        android:id="@+id/tvNumMembers"
+        android:id="@+id/tvEmail"
         style="@style/text_view_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

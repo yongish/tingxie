@@ -51,6 +51,13 @@ interface Service {
   @POST("groups")
   suspend fun createGroup(@Body group: NetworkCreateGroup): Long
 
+  @DELETE("groups/{groupId}")
+  suspend fun deleteGroup(
+    @Path("groupId") groupId: Long,
+    @Query("requesterName") requesterName: String,
+    @Query("requesterEmail") requesterEmail: String
+  ): Int
+
   @GET("groups/{groupId}/members")
   suspend fun getGroupMembers(@Path("groupId") groupId: Long): List<NetworkGroupMember>
 
@@ -59,6 +66,14 @@ interface Service {
     @Path("groupId") groupId: Long,
     @Body userProps: NetworkGroupMember
   ): Long
+
+  @DELETE("groups/{groupId}/members/{email}")
+  suspend fun deleteGroupMember(
+    @Path("groupId") groupId: Long,
+    @Path("email") email: String,
+    @Query("requesterName") requesterName: String,
+    @Query("requesterEmail") requesterEmail: String
+  ): Int
 
 
   // todo: Not developing these endpoints below. Should clean up.

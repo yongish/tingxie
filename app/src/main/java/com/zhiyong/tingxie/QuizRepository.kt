@@ -246,11 +246,29 @@ class QuizRepository(val context: Context) {
       NetworkCreateGroup(groupName, name, email, members)
     )
 
+  suspend fun deleteGroup(
+    groupId: Long,
+    requesterName: String,
+    requesterEmail: String
+  ): Int = TingXieNetwork.tingxie.deleteGroup(groupId, requesterName, requesterEmail)
+
   suspend fun getGroupMembers(groupId: Long) =
     TingXieNetwork.tingxie.getGroupMembers(groupId)
 
   suspend fun addUserToGroup(groupId: Long, userProps: NetworkGroupMember) =
     TingXieNetwork.tingxie.postGroupMember(groupId, userProps)
+
+  suspend fun deleteGroupMember(
+    groupId: Long,
+    requesterName: String,
+    requesterEmail: String,
+    email: String
+  ): Int = TingXieNetwork.tingxie.deleteGroupMember(
+    groupId,
+    email,
+    requesterName,
+    requesterEmail
+  )
 
   companion object {
     private const val TAG = "QuizRepository"

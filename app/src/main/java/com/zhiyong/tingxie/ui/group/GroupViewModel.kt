@@ -47,13 +47,4 @@ class GroupViewModel(application: Application) : AndroidViewModel(application) {
     return result
   }
 
-  // todo: This should be in GroupMemberViewModel that will be created soon.
-  fun addUser(groupId: Long, userProps: NetworkGroupMember): LiveData<Long> {
-    val result = MutableLiveData<Long>()
-    viewModelScope.launch(Dispatchers.IO) {
-      val newId = repository.addUserToGroup(groupId, userProps)
-      result.postValue(newId)
-    }
-    return result
-  }
 }

@@ -124,7 +124,7 @@ class RemoteQuestionActivity : AppCompatActivity() {
       .setNegativeButton(
         "No need. I can heard the words."
       ) { dialog: DialogInterface, _ -> dialog.dismiss() }
-      .show()
+      .create().show()
   }
 
   companion object {

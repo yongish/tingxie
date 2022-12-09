@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.ui.friend.FriendActivity;
+import com.zhiyong.tingxie.ui.group.GroupActivity;
 import com.zhiyong.tingxie.ui.hsk.buttons.HskButtonsActivity;
 import com.zhiyong.tingxie.ui.login.LoginActivity;
 import com.zhiyong.tingxie.viewmodel.Status;
@@ -162,8 +163,8 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void openFriends(MenuItem item) {
-        startActivity(new Intent(MainActivity.this, FriendActivity.class));
+    public void openGroups(MenuItem item) {
+        startActivity(new Intent(MainActivity.this, GroupActivity.class));
     }
 
     public static Intent openSpeechSettingsHelper() {

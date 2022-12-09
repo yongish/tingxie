@@ -252,6 +252,6 @@ public class WordActivity extends AppCompatActivity {
         new AlertDialog.Builder(WordActivity.this)
                 .setTitle("Words are tappable")
                 .setMessage("Tap on a word to search for it in Baidu dictionary.")
-                .show();
+                .create().show();
     }
 }

@@ -9,6 +9,7 @@ import com.zhiyong.tingxie.QuizRepository
 import com.zhiyong.tingxie.network.NetworkGroupMember
 import com.zhiyong.tingxie.network.NetworkWordItem
 import com.zhiyong.tingxie.viewmodel.CrudStatus
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class GroupMemberViewModel(application: Application, groupId: Long) :
@@ -38,7 +39,30 @@ class GroupMemberViewModel(application: Application, groupId: Long) :
       }
     }
 
-  fun deleteGroupMember(groupId: Long, email: String) {
-    view
+  fun addUser(groupId: Long, userProps: NetworkGroupMember): LiveData<Long> {
+    val result = MutableLiveData<Long>()
+    viewModelScope.launch(Dispatchers.IO) {
+      val newId = mRepository.addUserToGroup(groupId, userProps)
+      result.postValue(newId)
+    }
+    return result
+  }
+
+  fun deleteGroupMember(groupId: Long, requesterName: String, requesterEmail: String, email: String): LiveData<Int> {
+    val result = MutableLiveData<Int>()
+    viewModelScope.launch(Dispatchers.IO) {
+      val numRows = mRepository.deleteGroupMember(groupId, requesterName, requesterEmail, email)
+      result.postValue(numRows)
+    }
+    return result
+  }
+
+  fun deleteGroup(groupId: Long, requesterName: String, requesterEmail: String): LiveData<Int> {
+    val result = MutableLiveData<Int>()
+    viewModelScope.launch(Dispatchers.IO) {
+      val numRows = mRepository.deleteGroup(groupId, requesterName, requesterEmail)
+      result.postValue(numRows)
+    }
+    return result
   }
 }

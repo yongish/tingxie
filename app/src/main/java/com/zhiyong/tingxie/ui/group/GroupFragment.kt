@@ -53,7 +53,7 @@ class GroupFragment : Fragment() {
     viewModel.groupsStatus.observe(viewLifecycleOwner) { status ->
       if (status.equals(Status.ERROR)) {
         binding.emptyView.visibility = View.INVISIBLE
-
+        binding.networkErrorView.visibility = View.VISIBLE
       }
     }
 //    binding.swipeLayout.setOnRefreshListener {

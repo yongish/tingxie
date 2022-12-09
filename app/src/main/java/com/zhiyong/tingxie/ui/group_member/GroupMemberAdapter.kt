@@ -67,20 +67,30 @@ class GroupMemberAdapter(
         .create().show()
     }
 
-    if ()
-    holder.ivDelete.visibility = View.INVISIBLE
-
-    holder.ivDelete.setOnClickListener {
+    if (role == "READ-ONLY") {
+      holder.ivDelete.visibility = View.INVISIBLE
+    } else {
+      holder.ivDelete.setOnClickListener {
 //      val intent = Intent(context, GroupMemberActivity::class.java)
 //      intent.putExtra(EXTRA_NETWORK_GROUP, group)
 //      context.startActivity(intent)
-      if (groupMember.email == email && groupMember.role == "OWNER") {
-        AlertDialog.Builder(context)
-          .setTitle("Removal not allowed")
-          .setMessage("You must appoint someone else as the group owner before removing yourself.")
-          .setPositiveButton("Close") { dialog, _ -> dialog.dismiss() }
-      }
+        if (groupMember.email == email && groupMember.role == "OWNER") {
+          AlertDialog.Builder(context)
+            .setTitle("Removal not allowed")
+            .setMessage("You must appoint someone else as the group owner before removing yourself.")
+            .setPositiveButton("Close") { dialog, _ -> dialog.dismiss() }
+        } else {
+          AlertDialog.Builder(context)
+            .setTitle("Remove ${groupMember.userName}?")
+            .setMessage("Are you sure you want to remove ${groupMember.userName} from this group?")
+            .setPositiveButton("Yes") { dialog, _ ->
 
+            }
+            .setNegativeButton("Cancel") { dialog, _ -> dialog.cancel()}
+            .create().show()
+        }
+
+      }
     }
   }
 
