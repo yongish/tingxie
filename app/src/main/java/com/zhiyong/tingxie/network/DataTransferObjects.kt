@@ -107,7 +107,7 @@ data class NetworkCorrectRecord(
 )
 
 @JsonClass(generateAdapter = true)
-data class NetworkCreateMember(
+data class NetworkGroupMember(
   val userName: String,
   val email: String,
   val role: String
@@ -118,7 +118,7 @@ data class NetworkCreateGroup(
   val name: String,
   val creatorName: String,
   val creatorEmail: String,
-  val members: List<NetworkCreateMember>
+  val members: List<NetworkGroupMember>
 )
 
 @Parcelize
@@ -129,9 +129,6 @@ data class NetworkGroup(
   val role: String,
   val numMembers: Int
 ) : Parcelable
-
-@JsonClass(generateAdapter = true)
-data class NetworkGroupMember(val userName: String, val email: String, val role: String)
 
 // todo: Not using these data classes below. Should clean up.
 @JsonClass(generateAdapter = true)

@@ -76,4 +76,7 @@
     <string name="members">Members</string>
     <string name="error_in_downloading_groups">Error in downloading groups.</string>
     <string name="add_group">Add a group</string>
+    <string name="title_activity_group_member">GroupMemberActivity</string>
+    <string name="add_group_user">Add a user to a group</string>
+    <string name="error_downloading_group_members">Error in downloading group members.</string>
 </resources>

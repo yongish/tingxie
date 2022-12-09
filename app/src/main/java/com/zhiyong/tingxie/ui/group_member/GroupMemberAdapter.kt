@@ -1,29 +1,32 @@
-package com.zhiyong.tingxie.ui.group
+package com.zhiyong.tingxie.ui.group_member
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ImageSpan
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.R
-import com.zhiyong.tingxie.databinding.RecyclerviewGroupBinding
-import com.zhiyong.tingxie.network.NetworkGroup
-import com.zhiyong.tingxie.ui.group.GroupActivity.Companion.EXTRA_NETWORK_GROUP
-import com.zhiyong.tingxie.ui.group_member.GroupMemberActivity
+import com.zhiyong.tingxie.databinding.RecyclerviewGroupMemberBinding
+import com.zhiyong.tingxie.network.NetworkGroupMember
 
-class GroupAdapter(
+class GroupMemberAdapter(
   private val context: Context,
-  val viewModel: GroupViewModel,
-  val recyclerView: RecyclerView
-) : RecyclerView.Adapter<GroupAdapter.ViewHolder>() {
+  val viewModel: GroupMemberViewModel,
+  val recyclerView: RecyclerView,
+  val role: String
+) : RecyclerView.Adapter<GroupMemberAdapter.ViewHolder>() {
 
-  var groups = listOf<NetworkGroup>()
+  val user = FirebaseAuth.getInstance().currentUser
+  val email = user?.email
+
+  var groupMembers = listOf<NetworkGroupMember>()
     set(value) {
       field = value
       notifyDataSetChanged()
@@ -31,7 +34,7 @@ class GroupAdapter(
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
     ViewHolder(
-      RecyclerviewGroupBinding.inflate(
+      RecyclerviewGroupMemberBinding.inflate(
         LayoutInflater.from(parent.context),
         parent,
         false
@@ -55,8 +58,8 @@ class GroupAdapter(
       Spannable.SPAN_INCLUSIVE_EXCLUSIVE
     )
 
-    val group = groups[position]
-    holder.bind(group)
+    val groupMember = groupMembers[position]
+    holder.bind(groupMember)
     holder.clIdentifier.setOnClickListener {
       val builder = AlertDialog.Builder(context)
       builder.setMessage(spannableString)
@@ -64,23 +67,34 @@ class GroupAdapter(
         .create().show()
     }
 
-    holder.btnDetails.setOnClickListener {
-      val intent = Intent(context, GroupMemberActivity::class.java)
-      intent.putExtra(EXTRA_NETWORK_GROUP, group)
-      context.startActivity(intent)
+    if ()
+    holder.ivDelete.visibility = View.INVISIBLE
+
+    holder.ivDelete.setOnClickListener {
+//      val intent = Intent(context, GroupMemberActivity::class.java)
+//      intent.putExtra(EXTRA_NETWORK_GROUP, group)
+//      context.startActivity(intent)
+      if (groupMember.email == email && groupMember.role == "OWNER") {
+        AlertDialog.Builder(context)
+          .setTitle("Removal not allowed")
+          .setMessage("You must appoint someone else as the group owner before removing yourself.")
+          .setPositiveButton("Close") { dialog, _ -> dialog.dismiss() }
+      }
+
     }
   }
 
-  override fun getItemCount(): Int = groups.size
+  override fun getItemCount(): Int = groupMembers.size
 
-  class ViewHolder(private val binding: RecyclerviewGroupBinding) :
+  class ViewHolder(private val binding: RecyclerviewGroupMemberBinding) :
     RecyclerView.ViewHolder(binding.root) {
     val clIdentifier = binding.clIdentifier
-    val btnDetails = binding.btnDetails
+    val ivDelete = binding.ivDelete
 
-    fun bind(group: NetworkGroup) = with(binding) {
-      tvName.text = group.name
-      tvNumMembers.text = group.numMembers.toString()
+    fun bind(groupMember: NetworkGroupMember) = with(binding) {
+      tvName.text = groupMember.userName
+      tvEmail.text = groupMember.email
+      tvRole.text = groupMember.role
     }
   }
 }

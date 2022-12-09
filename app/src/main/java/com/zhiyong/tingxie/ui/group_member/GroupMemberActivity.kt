@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie.ui.group
+package com.zhiyong.tingxie.ui.group_member
 
 import android.os.Bundle
 import android.widget.Toast
@@ -9,10 +9,10 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.zhiyong.tingxie.R
-import com.zhiyong.tingxie.databinding.ActivityGroupBinding
+import com.zhiyong.tingxie.databinding.ActivityGroupMemberBinding
 import com.zhiyong.tingxie.ui.Util
 
-class GroupActivity : AppCompatActivity() {
+class GroupMemberActivity : AppCompatActivity() {
 
   private lateinit var appBarConfiguration: AppBarConfiguration
 
@@ -25,17 +25,18 @@ class GroupActivity : AppCompatActivity() {
 
     if (savedInstanceState == null) {
       supportFragmentManager.beginTransaction()
-        .replace(R.id.container, GroupFragment.newInstance())
+        .replace(R.id.container, GroupMemberFragment.newInstance())
         .commitNow()
     }
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-//    binding = ActivityGroupBinding.inflate(layoutInflater)
+//    private lateinit var binding: ActivityGroupMemberBinding
+//    binding = ActivityGroupMemberBinding.inflate(layoutInflater)
 //    setContentView(binding.root)
 //
 //    setSupportActionBar(binding.toolbar)
 //
-//    val navController = findNavController(R.id.nav_host_fragment_content_group)
+//    val navController = findNavController(R.id.nav_host_fragment_content_group_member)
 //    appBarConfiguration = AppBarConfiguration(navController.graph)
 //    setupActionBarWithNavController(navController, appBarConfiguration)
 //
@@ -46,12 +47,8 @@ class GroupActivity : AppCompatActivity() {
   }
 
   override fun onSupportNavigateUp(): Boolean {
-    val navController = findNavController(R.id.nav_host_fragment_content_group)
+    val navController = findNavController(R.id.nav_host_fragment_content_group_member)
     return navController.navigateUp(appBarConfiguration)
         || super.onSupportNavigateUp()
-  }
-
-  companion object {
-    const val EXTRA_NETWORK_GROUP = "com.zhiyong.tingxie.ui.group.extra.EXTRA_NETWORK_GROUP"
   }
 }

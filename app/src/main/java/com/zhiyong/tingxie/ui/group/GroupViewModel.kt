@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.zhiyong.tingxie.QuizRepository
-import com.zhiyong.tingxie.network.NetworkCreateMember
 import com.zhiyong.tingxie.network.NetworkGroup
 import com.zhiyong.tingxie.network.NetworkGroupMember
 import com.zhiyong.tingxie.viewmodel.Status
@@ -39,7 +38,7 @@ class GroupViewModel(application: Application) : AndroidViewModel(application) {
     }
   }
 
-  fun createGroup(groupName: String, members: List<NetworkCreateMember>): LiveData<Long> {
+  fun createGroup(groupName: String, members: List<NetworkGroupMember>): LiveData<Long> {
     val result = MutableLiveData<Long>()
     viewModelScope.launch(Dispatchers.IO) {
       val newId = repository.createGroup(groupName, members)

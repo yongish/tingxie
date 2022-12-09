@@ -19,7 +19,7 @@
         tools:text="Tan, Zhiyong" />
 
     <TextView
-        android:id="@+id/tvEmail"
+        android:id="@+id/tvNumMembers"
         style="@style/text_view_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,6 +37,6 @@
         android:text="@string/accept_or_reject"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/tvNumMembers" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

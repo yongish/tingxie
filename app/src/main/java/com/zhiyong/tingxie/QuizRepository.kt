@@ -30,6 +30,9 @@ class QuizRepository(val context: Context) {
   private lateinit var name: String
 
   init {
+    // 12/8/22. Should use the user details in the service layer rather than the
+    // repository layer, but keeping this here because there is so much code that uses it
+    // already.
     val user = FirebaseAuth.getInstance().currentUser
     val email = user?.email
     val name = user?.displayName
@@ -238,10 +241,13 @@ class QuizRepository(val context: Context) {
 
   suspend fun getGroups() = TingXieNetwork.tingxie.getGroups(email)
 
-  suspend fun createGroup(groupName: String, members: List<NetworkCreateMember>): Long =
+  suspend fun createGroup(groupName: String, members: List<NetworkGroupMember>): Long =
     TingXieNetwork.tingxie.createGroup(
       NetworkCreateGroup(groupName, name, email, members)
     )
+
+  suspend fun getGroupMembers(groupId: Long) =
+    TingXieNetwork.tingxie.getGroupMembers(groupId)
 
   suspend fun addUserToGroup(groupId: Long, userProps: NetworkGroupMember) =
     TingXieNetwork.tingxie.postGroupMember(groupId, userProps)

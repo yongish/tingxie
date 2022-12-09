@@ -51,6 +51,9 @@ interface Service {
   @POST("groups")
   suspend fun createGroup(@Body group: NetworkCreateGroup): Long
 
+  @GET("groups/{groupId}/members")
+  suspend fun getGroupMembers(@Path("groupId") groupId: Long): List<NetworkGroupMember>
+
   @POST("groups/{groupId}/members")
   suspend fun postGroupMember(
     @Path("groupId") groupId: Long,
