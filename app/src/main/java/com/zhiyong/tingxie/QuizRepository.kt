@@ -238,6 +238,11 @@ class QuizRepository(val context: Context) {
 
   suspend fun getGroups() = TingXieNetwork.tingxie.getGroups(email)
 
+  suspend fun createGroup(groupName: String, members: List<NetworkCreateMember>): Long =
+    TingXieNetwork.tingxie.createGroup(
+      NetworkCreateGroup(groupName, name, email, members)
+    )
+
   suspend fun addUserToGroup(groupId: Long, userProps: NetworkGroupMember) =
     TingXieNetwork.tingxie.postGroupMember(groupId, userProps)
 

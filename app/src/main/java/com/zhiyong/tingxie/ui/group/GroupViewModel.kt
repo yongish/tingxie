@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.zhiyong.tingxie.QuizRepository
+import com.zhiyong.tingxie.network.NetworkCreateMember
 import com.zhiyong.tingxie.network.NetworkGroup
 import com.zhiyong.tingxie.network.NetworkGroupMember
 import com.zhiyong.tingxie.viewmodel.Status
@@ -36,6 +37,15 @@ class GroupViewModel(application: Application) : AndroidViewModel(application) {
         _groupsStatus.value = Status.ERROR
       }
     }
+  }
+
+  fun createGroup(groupName: String, members: List<NetworkCreateMember>): LiveData<Long> {
+    val result = MutableLiveData<Long>()
+    viewModelScope.launch(Dispatchers.IO) {
+      val newId = repository.createGroup(groupName, members)
+      result.postValue(newId)
+    }
+    return result
   }
 
   // todo: This should be in GroupMemberViewModel that will be created soon.

@@ -106,6 +106,21 @@ data class NetworkCorrectRecord(
   val email: String,
 )
 
+@JsonClass(generateAdapter = true)
+data class NetworkCreateMember(
+  val userName: String,
+  val email: String,
+  val role: String
+)
+
+@JsonClass(generateAdapter = true)
+data class NetworkCreateGroup(
+  val name: String,
+  val creatorName: String,
+  val creatorEmail: String,
+  val members: List<NetworkCreateMember>
+)
+
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class NetworkGroup(

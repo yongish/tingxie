@@ -51,4 +51,8 @@ class GroupActivity : AppCompatActivity() {
     return navController.navigateUp(appBarConfiguration)
         || super.onSupportNavigateUp()
   }
+
+  companion object {
+    const val EXTRA_NETWORK_GROUP = "com.zhiyong.tingxie.ui.group.extra.EXTRA_NETWORK_GROUP"
+  }
 }

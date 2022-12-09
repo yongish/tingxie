@@ -17,7 +17,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="@string/details" />
+        android:text="@string/members" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clIdentifier"
@@ -41,7 +41,17 @@
             tools:text="Everlasting Primary School Class 41A" />
 
         <TextView
-            android:id="@+id/tvSub"
+            android:id="@+id/tvNumMembers"
+            style="@style/text_view_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvName"
+            tools:text="2000 members" />
+
+        <TextView
+            android:id="@+id/tvRole"
             style="@style/text_view_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,8 +59,8 @@
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvName"
-            tools:text="2000 members" />
+            app:layout_constraintTop_toBottomOf="@+id/tvNumMembers"
+            tools:text="Read-only" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
