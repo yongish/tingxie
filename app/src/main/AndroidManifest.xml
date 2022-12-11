@@ -23,18 +23,11 @@
             android:exported="false"
             android:label="@string/title_activity_group_member"
             android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
         </activity>
         <activity
             android:name=".ui.group.GroupActivity"
             android:exported="false"
-            android:label="@string/title_activity_group"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
+            android:label="@string/title_activity_group">
         </activity>
         <activity
             android:name=".ui.share.ShareActivity"

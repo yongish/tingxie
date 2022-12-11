@@ -17,7 +17,6 @@ class FriendActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-
     if (!Util.isOnline(this)) {
       Toast.makeText(this, "Internet connection required.", Toast.LENGTH_LONG).show()
     }

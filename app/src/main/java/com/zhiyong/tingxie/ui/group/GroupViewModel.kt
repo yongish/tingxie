@@ -27,13 +27,13 @@ class GroupViewModel(application: Application) : AndroidViewModel(application) {
 
   private fun getGroups() {
     viewModelScope.launch {
-      _groupsStatus.value = Status.LOADING
+//      _groupsStatus.value = Status.LOADING
       try {
         _groups.value = repository.getGroups()
-        _groupsStatus.value = Status.DONE
+//        _groupsStatus.value = Status.DONE
       } catch (e: Exception) {
         _groups.value = arrayListOf()
-        _groupsStatus.value = Status.ERROR
+//        _groupsStatus.value = Status.ERROR
       }
     }
   }

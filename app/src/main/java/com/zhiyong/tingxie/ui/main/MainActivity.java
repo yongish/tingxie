@@ -167,6 +167,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, GroupActivity.class));
     }
 
+    public void openFriends(MenuItem item) {
+        startActivity(new Intent(MainActivity.this, FriendActivity.class));
+    }
+
     public static Intent openSpeechSettingsHelper() {
         Intent intent = new Intent();
         intent.setAction("com.android.settings.TTS_SETTINGS");

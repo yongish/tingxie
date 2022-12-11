@@ -1,9 +1,7 @@
 package com.zhiyong.tingxie.ui.group
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.EditText
 import android.widget.FrameLayout
 import androidx.appcompat.app.AlertDialog
@@ -36,7 +34,7 @@ class GroupFragment : Fragment() {
 
     binding.fab.setOnClickListener { openAddGroupDialog() }
 
-    viewModel = ViewModelProvider(this)[GroupViewModel::class.java]
+    viewModel = ViewModelProvider(this).get(GroupViewModel::class.java)
     val adapter = GroupAdapter(requireActivity(), viewModel, binding.recyclerviewGroups)
     binding.recyclerviewGroups.adapter = adapter
     viewModel.groups.observe(viewLifecycleOwner) {
@@ -95,7 +93,7 @@ class GroupFragment : Fragment() {
             .setText("http://play.google.com/store/apps/details?id=" + it.packageName)
             .startChooser()
         }
-      }
+      }.create().show()
 
 
         // 12/4/22 refer to wordactivity to make this builder. should be simple.
