@@ -13,38 +13,37 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class GroupViewModel(application: Application) : AndroidViewModel(application) {
-  val repository: QuizRepository = QuizRepository(application)
+    private val repository = QuizRepository(application)
 
-  init {
-    getGroups()
-  }
+    private val _groupsStatus = MutableLiveData<Status>()
+    val groupsStatus: LiveData<Status> = _groupsStatus
 
-  private val _groups = MutableLiveData<List<NetworkGroup>>()
-  val groups: LiveData<List<NetworkGroup>> = _groups
+    private val _groups = MutableLiveData<List<NetworkGroup>>()
+    val groups: LiveData<List<NetworkGroup>> = _groups
 
-  private val _groupsStatus = MutableLiveData<Status>()
-  val groupsStatus: LiveData<Status> = _groupsStatus
-
-  private fun getGroups() {
-    viewModelScope.launch {
-//      _groupsStatus.value = Status.LOADING
-      try {
-        _groups.value = repository.getGroups()
-//        _groupsStatus.value = Status.DONE
-      } catch (e: Exception) {
-        _groups.value = arrayListOf()
-//        _groupsStatus.value = Status.ERROR
-      }
+    init {
+        getGroups()
     }
-  }
 
-  fun createGroup(groupName: String, members: List<NetworkGroupMember>): LiveData<Long> {
-    val result = MutableLiveData<Long>()
-    viewModelScope.launch(Dispatchers.IO) {
-      val newId = repository.createGroup(groupName, members)
-      result.postValue(newId)
+    private fun getGroups() {
+        viewModelScope.launch {
+            _groupsStatus.value = Status.LOADING
+            try {
+                _groups.value = repository.getGroups()
+                _groupsStatus.value = Status.DONE
+            } catch (e: Exception) {
+                _groupsStatus.value = Status.ERROR
+                _groups.value = listOf()
+            }
+        }
     }
-    return result
-  }
 
+    fun createGroup(groupName: String, members: List<NetworkGroupMember>): LiveData<Long> {
+        val result = MutableLiveData<Long>()
+        viewModelScope.launch(Dispatchers.IO) {
+            val newId = repository.createGroup(groupName, members)
+            result.postValue(newId)
+        }
+        return result
+    }
 }

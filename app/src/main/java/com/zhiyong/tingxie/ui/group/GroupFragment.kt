@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.FragmentGroupBinding
-import com.zhiyong.tingxie.viewmodel.Status
 
 class GroupFragment : Fragment() {
 
@@ -19,6 +18,8 @@ class GroupFragment : Fragment() {
   }
 
   private lateinit var viewModel: GroupViewModel
+//  private lateinit var viewModel: GroupViewModel
+//  private lateinit var viewModel: WordViewModel
   private var _binding: FragmentGroupBinding? = null
   private val binding get() = _binding!!
 
@@ -34,7 +35,7 @@ class GroupFragment : Fragment() {
 
     binding.fab.setOnClickListener { openAddGroupDialog() }
 
-    viewModel = ViewModelProvider(this).get(GroupViewModel::class.java)
+    viewModel = ViewModelProvider(this)[GroupViewModel::class.java]
     val adapter = GroupAdapter(requireActivity(), viewModel, binding.recyclerviewGroups)
     binding.recyclerviewGroups.adapter = adapter
     viewModel.groups.observe(viewLifecycleOwner) {
@@ -48,12 +49,12 @@ class GroupFragment : Fragment() {
       }
     }
 
-    viewModel.groupsStatus.observe(viewLifecycleOwner) { status ->
-      if (status.equals(Status.ERROR)) {
-        binding.emptyView.visibility = View.INVISIBLE
-        binding.networkErrorView.visibility = View.VISIBLE
-      }
-    }
+//    viewModel.groupsStatus.observe(viewLifecycleOwner) { status ->
+//      if (status.equals(Status.ERROR)) {
+//        binding.emptyView.visibility = View.INVISIBLE
+//        binding.networkErrorView.visibility = View.VISIBLE
+//      }
+//    }
 //    binding.swipeLayout.setOnRefreshListener {
 //      viewModel.refreshRequests(binding.swipeLayout)
 //    }
@@ -82,7 +83,7 @@ class GroupFragment : Fragment() {
       .setMessage("Create a new group.")
       .setView(frameLayout)
       .setPositiveButton(R.string.ok) { _, _ ->
-        viewModel.createGroup(editText.text.toString(), listOf())
+//        viewModel.createGroup(editText.text.toString(), listOf())
       }
       .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
       .setNeutralButton("Share 听写") { _, _ ->

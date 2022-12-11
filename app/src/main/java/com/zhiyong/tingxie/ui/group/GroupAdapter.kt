@@ -57,6 +57,7 @@ class GroupAdapter(
 
     val group = groups[position]
     holder.bind(group)
+//    holder.bind(group.asDomainModel())
     holder.clIdentifier.setOnClickListener {
       val builder = AlertDialog.Builder(context)
       builder.setMessage(spannableString)
@@ -66,6 +67,7 @@ class GroupAdapter(
 
     holder.btnDetails.setOnClickListener {
       val intent = Intent(context, GroupMemberActivity::class.java)
+//      intent.putExtra(EXTRA_NETWORK_GROUP, group.asDomainModel())
       intent.putExtra(EXTRA_NETWORK_GROUP, group)
       context.startActivity(intent)
     }
@@ -80,7 +82,11 @@ class GroupAdapter(
 
     fun bind(group: NetworkGroup) = with(binding) {
       tvName.text = group.name
-      tvNumMembers.text = group.numMembers.toString()
+      tvNumMembers.text = if (group.numMembers == 1) String.format(
+        "%d member",
+        group.numMembers
+      ) else String.format("%d member", group.numMembers)
+      tvRole.text = group.role
     }
   }
 }

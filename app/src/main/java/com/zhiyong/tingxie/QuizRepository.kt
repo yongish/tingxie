@@ -239,7 +239,7 @@ class QuizRepository(val context: Context) {
   suspend fun upsertCorrectRecord(wordId: Long) =
     TingXieNetwork.tingxie.upsertCorrectRecord(NetworkCorrectRecord(wordId, email))
 
-  suspend fun getGroups() = TingXieNetwork.tingxie.getGroups(email)
+  suspend fun getGroups(): List<NetworkGroup> = TingXieNetwork.tingxie.getGroups(email)
 
   suspend fun createGroup(groupName: String, members: List<NetworkGroupMember>): Long =
     TingXieNetwork.tingxie.createGroup(
