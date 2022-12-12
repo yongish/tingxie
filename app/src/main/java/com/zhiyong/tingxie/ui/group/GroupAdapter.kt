@@ -67,7 +67,6 @@ class GroupAdapter(
 
     holder.btnDetails.setOnClickListener {
       val intent = Intent(context, GroupMemberActivity::class.java)
-//      intent.putExtra(EXTRA_NETWORK_GROUP, group.asDomainModel())
       intent.putExtra(EXTRA_NETWORK_GROUP, group)
       context.startActivity(intent)
     }

@@ -18,8 +18,6 @@ class GroupFragment : Fragment() {
   }
 
   private lateinit var viewModel: GroupViewModel
-//  private lateinit var viewModel: GroupViewModel
-//  private lateinit var viewModel: WordViewModel
   private var _binding: FragmentGroupBinding? = null
   private val binding get() = _binding!!
 

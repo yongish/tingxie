@@ -33,9 +33,8 @@ class GroupMemberFragment : Fragment() {
   private lateinit var name: String
 
   override fun onCreateView(
-    inflater: LayoutInflater, container: ViewGroup?,
-    savedInstanceState: Bundle?
-  ): View? {
+    inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+  ): View {
     val currentUser = FirebaseAuth.getInstance().currentUser!!
     email = currentUser.email!!
     name = currentUser.displayName!!
@@ -65,13 +64,16 @@ class GroupMemberFragment : Fragment() {
 
     // todo: Title bar should contain an option to delete the entire group. Show a confirmation modal.
 
-    viewModel = ViewModelProvider(this)[GroupMemberViewModel::class.java]
+    val viewModelFactory =
+      GroupMemberViewModelFactory(requireActivity().application, networkGroup?.id ?: -1)
+    viewModel =
+      ViewModelProvider(this, viewModelFactory)[GroupMemberViewModel::class.java]
     val adapter = GroupMemberAdapter(
       requireActivity(), viewModel, binding.recyclerviewGroupMembers, role
     )
     binding.recyclerviewGroupMembers.adapter = adapter
     // Current user's role determines if she can see the share and delete imageViews.
-    viewModel.groupMembers.observe(viewLifecycleOwner) { it ->
+    viewModel.groupMembers.observe(viewLifecycleOwner) {
       it?.let {
         adapter.groupMembers = it
         if (it.isEmpty()) {

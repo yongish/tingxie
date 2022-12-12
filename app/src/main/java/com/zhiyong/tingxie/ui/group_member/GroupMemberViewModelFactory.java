@@ -6,8 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.zhiyong.tingxie.ui.question.QuestionViewModel;
-
 public class GroupMemberViewModelFactory implements ViewModelProvider.Factory {
     private final Application mApplication;
     private final long groupId;
@@ -20,6 +18,6 @@ public class GroupMemberViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new QuestionViewModel(mApplication, groupId);
+        return (T) new GroupMemberViewModel(mApplication, groupId);
     }
 }

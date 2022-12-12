@@ -21,8 +21,7 @@
         <activity
             android:name=".ui.group_member.GroupMemberActivity"
             android:exported="false"
-            android:label="@string/title_activity_group_member"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="@string/title_activity_group_member">
         </activity>
         <activity
             android:name=".ui.group.GroupActivity"
