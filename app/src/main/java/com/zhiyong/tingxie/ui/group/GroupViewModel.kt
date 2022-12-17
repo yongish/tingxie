@@ -18,8 +18,8 @@ class GroupViewModel(application: Application) : AndroidViewModel(application) {
     private val _groupsStatus = MutableLiveData<Status>()
     val groupsStatus: LiveData<Status> = _groupsStatus
 
-    private val _groups = MutableLiveData<List<NetworkGroup>>()
-    val groups: LiveData<List<NetworkGroup>> = _groups
+    private val _groups = MutableLiveData<MutableList<NetworkGroup>>()
+    val groups: LiveData<MutableList<NetworkGroup>> = _groups
 
     init {
         getGroups()
@@ -33,13 +33,13 @@ class GroupViewModel(application: Application) : AndroidViewModel(application) {
                 _groupsStatus.value = Status.DONE
             } catch (e: Exception) {
                 _groupsStatus.value = Status.ERROR
-                _groups.value = listOf()
+                _groups.value = mutableListOf()
             }
         }
     }
 
-    fun createGroup(groupName: String, members: List<NetworkGroupMember>): LiveData<Long> {
-        val result = MutableLiveData<Long>()
+    fun createGroup(groupName: String, members: List<NetworkGroupMember>): LiveData<String> {
+        val result = MutableLiveData<String>()
         viewModelScope.launch(Dispatchers.IO) {
             val newId = repository.createGroup(groupName, members)
             result.postValue(newId)

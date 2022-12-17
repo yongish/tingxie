@@ -23,7 +23,7 @@ class GroupAdapter(
   val recyclerView: RecyclerView
 ) : RecyclerView.Adapter<GroupAdapter.ViewHolder>() {
 
-  var groups = listOf<NetworkGroup>()
+  var groups = mutableListOf<NetworkGroup>()
     set(value) {
       field = value
       notifyDataSetChanged()
@@ -73,6 +73,11 @@ class GroupAdapter(
   }
 
   override fun getItemCount(): Int = groups.size
+
+  fun addNewGroup(networkGroup: NetworkGroup) {
+    groups.add(networkGroup)
+    notifyItemInserted(groups.size - 1)
+  }
 
   class ViewHolder(private val binding: RecyclerviewGroupBinding) :
     RecyclerView.ViewHolder(binding.root) {

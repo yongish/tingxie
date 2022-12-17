@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.*
 import android.widget.EditText
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ShareCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.FragmentGroupBinding
+import com.zhiyong.tingxie.network.NetworkGroup
 
 class GroupFragment : Fragment() {
 
@@ -20,6 +22,7 @@ class GroupFragment : Fragment() {
   private lateinit var viewModel: GroupViewModel
   private var _binding: FragmentGroupBinding? = null
   private val binding get() = _binding!!
+  private lateinit var adapter: GroupAdapter
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -34,7 +37,7 @@ class GroupFragment : Fragment() {
     binding.fab.setOnClickListener { openAddGroupDialog() }
 
     viewModel = ViewModelProvider(this)[GroupViewModel::class.java]
-    val adapter = GroupAdapter(requireActivity(), viewModel, binding.recyclerviewGroups)
+    adapter = GroupAdapter(requireActivity(), viewModel, binding.recyclerviewGroups)
     binding.recyclerviewGroups.adapter = adapter
     viewModel.groups.observe(viewLifecycleOwner) {
       it?.let {
@@ -81,7 +84,14 @@ class GroupFragment : Fragment() {
       .setMessage("Create a new group.")
       .setView(frameLayout)
       .setPositiveButton(R.string.ok) { _, _ ->
-//        viewModel.createGroup(editText.text.toString(), listOf())
+        val name = editText.text.toString()
+        viewModel.createGroup(name, listOf()).observe(viewLifecycleOwner) {
+          if (it.toLongOrNull() == null) {
+            Toast.makeText(context, "Error. Please contact yongish@gmail.com.", Toast.LENGTH_LONG).show()
+          } else {
+            adapter.addNewGroup(NetworkGroup(it.toLong(), name, "OWNER", 1))
+          }
+        }
       }
       .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
       .setNeutralButton("Share 听写") { _, _ ->

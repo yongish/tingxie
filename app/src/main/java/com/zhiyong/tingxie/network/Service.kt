@@ -46,10 +46,10 @@ interface Service {
   suspend fun upsertCorrectRecord(@Body asked: NetworkCorrectRecord): Int
 
   @GET("users/{email}/groups")
-  suspend fun getGroups(@Path("email") email: String): List<NetworkGroup>
+  suspend fun getGroups(@Path("email") email: String): MutableList<NetworkGroup>
 
   @POST("groups")
-  suspend fun createGroup(@Body group: NetworkCreateGroup): Long
+  suspend fun createGroup(@Body group: NetworkCreateGroup): String
 
   @DELETE("groups/{groupId}")
   suspend fun deleteGroup(
