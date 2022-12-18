@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.FragmentGroupMemberBinding
 import com.zhiyong.tingxie.network.NetworkGroup
+import com.zhiyong.tingxie.ui.add_group_member.AddGroupMemberActivity
 import com.zhiyong.tingxie.ui.group.GroupActivity
 
 /**
@@ -27,11 +28,12 @@ class GroupMemberFragment : Fragment() {
 
   companion object {
     fun newInstance() = GroupMemberFragment()
+    const val EXTRA_GROUP_ID = "com.zhiyong.tingxie.ui.group_member.extra.GROUP_ID"
   }
 
   private lateinit var viewModel: GroupMemberViewModel
   private lateinit var adapter: GroupMemberAdapter
-  private var networkGroup: NetworkGroup? = null
+//  private var networkGroup: NetworkGroup? = null
   private var _binding: FragmentGroupMemberBinding? = null
   private val binding get() = _binding!!
 
@@ -52,7 +54,7 @@ class GroupMemberFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    networkGroup = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    val networkGroup = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
       requireActivity().intent.getParcelableExtra(
         GroupActivity.EXTRA_NETWORK_GROUP,
         NetworkGroup::class.java
@@ -68,8 +70,13 @@ class GroupMemberFragment : Fragment() {
 
     if (role == "READ-ONLY") {
       binding.fab.visibility = View.INVISIBLE
-    } else {
-      binding.fab.setOnClickListener { openAddGroupMemberDialog() }
+    } else if (networkGroup != null) {
+      binding.fab.setOnClickListener {
+//        openAddGroupMemberDialog()
+        val intent = Intent(context, AddGroupMemberActivity::class.java)
+        intent.putExtra(EXTRA_GROUP_ID, networkGroup.id)
+        startActivity(intent)
+      }
     }
 
     // todo: Title bar should contain an option to delete the entire group. Show a confirmation modal.
@@ -193,13 +200,13 @@ class GroupMemberFragment : Fragment() {
       )
       .setPositiveButton(R.string.find_email) { _, _ ->
         val email = editText.text.toString()
-        viewModel.addMemberOrReturnNoUser(networkGroup?.id, email).observe(viewLifecycleOwner) {
-          if (it.email.isEmpty()) {
-            openAddGroupMemberDialog(true)
-          } else {
-            adapter.addGroupMember(it)
-          }
-        }
+//        viewModel.addMemberOrReturnNoUser(networkGroup?.id, email).observe(viewLifecycleOwner) {
+//          if (it.email.isEmpty()) {
+//            openAddGroupMemberDialog(true)
+//          } else {
+//            adapter.addGroupMember(it)
+//          }
+//        }
       }
       .setNegativeButton(R.string.cancel) { dialog, _ ->
         dialog.cancel()

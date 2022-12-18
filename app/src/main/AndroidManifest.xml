@@ -19,15 +19,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ui.add_group_member.AddGroupMemberActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ui.group_member.GroupMemberActivity"
             android:exported="false"
-            android:label="@string/title_activity_group_member">
-        </activity>
+            android:label="@string/title_activity_group_member"></activity>
         <activity
             android:name=".ui.group.GroupActivity"
             android:exported="false"
-            android:label="@string/title_activity_group">
-        </activity>
+            android:label="@string/title_activity_group"></activity>
         <activity
             android:name=".ui.share.ShareActivity"
             android:exported="false" />
