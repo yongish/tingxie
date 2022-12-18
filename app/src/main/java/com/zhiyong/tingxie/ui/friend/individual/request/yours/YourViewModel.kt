@@ -27,6 +27,8 @@ class YourViewModel(application: Application) : AndroidViewModel(application) {
     get() = _requests
 
   private val _shouldReopen = MutableLiveData<Boolean>()
+  val shouldReopen: LiveData<Boolean>
+    get() = _shouldReopen
 
   init {
     viewModelScope.launch {

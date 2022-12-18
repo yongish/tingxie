@@ -42,14 +42,15 @@
     <string name="hsk_levels">HSK levels</string>
     <string name="no_pinyin">No pinyin</string>
     <string name="no_word">No Word</string>
+    <string name="start_hsk1_quiz">Start/resume\nHSK1 quiz</string>
+    <string name="start_hsk2_quiz">Start/resume\nHSK2 quiz</string>
     <string name="start_hsk3_quiz">Start/resume\nHSK3 quiz</string>
     <string name="start_hsk4_quiz">Start/resume\nHSK4 quiz</string>
     <string name="start_hsk5_quiz">Start/resume\nHSK5 quiz</string>
     <string name="start_hsk6_quiz">Start/resume\nHSK6 quiz</string>
-    <string name="start_hsk2_quiz">Start/resume\nHSK2 quiz</string>
-    <string name="start_hsk1_quiz">Start/resume\nHSK1 quiz</string>
     <string name="reset">Reset</string>
     <string name="remaining">%d/%d remaining</string>
+    <string name="find_email">Find email</string>
     <string name="search_email">Search for email</string>
     <string name="your_email_address">Your email address:</string>
     <string name="enter_friend_email">Enter friend\'s email</string>
@@ -81,4 +82,5 @@
     <string name="error_downloading_group_members">Error in downloading group members.</string>
     <string name="delete_group">Delete group</string>
     <string name="groups">Groups</string>
+    <string name="error_in_groupmemberfragment">Error in GroupMemberFragment. Please contact yongish@gmail.com.</string>
 </resources>

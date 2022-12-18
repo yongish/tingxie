@@ -255,8 +255,8 @@ class QuizRepository(val context: Context) {
   suspend fun getGroupMembers(groupId: Long) =
     TingXieNetwork.tingxie.getGroupMembers(groupId)
 
-  suspend fun addUserToGroup(groupId: Long, userProps: NetworkGroupMember) =
-    TingXieNetwork.tingxie.postGroupMember(groupId, userProps)
+  suspend fun addUserToGroup(groupId: Long, email: String): NetworkGroupMember =
+    TingXieNetwork.tingxie.addUserToGroup(groupId, email)
 
   suspend fun deleteGroupMember(
     groupId: Long,

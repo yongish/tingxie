@@ -5,6 +5,10 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.*
+import android.widget.EditText
+import android.widget.FrameLayout
+import androidx.core.app.ShareCompat
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -26,6 +30,8 @@ class GroupMemberFragment : Fragment() {
   }
 
   private lateinit var viewModel: GroupMemberViewModel
+  private lateinit var adapter: GroupMemberAdapter
+  private var networkGroup: NetworkGroup? = null
   private var _binding: FragmentGroupMemberBinding? = null
   private val binding get() = _binding!!
 
@@ -46,7 +52,7 @@ class GroupMemberFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    val networkGroup = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    networkGroup = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
       requireActivity().intent.getParcelableExtra(
         GroupActivity.EXTRA_NETWORK_GROUP,
         NetworkGroup::class.java
@@ -54,6 +60,10 @@ class GroupMemberFragment : Fragment() {
     } else {
       requireActivity().intent.getParcelableExtra(GroupActivity.EXTRA_NETWORK_GROUP)
     }
+    if (networkGroup == null) {
+      binding.otherErrorView.visibility = View.VISIBLE
+    }
+
     val role = networkGroup?.role ?: "READ-ONLY"
 
     if (role == "READ-ONLY") {
@@ -68,7 +78,7 @@ class GroupMemberFragment : Fragment() {
       GroupMemberViewModelFactory(requireActivity().application, networkGroup?.id ?: -1)
     viewModel =
       ViewModelProvider(this, viewModelFactory)[GroupMemberViewModel::class.java]
-    val adapter = GroupMemberAdapter(
+    adapter = GroupMemberAdapter(
       requireActivity(), viewModel, binding.recyclerviewGroupMembers, role
     )
     binding.recyclerviewGroupMembers.adapter = adapter
@@ -100,8 +110,8 @@ class GroupMemberFragment : Fragment() {
         return when (menuItem.itemId) {
           R.id.action_delete_group -> {
             if (role == "OWNER") {
-              if (networkGroup.numMembers == 1) {
-                viewModel.deleteGroup(networkGroup.id, name, email)
+              if (networkGroup?.numMembers == 1) {
+                viewModel.deleteGroup(networkGroup?.id, name, email)
                   .observe(viewLifecycleOwner) {
                     if (it > 0) {
                       startActivity(Intent(context, GroupActivity::class.java))
@@ -119,7 +129,7 @@ class GroupMemberFragment : Fragment() {
               builder.setTitle("Leave group")
                 .setMessage("Are you sure you want to leave the group?")
                 .setPositiveButton("Yes") { dialog, _ ->
-                  viewModel.deleteGroupMember(networkGroup.id, name, email, email)
+                  viewModel.deleteGroupMember(networkGroup?.id, name, email, email)
                     .observe(viewLifecycleOwner) {
                       if (it > 0) {
                         dialog.dismiss()
@@ -148,10 +158,61 @@ class GroupMemberFragment : Fragment() {
 
   // todo: Add a member by QR code.
   // next step is to add a fragment.
-  private fun openAddGroupMemberDialog() {
+  private fun openAddGroupMemberDialog(showError: Boolean = false) {
+    val params = FrameLayout.LayoutParams(
+      ViewGroup.LayoutParams.MATCH_PARENT,
+      ViewGroup.LayoutParams.WRAP_CONTENT
+    )
+    params.leftMargin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
+    params.rightMargin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
+    val editText = EditText(context)
+    editText.layoutParams = params
 
+    // todo: Define radio buttons for READ-ONLY, ADMIN,
+    // Need a whole new fragment to explain what each option is.
+
+    val frameLayout = context?.let { it1 ->
+      FrameLayout(it1)
+    }
+    frameLayout?.addView(editText)
+    val yourEmail = FirebaseAuth.getInstance().currentUser?.email
+
+    // stopped here.
+    // todo: ERROR. SHOULD ADD BOTH EMAIL AND ROLE.
     val builder = AlertDialog.Builder(requireActivity())
     builder.setTitle("Add group member")
-      .setMessage("Enter a user's email address to add her/him to the group.")
+      .setMessage(
+        HtmlCompat.fromHtml(
+        (if (showError) "<p style=\"color:red\">No such email: ${email}</p>\n" +
+            "Please check that the email address is correct. " +
+            "If it is correct, please ask your friend to install 听写 and create an account.<br />" else "") +
+            "Enter a user's email address to add her/him to the group." +
+            if (yourEmail == null) "" else "\n<br />Your email address: $yourEmail",
+        HtmlCompat.FROM_HTML_MODE_LEGACY
+        )
+      )
+      .setPositiveButton(R.string.find_email) { _, _ ->
+        val email = editText.text.toString()
+        viewModel.addMemberOrReturnNoUser(networkGroup?.id, email).observe(viewLifecycleOwner) {
+          if (it.email.isEmpty()) {
+            openAddGroupMemberDialog(true)
+          } else {
+            adapter.addGroupMember(it)
+          }
+        }
+      }
+      .setNegativeButton(R.string.cancel) { dialog, _ ->
+        dialog.cancel()
+      }
+      .setNeutralButton("Share 听写") { _, _ ->
+        context?.let {
+          ShareCompat.IntentBuilder(it)
+            .setType("text/plain")
+            .setChooserTitle("Chooser title")
+            .setText("http://play.google.com/store/apps/details?id=" + it.packageName)
+            .startChooser()
+        }
+      }
+      .create().show()
   }
 }

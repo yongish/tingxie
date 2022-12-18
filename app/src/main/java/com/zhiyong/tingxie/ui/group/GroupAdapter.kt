@@ -57,7 +57,6 @@ class GroupAdapter(
 
     val group = groups[position]
     holder.bind(group)
-//    holder.bind(group.asDomainModel())
     holder.clIdentifier.setOnClickListener {
       val builder = AlertDialog.Builder(context)
       builder.setMessage(spannableString)
@@ -76,7 +75,7 @@ class GroupAdapter(
 
   fun addNewGroup(networkGroup: NetworkGroup) {
     groups.add(networkGroup)
-    notifyItemInserted(groups.size - 1)
+    notifyItemInserted(groups.size)
   }
 
   class ViewHolder(private val binding: RecyclerviewGroupBinding) :

@@ -18,10 +18,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_add_black_24dp" />
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+<!--    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout-->
+<!--        android:id="@+id/swipe_layout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent">-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_group_members"
@@ -31,7 +31,7 @@
             app:layoutManager="LinearLayoutManager"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="8dp" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+<!--    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
 
     <TextView
         android:id="@+id/empty_view"
@@ -48,6 +48,15 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="@string/error_downloading_group_members"
+        android:textColor="@color/white"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/other_error_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/error_in_groupmemberfragment"
         android:textColor="@color/white"
         android:visibility="gone" />
 </androidx.constraintlayout.widget.ConstraintLayout>

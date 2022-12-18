@@ -68,6 +68,12 @@ class YourRequestFragment : Fragment() {
         ).show()
       }
     }
+
+    viewModel.shouldReopen.observe(viewLifecycleOwner) { status ->
+      if (status == true) {
+        openAddFriendDialog(true)
+      }
+    }
   }
 
   override fun onDestroyView() {
@@ -75,7 +81,7 @@ class YourRequestFragment : Fragment() {
     _binding = null
   }
 
-  private fun openAddFriendDialog(showError: Boolean = false) {
+  fun openAddFriendDialog(showError: Boolean = false) {
     // todo: Show no internet connection message.
 
     val editText = EditText(context)

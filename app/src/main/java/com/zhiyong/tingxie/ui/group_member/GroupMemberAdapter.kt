@@ -26,7 +26,7 @@ class GroupMemberAdapter(
   val user = FirebaseAuth.getInstance().currentUser
   val email = user?.email
 
-  var groupMembers = listOf<NetworkGroupMember>()
+  var groupMembers = mutableListOf<NetworkGroupMember>()
     set(value) {
       field = value
       notifyDataSetChanged()
@@ -71,14 +71,12 @@ class GroupMemberAdapter(
       holder.ivDelete.visibility = View.INVISIBLE
     } else {
       holder.ivDelete.setOnClickListener {
-//      val intent = Intent(context, GroupMemberActivity::class.java)
-//      intent.putExtra(EXTRA_NETWORK_GROUP, group)
-//      context.startActivity(intent)
         if (groupMember.email == email && groupMember.role == "OWNER") {
           AlertDialog.Builder(context)
             .setTitle("Removal not allowed")
             .setMessage("You must appoint someone else as the group owner before removing yourself.")
             .setPositiveButton("Close") { dialog, _ -> dialog.dismiss() }
+            .create().show()
         } else {
           AlertDialog.Builder(context)
             .setTitle("Remove ${groupMember.userName}?")
@@ -89,9 +87,13 @@ class GroupMemberAdapter(
             .setNegativeButton("Cancel") { dialog, _ -> dialog.cancel()}
             .create().show()
         }
-
       }
     }
+  }
+
+  fun addGroupMember(networkGroupMember: NetworkGroupMember) {
+    groupMembers.add(networkGroupMember)
+    notifyItemInserted(groupMembers.size)
   }
 
   override fun getItemCount(): Int = groupMembers.size

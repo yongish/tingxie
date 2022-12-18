@@ -59,13 +59,13 @@ interface Service {
   ): Int
 
   @GET("groups/{groupId}/members")
-  suspend fun getGroupMembers(@Path("groupId") groupId: Long): List<NetworkGroupMember>
+  suspend fun getGroupMembers(@Path("groupId") groupId: Long): MutableList<NetworkGroupMember>
 
-  @POST("groups/{groupId}/members")
-  suspend fun postGroupMember(
+  @POST("groups/{groupId}/email/{email}")
+  suspend fun addUserToGroup(
     @Path("groupId") groupId: Long,
-    @Body userProps: NetworkGroupMember
-  ): Long
+    @Path("email") email: String
+  ): NetworkGroupMember
 
   @DELETE("groups/{groupId}/members/{email}")
   suspend fun deleteGroupMember(

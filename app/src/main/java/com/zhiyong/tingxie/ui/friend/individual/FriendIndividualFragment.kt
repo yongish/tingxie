@@ -54,13 +54,6 @@ class FriendIndividualFragment : Fragment() {
 //        Toast.makeText(activity, "Network Error on FriendIndividualFragment", Toast.LENGTH_LONG).show()
 //      }
 //    }
-
-    // what is this? may delete.
-//    viewModel.shouldReopen.observe(viewLifecycleOwner) { status ->
-//      if (status == true) {
-//        openAddFriendDialog(true)
-//      }
-//    }
   }
 
   override fun onDestroyView() {
