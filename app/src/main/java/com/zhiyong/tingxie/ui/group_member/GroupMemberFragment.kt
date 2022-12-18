@@ -20,6 +20,7 @@ import com.zhiyong.tingxie.databinding.FragmentGroupMemberBinding
 import com.zhiyong.tingxie.network.NetworkGroup
 import com.zhiyong.tingxie.ui.add_group_member.AddGroupMemberActivity
 import com.zhiyong.tingxie.ui.group.GroupActivity
+import com.zhiyong.tingxie.ui.group.GroupActivity.Companion.EXTRA_NETWORK_GROUP
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -56,11 +57,11 @@ class GroupMemberFragment : Fragment() {
 
     val networkGroup = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
       requireActivity().intent.getParcelableExtra(
-        GroupActivity.EXTRA_NETWORK_GROUP,
+        EXTRA_NETWORK_GROUP,
         NetworkGroup::class.java
       )
     } else {
-      requireActivity().intent.getParcelableExtra(GroupActivity.EXTRA_NETWORK_GROUP)
+      requireActivity().intent.getParcelableExtra(EXTRA_NETWORK_GROUP)
     }
     if (networkGroup == null) {
       binding.otherErrorView.visibility = View.VISIBLE
@@ -74,7 +75,7 @@ class GroupMemberFragment : Fragment() {
       binding.fab.setOnClickListener {
 //        openAddGroupMemberDialog()
         val intent = Intent(context, AddGroupMemberActivity::class.java)
-        intent.putExtra(EXTRA_GROUP_ID, networkGroup.id)
+        intent.putExtra(EXTRA_NETWORK_GROUP, networkGroup)
         startActivity(intent)
       }
     }
@@ -163,6 +164,7 @@ class GroupMemberFragment : Fragment() {
     _binding = null
   }
 
+  // 12/17/22: Replaced this with AddGroupMemberActivity.
   // todo: Add a member by QR code.
   // next step is to add a fragment.
   private fun openAddGroupMemberDialog(showError: Boolean = false) {
@@ -184,7 +186,6 @@ class GroupMemberFragment : Fragment() {
     frameLayout?.addView(editText)
     val yourEmail = FirebaseAuth.getInstance().currentUser?.email
 
-    // stopped here.
     // todo: ERROR. SHOULD ADD BOTH EMAIL AND ROLE.
     val builder = AlertDialog.Builder(requireActivity())
     builder.setTitle("Add group member")

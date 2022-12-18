@@ -20,7 +20,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.add_group_member.AddGroupMemberActivity"
-            android:exported="false">
+            android:exported="false"
+            android:label="Add new member">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
