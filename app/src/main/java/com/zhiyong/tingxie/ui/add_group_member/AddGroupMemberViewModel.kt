@@ -9,6 +9,7 @@ import com.zhiyong.tingxie.QuizRepository
 import com.zhiyong.tingxie.network.NetworkGroupMember
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
 
 class AddGroupMemberViewModel(application: Application) : AndroidViewModel(application) {
   private val repository = QuizRepository(application)
@@ -23,7 +24,7 @@ class AddGroupMemberViewModel(application: Application) : AndroidViewModel(appli
       viewModelScope.launch(Dispatchers.IO) {
         // It is a security risk to get the details of another user, so we use a single
         // function to check if the user exists, and if so, add the user to the group.
-        val newMember = repository.addUserToGroup(groupId, email)
+        val newMember = repository.addMemberOrReturnNoUser(groupId, email, role)
         result.postValue(newMember)
       }
     }

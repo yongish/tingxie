@@ -69,29 +69,34 @@ class AddGroupMemberFragment : Fragment() {
     }
 
     binding.btnSubmit.setOnClickListener {
-      val groupId = networkGroup!!.id
       val etEmailString = binding.etEmail.text.toString()
-      val role =
-        if (binding.radioGroup.checkedRadioButtonId == R.id.rbViewer) "VIEWER" else "ADMIN"
-      viewModel.addMemberOrReturnNoUser(groupId, etEmailString, role)
-        .observe(viewLifecycleOwner) {
-          if (it.email.isEmpty()) {
-            AlertDialog.Builder(requireActivity()).setTitle("Email not found")
-              .setMessage("You entered \"$etEmailString\". Did you enter the correct email address? Tap on \"Share 听写\" to share this app.")
-              .setPositiveButton("Close") { dialog, _ -> dialog.cancel() }
-              .setNeutralButton("Share 听写") { _, _ ->
-                ShareCompat.IntentBuilder(requireActivity()).setType("text/plain")
-                  .setChooserTitle("Chooser title")
-                  .setText("http://play.google.com/store/apps/details?id=" + requireActivity().packageName)
-                  .startChooser()
-              }.create().show()
-          } else {
-            // todo: May be able to use just group ID instead of entire NetworkGroup object.
-            val intent = Intent(context, GroupMemberActivity::class.java)
-            intent.putExtra(GroupActivity.EXTRA_NETWORK_GROUP, networkGroup)
-            startActivity(intent)
+      if (android.util.Patterns.EMAIL_ADDRESS.matcher(etEmailString).matches()) {
+        binding.tvEmailValid.visibility = View.INVISIBLE
+        val groupId = networkGroup!!.id
+        val role =
+          if (binding.radioGroup.checkedRadioButtonId == R.id.rbViewer) "MEMBER" else "ADMIN"
+        viewModel.addMemberOrReturnNoUser(groupId, etEmailString, role)
+          .observe(viewLifecycleOwner) {
+            if (it.email.isEmpty()) {
+              AlertDialog.Builder(requireActivity()).setTitle("Email not found")
+                .setMessage("You entered \"$etEmailString\". Did you enter the correct email address? Tap on \"Share 听写\" to share this app.")
+                .setPositiveButton("Close") { dialog, _ -> dialog.cancel() }
+                .setNeutralButton("Share 听写") { _, _ ->
+                  ShareCompat.IntentBuilder(requireActivity()).setType("text/plain")
+                    .setChooserTitle("Chooser title")
+                    .setText("http://play.google.com/store/apps/details?id=" + requireActivity().packageName)
+                    .startChooser()
+                }.create().show()
+            } else {
+              // todo: May be able to use just group ID instead of entire NetworkGroup object.
+              val intent = Intent(context, GroupMemberActivity::class.java)
+              intent.putExtra(GroupActivity.EXTRA_NETWORK_GROUP, networkGroup)
+              startActivity(intent)
+            }
           }
-        }
+      } else {
+        binding.tvEmailValid.visibility = View.VISIBLE
+      }
     }
   }
 }

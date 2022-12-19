@@ -71,7 +71,7 @@ class GroupMemberFragment : Fragment() {
 
     if (role == "READ-ONLY") {
       binding.fab.visibility = View.INVISIBLE
-    } else if (networkGroup != null) {
+    } else {
       binding.fab.setOnClickListener {
 //        openAddGroupMemberDialog()
         val intent = Intent(context, AddGroupMemberActivity::class.java)
@@ -118,8 +118,8 @@ class GroupMemberFragment : Fragment() {
         return when (menuItem.itemId) {
           R.id.action_delete_group -> {
             if (role == "OWNER") {
-              if (networkGroup?.numMembers == 1) {
-                viewModel.deleteGroup(networkGroup?.id, name, email)
+              if (networkGroup.numMembers == 1) {
+                viewModel.deleteGroup(networkGroup.id, name, email)
                   .observe(viewLifecycleOwner) {
                     if (it > 0) {
                       startActivity(Intent(context, GroupActivity::class.java))
@@ -137,7 +137,7 @@ class GroupMemberFragment : Fragment() {
               builder.setTitle("Leave group")
                 .setMessage("Are you sure you want to leave the group?")
                 .setPositiveButton("Yes") { dialog, _ ->
-                  viewModel.deleteGroupMember(networkGroup?.id, name, email, email)
+                  viewModel.deleteGroupMember(networkGroup.id, name, email, email)
                     .observe(viewLifecycleOwner) {
                       if (it > 0) {
                         dialog.dismiss()

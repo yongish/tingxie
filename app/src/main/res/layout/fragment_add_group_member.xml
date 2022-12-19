@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="Enter user's email"
+        android:text="@string/enter_users_email"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -33,13 +33,25 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:hint="Enter user's email here"
+        android:hint="@string/enter_user_email_here"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvEnterEmailSub" />
+        app:layout_constraintTop_toBottomOf="@+id/tvEnterEmailSub"
+        android:autofillHints="emailAddress" />
+
+    <TextView
+        android:id="@+id/tvEmailValid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/entered_invalid_email"
+        android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+        android:visibility="invisible"
+        android:textColor="@color/red"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etEmail" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clRole"
@@ -47,19 +59,20 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etEmail">
+        app:layout_constraintTop_toBottomOf="@+id/tvEmailValid">
 
         <TextView
             android:id="@+id/tvRoleHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select role"
+            android:text="@string/select_role"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/clRole" />
 
         <ImageView
             android:id="@+id/imageView"
+            android:contentDescription="@string/help"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
@@ -86,7 +99,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:text="Viewer" />
+            android:text="@string/member" />
 
         <RadioButton
             android:id="@+id/rbAdmin"
@@ -94,7 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:text="Admin" />
+            android:text="@string/admin" />
     </RadioGroup>
 
     <Button
@@ -103,7 +116,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:text="Submit"
+        android:text="@string/submit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -115,6 +128,5 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="@string/error_in_addgroupmemberfragment"
-        android:textColor="@color/white"
         android:visibility="gone" />
 </androidx.constraintlayout.widget.ConstraintLayout>

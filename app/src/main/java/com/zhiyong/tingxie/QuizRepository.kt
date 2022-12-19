@@ -12,8 +12,10 @@ import com.zhiyong.tingxie.ui.word.WordItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
+import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import kotlin.collections.HashSet
 
 
 /* A Repository is a class that abstracts access to multiple data sources.
@@ -255,8 +257,8 @@ class QuizRepository(val context: Context) {
   suspend fun getGroupMembers(groupId: Long) =
     TingXieNetwork.tingxie.getGroupMembers(groupId)
 
-  suspend fun addUserToGroup(groupId: Long, email: String): NetworkGroupMember =
-    TingXieNetwork.tingxie.addUserToGroup(groupId, email)
+  suspend fun addMemberOrReturnNoUser(groupId: Long, email: String, role: String): NetworkGroupMember =
+    TingXieNetwork.tingxie.addMemberOrReturnNoUser(groupId, email, role)
 
   suspend fun deleteGroupMember(
     groupId: Long,

@@ -84,4 +84,11 @@
     <string name="groups">Groups</string>
     <string name="error_in_groupmemberfragment">Error in GroupMemberFragment. Please contact yongish@gmail.com.</string>
     <string name="error_in_addgroupmemberfragment">Error in AddGroupMemberFragment. Please contact yongish@gmail.com.</string>
+    <string name="entered_invalid_email">You entered an invalid email. Try again.</string>
+    <string name="enter_user_email_here">Enter user\'s email here</string>
+    <string name="enter_users_email">Enter user\'s email</string>
+    <string name="select_role">Select role</string>
+    <string name="submit">Submit</string>
+    <string name="member">Member</string>
+    <string name="admin">Admin</string>
 </resources>

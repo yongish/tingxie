@@ -3,6 +3,7 @@ package com.zhiyong.tingxie.network
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
+import java.util.*
 
 interface Service {
   @PUT("tokens")
@@ -61,10 +62,11 @@ interface Service {
   @GET("groups/{groupId}/members")
   suspend fun getGroupMembers(@Path("groupId") groupId: Long): MutableList<NetworkGroupMember>
 
-  @POST("groups/{groupId}/email/{email}")
-  suspend fun addUserToGroup(
+  @POST("groups/{groupId}/email/{email}/role/{role}")
+  suspend fun addMemberOrReturnNoUser(
     @Path("groupId") groupId: Long,
-    @Path("email") email: String
+    @Path("email") email: String,
+    @Path("role") role: String
   ): NetworkGroupMember
 
   @DELETE("groups/{groupId}/members/{email}")
