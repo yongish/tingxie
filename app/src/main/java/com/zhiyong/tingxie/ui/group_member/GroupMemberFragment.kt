@@ -12,6 +12,7 @@ import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
@@ -34,12 +35,24 @@ class GroupMemberFragment : Fragment() {
 
   private lateinit var viewModel: GroupMemberViewModel
   private lateinit var adapter: GroupMemberAdapter
-//  private var networkGroup: NetworkGroup? = null
+
+  //  private var networkGroup: NetworkGroup? = null
   private var _binding: FragmentGroupMemberBinding? = null
   private val binding get() = _binding!!
 
   private lateinit var email: String
   private lateinit var name: String
+
+  var position: Int? = null
+  var role: String? = null
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setFragmentResultListener("requestKey") { key, bundle ->
+      position = bundle.getInt("position")
+      role = bundle.getString("role")
+    }
+  }
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -47,6 +60,14 @@ class GroupMemberFragment : Fragment() {
     val currentUser = FirebaseAuth.getInstance().currentUser!!
     email = currentUser.email!!
     name = currentUser.displayName!!
+
+//    childFragmentManager.setFragmentResultListener(
+//      "requestKey",
+//      viewLifecycleOwner
+//    ) { _, bundle ->
+//      position = bundle.getInt("position")
+//      role = bundle.getString("role")
+//    }
 
     _binding = FragmentGroupMemberBinding.inflate(inflater, container, false)
     return binding.root
@@ -90,6 +111,11 @@ class GroupMemberFragment : Fragment() {
       requireActivity(), viewModel, binding.recyclerviewGroupMembers, role
     )
     binding.recyclerviewGroupMembers.adapter = adapter
+
+
+    // stopped here. Use viewmodel to update role, then get updated groupMembers.
+
+
     // Current user's role determines if she can see the share and delete imageViews.
     viewModel.groupMembers.observe(viewLifecycleOwner) {
       it?.let {
@@ -101,6 +127,10 @@ class GroupMemberFragment : Fragment() {
         }
       }
     }
+
+
+
+
 
     val menuHost: MenuHost = requireActivity()
     menuHost.addMenuProvider(object : MenuProvider {
@@ -191,12 +221,12 @@ class GroupMemberFragment : Fragment() {
     builder.setTitle("Add group member")
       .setMessage(
         HtmlCompat.fromHtml(
-        (if (showError) "<p style=\"color:red\">No such email: ${email}</p>\n" +
-            "Please check that the email address is correct. " +
-            "If it is correct, please ask your friend to install 听写 and create an account.<br />" else "") +
-            "Enter a user's email address to add her/him to the group." +
-            if (yourEmail == null) "" else "\n<br />Your email address: $yourEmail",
-        HtmlCompat.FROM_HTML_MODE_LEGACY
+          (if (showError) "<p style=\"color:red\">No such email: ${email}</p>\n" +
+              "Please check that the email address is correct. " +
+              "If it is correct, please ask your friend to install 听写 and create an account.<br />" else "") +
+              "Enter a user's email address to add her/him to the group." +
+              if (yourEmail == null) "" else "\n<br />Your email address: $yourEmail",
+          HtmlCompat.FROM_HTML_MODE_LEGACY
         )
       )
       .setPositiveButton(R.string.find_email) { _, _ ->
