@@ -54,12 +54,12 @@ class GroupMemberViewModel(application: Application, groupId: Long) :
 
   fun deleteGroupMember(
     groupId: Long?,
-    requesterName: String,
-    requesterEmail: String,
+    requesterName: String?,
+    requesterEmail: String?,
     email: String
   ): LiveData<Int> {
     val result = MutableLiveData<Int>()
-    if (groupId != null) {
+    if (groupId != null && requesterName != null && requesterEmail != null) {
       viewModelScope.launch(Dispatchers.IO) {
         val numRows =
           mRepository.deleteGroupMember(groupId, requesterName, requesterEmail, email)

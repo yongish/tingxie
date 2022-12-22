@@ -91,6 +91,7 @@ class GroupFragment : Fragment() {
             Toast.makeText(context, "Error. Please contact yongish@gmail.com.", Toast.LENGTH_LONG).show()
           } else {
             adapter.addNewGroup(NetworkGroup(newId, name, "OWNER", 1))
+            binding.emptyView.visibility = View.INVISIBLE
           }
         }
       }

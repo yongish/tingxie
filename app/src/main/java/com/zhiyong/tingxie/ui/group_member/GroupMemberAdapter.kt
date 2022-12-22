@@ -6,17 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.databinding.RecyclerviewGroupMemberBinding
 import com.zhiyong.tingxie.network.NetworkGroupMember
 
-
 class GroupMemberAdapter(
   private val context: Context,
   val viewModel: GroupMemberViewModel,
   val recyclerView: RecyclerView,
-  val role: String
+  private val viewLifecycleOwner: LifecycleOwner,
+  val role: String,
+  private val groupId: Long
 ) : RecyclerView.Adapter<GroupMemberAdapter.ViewHolder>() {
 
   val user = FirebaseAuth.getInstance().currentUser
@@ -43,12 +45,9 @@ class GroupMemberAdapter(
     holder.bind(groupMember)
     holder.clIdentifier.setOnClickListener {
       val fm = (context as AppCompatActivity).supportFragmentManager
-      val selectRoleFragment: SelectRoleFragment = SelectRoleFragment.newInstance(groupMember, position)
+      val selectRoleFragment: SelectRoleFragment =
+        SelectRoleFragment.newInstance(groupMember, position)
       selectRoleFragment.show(fm, "fragment_select_role")
-
-//      builder.setMessage("")
-//        .setNegativeButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
-//        .create().show()
     }
 
     if (role == "READ-ONLY") {
@@ -66,9 +65,19 @@ class GroupMemberAdapter(
             .setTitle("Remove ${groupMember.userName}?")
             .setMessage("Are you sure you want to remove ${groupMember.userName} from this group?")
             .setPositiveButton("Yes") { dialog, _ ->
-
+              viewModel.deleteGroupMember(
+                groupId,
+                user?.displayName,
+                email,
+                groupMember.email
+              ).observe(viewLifecycleOwner) {
+                if (it > 0) {
+                  groupMembers.removeAt(position)
+                  notifyItemChanged(position)
+                }
+              }
             }
-            .setNegativeButton("Cancel") { dialog, _ -> dialog.cancel()}
+            .setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
             .create().show()
         }
       }

@@ -88,7 +88,7 @@ class GroupAdapter(
       tvNumMembers.text = if (group.numMembers == 1) String.format(
         "%d member",
         group.numMembers
-      ) else String.format("%d member", group.numMembers)
+      ) else String.format("%d members", group.numMembers)
       tvRole.text = group.role
     }
   }

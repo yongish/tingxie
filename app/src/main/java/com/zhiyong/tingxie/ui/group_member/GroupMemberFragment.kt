@@ -91,7 +91,12 @@ class GroupMemberFragment : Fragment() {
     val viewModel =
       ViewModelProvider(this, viewModelFactory)[GroupMemberViewModel::class.java]
     adapter = GroupMemberAdapter(
-      requireActivity(), viewModel, binding.recyclerviewGroupMembers, role
+      requireActivity(),
+      viewModel,
+      binding.recyclerviewGroupMembers,
+      viewLifecycleOwner,
+      role,
+      networkGroup?.id ?: -1
     )
     binding.recyclerviewGroupMembers.adapter = adapter
 
