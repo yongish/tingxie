@@ -43,7 +43,7 @@ class GroupMemberAdapter(
     holder.bind(groupMember)
     holder.clIdentifier.setOnClickListener {
       val fm = (context as AppCompatActivity).supportFragmentManager
-      val selectRoleFragment: SelectRoleFragment = SelectRoleFragment.newInstance(position)
+      val selectRoleFragment: SelectRoleFragment = SelectRoleFragment.newInstance(groupMember, position)
       selectRoleFragment.show(fm, "fragment_select_role")
 
 //      builder.setMessage("")
@@ -73,6 +73,11 @@ class GroupMemberAdapter(
         }
       }
     }
+  }
+
+  fun changeRole(networkGroupMember: NetworkGroupMember, i: Int) {
+    groupMembers[i] = networkGroupMember
+    notifyItemChanged(i)
   }
 
   fun addGroupMember(networkGroupMember: NetworkGroupMember) {

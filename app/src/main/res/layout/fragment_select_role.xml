@@ -42,12 +42,12 @@
         android:id="@+id/radioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:checkedButton="@id/rbViewer"
+        android:checkedButton="@id/rbMember"
         app:layout_constraintStart_toStartOf="@+id/clRole"
         app:layout_constraintTop_toBottomOf="@+id/clRole">
 
         <RadioButton
-            android:id="@+id/rbViewer"
+            android:id="@+id/rbMember"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/member" />

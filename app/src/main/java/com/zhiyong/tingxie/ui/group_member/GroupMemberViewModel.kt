@@ -41,6 +41,17 @@ class GroupMemberViewModel(application: Application, groupId: Long) :
       }
     }
 
+  fun changeRole(groupId: Long?, email: String?, role: String?): LiveData<Int> {
+    val result = MutableLiveData<Int>()
+    if (groupId != null && email != null && role != null) {
+      viewModelScope.launch(Dispatchers.IO) {
+        val numRows = mRepository.changeRole(groupId, email, role)
+        result.postValue(numRows)
+      }
+    }
+    return result
+  }
+
   fun deleteGroupMember(
     groupId: Long?,
     requesterName: String,

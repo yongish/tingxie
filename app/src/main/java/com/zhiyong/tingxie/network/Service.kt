@@ -69,6 +69,13 @@ interface Service {
     @Path("role") role: String
   ): NetworkGroupMember
 
+  @PUT("groups/{groupId}/email/{email}/role/{role}")
+  suspend fun changeRole(
+    @Path("groupId") groupId: Long,
+    @Path("email") email: String,
+    @Path("role") role: String
+  ): Int
+
   @DELETE("groups/{groupId}/members/{email}")
   suspend fun deleteGroupMember(
     @Path("groupId") groupId: Long,

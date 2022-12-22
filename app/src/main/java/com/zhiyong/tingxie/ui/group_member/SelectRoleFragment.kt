@@ -1,17 +1,19 @@
 package com.zhiyong.tingxie.ui.group_member
 
+import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.FragmentSelectRoleBinding
-
-private const val POSITION = "position"
+import com.zhiyong.tingxie.network.NetworkGroupMember
+import com.zhiyong.tingxie.ui.group_member.GroupMemberFragment.Companion.EXTRA_GROUP_MEMBER
+import com.zhiyong.tingxie.ui.group_member.GroupMemberFragment.Companion.EXTRA_POSITION
 
 /**
  * A simple [Fragment] subclass.
@@ -19,9 +21,6 @@ private const val POSITION = "position"
  * create an instance of this fragment.
  */
 class SelectRoleFragment : DialogFragment() {
-
-  // TODO: Rename and change types of parameters
-  private var position: Int? = null
 
   private var _binding: FragmentSelectRoleBinding? = null
   private val binding get() = _binding!!
@@ -37,11 +36,28 @@ class SelectRoleFragment : DialogFragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    position = arguments?.getInt("position")
+    val groupMember =
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) arguments?.getParcelable(
+        EXTRA_GROUP_MEMBER,
+        NetworkGroupMember::class.java
+      ) else arguments?.getParcelable(EXTRA_GROUP_MEMBER)
+    val position = arguments?.getInt(EXTRA_POSITION)
+
+    if (groupMember?.role == "MEMBER") {
+      binding.rbMember.isChecked = true
+      binding.rbAdmin.isChecked = false
+    } else {
+      binding.rbAdmin.isChecked = true
+      binding.rbMember.isChecked = false
+    }
 
     binding.btnOk.setOnClickListener {
-      val role = if (binding.radioGroup.checkedRadioButtonId == R.id.rbViewer) "MEMBER" else "ADMIN"
-      setFragmentResult("requestKey", bundleOf("position" to position, "role" to role))
+      groupMember?.role = if (binding.radioGroup.checkedRadioButtonId == R.id.rbMember)
+        "MEMBER" else "ADMIN"
+      setFragmentResult(
+        REQUEST_KEY,
+        bundleOf(EXTRA_GROUP_MEMBER to groupMember, EXTRA_POSITION to position)
+      )
       dismiss()
     }
 
@@ -51,6 +67,8 @@ class SelectRoleFragment : DialogFragment() {
   }
 
   companion object {
+    const val REQUEST_KEY = "com.zhiyong.tingxie.ui.group_member.REQUEST_KEY"
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -61,10 +79,11 @@ class SelectRoleFragment : DialogFragment() {
      */
     // TODO: Rename and change types and number of parameters
     @JvmStatic
-    fun newInstance(position: Int) =
+    fun newInstance(groupMember: NetworkGroupMember, position: Int) =
       SelectRoleFragment().apply {
         arguments = Bundle().apply {
-          putInt(POSITION, position)
+          putParcelable(EXTRA_GROUP_MEMBER, groupMember)
+          putInt(EXTRA_POSITION, position)
         }
       }
   }

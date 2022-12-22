@@ -85,7 +85,7 @@
 
     <RadioGroup
         android:id="@+id/radioGroup"
-        android:checkedButton="@id/rbViewer"
+        android:checkedButton="@id/rbMember"
         android:layout_width="405dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -95,7 +95,7 @@
         app:layout_constraintTop_toBottomOf="@+id/clRole">
 
         <RadioButton
-            android:id="@+id/rbViewer"
+            android:id="@+id/rbMember"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

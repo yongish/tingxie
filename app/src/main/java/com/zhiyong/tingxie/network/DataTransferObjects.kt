@@ -106,12 +106,13 @@ data class NetworkCorrectRecord(
   val email: String,
 )
 
+@Parcelize
 @JsonClass(generateAdapter = true)
 data class NetworkGroupMember(
   val userName: String,
   val email: String,
-  val role: String
-)
+  var role: String
+): Parcelable
 
 @JsonClass(generateAdapter = true)
 data class NetworkCreateGroup(

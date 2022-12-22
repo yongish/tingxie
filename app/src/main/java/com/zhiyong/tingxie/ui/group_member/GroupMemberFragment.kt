@@ -19,9 +19,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.FragmentGroupMemberBinding
 import com.zhiyong.tingxie.network.NetworkGroup
+import com.zhiyong.tingxie.network.NetworkGroupMember
 import com.zhiyong.tingxie.ui.add_group_member.AddGroupMemberActivity
 import com.zhiyong.tingxie.ui.group.GroupActivity
 import com.zhiyong.tingxie.ui.group.GroupActivity.Companion.EXTRA_NETWORK_GROUP
+import com.zhiyong.tingxie.ui.group_member.SelectRoleFragment.Companion.REQUEST_KEY
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -30,29 +32,18 @@ class GroupMemberFragment : Fragment() {
 
   companion object {
     fun newInstance() = GroupMemberFragment()
-    const val EXTRA_GROUP_ID = "com.zhiyong.tingxie.ui.group_member.extra.GROUP_ID"
+    const val EXTRA_GROUP_MEMBER =
+      "com.zhiyong.tingxie.ui.group_member.extra.GROUP_MEMBER"
+    const val EXTRA_POSITION = "com.zhiyong.tingxie.ui.group_member.extra.POSITION"
   }
 
-  private lateinit var viewModel: GroupMemberViewModel
   private lateinit var adapter: GroupMemberAdapter
 
-  //  private var networkGroup: NetworkGroup? = null
   private var _binding: FragmentGroupMemberBinding? = null
   private val binding get() = _binding!!
 
   private lateinit var email: String
   private lateinit var name: String
-
-  var position: Int? = null
-  var role: String? = null
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setFragmentResultListener("requestKey") { key, bundle ->
-      position = bundle.getInt("position")
-      role = bundle.getString("role")
-    }
-  }
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -60,14 +51,6 @@ class GroupMemberFragment : Fragment() {
     val currentUser = FirebaseAuth.getInstance().currentUser!!
     email = currentUser.email!!
     name = currentUser.displayName!!
-
-//    childFragmentManager.setFragmentResultListener(
-//      "requestKey",
-//      viewLifecycleOwner
-//    ) { _, bundle ->
-//      position = bundle.getInt("position")
-//      role = bundle.getString("role")
-//    }
 
     _binding = FragmentGroupMemberBinding.inflate(inflater, container, false)
     return binding.root
@@ -105,16 +88,12 @@ class GroupMemberFragment : Fragment() {
 
     val viewModelFactory =
       GroupMemberViewModelFactory(requireActivity().application, networkGroup?.id ?: -1)
-    viewModel =
+    val viewModel =
       ViewModelProvider(this, viewModelFactory)[GroupMemberViewModel::class.java]
     adapter = GroupMemberAdapter(
       requireActivity(), viewModel, binding.recyclerviewGroupMembers, role
     )
     binding.recyclerviewGroupMembers.adapter = adapter
-
-
-    // stopped here. Use viewmodel to update role, then get updated groupMembers.
-
 
     // Current user's role determines if she can see the share and delete imageViews.
     viewModel.groupMembers.observe(viewLifecycleOwner) {
@@ -128,9 +107,20 @@ class GroupMemberFragment : Fragment() {
       }
     }
 
-
-
-
+    setFragmentResultListener(REQUEST_KEY) { key, bundle ->
+      val groupMember = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        bundle.getParcelable(EXTRA_GROUP_MEMBER, NetworkGroupMember::class.java)
+      } else {
+        bundle.getParcelable(EXTRA_GROUP_MEMBER)
+      }
+      val position = bundle.getInt(EXTRA_POSITION)
+      if (groupMember != null) {
+        viewModel.changeRole(networkGroup?.id, groupMember.email, groupMember.role)
+          .observe(viewLifecycleOwner) {
+            if (it > 0) adapter.changeRole(groupMember, position)
+          }
+      }
+    }
 
     val menuHost: MenuHost = requireActivity()
     menuHost.addMenuProvider(object : MenuProvider {
@@ -183,10 +173,6 @@ class GroupMemberFragment : Fragment() {
         }
       }
     }, viewLifecycleOwner, Lifecycle.State.RESUMED)
-
-//    binding.buttonFirst.setOnClickListener {
-//      findNavController().navigate(R.id.action_FirstFragment_to_Second2Fragment)
-//    }
   }
 
   override fun onDestroyView() {

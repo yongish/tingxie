@@ -74,7 +74,7 @@ class AddGroupMemberFragment : Fragment() {
         binding.tvEmailValid.visibility = View.INVISIBLE
         val groupId = networkGroup!!.id
         val role =
-          if (binding.radioGroup.checkedRadioButtonId == R.id.rbViewer) "MEMBER" else "ADMIN"
+          if (binding.radioGroup.checkedRadioButtonId == R.id.rbMember) "MEMBER" else "ADMIN"
         viewModel.addMemberOrReturnNoUser(groupId, etEmailString, role)
           .observe(viewLifecycleOwner) {
             if (it.email.isEmpty()) {
