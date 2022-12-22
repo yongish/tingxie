@@ -65,19 +65,15 @@
     <string name="share_with_all">Share with all    </string>
     <string name="errorQuizDownload">Error in downloading quizzes. Check your Internet connection or email yongish@gmail.com for help.</string>
     <string name="errorWordsDownload">Error in downloading words. Check your Internet connection or email yongish@gmail.com for help.</string>
-    <string name="title_activity_group">GroupActivity</string>
+    <string name="title_activity_group">Groups</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="members">Members</string>
     <string name="error_in_downloading_groups">Error in downloading groups.</string>
     <string name="add_group">Add a group</string>
-    <string name="title_activity_group_member">GroupMemberActivity</string>
+    <string name="title_activity_group_member">Group Members</string>
     <string name="add_group_user">Add a user to a group</string>
     <string name="error_downloading_group_members">Error in downloading group members.</string>
     <string name="delete_group">Delete group</string>
@@ -91,6 +87,4 @@
     <string name="submit">Submit</string>
     <string name="member">Member</string>
     <string name="admin">Admin</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

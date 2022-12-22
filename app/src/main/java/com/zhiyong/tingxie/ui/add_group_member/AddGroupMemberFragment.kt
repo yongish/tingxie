@@ -17,7 +17,6 @@ import com.zhiyong.tingxie.network.NetworkGroup
 import com.zhiyong.tingxie.ui.group.GroupActivity
 import com.zhiyong.tingxie.ui.group_member.GroupMemberActivity
 
-
 class AddGroupMemberFragment : Fragment() {
 
   companion object {

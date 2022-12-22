@@ -5,10 +5,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.*
-import android.widget.EditText
-import android.widget.FrameLayout
-import androidx.core.app.ShareCompat
-import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -25,9 +21,6 @@ import com.zhiyong.tingxie.ui.group.GroupActivity
 import com.zhiyong.tingxie.ui.group.GroupActivity.Companion.EXTRA_NETWORK_GROUP
 import com.zhiyong.tingxie.ui.group_member.SelectRoleFragment.Companion.REQUEST_KEY
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
 class GroupMemberFragment : Fragment() {
 
   companion object {
@@ -73,11 +66,10 @@ class GroupMemberFragment : Fragment() {
 
     val role = networkGroup?.role ?: "READ-ONLY"
 
-    if (role == "READ-ONLY") {
+    if (role == "MEMBER") {
       binding.fab.visibility = View.INVISIBLE
     } else {
       binding.fab.setOnClickListener {
-//        openAddGroupMemberDialog()
         val intent = Intent(context, AddGroupMemberActivity::class.java)
         intent.putExtra(EXTRA_NETWORK_GROUP, networkGroup)
         startActivity(intent)
@@ -112,7 +104,7 @@ class GroupMemberFragment : Fragment() {
       }
     }
 
-    setFragmentResultListener(REQUEST_KEY) { key, bundle ->
+    setFragmentResultListener(REQUEST_KEY) { _, bundle ->
       val groupMember = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         bundle.getParcelable(EXTRA_GROUP_MEMBER, NetworkGroupMember::class.java)
       } else {
@@ -131,9 +123,6 @@ class GroupMemberFragment : Fragment() {
     menuHost.addMenuProvider(object : MenuProvider {
       override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.menu_group_member, menu)
-//        if (role != "OWNER") {
-//          menu.findItem(R.id.action_delete_group).isVisible = false
-//        }
       }
 
       override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -143,10 +132,10 @@ class GroupMemberFragment : Fragment() {
         return when (menuItem.itemId) {
           R.id.action_delete_group -> {
             if (role == "OWNER") {
-              if (networkGroup.numMembers == 1) {
+              if (adapter.groupMembers.size == 1) {
                 viewModel.deleteGroup(networkGroup.id, name, email)
                   .observe(viewLifecycleOwner) {
-                    if (it > 0) {
+                    if (it > -1) {
                       startActivity(Intent(context, GroupActivity::class.java))
                     }
                   }
@@ -183,65 +172,5 @@ class GroupMemberFragment : Fragment() {
   override fun onDestroyView() {
     super.onDestroyView()
     _binding = null
-  }
-
-  // 12/17/22: Replaced this with AddGroupMemberActivity.
-  // todo: Add a member by QR code.
-  // next step is to add a fragment.
-  private fun openAddGroupMemberDialog(showError: Boolean = false) {
-    val params = FrameLayout.LayoutParams(
-      ViewGroup.LayoutParams.MATCH_PARENT,
-      ViewGroup.LayoutParams.WRAP_CONTENT
-    )
-    params.leftMargin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
-    params.rightMargin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
-    val editText = EditText(context)
-    editText.layoutParams = params
-
-    // todo: Define radio buttons for READ-ONLY, ADMIN,
-    // Need a whole new fragment to explain what each option is.
-
-    val frameLayout = context?.let { it1 ->
-      FrameLayout(it1)
-    }
-    frameLayout?.addView(editText)
-    val yourEmail = FirebaseAuth.getInstance().currentUser?.email
-
-    // todo: ERROR. SHOULD ADD BOTH EMAIL AND ROLE.
-    val builder = AlertDialog.Builder(requireActivity())
-    builder.setTitle("Add group member")
-      .setMessage(
-        HtmlCompat.fromHtml(
-          (if (showError) "<p style=\"color:red\">No such email: ${email}</p>\n" +
-              "Please check that the email address is correct. " +
-              "If it is correct, please ask your friend to install 听写 and create an account.<br />" else "") +
-              "Enter a user's email address to add her/him to the group." +
-              if (yourEmail == null) "" else "\n<br />Your email address: $yourEmail",
-          HtmlCompat.FROM_HTML_MODE_LEGACY
-        )
-      )
-      .setPositiveButton(R.string.find_email) { _, _ ->
-        val email = editText.text.toString()
-//        viewModel.addMemberOrReturnNoUser(networkGroup?.id, email).observe(viewLifecycleOwner) {
-//          if (it.email.isEmpty()) {
-//            openAddGroupMemberDialog(true)
-//          } else {
-//            adapter.addGroupMember(it)
-//          }
-//        }
-      }
-      .setNegativeButton(R.string.cancel) { dialog, _ ->
-        dialog.cancel()
-      }
-      .setNeutralButton("Share 听写") { _, _ ->
-        context?.let {
-          ShareCompat.IntentBuilder(it)
-            .setType("text/plain")
-            .setChooserTitle("Chooser title")
-            .setText("http://play.google.com/store/apps/details?id=" + it.packageName)
-            .startChooser()
-        }
-      }
-      .create().show()
   }
 }

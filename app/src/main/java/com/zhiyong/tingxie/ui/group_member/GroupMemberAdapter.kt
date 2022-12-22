@@ -43,14 +43,20 @@ class GroupMemberAdapter(
 
     val groupMember = groupMembers[position]
     holder.bind(groupMember)
-    holder.clIdentifier.setOnClickListener {
-      val fm = (context as AppCompatActivity).supportFragmentManager
-      val selectRoleFragment: SelectRoleFragment =
-        SelectRoleFragment.newInstance(groupMember, position)
-      selectRoleFragment.show(fm, "fragment_select_role")
+
+    if (groupMember.role != "OWNER") {
+      holder.clIdentifier.setOnClickListener {
+        val fm = (context as AppCompatActivity).supportFragmentManager
+        val selectRoleFragment: SelectRoleFragment =
+          SelectRoleFragment.newInstance(groupMember, position)
+        selectRoleFragment.show(fm, "fragment_select_role")
+      }
+    }
+    if (groupMember.role == "OWNER") {
+      holder.ivEditRole.visibility = View.INVISIBLE
     }
 
-    if (role == "READ-ONLY") {
+    if (role == "MEMBER") {
       holder.ivDelete.visibility = View.INVISIBLE
     } else {
       holder.ivDelete.setOnClickListener {
@@ -99,6 +105,7 @@ class GroupMemberAdapter(
   class ViewHolder(private val binding: RecyclerviewGroupMemberBinding) :
     RecyclerView.ViewHolder(binding.root) {
     val clIdentifier = binding.clIdentifier
+    val ivEditRole = binding.ivEditRole
     val ivDelete = binding.ivDelete
 
     fun bind(groupMember: NetworkGroupMember) = with(binding) {
