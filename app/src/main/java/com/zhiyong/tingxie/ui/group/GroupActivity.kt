@@ -1,5 +1,6 @@
 package com.zhiyong.tingxie.ui.group
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.widget.Toast
@@ -38,7 +39,7 @@ class GroupActivity : AppCompatActivity() {
   }
 
   override fun onSupportNavigateUp(): Boolean {
-    onBackPressedDispatcher.onBackPressed()
+    startActivity(Intent(this, MainActivity::class.java))
     return true
   }
 

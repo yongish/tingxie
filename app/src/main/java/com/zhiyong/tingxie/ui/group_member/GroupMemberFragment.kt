@@ -25,6 +25,8 @@ class GroupMemberFragment : Fragment() {
 
   companion object {
     fun newInstance() = GroupMemberFragment()
+    const val EXTRA_SHOW_OWNER_OPTION =
+      "com.zhiyong.tingxie.ui.group_member.extra.SHOW_OWNER_OPTION"
     const val EXTRA_GROUP_MEMBER =
       "com.zhiyong.tingxie.ui.group_member.extra.GROUP_MEMBER"
     const val EXTRA_POSITION = "com.zhiyong.tingxie.ui.group_member.extra.POSITION"
@@ -76,8 +78,6 @@ class GroupMemberFragment : Fragment() {
       }
     }
 
-    // todo: Title bar should contain an option to delete the entire group. Show a confirmation modal.
-
     val viewModelFactory =
       GroupMemberViewModelFactory(requireActivity().application, networkGroup?.id ?: -1)
     val viewModel =
@@ -92,7 +92,6 @@ class GroupMemberFragment : Fragment() {
     )
     binding.recyclerviewGroupMembers.adapter = adapter
 
-    // Current user's role determines if she can see the share and delete imageViews.
     viewModel.groupMembers.observe(viewLifecycleOwner) {
       it?.let {
         adapter.groupMembers = it
@@ -115,6 +114,9 @@ class GroupMemberFragment : Fragment() {
         viewModel.changeRole(networkGroup?.id, groupMember.email, groupMember.role)
           .observe(viewLifecycleOwner) {
             if (it > 0) adapter.changeRole(groupMember, position)
+            if (role == "OWNER" && groupMember.role == "OWNER") {
+              viewModel.changeRole(networkGroup?.id, email, "ADMIN")
+            }
           }
       }
     }

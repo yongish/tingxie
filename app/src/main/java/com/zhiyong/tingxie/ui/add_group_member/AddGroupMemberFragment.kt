@@ -51,7 +51,7 @@ class AddGroupMemberFragment : Fragment() {
       AlertDialog.Builder(requireActivity()).setTitle("Roles").setMessage(
         """
 1. Member - Can see who the members of the group are. Can remove oneself from the group. Cannot add or remove other members from the group. Also cannot change anyone's role.
-2. Admin - Can add and remove people from the group, and change their roles.
+2. Admin - Can add and remove people from the group, and change their roles. Cannot change the owner's role.
 3. Owner (not an option here) - A group can only have 1 owner. The owner can transfer her ownership to another group member. The owner has all admin permissions, and can also delete the entire group."""
       ).setPositiveButton("Close") { dialog, _ -> dialog.cancel() }.create().show()
     }

@@ -48,7 +48,7 @@ class GroupMemberAdapter(
       holder.clIdentifier.setOnClickListener {
         val fm = (context as AppCompatActivity).supportFragmentManager
         val selectRoleFragment: SelectRoleFragment =
-          SelectRoleFragment.newInstance(groupMember, position)
+          SelectRoleFragment.newInstance(role == "OWNER", groupMember, position)
         selectRoleFragment.show(fm, "fragment_select_role")
       }
     }
@@ -57,6 +57,7 @@ class GroupMemberAdapter(
     }
 
     if (role == "MEMBER") {
+      holder.ivEditRole.visibility = View.INVISIBLE
       holder.ivDelete.visibility = View.INVISIBLE
     } else {
       holder.ivDelete.setOnClickListener {
