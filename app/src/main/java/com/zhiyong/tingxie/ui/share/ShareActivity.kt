@@ -1,8 +1,10 @@
 package com.zhiyong.tingxie.ui.share
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.tabs.TabLayoutMediator
 import com.zhiyong.tingxie.R
+import com.zhiyong.tingxie.databinding.ShareActivityBinding
 
 class ShareActivity : AppCompatActivity() {
 
@@ -10,16 +12,24 @@ class ShareActivity : AppCompatActivity() {
     const val EXTRA_QUIZ_ID = "com.zhiyong.tingxie.ui.share.extra.QUIZ_ID"
   }
 
+  private lateinit var binding: ShareActivityBinding
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.share_activity)
-
-    if (savedInstanceState == null) {
-      supportFragmentManager.beginTransaction()
-          .replace(R.id.container, ShareIndividualFragment.newInstance())
-          .commitNow()
-    }
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+    binding = ShareActivityBinding.inflate(layoutInflater)
+    setContentView(binding.root)
+
+    val quizId = intent.getLongExtra(EXTRA_QUIZ_ID, -1)
+    binding.vpShare.adapter = ShareAdapter(this, 2, quizId)
+    TabLayoutMediator(binding.tabLayout, binding.vpShare) { tab, position ->
+      when (position) {
+        0 -> tab.text = "Individuals"
+        1 -> tab.text = "Groups"
+      }
+    }.attach()
   }
 
   override fun onSupportNavigateUp(): Boolean {

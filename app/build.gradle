@@ -26,6 +26,7 @@ android {
         }
         kotlinOptions {
             jvmTarget = JavaVersion.VERSION_1_8.toString()
+            freeCompilerArgs = ['-Xjvm-default=compatibility']
         }
 //        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         // The following argument makes the Android Test Orchestrator run its

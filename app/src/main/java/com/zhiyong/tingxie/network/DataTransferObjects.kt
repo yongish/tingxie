@@ -6,7 +6,6 @@ import com.zhiyong.tingxie.db.Quiz
 import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
 import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
-import com.zhiyong.tingxie.ui.share.TingXieShareIndividual
 import com.zhiyong.tingxie.ui.word.WordItem
 import kotlinx.parcelize.Parcelize
 
@@ -177,8 +176,3 @@ data class NetworkShare(
   val isShared: Boolean,
   val role: EnumQuizRole
 )
-
-// may delete this.
-fun NetworkShareContainer.asDomainModel(): List<TingXieShareIndividual> = shares.map {
-  TingXieShareIndividual(it.email, it.name, it.isShared, it.role)
-}

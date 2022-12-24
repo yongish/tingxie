@@ -7,7 +7,6 @@ import com.zhiyong.tingxie.network.*
 import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
 import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsAdapter
-import com.zhiyong.tingxie.ui.share.TingXieShareIndividual
 import com.zhiyong.tingxie.ui.word.WordItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -64,73 +63,6 @@ class QuizRepository(val context: Context) {
   suspend fun getWordItemsOfQuiz(quizId: Long): List<WordItem> =
     TingXieNetwork.tingxie.getWordItemsOfQuiz(quizId)
       .map { it.asDomainModel(quizId) }
-
-  suspend fun checkUserExists(email: String): Boolean =
-    TingXieNetwork.tingxie.checkUserExists(email).toBoolean()
-
-  suspend fun getFriends(party: String, friendStatus: String): List<TingXieIndividual> =
-    TingXieNetwork.tingxie.getFriends(email, party, friendStatus)
-      .map { it.asDomainModel() }
-
-  suspend fun addFriend(individual: TingXieIndividual) =
-    TingXieNetwork.tingxie.postFriend(
-      NetworkIndividual(
-        email,
-        individual.email,
-        name,
-        individual.name,
-        individual.status
-      )
-    )
-
-  suspend fun updateFriend(individual: TingXieIndividual) =
-    TingXieNetwork.tingxie.putFriend(
-      NetworkIndividual(
-        individual.email,
-        email,
-        name,
-        individual.name,
-        individual.status
-      )
-    )
-
-  suspend fun deleteFriend(email: String) =
-    TingXieNetwork.tingxie.deleteFriend(this.email, email)
-
-//  suspend fun acceptOtherIndividualRequest(email: String) =
-//    TingXieNetwork.tingxie.putOtherIndividualRequest(email, this.email, true)
-//
-//  suspend fun rejectOtherIndividualRequest(email: String) =
-//    TingXieNetwork.tingxie.putOtherIndividualRequest(email, this.email, false)
-
-  suspend fun getShares(quizId: Long): List<TingXieShareIndividual> =
-    TingXieNetwork.tingxie.getShares(email, quizId).map {
-      TingXieShareIndividual(it.email, it.name, it.isShared, it.role)
-    }
-//    return arrayListOf(
-//        TingXieShareIndividual("yongish@gmail.com", "firstZ", "lastZ", true, EnumQuizRole.EDITOR),
-//        TingXieShareIndividual("test0email.com", "first0", "last0", false, EnumQuizRole.EDITOR),
-//        TingXieShareIndividual("test1email.com", "first1", "last1", false, EnumQuizRole.VIEWER),
-//        TingXieShareIndividual("test2email.com", "first2", "last2", true, EnumQuizRole.VIEWER),
-//    )
-//    return arrayListOf()
-
-  suspend fun addShare(quizId: Long, shareIndividual: TingXieShareIndividual) {
-    TingXieNetwork.tingxie.postShare(
-      email, quizId, NetworkShare(
-        shareIndividual.email, shareIndividual.name, true, shareIndividual.role
-      )
-    )
-  }
-
-  suspend fun shareAll(quizId: Long, shared: Boolean): List<TingXieShareIndividual> {
-    TingXieNetwork.tingxie.putShareAll(email, quizId, shared)
-    return arrayListOf()
-  }
-
-  suspend fun deleteShare(quizId: Long, email: String) {
-    TingXieNetwork.tingxie.deleteShare(this.email, quizId, email)
-  }
 
   suspend fun notCorrectWordsRandomOrder(quizId: Long): List<NetworkWordItem> =
     TingXieNetwork.tingxie.notCorrectWordsRandomOrder(quizId, email)
@@ -278,6 +210,79 @@ class QuizRepository(val context: Context) {
     requesterName,
     requesterEmail
   )
+
+  suspend fun getUsersOfQuiz(quizId: Long): List<NetworkGroupMember> =
+    TingXieNetwork.tingxie.getUsersOfQuiz(quizId)
+
+
+
+  // Endpoints below are for Friends API, which I decided not to use.
+  suspend fun checkUserExists(email: String): Boolean =
+    TingXieNetwork.tingxie.checkUserExists(email).toBoolean()
+
+  suspend fun getFriends(party: String, friendStatus: String): List<TingXieIndividual> =
+    TingXieNetwork.tingxie.getFriends(email, party, friendStatus)
+      .map { it.asDomainModel() }
+
+  suspend fun addFriend(individual: TingXieIndividual) =
+    TingXieNetwork.tingxie.postFriend(
+      NetworkIndividual(
+        email,
+        individual.email,
+        name,
+        individual.name,
+        individual.status
+      )
+    )
+
+  suspend fun updateFriend(individual: TingXieIndividual) =
+    TingXieNetwork.tingxie.putFriend(
+      NetworkIndividual(
+        individual.email,
+        email,
+        name,
+        individual.name,
+        individual.status
+      )
+    )
+
+  suspend fun deleteFriend(email: String) =
+    TingXieNetwork.tingxie.deleteFriend(this.email, email)
+
+//  suspend fun acceptOtherIndividualRequest(email: String) =
+//    TingXieNetwork.tingxie.putOtherIndividualRequest(email, this.email, true)
+//
+//  suspend fun rejectOtherIndividualRequest(email: String) =
+//    TingXieNetwork.tingxie.putOtherIndividualRequest(email, this.email, false)
+
+//  suspend fun getShares(quizId: Long): List<TingXieShareIndividual> =
+//    TingXieNetwork.tingxie.getShares(email, quizId).map {
+//      TingXieShareIndividual(it.email, it.name, it.isShared, it.role)
+//    }
+//    return arrayListOf(
+//        TingXieShareIndividual("yongish@gmail.com", "firstZ", "lastZ", true, EnumQuizRole.EDITOR),
+//        TingXieShareIndividual("test0email.com", "first0", "last0", false, EnumQuizRole.EDITOR),
+//        TingXieShareIndividual("test1email.com", "first1", "last1", false, EnumQuizRole.VIEWER),
+//        TingXieShareIndividual("test2email.com", "first2", "last2", true, EnumQuizRole.VIEWER),
+//    )
+//    return arrayListOf()
+
+//  suspend fun addShare(quizId: Long, shareIndividual: TingXieShareIndividual) {
+//    TingXieNetwork.tingxie.postShare(
+//      email, quizId, NetworkShare(
+//        shareIndividual.email, shareIndividual.name, true, shareIndividual.role
+//      )
+//    )
+//  }
+
+//  suspend fun shareAll(quizId: Long, shared: Boolean): List<TingXieShareIndividual> {
+//    TingXieNetwork.tingxie.putShareAll(email, quizId, shared)
+//    return arrayListOf()
+//  }
+
+  suspend fun deleteShare(quizId: Long, email: String) {
+    TingXieNetwork.tingxie.deleteShare(this.email, quizId, email)
+  }
 
   companion object {
     private const val TAG = "QuizRepository"

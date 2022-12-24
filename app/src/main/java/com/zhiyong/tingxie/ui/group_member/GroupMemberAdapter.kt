@@ -11,13 +11,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.databinding.RecyclerviewGroupMemberBinding
 import com.zhiyong.tingxie.network.NetworkGroupMember
+import com.zhiyong.tingxie.ui.share.EnumQuizRole
 
 class GroupMemberAdapter(
   private val context: Context,
   val viewModel: GroupMemberViewModel,
   val recyclerView: RecyclerView,
   private val viewLifecycleOwner: LifecycleOwner,
-  val role: String,
+  val role: EnumQuizRole,
   private val groupId: Long
 ) : RecyclerView.Adapter<GroupMemberAdapter.ViewHolder>() {
 
@@ -44,19 +45,21 @@ class GroupMemberAdapter(
     val groupMember = groupMembers[position]
     holder.bind(groupMember)
 
-    if (groupMember.role != "OWNER") {
+    if (groupMember.role != EnumQuizRole.OWNER.name) {
+      // Non-owner roles can be changed anytime. The owner must assign someone else as
+      // owner, before he can change her own role.
       holder.clIdentifier.setOnClickListener {
         val fm = (context as AppCompatActivity).supportFragmentManager
         val selectRoleFragment: SelectRoleFragment =
-          SelectRoleFragment.newInstance(role == "OWNER", groupMember, position)
+          SelectRoleFragment.newInstance(role == EnumQuizRole.OWNER, groupMember, position)
         selectRoleFragment.show(fm, "fragment_select_role")
       }
     }
-    if (groupMember.role == "OWNER") {
+    if (groupMember.role == EnumQuizRole.OWNER.name) {
       holder.ivEditRole.visibility = View.INVISIBLE
     }
 
-    if (role == "MEMBER") {
+    if (role == EnumQuizRole.MEMBER) {
       holder.ivEditRole.visibility = View.INVISIBLE
       holder.ivDelete.visibility = View.INVISIBLE
     } else {

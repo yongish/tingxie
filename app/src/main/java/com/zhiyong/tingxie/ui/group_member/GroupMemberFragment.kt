@@ -20,6 +20,7 @@ import com.zhiyong.tingxie.ui.add_group_member.AddGroupMemberActivity
 import com.zhiyong.tingxie.ui.group.GroupActivity
 import com.zhiyong.tingxie.ui.group.GroupActivity.Companion.EXTRA_NETWORK_GROUP
 import com.zhiyong.tingxie.ui.group_member.SelectRoleFragment.Companion.REQUEST_KEY
+import com.zhiyong.tingxie.ui.share.EnumQuizRole
 
 class GroupMemberFragment : Fragment() {
 
@@ -66,9 +67,9 @@ class GroupMemberFragment : Fragment() {
       binding.otherErrorView.visibility = View.VISIBLE
     }
 
-    val role = networkGroup?.role ?: "READ-ONLY"
+    val role = EnumQuizRole.valueOf(networkGroup?.role ?: EnumQuizRole.MEMBER.name)
 
-    if (role == "MEMBER") {
+    if (role == EnumQuizRole.MEMBER) {
       binding.fab.visibility = View.INVISIBLE
     } else {
       binding.fab.setOnClickListener {
@@ -114,7 +115,7 @@ class GroupMemberFragment : Fragment() {
         viewModel.changeRole(networkGroup?.id, groupMember.email, groupMember.role)
           .observe(viewLifecycleOwner) {
             if (it > 0) adapter.changeRole(groupMember, position)
-            if (role == "OWNER" && groupMember.role == "OWNER") {
+            if (role == EnumQuizRole.OWNER && groupMember.role == EnumQuizRole.OWNER.name) {
               viewModel.changeRole(networkGroup?.id, email, "ADMIN")
             }
           }
@@ -133,7 +134,7 @@ class GroupMemberFragment : Fragment() {
         }
         return when (menuItem.itemId) {
           R.id.action_delete_group -> {
-            if (role == "OWNER") {
+            if (role == EnumQuizRole.OWNER) {
               if (adapter.groupMembers.size == 1) {
                 viewModel.deleteGroup(networkGroup.id, name, email)
                   .observe(viewLifecycleOwner) {
