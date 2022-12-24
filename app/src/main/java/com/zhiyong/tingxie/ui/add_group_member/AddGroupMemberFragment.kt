@@ -13,8 +13,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.FragmentAddGroupMemberBinding
-import com.zhiyong.tingxie.network.NetworkGroup
-import com.zhiyong.tingxie.ui.group.GroupActivity
+import com.zhiyong.tingxie.ui.EXTRA_ROLE
+import com.zhiyong.tingxie.ui.UserRole
 import com.zhiyong.tingxie.ui.group_member.GroupMemberActivity
 
 class AddGroupMemberFragment : Fragment() {
@@ -56,14 +56,14 @@ class AddGroupMemberFragment : Fragment() {
       ).setPositiveButton("Close") { dialog, _ -> dialog.cancel() }.create().show()
     }
 
-    val networkGroup = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    val userRole = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
       requireActivity().intent.getParcelableExtra(
-        GroupActivity.EXTRA_NETWORK_GROUP, NetworkGroup::class.java
+        EXTRA_ROLE, UserRole::class.java
       )
     } else {
-      requireActivity().intent.getParcelableExtra(GroupActivity.EXTRA_NETWORK_GROUP)
+      requireActivity().intent.getParcelableExtra(EXTRA_ROLE)
     }
-    if (networkGroup == null) {
+    if (userRole == null) {
       binding.otherErrorView.visibility = View.VISIBLE
     }
 
@@ -71,7 +71,7 @@ class AddGroupMemberFragment : Fragment() {
       val etEmailString = binding.etEmail.text.toString()
       if (android.util.Patterns.EMAIL_ADDRESS.matcher(etEmailString).matches()) {
         binding.tvEmailValid.visibility = View.INVISIBLE
-        val groupId = networkGroup!!.id
+        val groupId = userRole!!.id
         val role =
           if (binding.radioGroup.checkedRadioButtonId == R.id.rbMember) "MEMBER" else "ADMIN"
         viewModel.addMemberOrReturnNoUser(groupId, etEmailString, role)
@@ -89,7 +89,7 @@ class AddGroupMemberFragment : Fragment() {
             } else {
               // todo: May be able to use just group ID instead of entire NetworkGroup object.
               val intent = Intent(context, GroupMemberActivity::class.java)
-              intent.putExtra(GroupActivity.EXTRA_NETWORK_GROUP, networkGroup)
+              intent.putExtra(EXTRA_ROLE, userRole)
               startActivity(intent)
             }
           }

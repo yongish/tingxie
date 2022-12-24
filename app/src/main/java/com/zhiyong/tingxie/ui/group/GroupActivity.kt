@@ -62,8 +62,4 @@ class GroupActivity : AppCompatActivity() {
       }
       .create().show()
   }
-
-  companion object {
-    const val EXTRA_NETWORK_GROUP = "com.zhiyong.tingxie.ui.group.extra.EXTRA_NETWORK_GROUP"
-  }
 }

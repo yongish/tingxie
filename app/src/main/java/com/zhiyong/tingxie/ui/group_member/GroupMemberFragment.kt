@@ -14,11 +14,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.FragmentGroupMemberBinding
-import com.zhiyong.tingxie.network.NetworkGroup
 import com.zhiyong.tingxie.network.NetworkGroupMember
+import com.zhiyong.tingxie.ui.EXTRA_ROLE
+import com.zhiyong.tingxie.ui.UserRole
 import com.zhiyong.tingxie.ui.add_group_member.AddGroupMemberActivity
 import com.zhiyong.tingxie.ui.group.GroupActivity
-import com.zhiyong.tingxie.ui.group.GroupActivity.Companion.EXTRA_NETWORK_GROUP
 import com.zhiyong.tingxie.ui.group_member.SelectRoleFragment.Companion.REQUEST_KEY
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
 
@@ -55,32 +55,32 @@ class GroupMemberFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    val networkGroup = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    val userRole = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
       requireActivity().intent.getParcelableExtra(
-        EXTRA_NETWORK_GROUP,
-        NetworkGroup::class.java
+        EXTRA_ROLE,
+        UserRole::class.java
       )
     } else {
-      requireActivity().intent.getParcelableExtra(EXTRA_NETWORK_GROUP)
+      requireActivity().intent.getParcelableExtra(EXTRA_ROLE)
     }
-    if (networkGroup == null) {
+    if (userRole == null) {
       binding.otherErrorView.visibility = View.VISIBLE
     }
 
-    val role = EnumQuizRole.valueOf(networkGroup?.role ?: EnumQuizRole.MEMBER.name)
+    val role = userRole?.role ?: EnumQuizRole.MEMBER
 
     if (role == EnumQuizRole.MEMBER) {
       binding.fab.visibility = View.INVISIBLE
     } else {
       binding.fab.setOnClickListener {
         val intent = Intent(context, AddGroupMemberActivity::class.java)
-        intent.putExtra(EXTRA_NETWORK_GROUP, networkGroup)
+        intent.putExtra(EXTRA_ROLE, userRole)
         startActivity(intent)
       }
     }
 
     val viewModelFactory =
-      GroupMemberViewModelFactory(requireActivity().application, networkGroup?.id ?: -1)
+      GroupMemberViewModelFactory(requireActivity().application, userRole?.id ?: -1)
     val viewModel =
       ViewModelProvider(this, viewModelFactory)[GroupMemberViewModel::class.java]
     adapter = GroupMemberAdapter(
@@ -89,7 +89,7 @@ class GroupMemberFragment : Fragment() {
       binding.recyclerviewGroupMembers,
       viewLifecycleOwner,
       role,
-      networkGroup?.id ?: -1
+      userRole?.id ?: -1
     )
     binding.recyclerviewGroupMembers.adapter = adapter
 
@@ -112,11 +112,11 @@ class GroupMemberFragment : Fragment() {
       }
       val position = bundle.getInt(EXTRA_POSITION)
       if (groupMember != null) {
-        viewModel.changeRole(networkGroup?.id, groupMember.email, groupMember.role)
+        viewModel.changeRole(userRole?.id, groupMember.email, groupMember.role)
           .observe(viewLifecycleOwner) {
             if (it > 0) adapter.changeRole(groupMember, position)
             if (role == EnumQuizRole.OWNER && groupMember.role == EnumQuizRole.OWNER.name) {
-              viewModel.changeRole(networkGroup?.id, email, "ADMIN")
+              viewModel.changeRole(userRole?.id, email, "ADMIN")
             }
           }
       }
@@ -129,14 +129,14 @@ class GroupMemberFragment : Fragment() {
       }
 
       override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        if (networkGroup == null) {
+        if (userRole == null) {
           return false
         }
         return when (menuItem.itemId) {
           R.id.action_delete_group -> {
             if (role == EnumQuizRole.OWNER) {
               if (adapter.groupMembers.size == 1) {
-                viewModel.deleteGroup(networkGroup.id, name, email)
+                viewModel.deleteGroup(userRole.id, name, email)
                   .observe(viewLifecycleOwner) {
                     if (it > -1) {
                       startActivity(Intent(context, GroupActivity::class.java))
@@ -154,7 +154,7 @@ class GroupMemberFragment : Fragment() {
               builder.setTitle("Leave group")
                 .setMessage("Are you sure you want to leave the group?")
                 .setPositiveButton("Yes") { dialog, _ ->
-                  viewModel.deleteGroupMember(networkGroup.id, name, email, email)
+                  viewModel.deleteGroupMember(userRole.id, name, email, email)
                     .observe(viewLifecycleOwner) {
                       if (it > 0) {
                         dialog.dismiss()

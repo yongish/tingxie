@@ -17,7 +17,6 @@ import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.ShareIndividualFragmentBinding
 import com.zhiyong.tingxie.network.NetworkGroupMember
 import com.zhiyong.tingxie.ui.add_group_member.AddGroupMemberActivity
-import com.zhiyong.tingxie.ui.group.GroupActivity.Companion.EXTRA_NETWORK_GROUP
 import com.zhiyong.tingxie.ui.group_member.GroupMemberFragment
 import com.zhiyong.tingxie.ui.group_member.SelectRoleFragment.Companion.REQUEST_KEY
 import com.zhiyong.tingxie.ui.share.ShareActivity.Companion.EXTRA_QUIZ_ID

@@ -20,21 +20,23 @@ import com.zhiyong.tingxie.ui.group_member.SelectRoleFragment
 
 //enum class IsShared { SHARED, ALL }
 
-class ShareIndividualAdapter(private val quizId: Long,
-                             private val users: List<NetworkGroupMember>,
-                             private val context: Context,
-                             val viewModel: ShareIndividualViewModel,
-                             val recyclerView: RecyclerView)
-  : RecyclerView.Adapter<ShareIndividualAdapter.ViewHolder>() {
+class ShareIndividualAdapter(
+  private val quizId: Long,
+  private val users: List<NetworkGroupMember>,
+  private val context: Context,
+  val viewModel: ShareIndividualViewModel,
+  val recyclerView: RecyclerView
+) : RecyclerView.Adapter<ShareIndividualAdapter.ViewHolder>() {
 
-//  var sharesFiltered: List<TingXieShareIndividual> = shareIndividuals.filter { it.isShared }
+  //  var sharesFiltered: List<TingXieShareIndividual> = shareIndividuals.filter { it.isShared }
   var editing = false
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
     return ViewHolder(
       RecyclerviewGroupMemberBinding.inflate(
         LayoutInflater.from(parent.context), parent, false
-    ))
+      )
+    )
   }
 
   @SuppressLint("ClickableViewAccessibility")
@@ -45,9 +47,13 @@ class ShareIndividualAdapter(private val quizId: Long,
     if (user.role != EnumQuizRole.OWNER.name) {
       holder.clIdentifier.setOnClickListener {
         val fm = (context as AppCompatActivity).supportFragmentManager
-//        val selectRoleFragment: SelectRoleFragment =
-//          SelectRoleFragment.newInstance(role == EnumQuizRole.OWNER, user, position)
-//        selectRoleFragment.show(fm, "fragment_select_role")
+        val selectRoleFragment: SelectRoleFragment =
+          SelectRoleFragment.newInstance(
+            user.role == EnumQuizRole.OWNER.name,
+            user,
+            position
+          )
+        selectRoleFragment.show(fm, "fragment_select_role")
       }
     }
 
@@ -124,8 +130,8 @@ class ShareIndividualAdapter(private val quizId: Long,
 //    }
 //  }
 
-  class ViewHolder(private val binding: RecyclerviewGroupMemberBinding)
-    : RecyclerView.ViewHolder(binding.root) {
+  class ViewHolder(private val binding: RecyclerviewGroupMemberBinding) :
+    RecyclerView.ViewHolder(binding.root) {
     val clIdentifier = binding.clIdentifier
     val ivEditRole = binding.ivEditRole
     val ivDelete = binding.ivDelete
