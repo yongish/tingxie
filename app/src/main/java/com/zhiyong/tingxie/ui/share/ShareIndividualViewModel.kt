@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.zhiyong.tingxie.QuizRepository
 import com.zhiyong.tingxie.network.NetworkGroupMember
 import com.zhiyong.tingxie.viewmodel.Status
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ShareIndividualViewModel(application: Application, quizId: Long) : AndroidViewModel(application) {
@@ -64,6 +65,23 @@ class ShareIndividualViewModel(application: Application, quizId: Long) : Android
 //    }
 //  }
 
+  fun removeQuizMember(
+    quizId: Long,
+    requesterName: String?,
+    requesterEmail: String?,
+    email: String
+  ): LiveData<String> {
+    val result = MutableLiveData<String>()
+    if (requesterName != null && requesterEmail != null) {
+      viewModelScope.launch(Dispatchers.IO) {
+        val numRows = repository.removeQuizMember(quizId, requesterEmail, requesterEmail, email)
+        result.postValue(numRows)
+      }
+    }
+    return result
+  }
+
+  // todo: DELETE THIS.
   fun deleteShare(quizId: Long, email: String) {
     viewModelScope.launch {
       _status.value = Status.LOADING

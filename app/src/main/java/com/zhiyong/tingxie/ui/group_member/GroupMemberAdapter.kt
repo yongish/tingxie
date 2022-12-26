@@ -18,8 +18,8 @@ class GroupMemberAdapter(
   val viewModel: GroupMemberViewModel,
   val recyclerView: RecyclerView,
   private val viewLifecycleOwner: LifecycleOwner,
-  val role: EnumQuizRole,
-  private val groupId: Long
+  private val groupId: Long,
+  val role: EnumQuizRole
 ) : RecyclerView.Adapter<GroupMemberAdapter.ViewHolder>() {
 
   val user = FirebaseAuth.getInstance().currentUser
@@ -64,7 +64,7 @@ class GroupMemberAdapter(
       holder.ivDelete.visibility = View.INVISIBLE
     } else {
       holder.ivDelete.setOnClickListener {
-        if (groupMember.email == email && groupMember.role == "OWNER") {
+        if (groupMember.email == email && groupMember.role == EnumQuizRole.OWNER.name) {
           AlertDialog.Builder(context)
             .setTitle("Removal not allowed")
             .setMessage("You must appoint someone else as the group owner before removing yourself.")

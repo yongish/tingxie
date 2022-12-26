@@ -1,42 +1,44 @@
-package com.zhiyong.tingxie.ui.add_group_member
+package com.zhiyong.tingxie.ui.add_quiz_individual
 
 import android.content.Intent
+import android.nfc.NfcAdapter.EXTRA_ID
 import android.os.Build
+import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ShareCompat
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.R
-import com.zhiyong.tingxie.databinding.FragmentAddGroupMemberBinding
+import com.zhiyong.tingxie.databinding.FragmentAddQuizIndividualBinding
 import com.zhiyong.tingxie.ui.EXTRA_USER_ROLE
 import com.zhiyong.tingxie.ui.UserRole
-import com.zhiyong.tingxie.ui.group_member.GroupMemberActivity
+import com.zhiyong.tingxie.ui.share.ShareActivity
 
-class AddGroupMemberFragment : Fragment() {
+class AddQuizIndividualFragment : Fragment() {
 
   companion object {
-    fun newInstance() = AddGroupMemberFragment()
+    fun newInstance() = AddQuizIndividualFragment()
   }
 
-  private var _binding: FragmentAddGroupMemberBinding? = null
+  private var _binding: FragmentAddQuizIndividualBinding? = null
   private val binding get() = _binding!!
 
-  private lateinit var viewModel: AddGroupMemberViewModel
+  private lateinit var viewModel: AddQuizIndividualViewModel
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    viewModel = ViewModelProvider(this)[AddGroupMemberViewModel::class.java]
+    viewModel = ViewModelProvider(this)[AddQuizIndividualViewModel::class.java]
   }
 
   override fun onCreateView(
-    inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    inflater: LayoutInflater, container: ViewGroup?,
+    savedInstanceState: Bundle?
   ): View {
-    _binding = FragmentAddGroupMemberBinding.inflate(inflater, container, false)
+    _binding = FragmentAddQuizIndividualBinding.inflate(inflater, container, false)
     return binding.root
   }
 
@@ -50,9 +52,9 @@ class AddGroupMemberFragment : Fragment() {
     binding.clRole.setOnClickListener {
       AlertDialog.Builder(requireActivity()).setTitle("Roles").setMessage(
         """
-1. Member - Can see who the members of the group are. Can remove oneself from the group. Cannot add or remove other members from the group. Also cannot change anyone's role.
-2. Admin - Can add and remove people from the group, and change their roles. Cannot change the owner's role.
-3. Owner (not an option here) - A group can only have 1 owner. The owner can transfer her ownership to another group member. The owner has all admin permissions, and can also delete the entire group."""
+1. Member - Can see who can access this quiz. Can remove oneself from the quiz. Cannot add or remove other members from the quiz. Also cannot change anyone's role.
+2. Admin - Can add and remove words and people to the quiz, and change peoples' roles. Cannot change the owner's role.
+3. Owner (not an option here) - A quiz can only have 1 owner. The owner can transfer her ownership to another member. The owner has all admin permissions, and can also delete the entire quiz."""
       ).setPositiveButton("Close") { dialog, _ -> dialog.cancel() }.create().show()
     }
 
@@ -74,7 +76,8 @@ class AddGroupMemberFragment : Fragment() {
         val groupId = userRole!!.id
         val role =
           if (binding.radioGroup.checkedRadioButtonId == R.id.rbMember) "MEMBER" else "ADMIN"
-        viewModel.addGroupMemberOrReturnNoUser(groupId, etEmailString, role)
+
+        viewModel.addQuizMemberOrReturnNoUser(groupId, etEmailString, role)
           .observe(viewLifecycleOwner) {
             if (it.email.isEmpty()) {
               AlertDialog.Builder(requireActivity()).setTitle("Email not found")
@@ -87,7 +90,7 @@ class AddGroupMemberFragment : Fragment() {
                     .startChooser()
                 }.create().show()
             } else {
-              val intent = Intent(context, GroupMemberActivity::class.java)
+              val intent = Intent(context, ShareActivity::class.java)
               intent.putExtra(EXTRA_USER_ROLE, userRole)
               startActivity(intent)
             }

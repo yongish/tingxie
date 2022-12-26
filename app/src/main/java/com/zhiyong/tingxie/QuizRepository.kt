@@ -189,12 +189,12 @@ class QuizRepository(val context: Context) {
   suspend fun getGroupMembers(groupId: Long) =
     TingXieNetwork.tingxie.getGroupMembers(groupId)
 
-  suspend fun addMemberOrReturnNoUser(
+  suspend fun addGroupMemberOrReturnNoUser(
     groupId: Long,
     email: String,
     role: String
   ): NetworkGroupMember =
-    TingXieNetwork.tingxie.addMemberOrReturnNoUser(groupId, email, role)
+    TingXieNetwork.tingxie.addGroupMemberOrReturnNoUser(groupId, email, role)
 
   suspend fun changeRole(groupId: Long, email: String, role: String): Int =
     TingXieNetwork.tingxie.changeRole(groupId, email, role)
@@ -214,6 +214,18 @@ class QuizRepository(val context: Context) {
   suspend fun getUsersOfQuiz(quizId: Long): List<NetworkGroupMember> =
     TingXieNetwork.tingxie.getUsersOfQuiz(quizId)
 
+  suspend fun addQuizMemberOrReturnNoUser(
+    quizId: Long,
+    addQuizUser: NetworkAddQuizUser
+  ): NetworkGroupMember =
+    TingXieNetwork.tingxie.addQuizMemberOrReturnNoUser(quizId, addQuizUser)
+
+  suspend fun removeQuizMember(
+    quizId: Long,
+    requesterName: String,
+    requesterEmail: String,
+    email: String
+  ): String = TingXieNetwork.tingxie.deleteQuiz(quizId, requesterName, requesterEmail, email)
 
 
   // Endpoints below are for Friends API, which I decided not to use.

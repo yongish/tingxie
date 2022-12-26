@@ -114,6 +114,14 @@ data class NetworkGroupMember(
 ): Parcelable
 
 @JsonClass(generateAdapter = true)
+data class NetworkAddQuizUser(
+  val creatorName: String,
+  val creatorEmail: String,
+  val email: String,
+  val role: String
+)
+
+@JsonClass(generateAdapter = true)
 data class NetworkCreateGroup(
   val name: String,
   val creatorName: String,

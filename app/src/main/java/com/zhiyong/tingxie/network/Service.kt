@@ -63,7 +63,7 @@ interface Service {
   suspend fun getGroupMembers(@Path("groupId") groupId: Long): MutableList<NetworkGroupMember>
 
   @POST("groups/{groupId}/email/{email}/role/{role}")
-  suspend fun addMemberOrReturnNoUser(
+  suspend fun addGroupMemberOrReturnNoUser(
     @Path("groupId") groupId: Long,
     @Path("email") email: String,
     @Path("role") role: String
@@ -87,6 +87,19 @@ interface Service {
   @GET("quizzes/{quizId}/users")
   suspend fun getUsersOfQuiz(@Path("quizId") quizId: Long): List<NetworkGroupMember>
 
+  @PUT("quizzes/{quizId}/users")
+  suspend fun addQuizMemberOrReturnNoUser(
+    @Path("quizId") quizId: Long,
+    @Body addQuizUser: NetworkAddQuizUser
+  ): NetworkGroupMember
+
+  @DELETE("quizzes/{quizId}/users/{email}")
+  suspend fun removeQuizMember(
+    @Path("quizId") quizId: Long,
+    @Path("email") email: String,
+    @Query("requesterName") requesterName: String,
+    @Query("requesterEmail") requesterEmail: String
+  ): Int
 
   // todo: Not developing these endpoints below. Should clean up.
   @GET("shares/email/{email}/quiz_id/{quizId}")

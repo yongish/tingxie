@@ -15,7 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.FragmentGroupMemberBinding
 import com.zhiyong.tingxie.network.NetworkGroupMember
-import com.zhiyong.tingxie.ui.EXTRA_ROLE
+import com.zhiyong.tingxie.ui.EXTRA_USER_ROLE
 import com.zhiyong.tingxie.ui.UserRole
 import com.zhiyong.tingxie.ui.add_group_member.AddGroupMemberActivity
 import com.zhiyong.tingxie.ui.group.GroupActivity
@@ -57,16 +57,15 @@ class GroupMemberFragment : Fragment() {
 
     val userRole = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
       requireActivity().intent.getParcelableExtra(
-        EXTRA_ROLE,
+        EXTRA_USER_ROLE,
         UserRole::class.java
       )
     } else {
-      requireActivity().intent.getParcelableExtra(EXTRA_ROLE)
+      requireActivity().intent.getParcelableExtra(EXTRA_USER_ROLE)
     }
     if (userRole == null) {
       binding.otherErrorView.visibility = View.VISIBLE
     }
-
     val role = userRole?.role ?: EnumQuizRole.MEMBER
 
     if (role == EnumQuizRole.MEMBER) {
@@ -74,7 +73,7 @@ class GroupMemberFragment : Fragment() {
     } else {
       binding.fab.setOnClickListener {
         val intent = Intent(context, AddGroupMemberActivity::class.java)
-        intent.putExtra(EXTRA_ROLE, userRole)
+        intent.putExtra(EXTRA_USER_ROLE, userRole)
         startActivity(intent)
       }
     }
@@ -88,8 +87,8 @@ class GroupMemberFragment : Fragment() {
       viewModel,
       binding.recyclerviewGroupMembers,
       viewLifecycleOwner,
-      role,
-      userRole?.id ?: -1
+      userRole?.id ?: -1,
+      role
     )
     binding.recyclerviewGroupMembers.adapter = adapter
 

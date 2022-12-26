@@ -1,10 +1,12 @@
 package com.zhiyong.tingxie.ui.share
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayoutMediator
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.ShareActivityBinding
+import com.zhiyong.tingxie.ui.main.MainActivity
 
 class ShareActivity : AppCompatActivity() {
 
@@ -23,7 +25,7 @@ class ShareActivity : AppCompatActivity() {
     setContentView(binding.root)
 
     val quizId = intent.getLongExtra(EXTRA_QUIZ_ID, -1)
-    binding.vpShare.adapter = ShareAdapter(this, 2, quizId)
+    binding.vpShare.adapter = ShareAdapter(this, 2, quizId, )
     TabLayoutMediator(binding.tabLayout, binding.vpShare) { tab, position ->
       when (position) {
         0 -> tab.text = "Individuals"
@@ -33,7 +35,7 @@ class ShareActivity : AppCompatActivity() {
   }
 
   override fun onSupportNavigateUp(): Boolean {
-    onBackPressed()
+    startActivity(Intent(this, MainActivity::class.java))
     return true
   }
 }

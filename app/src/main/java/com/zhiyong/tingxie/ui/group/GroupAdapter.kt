@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.RecyclerviewGroupBinding
 import com.zhiyong.tingxie.network.NetworkGroup
-import com.zhiyong.tingxie.ui.EXTRA_ROLE
+import com.zhiyong.tingxie.ui.EXTRA_USER_ROLE
 import com.zhiyong.tingxie.ui.UserRole
 import com.zhiyong.tingxie.ui.group_member.GroupMemberActivity
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
@@ -68,7 +68,7 @@ class GroupAdapter(
 
     holder.btnDetails.setOnClickListener {
       val intent = Intent(context, GroupMemberActivity::class.java)
-      intent.putExtra(EXTRA_ROLE, UserRole(group.id, EnumQuizRole.valueOf(group.role)))
+      intent.putExtra(EXTRA_USER_ROLE, UserRole(group.id, EnumQuizRole.valueOf(group.role)))
       context.startActivity(intent)
     }
   }

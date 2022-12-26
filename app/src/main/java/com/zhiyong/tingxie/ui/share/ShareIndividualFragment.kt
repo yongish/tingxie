@@ -12,18 +12,17 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.setFragmentResultListener
-import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.ShareIndividualFragmentBinding
 import com.zhiyong.tingxie.network.NetworkGroupMember
-import com.zhiyong.tingxie.ui.add_group_member.AddGroupMemberActivity
+import com.zhiyong.tingxie.ui.EXTRA_USER_ROLE
+import com.zhiyong.tingxie.ui.UserRole
+import com.zhiyong.tingxie.ui.add_quiz_individual.AddQuizIndividualActivity
 import com.zhiyong.tingxie.ui.group_member.GroupMemberFragment
 import com.zhiyong.tingxie.ui.group_member.SelectRoleFragment.Companion.REQUEST_KEY
-import com.zhiyong.tingxie.ui.share.ShareActivity.Companion.EXTRA_QUIZ_ID
 
 class ShareIndividualFragment : Fragment() {
 
-  private lateinit var viewModel: ShareIndividualViewModel
   private lateinit var shareIndividualAdapter: ShareIndividualAdapter
   private lateinit var menuItem: MenuItem
   private var _binding: ShareIndividualFragmentBinding? = null
@@ -45,7 +44,30 @@ class ShareIndividualFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    val quizId = requireActivity().intent.getLongExtra(EXTRA_QUIZ_ID, -1)
+    val userRole = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      requireActivity().intent.getParcelableExtra(
+        EXTRA_USER_ROLE,
+        UserRole::class.java
+      )
+    } else {
+      requireActivity().intent.getParcelableExtra(EXTRA_USER_ROLE)
+    }
+    if (userRole == null) {
+      binding.otherErrorView.visibility = View.VISIBLE
+    }
+    val quizId = userRole?.id ?: -1
+    val role = userRole?.role ?: EnumQuizRole.MEMBER
+
+    if (role == EnumQuizRole.ADMIN || role == EnumQuizRole.OWNER) {
+      binding.fab.visibility = View.VISIBLE
+      binding.fab.setOnClickListener {
+        val intent = Intent(context, AddQuizIndividualActivity::class.java)
+        intent.putExtra(EXTRA_USER_ROLE, userRole)
+        startActivity(intent)
+      }
+    } else {
+      binding.fab.visibility = View.GONE
+    }
 
     val spannableString = SpannableString(resources.getString(R.string.no_shares))
     val d: Drawable? = ResourcesCompat.getDrawable(
@@ -65,57 +87,43 @@ class ShareIndividualFragment : Fragment() {
 //      true
 //    }
 
-    if (quizId != -1L) {
-      val viewModelFactory =
-        ShareIndividualViewModelFactory(requireActivity().application, quizId)
-      viewModel =
-        ViewModelProvider(this, viewModelFactory)[ShareIndividualViewModel::class.java]
+    val viewModelFactory =
+      ShareIndividualViewModelFactory(requireActivity().application, quizId)
+    val viewModel =
+      ViewModelProvider(this, viewModelFactory)[ShareIndividualViewModel::class.java]
 
-      viewModel.users.observe(viewLifecycleOwner) { users ->
-        if (users.isEmpty()) {
-          binding.emptyView.visibility = View.VISIBLE
-        } else {
-          binding.emptyView.visibility = View.INVISIBLE
-        }
+    // todo: Pass role into ShareAdapter to fix duplication.
+    shareIndividualAdapter = ShareIndividualAdapter(
+      requireActivity(),
+      viewModel,
+      binding.recyclerviewShares,
+      viewLifecycleOwner,
+      quizId,
+      role
+    )
+    binding.recyclerviewShares.adapter = shareIndividualAdapter
 
-        users?.apply {
-          if (users.isNotEmpty()) {
-            val role =
-              users.first { it.email == FirebaseAuth.getInstance().currentUser?.email }.role
-            if (role == EnumQuizRole.ADMIN.name || role == EnumQuizRole.OWNER.name) {
-              binding.fab.visibility = View.VISIBLE
-              binding.fab.setOnClickListener {
-                val intent = Intent(context, AddGroupMemberActivity::class.java)
-//                intent.putExtra(EXTRA_NETWORK_GROUP, user)
-              }
-            } else {
-              binding.fab.visibility = View.GONE
-            }
-          }
-
-
-          // todo: Pass role into ShareAdapter to fix duplication.
-          binding.recyclerviewShares.adapter = ShareIndividualAdapter(
-            quizId,
-            users,
-            requireActivity(),
-            viewModel,
-            binding.recyclerviewShares,
-          )
-
-          shareIndividualAdapter =
-            binding.recyclerviewShares.adapter as ShareIndividualAdapter
-        }
+    viewModel.users.observe(viewLifecycleOwner) {
+      shareIndividualAdapter.users = it as MutableList<NetworkGroupMember>
+      if (it.isEmpty()) {
+        binding.emptyView.visibility = View.VISIBLE
+      } else {
+        binding.emptyView.visibility = View.INVISIBLE
       }
+    }
 
-      setFragmentResultListener(REQUEST_KEY) { _, bundle ->
-        val user = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-          bundle.getParcelable(GroupMemberFragment.EXTRA_GROUP_MEMBER, NetworkGroupMember::class.java)
-        } else {
-          bundle.getParcelable(GroupMemberFragment.EXTRA_GROUP_MEMBER)
-        }
-        val position = bundle.getInt(GroupMemberFragment.EXTRA_POSITION)
-        if (user != null) {
+
+    setFragmentResultListener(REQUEST_KEY) { _, bundle ->
+      val user = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        bundle.getParcelable(
+          GroupMemberFragment.EXTRA_GROUP_MEMBER,
+          NetworkGroupMember::class.java
+        )
+      } else {
+        bundle.getParcelable(GroupMemberFragment.EXTRA_GROUP_MEMBER)
+      }
+      val position = bundle.getInt(GroupMemberFragment.EXTRA_POSITION)
+      if (user != null) {
 //          viewModel.changeRole(networkGroup?.id, groupMember.email, groupMember.role)
 //            .observe(viewLifecycleOwner) {
 //              if (it > 0) adapter.changeRole(groupMember, position)
@@ -123,8 +131,8 @@ class ShareIndividualFragment : Fragment() {
 //                viewModel.changeRole(networkGroup?.id, email, "ADMIN")
 //              }
 //            }
-        }
       }
+    }
 
 //      viewModel.status.observe(viewLifecycleOwner) { status: Status ->
 //        if (status == Status.ERROR) {
@@ -133,7 +141,6 @@ class ShareIndividualFragment : Fragment() {
 //        }
 //      }
 
-    }
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -153,9 +160,9 @@ class ShareIndividualFragment : Fragment() {
 
   companion object {
     @JvmStatic
-    fun newInstance(quizId: Long) = ShareIndividualFragment().apply {
+    fun newInstance(userRole: UserRole) = ShareIndividualFragment().apply {
       arguments = Bundle().apply {
-        putLong(EXTRA_QUIZ_ID, quizId)
+        putParcelable(EXTRA_USER_ROLE, userRole)
       }
     }
   }
