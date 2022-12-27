@@ -107,6 +107,9 @@ interface Service {
     @Query("requesterEmail") requesterEmail: String
   ): Int
 
+  @GET("quizzes/{quizId}/groups")
+  suspend fun getGroupsOfQuiz(@Path("quizId") quizId: Long): List<NetworkGroup>
+
   // todo: Not developing these endpoints below. Should clean up.
   @GET("shares/email/{email}/quiz_id/{quizId}")
   suspend fun getShares(

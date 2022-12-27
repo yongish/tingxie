@@ -228,6 +228,9 @@ class QuizRepository(val context: Context) {
     email: String
   ): String = TingXieNetwork.tingxie.deleteQuiz(quizId, requesterName, requesterEmail, email)
 
+  suspend fun getGroupsOfQuiz(quizId: Long): List<NetworkGroup> =
+    TingXieNetwork.tingxie.getGroupsOfQuiz(quizId)
+
 
   // Endpoints below are for Friends API, which I decided not to use.
   suspend fun checkUserExists(email: String): Boolean =

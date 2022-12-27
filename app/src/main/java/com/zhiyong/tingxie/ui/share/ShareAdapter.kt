@@ -11,10 +11,7 @@ class ShareAdapter(activity: AppCompatActivity, private val itemsCount: Int, val
 
   override fun createFragment(position: Int): Fragment {
     if (position == 0) {
-      // todo: Replace with role from NetworkQuiz.
       return ShareIndividualFragment.newInstance(UserRole(quizId, EnumQuizRole.MEMBER))
-//      shareIndividualFragment.arguments = bundle
-//      return shareIndividualFragment
     }
     // todo: Replace with role from NetworkQuiz.
     val shareIndividualFragment = ShareIndividualFragment.newInstance(UserRole(quizId, EnumQuizRole.MEMBER))

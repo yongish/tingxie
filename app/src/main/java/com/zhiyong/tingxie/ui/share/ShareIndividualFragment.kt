@@ -76,19 +76,6 @@ class ShareIndividualFragment : Fragment() {
       binding.fab.visibility = View.GONE
     }
 
-    val spannableString = SpannableString(resources.getString(R.string.no_shares))
-    val d: Drawable? = ResourcesCompat.getDrawable(
-      resources, R.drawable.ic_baseline_edit_white_24, null
-    )
-    d?.setBounds(0, 0, d.intrinsicWidth, d.intrinsicHeight)
-    spannableString.setSpan(
-      d?.let { ImageSpan(it, ImageSpan.ALIGN_BOTTOM) },
-      spannableString.toString().indexOf("+"),
-      spannableString.toString().indexOf("+") + 1,
-      Spannable.SPAN_INCLUSIVE_EXCLUSIVE
-    )
-    binding.emptyView.text = spannableString
-
 //    menuItem.setOnMenuItemClickListener {
 //      viewModel.setAllShared(quizId, it.isChecked)
 //      true

@@ -13,6 +13,8 @@ class ShareGroupFragment : Fragment() {
     fun newInstance() = ShareGroupFragment()
   }
 
+  private lateinit var adapter: ShareGroupAdapter
+
   private var _binding: ShareGroupFragmentBinding? = null
   private val binding get() = _binding!!
 
@@ -25,5 +27,8 @@ class ShareGroupFragment : Fragment() {
     return binding.root
   }
 
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
 
+  }
 }
