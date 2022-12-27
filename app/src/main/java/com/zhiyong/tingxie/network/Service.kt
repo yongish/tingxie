@@ -70,7 +70,7 @@ interface Service {
   ): NetworkGroupMember
 
   @PUT("groups/{groupId}/email/{email}/role/{role}")
-  suspend fun changeRole(
+  suspend fun changeGroupRole(
     @Path("groupId") groupId: Long,
     @Path("email") email: String,
     @Path("role") role: String
@@ -87,11 +87,17 @@ interface Service {
   @GET("quizzes/{quizId}/users")
   suspend fun getUsersOfQuiz(@Path("quizId") quizId: Long): List<NetworkGroupMember>
 
-  @PUT("quizzes/{quizId}/users")
+  @POST("quizzes/{quizId}/users")
   suspend fun addQuizMemberOrReturnNoUser(
     @Path("quizId") quizId: Long,
     @Body addQuizUser: NetworkAddQuizUser
   ): NetworkGroupMember
+
+  @PUT("quizzes/{quizId}/users")
+  suspend fun changeQuizRole(
+    @Path("quizId") quizId: Long,
+    @Body addQuizUser: NetworkAddQuizUser
+  ): Int
 
   @DELETE("quizzes/{quizId}/users/{email}")
   suspend fun removeQuizMember(

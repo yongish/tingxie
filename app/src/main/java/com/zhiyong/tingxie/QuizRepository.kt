@@ -194,8 +194,8 @@ class QuizRepository(val context: Context) {
   ): NetworkGroupMember =
     TingXieNetwork.tingxie.addGroupMemberOrReturnNoUser(groupId, email, role)
 
-  suspend fun changeRole(groupId: Long, email: String, role: String): Int =
-    TingXieNetwork.tingxie.changeRole(groupId, email, role)
+  suspend fun changeGroupRole(groupId: Long, email: String, role: String): Int =
+    TingXieNetwork.tingxie.changeGroupRole(groupId, email, role)
 
   suspend fun deleteGroupMember(
     groupId: Long,
@@ -217,6 +217,9 @@ class QuizRepository(val context: Context) {
     addQuizUser: NetworkAddQuizUser
   ): NetworkGroupMember =
     TingXieNetwork.tingxie.addQuizMemberOrReturnNoUser(quizId, addQuizUser)
+
+  suspend fun changeQuizRole(quizId: Long, addQuizUser: NetworkAddQuizUser): Int =
+    TingXieNetwork.tingxie.changeQuizRole(quizId, addQuizUser)
 
   suspend fun removeQuizMember(
     quizId: Long,

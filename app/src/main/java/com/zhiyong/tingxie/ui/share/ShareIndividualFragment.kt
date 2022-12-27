@@ -12,6 +12,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.setFragmentResultListener
+import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.ShareIndividualFragmentBinding
 import com.zhiyong.tingxie.network.NetworkGroupMember
@@ -23,16 +24,20 @@ import com.zhiyong.tingxie.ui.group_member.SelectRoleFragment.Companion.REQUEST_
 
 class ShareIndividualFragment : Fragment() {
 
-  private lateinit var shareIndividualAdapter: ShareIndividualAdapter
+  private lateinit var adapter: ShareIndividualAdapter
   private lateinit var menuItem: MenuItem
   private var _binding: ShareIndividualFragmentBinding? = null
   private val binding get() = _binding!!
-  private var editing = false
+
+  private lateinit var email: String
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
+    val currentUser = FirebaseAuth.getInstance().currentUser!!
+    email = currentUser.email!!
+
     _binding = ShareIndividualFragmentBinding.inflate(inflater, container, false)
     return binding.root
   }
@@ -57,8 +62,8 @@ class ShareIndividualFragment : Fragment() {
       binding.emptyView.visibility = View.INVISIBLE
       return
     }
-    val quizId = userRole?.id ?: -1
-    val role = userRole?.role ?: EnumQuizRole.MEMBER
+    val quizId = userRole.id
+    val role = userRole.role
 
     if (role == EnumQuizRole.ADMIN || role == EnumQuizRole.OWNER) {
       binding.fab.visibility = View.VISIBLE
@@ -95,7 +100,7 @@ class ShareIndividualFragment : Fragment() {
       ViewModelProvider(this, viewModelFactory)[ShareIndividualViewModel::class.java]
 
     // todo: Pass role into ShareAdapter to fix duplication.
-    shareIndividualAdapter = ShareIndividualAdapter(
+    adapter = ShareIndividualAdapter(
       requireActivity(),
       viewModel,
       binding.recyclerviewShares,
@@ -103,17 +108,16 @@ class ShareIndividualFragment : Fragment() {
       quizId,
       role
     )
-    binding.recyclerviewShares.adapter = shareIndividualAdapter
+    binding.recyclerviewShares.adapter = adapter
 
     viewModel.users.observe(viewLifecycleOwner) {
-      shareIndividualAdapter.users = it as MutableList<NetworkGroupMember>
+      adapter.users = it as MutableList<NetworkGroupMember>
       if (it.isEmpty()) {
         binding.emptyView.visibility = View.VISIBLE
       } else {
         binding.emptyView.visibility = View.INVISIBLE
       }
     }
-
 
     setFragmentResultListener(REQUEST_KEY) { _, bundle ->
       val user = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -127,12 +131,12 @@ class ShareIndividualFragment : Fragment() {
       val position = bundle.getInt(GroupMemberFragment.EXTRA_POSITION)
       if (user != null) {
           viewModel.changeRole(userRole.id, user.email, user.role)
-//            .observe(viewLifecycleOwner) {
-//              if (it > 0) adapter.changeRole(groupMember, position)
-//              if (role == EnumQuizRole.OWNER && groupMember.role == EnumQuizRole.OWNER.name) {
-//                viewModel.changeRole(networkGroup?.id, email, "ADMIN")
-//              }
-//            }
+            .observe(viewLifecycleOwner) {
+              if (it > 0) adapter.changeRole(user, position)
+              if (role == EnumQuizRole.OWNER && user.role == EnumQuizRole.OWNER.name) {
+                viewModel.changeRole(userRole.id, email, "ADMIN")
+              }
+            }
       }
     }
 

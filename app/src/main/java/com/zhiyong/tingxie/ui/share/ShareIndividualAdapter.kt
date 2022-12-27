@@ -155,6 +155,11 @@ class ShareIndividualAdapter(
 
   }
 
+  fun changeRole(networkGroupMember: NetworkGroupMember, i: Int) {
+    users[i] = networkGroupMember
+    notifyItemChanged(i)
+  }
+
   override fun getItemCount(): Int = users.size
 
 //  override fun getFilter(): Filter = object : Filter() {

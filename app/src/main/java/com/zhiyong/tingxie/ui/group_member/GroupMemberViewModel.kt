@@ -45,7 +45,7 @@ class GroupMemberViewModel(application: Application, groupId: Long) :
     val result = MutableLiveData<Int>()
     if (groupId != null && email != null && role != null) {
       viewModelScope.launch(Dispatchers.IO) {
-        val numRows = mRepository.changeRole(groupId, email, role)
+        val numRows = mRepository.changeGroupRole(groupId, email, role)
         result.postValue(numRows)
       }
     }
