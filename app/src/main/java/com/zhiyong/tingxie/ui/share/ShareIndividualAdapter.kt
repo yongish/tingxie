@@ -86,7 +86,9 @@ class ShareIndividualAdapter(
                 email,
                 user.email
               ).observe(viewLifecycleOwner) {
-                if (it.toInt() > 0) {
+                if (it.toInt() >= -1) {
+                  // Backend returns -1 if there is no token found for user, but the user
+                  // is removed anyway.
                   users.removeAt(position)
                   notifyItemChanged(position)
                 }

@@ -126,7 +126,7 @@ class ShareIndividualFragment : Fragment() {
       }
       val position = bundle.getInt(GroupMemberFragment.EXTRA_POSITION)
       if (user != null) {
-//          viewModel.changeRole(networkGroup?.id, groupMember.email, groupMember.role)
+          viewModel.changeRole(userRole.id, user.email, user.role)
 //            .observe(viewLifecycleOwner) {
 //              if (it > 0) adapter.changeRole(groupMember, position)
 //              if (role == EnumQuizRole.OWNER && groupMember.role == EnumQuizRole.OWNER.name) {
