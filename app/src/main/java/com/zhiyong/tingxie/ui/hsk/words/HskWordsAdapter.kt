@@ -16,7 +16,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.db.QuizPinyin
-import com.zhiyong.tingxie.ui.main.QuizItem
+import com.zhiyong.tingxie.network.NetworkQuiz
 import com.zhiyong.tingxie.ui.main.QuizViewModel
 import com.zhiyong.tingxie.ui.question.HskQuestionActivity
 import java.text.SimpleDateFormat
@@ -29,7 +29,7 @@ class HskWordsAdapter(
   var quizViewModel: QuizViewModel
 ) : RecyclerView.Adapter<HskWordsAdapter.ViewHolder>() {
   private lateinit var mWordItems: List<HskWord>
-  private lateinit var quizItems: List<QuizItem>
+  private lateinit var quizItems: List<NetworkQuiz>
   private lateinit var textToSpeech: TextToSpeech
 
   init {
@@ -76,7 +76,7 @@ class HskWordsAdapter(
         1 -> {
           Log.i("numQuizItems", "1")
           quizViewModel.insertQuizPinyin(
-            QuizPinyin(quizItems[0].id, wordItem.pinyin, word, false)
+            QuizPinyin(quizItems[0].quizId, wordItem.pinyin, word, false)
           )
           Toast.makeText(context, "Added to your quiz", Toast.LENGTH_SHORT).show()
         }
@@ -91,17 +91,18 @@ class HskWordsAdapter(
             dialog.dismiss()
             val updatedQuizItem = quizItems[which]
             quizViewModel.insertQuizPinyin(
-              QuizPinyin(updatedQuizItem.id, wordItem.pinyin, word, false)
+              QuizPinyin(updatedQuizItem.quizId, wordItem.pinyin, word, false)
             )
-            quizViewModel.updateQuiz(
-              QuizItem(
-                updatedQuizItem.id,
-                updatedQuizItem.date,
-                updatedQuizItem.title,
-                updatedQuizItem.numWords + 1,
-                updatedQuizItem.numWords + 1,
-                1
-              )
+            quizViewModel.updateQuiz(updatedQuizItem
+              // todo: REPAIR THIS.
+//              QuizItem(
+//                updatedQuizItem.id,
+//                updatedQuizItem.date,
+//                updatedQuizItem.title,
+//                updatedQuizItem.numWords + 1,
+//                updatedQuizItem.numWords + 1,
+//                1
+//              )
             )
             Toast.makeText(context, "Added to selected quiz", Toast.LENGTH_SHORT).show()
           }
@@ -127,7 +128,7 @@ class HskWordsAdapter(
     notifyDataSetChanged()
   }
 
-  fun setQuizItems(quizItems: List<QuizItem>) {
+  fun setQuizItems(quizItems: List<NetworkQuiz>) {
     this.quizItems = quizItems
   }
 

@@ -16,12 +16,12 @@ import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.zhiyong.tingxie.R
+import com.zhiyong.tingxie.network.NetworkQuiz
 import com.zhiyong.tingxie.network.NetworkWordItem
 import com.zhiyong.tingxie.ui.answer.HskAnswerActivity
 import com.zhiyong.tingxie.ui.hsk.buttons.HskButtonsFragment.Companion.EXTRA_LEVEL
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsViewModel
 import com.zhiyong.tingxie.ui.main.MainActivity
-import com.zhiyong.tingxie.ui.main.QuizItem
 import java.util.*
 import kotlin.text.StringBuilder
 
@@ -80,7 +80,7 @@ class HskQuestionActivity : AppCompatActivity() {
     }
 
     // From AnswerActivity.
-    val quizItem: QuizItem? = intent.getParcelableExtra(EXTRA_QUIZ_ITEM)
+    val quizItem: NetworkQuiz? = intent.getParcelableExtra(EXTRA_QUIZ_ITEM)
     if (quizItem == null) {
       questionViewModel = ViewModelProvider(this).get(HskWordsViewModel::class.java)
 
@@ -121,7 +121,7 @@ class HskQuestionActivity : AppCompatActivity() {
       mQuestionViewModel = ViewModelProviders
         .of(
           this,
-          QuestionViewModelFactory(this.application, quizItem.id)
+          QuestionViewModelFactory(this.application, quizItem.quizId)
         )[QuestionViewModel::class.java]
       mQuestionViewModel.notCorrectWordsRandomOrder.observe(this) { words: List<NetworkWordItem> ->
         run {

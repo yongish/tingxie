@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.db.QuizPinyin;
-import com.zhiyong.tingxie.ui.main.QuizItem;
+import com.zhiyong.tingxie.network.NetworkQuiz;
 
 import java.util.List;
 import java.util.Locale;
@@ -35,10 +35,10 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
 
     private final WordViewModel viewModel;
     private final RecyclerView recyclerView;
-    private final QuizItem quizItem;
+    private final NetworkQuiz quizItem;
 
     WordListAdapter(final Context context, WordViewModel viewModel,
-                    RecyclerView recyclerView, QuizItem quizItem) {
+                    RecyclerView recyclerView, NetworkQuiz quizItem) {
         mInflater = LayoutInflater.from(context);
         textToSpeech = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
             @Override
@@ -108,10 +108,6 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         final QuizPinyin quizPinyin = new QuizPinyin(wordItem.getQuizId(),
                 wordItem.getPinyinString(), wordItem.getWordString(), false);
 
-        final QuizItem quizCopy = new QuizItem(
-                quizItem.getId(), quizItem.getDate(), quizItem.getTitle(),
-                quizItem.getNumWords(), quizItem.getNumNotCorrect(), quizItem.getRound()
-        );
         Snackbar snackbar = Snackbar
                 .make(recyclerView, "Removed word", Snackbar.LENGTH_LONG)
                 .setAction("Undo", new View.OnClickListener() {
@@ -121,7 +117,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
 
                         viewModel.addWord(quizPinyin.getQuizId(), quizPinyin.getCharacters(), quizPinyin.getPinyinString());
 
-                        viewModel.updateQuiz(quizCopy);
+                        viewModel.updateQuiz(quizItem);
 //                        mWordItems.add(adapterPosition, wordItem);
 //                        notifyItemInserted(adapterPosition);
                         recyclerView.scrollToPosition(adapterPosition);
@@ -136,10 +132,11 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         quizItem.setNumWords(totalWords);
         quizItem.setNumNotCorrect(totalWords);
         quizItem.setRound(1);
-        viewModel.updateQuiz(new QuizItem(
-                quizItem.getId(), quizItem.getDate(), quizItem.getTitle(),
-                quizItem.getNumWords(), quizItem.getNumNotCorrect(), quizItem.getRound()
-        ));
+        viewModel.updateQuiz(quizItem);
+//                new QuizItem(
+//                quizItem.getId(), quizItem.getDate(), quizItem.getTitle(),
+//                quizItem.getNumWords(), quizItem.getNumNotCorrect(), quizItem.getRound()
+
         notifyItemRemoved(adapterPosition);
     }
 

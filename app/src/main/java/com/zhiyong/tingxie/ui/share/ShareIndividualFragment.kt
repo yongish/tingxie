@@ -54,6 +54,8 @@ class ShareIndividualFragment : Fragment() {
     }
     if (userRole == null) {
       binding.otherErrorView.visibility = View.VISIBLE
+      binding.emptyView.visibility = View.INVISIBLE
+      return
     }
     val quizId = userRole?.id ?: -1
     val role = userRole?.role ?: EnumQuizRole.MEMBER

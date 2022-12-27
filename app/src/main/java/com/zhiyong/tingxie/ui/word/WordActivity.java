@@ -29,8 +29,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.zhiyong.tingxie.R;
+import com.zhiyong.tingxie.network.NetworkQuiz;
 import com.zhiyong.tingxie.ui.main.MainActivity;
-import com.zhiyong.tingxie.ui.main.QuizItem;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -78,8 +78,8 @@ public class WordActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
         });
 
-        QuizItem quizItem = getIntent().getParcelableExtra(EXTRA_QUIZ_ITEM);
-        long quizId = quizItem.getId();
+        NetworkQuiz quizItem = getIntent().getParcelableExtra(EXTRA_QUIZ_ITEM);
+        long quizId = quizItem.getQuizId();
 
         final AutoCompleteTextView textView = findViewById(R.id.autoCompleteTextView1);
         textView.setThreshold(1);
@@ -148,10 +148,13 @@ public class WordActivity extends AppCompatActivity {
                                                 pinyin);
                                         // Update totalWords. Reset notLearned and round.
                                         int totalWords = quizItem.getNumWords() + 1;
-                                        mWordViewModel.updateQuiz(new QuizItem(quizItem.getId(),
-                                                quizItem.getDate(), quizItem.getTitle(),
-                                                totalWords, totalWords,
-                                                1));
+                                        quizItem.setNumWords(1);
+                                        mWordViewModel.updateQuiz(quizItem
+//                                                new NetworkQuiz(quizItem.getQuizId(),
+//                                                quizItem.getDate(), quizItem.getTitle(),
+//                                                totalWords, totalWords,
+//                                                1)
+                                        );
                                     } else {
                                         Toast.makeText(WordActivity.this,
                                                         "ERROR in pinyin lookup",

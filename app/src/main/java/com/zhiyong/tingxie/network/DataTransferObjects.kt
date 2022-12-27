@@ -4,7 +4,6 @@ import android.os.Parcelable
 import com.squareup.moshi.JsonClass
 import com.zhiyong.tingxie.db.Quiz
 import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
-import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
 import com.zhiyong.tingxie.ui.word.WordItem
 import kotlinx.parcelize.Parcelize
@@ -43,20 +42,18 @@ fun NetworkQuizContainer.asDatabaseModel(): List<Quiz> = quizzes.map {
   Quiz(it.quizId, it.date, it.title, it.numWords, it.numNotCorrect, it.round)
 }
 
+@Parcelize
 @JsonClass(generateAdapter = true)
 data class NetworkQuiz(
   val quizId: Long,
-  val title: String,
-  val date: Int,
+  var title: String,
+  var date: Int,
   val email: String,
   val role: String,
-  val numWords: Int,
-  val numNotCorrect: Int,
-  val round: Int
-)
-
-fun NetworkQuiz.asDomainModel(): QuizItem =
-  QuizItem(quizId, date, title, numWords, numNotCorrect, round)
+  var numWords: Int,
+  var numNotCorrect: Int,
+  var round: Int
+) : Parcelable
 
 @JsonClass(generateAdapter = true)
 data class NetworkCreateQuiz(

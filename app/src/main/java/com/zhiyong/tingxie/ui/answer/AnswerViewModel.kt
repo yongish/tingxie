@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.zhiyong.tingxie.QuizRepository
-import com.zhiyong.tingxie.ui.main.QuizItem
+import com.zhiyong.tingxie.network.NetworkQuiz
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -22,7 +22,7 @@ class AnswerViewModel(application: Application) : AndroidViewModel(application) 
     return result
   }
 
-  fun updateQuiz(quizItem: QuizItem): LiveData<Int> {
+  fun updateQuiz(quizItem: NetworkQuiz): LiveData<Int> {
     val result = MutableLiveData<Int>()
     viewModelScope.launch(Dispatchers.IO) {
       val numRecords = repository.updateQuiz(quizItem)

@@ -18,9 +18,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import com.zhiyong.tingxie.R
+import com.zhiyong.tingxie.network.NetworkQuiz
 import com.zhiyong.tingxie.ui.answer.RemoteAnswerActivity
 import com.zhiyong.tingxie.ui.main.MainActivity
-import com.zhiyong.tingxie.ui.main.QuizItem
 import java.util.*
 
 class RemoteQuestionActivity : AppCompatActivity() {
@@ -66,14 +66,14 @@ class RemoteQuestionActivity : AppCompatActivity() {
     btnShowAnswer = findViewById(R.id.btnShowAnswer)
 
     // From AnswerActivity.
-    val quizItem: QuizItem? =
+    val quizItem: NetworkQuiz? =
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        intent.getParcelableExtra(EXTRA_QUIZ_ITEM, QuizItem::class.java)
+        intent.getParcelableExtra(EXTRA_QUIZ_ITEM, NetworkQuiz::class.java)
       } else {
         intent.getParcelableExtra(EXTRA_QUIZ_ITEM)
       }
     if (quizItem != null) {
-      val viewModelFactory = QuestionViewModelFactory(this.application, quizItem.id)
+      val viewModelFactory = QuestionViewModelFactory(this.application, quizItem.quizId)
       mQuestionViewModel =
         ViewModelProvider(this, viewModelFactory)[QuestionViewModel::class.java]
       mQuestionViewModel.notCorrectWordsRandomOrder.observe(this) { words ->

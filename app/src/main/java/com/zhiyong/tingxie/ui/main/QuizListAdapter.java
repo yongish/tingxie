@@ -1,7 +1,7 @@
 package com.zhiyong.tingxie.ui.main;
 
+import static com.zhiyong.tingxie.ui.UserRoleKt.EXTRA_USER_ROLE;
 import static com.zhiyong.tingxie.ui.question.RemoteQuestionActivity.EXTRA_QUIZ_ITEM;
-import static com.zhiyong.tingxie.ui.share.ShareActivity.EXTRA_QUIZ_ID;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -34,7 +34,10 @@ import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.Util;
 import com.zhiyong.tingxie.db.Question;
 import com.zhiyong.tingxie.db.QuizPinyin;
+import com.zhiyong.tingxie.network.NetworkQuiz;
+import com.zhiyong.tingxie.ui.UserRole;
 import com.zhiyong.tingxie.ui.question.RemoteQuestionActivity;
+import com.zhiyong.tingxie.ui.share.EnumQuizRole;
 import com.zhiyong.tingxie.ui.share.ShareActivity;
 import com.zhiyong.tingxie.ui.word.WordActivity;
 
@@ -54,7 +57,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
     private final LayoutInflater mInflater;
     private final Context context;
 
-    private List<QuizItem> mQuizItems;
+    private List<NetworkQuiz> mQuizItems;
 
     private final QuizViewModel viewModel;
     private final RecyclerView recyclerView;
@@ -82,12 +85,10 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
 
     @Override
     public void onBindViewHolder(final QuizViewHolder holder, int i) {
+        final NetworkQuiz quizItem = mQuizItems.get(i);
+
         if (mQuizItems != null) {
-            final QuizItem current = mQuizItems.get(i);
-            QuizItem quizItem = new QuizItem(current.getId(), current.getDate(),
-                    current.getTitle(),
-                    current.getNumWords(), current.getNumNotCorrect(), current.getRound()
-            );
+            final NetworkQuiz current = mQuizItems.get(i);
 
             String displayDate = String.valueOf(current.getDate());
             try {
@@ -116,13 +117,11 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                                 @Override
                                 public void onDateSet(DatePicker view, int year,
                                                       int month, int dayOfMonth) {
-                                    QuizItem newItem = current;
-
                                     int newIntDate = Integer.valueOf(year +
                                             String.format("%02d", ++month) + dayOfMonth);
                                     Log.d("newIntDate", String.valueOf(newIntDate));
-                                    newItem.setDate(newIntDate);
-                                    mQuizItems.set(holder.getAdapterPosition(), newItem);
+                                    current.setDate(newIntDate);
+                                    mQuizItems.set(holder.getAdapterPosition(), current);
                                     notifyDataSetChanged();
                                 }
                             };
@@ -154,16 +153,12 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        QuizItem newItem = current;
+                        NetworkQuiz newItem = current;
                         newItem.setTitle(v.getText().toString());
                         mQuizItems.set(holder.getAdapterPosition(), newItem);
                         notifyDataSetChanged();
 
-                        viewModel.updateQuiz(new QuizItem(
-                                newItem.getId(), newItem.getDate(), newItem.getTitle(),
-                                newItem.getNumWords(), newItem.getNumNotCorrect(),
-                                newItem.getRound()
-                        ));
+                        viewModel.updateQuiz(newItem);
 
                         InputMethodManager inputManager = (InputMethodManager)
                                 context.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -184,30 +179,24 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                     );
                 }
             });
-            holder.btnStartResume.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (current.getNumWords() > 0) {
-                        Intent intent = new Intent(context, RemoteQuestionActivity.class);
-                        intent.putExtra(EXTRA_QUIZ_ITEM, quizItem);
-                        ((Activity) context).startActivityForResult(
-                                intent, QUESTION_ACTIVITY_REQUEST_CODE
-                        );
-                    } else {
-                        Toast.makeText(context, "No words in quiz",
-                                Toast.LENGTH_SHORT).show();
-                    }
+            holder.btnStartResume.setOnClickListener(v -> {
+                if (current.getNumWords() > 0) {
+                    Intent intent = new Intent(context,
+                            RemoteQuestionActivity.class);
+                    intent.putExtra(EXTRA_QUIZ_ITEM, quizItem);
+                    ((Activity) context).startActivityForResult(
+                            intent, QUESTION_ACTIVITY_REQUEST_CODE
+                    );
+                } else {
+                    Toast.makeText(context, "No words in quiz",
+                            Toast.LENGTH_SHORT).show();
                 }
             });
-            holder.ivDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onItemRemove(holder);
-                }
-            });
+            holder.ivDelete.setOnClickListener(v -> onItemRemove(holder));
             holder.ivShare.setOnClickListener(v -> {
                 Intent intent = new Intent(context, ShareActivity.class);
-                intent.putExtra(EXTRA_QUIZ_ID, quizItem.getId());
+                intent.putExtra(EXTRA_USER_ROLE, new UserRole(quizItem.getQuizId(),
+                        EnumQuizRole.valueOf(quizItem.getRole())));
                 context.startActivity(intent);
             });
         } else {
@@ -216,7 +205,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         }
     }
 
-    void setQuizItems(List<QuizItem> quizItems, final RecyclerView mRecyclerView) {
+    void setQuizItems(List<NetworkQuiz> quizItems, final RecyclerView mRecyclerView) {
         mQuizItems = quizItems;
         // Scroll to 1 position before next quiz.
         int scrollPosition = 0;
@@ -240,13 +229,13 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         mRecyclerView.post(() -> mRecyclerView.smoothScrollToPosition(position));
     }
 
-    void addQuizItem(QuizItem newQuizItem, RecyclerView recyclerView) {
+    void addQuizItem(NetworkQuiz newQuizItem, RecyclerView recyclerView) {
         mQuizItems.add(0, newQuizItem);
         notifyItemInserted(0);
         recyclerView.post(() -> recyclerView.smoothScrollToPosition(0));
     }
 
-    void replaceQuizItem(QuizItem newQuizItem, RecyclerView recyclerView, int i) {
+    void replaceQuizItem(NetworkQuiz newQuizItem, RecyclerView recyclerView, int i) {
         mQuizItems.set(i, newQuizItem);
         notifyItemChanged(i);
         recyclerView.post(() -> recyclerView.smoothScrollToPosition(i));
@@ -262,8 +251,8 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
 
     void onItemRemove(RecyclerView.ViewHolder viewHolder) {
         final int adapterPosition = viewHolder.getAdapterPosition();
-        final QuizItem quizItem = mQuizItems.get(adapterPosition);
-        final long quizId = quizItem.getId();
+        final NetworkQuiz quizItem = mQuizItems.get(adapterPosition);
+        final long quizId = quizItem.getQuizId();
 
         Snackbar snackbar = Snackbar
                 .make(recyclerView, "Removed quiz", Snackbar.LENGTH_LONG)

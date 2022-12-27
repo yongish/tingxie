@@ -12,7 +12,6 @@ import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.db.QuizRole;
 import com.zhiyong.tingxie.db.Word;
-import com.zhiyong.tingxie.ui.main.QuizItem;
 import com.zhiyong.tingxie.ui.word.WordItem;
 
 import java.util.List;
@@ -88,9 +87,9 @@ public interface QuizDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertQuizPinyins(List<QuizPinyin> quizPinyins);
 
-    @Query("SELECT id, date, title, total_words AS numWords, not_learned AS numNotCorrect, round " +
-            "FROM quiz WHERE id = :id")
-    LiveData<QuizItem> getQuizItem(long id);
+//    @Query("SELECT id, date, title, total_words AS numWords, not_learned AS numNotCorrect, round " +
+//            "FROM quiz WHERE id = :id")
+//    LiveData<QuizItem> getQuizItem(long id);
 
     @Query("SELECT :quizId AS quizId," +
             "qp.id AS id," +

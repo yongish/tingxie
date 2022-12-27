@@ -5,7 +5,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.db.*
 import com.zhiyong.tingxie.network.*
 import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
-import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsAdapter
 import com.zhiyong.tingxie.ui.word.WordItem
 import kotlinx.coroutines.Dispatchers
@@ -56,9 +55,7 @@ class QuizRepository(val context: Context) {
     }
   }
 
-  suspend fun getQuizzes(): List<QuizItem> =
-    TingXieNetwork.tingxie.getQuizzes(email)
-      .map { it.asDomainModel() }
+  suspend fun getQuizzes(): List<NetworkQuiz> = TingXieNetwork.tingxie.getQuizzes(email)
 
   suspend fun getWordItemsOfQuiz(quizId: Long): List<WordItem> =
     TingXieNetwork.tingxie.getWordItemsOfQuiz(quizId)
@@ -134,19 +131,20 @@ class QuizRepository(val context: Context) {
     return TingXieNetwork.tingxie.postQuiz(NetworkCreateQuiz(title, date, name, email))
   }
 
-  suspend fun updateQuiz(quiz: QuizItem): Int {
-    return TingXieNetwork.tingxie.putQuiz(
-      NetworkQuiz(
-        quiz.id,
-        quiz.title,
-        quiz.date,
-        email,
-        "STUB. REPLACE THIS",
-        quiz.numWords,
-        quiz.numNotCorrect,
-        quiz.round
-      )
-    )
+  suspend fun updateQuiz(quiz: NetworkQuiz): Int {
+    // todo: REPAIR THIS.
+    return TingXieNetwork.tingxie.putQuiz(quiz)
+//      NetworkQuiz(
+//        quiz.id,
+//        quiz.title,
+//        quiz.date,
+//        email,
+//        "STUB. REPLACE THIS",
+//        quiz.numWords,
+//        quiz.numNotCorrect,
+//        quiz.round
+//      )
+//    )
   }
 
   suspend fun addWord(quizId: Long, wordString: String?, pinyinString: String?): Long {

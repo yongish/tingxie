@@ -18,7 +18,6 @@ import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.network.NetworkQuiz
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsViewModel
 import com.zhiyong.tingxie.ui.main.MainActivity
-import com.zhiyong.tingxie.ui.main.QuizItem
 import com.zhiyong.tingxie.ui.question.RemoteQuestionActivity
 
 class RemoteAnswerActivity : AppCompatActivity() {
@@ -61,7 +60,7 @@ class RemoteAnswerActivity : AppCompatActivity() {
     val quizItem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
       intent.getParcelableExtra(
         RemoteQuestionActivity.EXTRA_QUIZ_ITEM,
-        QuizItem::class.java
+        NetworkQuiz::class.java
       )
     } else {
       intent.getParcelableExtra(RemoteQuestionActivity.EXTRA_QUIZ_ITEM)

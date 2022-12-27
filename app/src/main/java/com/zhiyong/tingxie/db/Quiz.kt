@@ -2,7 +2,6 @@ package com.zhiyong.tingxie.db
 
 import androidx.annotation.NonNull
 import androidx.room.*
-import com.zhiyong.tingxie.ui.main.QuizItem
 
 @Entity(indices = [Index("id")])
 data class Quiz(
@@ -20,15 +19,15 @@ data class Quiz(
   constructor(date: Int) : this(0, date)
 }
 
-fun List<Quiz>.asDomainModel(): List<QuizItem> {
-  return map {
-    QuizItem(
-        id = it.id,
-        date = it.date,
-        title = it.title,
-        numWords = it.totalWords,
-        numNotCorrect = it.notLearned,
-        round = it.round,
-    )
-  }
-}
+//fun List<Quiz>.asDomainModel(): List<QuizItem> {
+//  return map {
+//    QuizItem(
+//        id = it.id,
+//        date = it.date,
+//        title = it.title,
+//        numWords = it.totalWords,
+//        numNotCorrect = it.notLearned,
+//        round = it.round,
+//    )
+//  }
+//}

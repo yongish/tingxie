@@ -10,6 +10,7 @@ import com.zhiyong.tingxie.db.Question
 import com.zhiyong.tingxie.db.Quiz
 import com.zhiyong.tingxie.db.QuizPinyin
 import com.zhiyong.tingxie.network.NetworkCreateQuiz
+import com.zhiyong.tingxie.network.NetworkQuiz
 import com.zhiyong.tingxie.ui.word.WordItem
 import com.zhiyong.tingxie.viewmodel.Status
 import com.zhiyong.tingxie.viewmodel.UpdateQuizViewModel
@@ -44,8 +45,8 @@ class QuizViewModel(application: Application) : UpdateQuizViewModel(application)
         }
     }
 
-    private val _quizItems = MutableLiveData<List<QuizItem>>()
-    val allQuizItems: LiveData<List<QuizItem>> = _quizItems
+    private val _quizItems = MutableLiveData<List<NetworkQuiz>>()
+    val allQuizItems: LiveData<List<NetworkQuiz>> = _quizItems
 
     private val _quizzesStatus = MutableLiveData<Status>()
     val quizzesStatus: LiveData<Status> = _quizzesStatus

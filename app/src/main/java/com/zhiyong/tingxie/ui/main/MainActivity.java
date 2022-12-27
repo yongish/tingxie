@@ -24,10 +24,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.zhiyong.tingxie.R;
+import com.zhiyong.tingxie.network.NetworkQuiz;
 import com.zhiyong.tingxie.ui.friend.FriendActivity;
 import com.zhiyong.tingxie.ui.group.GroupActivity;
 import com.zhiyong.tingxie.ui.hsk.buttons.HskButtonsActivity;
 import com.zhiyong.tingxie.ui.login.LoginActivity;
+import com.zhiyong.tingxie.ui.share.EnumQuizRole;
 import com.zhiyong.tingxie.viewmodel.Status;
 
 import java.util.Optional;
@@ -39,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
     QuizListAdapter adapter;
+    String name;
+    String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +140,11 @@ public class MainActivity extends AppCompatActivity {
         FirebaseMessaging.getInstance().getToken().addOnSuccessListener(token -> {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null && user.getEmail() != null) {
-                mQuizViewModel.putToken(user.getUid(), user.getEmail(), token);
+                name = user.getDisplayName();
+                email = user.getEmail();
+                if (email != null) {
+                    mQuizViewModel.putToken(user.getUid(), email, token);
+                }
             }
         });
     }
@@ -186,25 +194,20 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, HskButtonsActivity.class));
     }
 
-    public void processDatePickerResult(Optional<QuizItem> optionalQuizItem,
+    public void processDatePickerResult(Optional<NetworkQuiz> optionalQuizItem,
                                         int position, int year, int month, int day) {
         int date = Integer.valueOf(year + String.format("%02d", ++month) +
                 String.format("%02d", day));
         if (optionalQuizItem.isPresent()) {
-            QuizItem quizItem = optionalQuizItem.get();
-            QuizItem newQuizItem = new QuizItem(quizItem.getId(),
-                    date,
-                    quizItem.getTitle(),
-                    quizItem.getNumWords(),
-                    quizItem.getNumNotCorrect(),
-                    quizItem.getRound());
-            mQuizViewModel.updateQuiz(newQuizItem).observe(this,
-                    quizId -> adapter.replaceQuizItem(newQuizItem, recyclerView, position
+            NetworkQuiz quizItem = optionalQuizItem.get();
+            quizItem.setDate(date);
+            mQuizViewModel.updateQuiz(quizItem).observe(this,
+                    quizId -> adapter.replaceQuizItem(quizItem, recyclerView, position
                     ));
         } else {
             mQuizViewModel.createQuiz("No title", date).observe(this,
-                    newQuizId -> adapter.addQuizItem(new QuizItem(newQuizId, date, "No" +
-                                    " title", 0, 0, 1),
+                    newQuizId -> adapter.addQuizItem(new NetworkQuiz(newQuizId, "No " +
+                            "title", date, email, EnumQuizRole.OWNER.name(), 0, 0, 1),
                             recyclerView));
         }
     }

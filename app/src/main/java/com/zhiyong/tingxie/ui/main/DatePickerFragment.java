@@ -8,12 +8,14 @@ import androidx.fragment.app.DialogFragment;
 import android.app.DatePickerDialog;
 import android.widget.DatePicker;
 
+import com.zhiyong.tingxie.network.NetworkQuiz;
+
 import java.util.Calendar;
 import java.util.Optional;
 
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
-    private QuizItem quizItem;
+    private NetworkQuiz quizItem;
     private int position;
 
     @NonNull
@@ -47,7 +49,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         return new DatePickerDialog(getActivity(), this, year, month, day);
     }
 
-    static DatePickerFragment newInstance(QuizItem quizItem, int position, int year, int month, int day) {
+    static DatePickerFragment newInstance(NetworkQuiz quizItem, int position, int year, int month, int day) {
         DatePickerFragment f = new DatePickerFragment();
 
         Bundle args = new Bundle();
