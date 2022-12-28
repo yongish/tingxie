@@ -19,5 +19,11 @@ class AddQuizIndividualActivity : AppCompatActivity() {
         .replace(R.id.container, AddQuizIndividualFragment.newInstance())
         .commitNow()
     }
+    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+  }
+
+  override fun onSupportNavigateUp(): Boolean {
+    onBackPressedDispatcher.onBackPressed()
+    return true
   }
 }
