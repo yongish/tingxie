@@ -3,35 +3,25 @@ package com.zhiyong.tingxie.ui.share
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.tabs.TabLayoutMediator
 import com.zhiyong.tingxie.R
-import com.zhiyong.tingxie.databinding.ShareActivityBinding
+import com.zhiyong.tingxie.databinding.ActivityShareBinding
 import com.zhiyong.tingxie.ui.main.MainActivity
 
 class ShareActivity : AppCompatActivity() {
 
-  companion object {
-    const val EXTRA_QUIZ_ID = "com.zhiyong.tingxie.ui.share.extra.QUIZ_ID"
-  }
-
-  private lateinit var binding: ShareActivityBinding
+  private lateinit var binding: ActivityShareBinding
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.share_activity)
-    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    setContentView(R.layout.activity_share)
 
-    binding = ShareActivityBinding.inflate(layoutInflater)
+    binding = ActivityShareBinding.inflate(layoutInflater)
     setContentView(binding.root)
 
-    val quizId = intent.getLongExtra(EXTRA_QUIZ_ID, -1)
-    binding.vpShare.adapter = ShareAdapter(this, 2, quizId, )
-    TabLayoutMediator(binding.tabLayout, binding.vpShare) { tab, position ->
-      when (position) {
-        0 -> tab.text = "Individuals"
-        1 -> tab.text = "Groups"
-      }
-    }.attach()
+    if (savedInstanceState == null) {
+      supportFragmentManager.beginTransaction().replace(R.id.container, ShareFragment.newInstance()).commitNow()
+    }
+    supportActionBar?.setDisplayHomeAsUpEnabled(true)
   }
 
   override fun onSupportNavigateUp(): Boolean {

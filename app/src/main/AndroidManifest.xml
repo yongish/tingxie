@@ -44,7 +44,8 @@
             android:label="@string/title_activity_group" />
         <activity
             android:name=".ui.share.ShareActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:label="Quiz members" />
         <activity
             android:name=".ui.friend.FriendActivity"
             android:exported="false"

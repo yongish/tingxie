@@ -1,20 +1,15 @@
 package com.zhiyong.tingxie.ui.share
 
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.os.Build
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.ImageSpan
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.setFragmentResultListener
 import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.R
-import com.zhiyong.tingxie.databinding.ShareIndividualFragmentBinding
+import com.zhiyong.tingxie.databinding.FragmentShareBinding
 import com.zhiyong.tingxie.network.NetworkGroupMember
 import com.zhiyong.tingxie.ui.EXTRA_USER_ROLE
 import com.zhiyong.tingxie.ui.UserRole
@@ -22,11 +17,16 @@ import com.zhiyong.tingxie.ui.add_quiz_individual.AddQuizIndividualActivity
 import com.zhiyong.tingxie.ui.group_member.GroupMemberFragment
 import com.zhiyong.tingxie.ui.group_member.SelectRoleFragment.Companion.REQUEST_KEY
 
-class ShareIndividualFragment : Fragment() {
+class ShareFragment : Fragment() {
 
-  private lateinit var adapter: ShareIndividualAdapter
+  companion object {
+    @JvmStatic
+    fun newInstance() = ShareFragment()
+  }
+
+  private lateinit var adapter: ShareAdapter
   private lateinit var menuItem: MenuItem
-  private var _binding: ShareIndividualFragmentBinding? = null
+  private var _binding: FragmentShareBinding? = null
   private val binding get() = _binding!!
 
   private lateinit var email: String
@@ -38,7 +38,7 @@ class ShareIndividualFragment : Fragment() {
     val currentUser = FirebaseAuth.getInstance().currentUser!!
     email = currentUser.email!!
 
-    _binding = ShareIndividualFragmentBinding.inflate(inflater, container, false)
+    _binding = FragmentShareBinding.inflate(inflater, container, false)
     return binding.root
   }
 
@@ -82,12 +82,12 @@ class ShareIndividualFragment : Fragment() {
 //    }
 
     val viewModelFactory =
-      ShareIndividualViewModelFactory(requireActivity().application, quizId)
+      ShareViewModelFactory(requireActivity().application, quizId)
     val viewModel =
-      ViewModelProvider(this, viewModelFactory)[ShareIndividualViewModel::class.java]
+      ViewModelProvider(this, viewModelFactory)[ShareViewModel::class.java]
 
     // todo: Pass role into ShareAdapter to fix duplication.
-    adapter = ShareIndividualAdapter(
+    adapter = ShareAdapter(
       requireActivity(),
       viewModel,
       binding.recyclerviewShares,
@@ -149,14 +149,5 @@ class ShareIndividualFragment : Fragment() {
   override fun onDestroyView() {
     super.onDestroyView()
     _binding = null
-  }
-
-  companion object {
-    @JvmStatic
-    fun newInstance(userRole: UserRole) = ShareIndividualFragment().apply {
-      arguments = Bundle().apply {
-        putParcelable(EXTRA_USER_ROLE, userRole)
-      }
-    }
   }
 }

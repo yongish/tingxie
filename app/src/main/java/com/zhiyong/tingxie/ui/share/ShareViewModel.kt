@@ -14,7 +14,7 @@ import com.zhiyong.tingxie.viewmodel.Status
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ShareIndividualViewModel(application: Application, quizId: Long) :
+class ShareViewModel(application: Application, quizId: Long) :
   AndroidViewModel(application) {
   private val repository: QuizRepository = QuizRepository(application)
 

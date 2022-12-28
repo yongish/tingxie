@@ -7,10 +7,3 @@ enum class EnumQuizRole {
 
     OWNER, ADMIN, MEMBER
 }
-
-//data class TingXieShareIndividual(
-//    val email: String,
-//    val name: String,
-//    val isShared: Boolean,
-//    val role: EnumQuizRole
-//    )
