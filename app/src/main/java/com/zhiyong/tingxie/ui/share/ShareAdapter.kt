@@ -11,12 +11,9 @@ import com.google.firebase.auth.FirebaseAuth
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
-import com.zhiyong.tingxie.databinding.RecyclerviewGroupMemberBinding
 import com.zhiyong.tingxie.databinding.RecyclerviewShareBinding
 import com.zhiyong.tingxie.network.NetworkGroupMember
 import com.zhiyong.tingxie.ui.group_member.SelectRoleFragment
-
-//enum class IsShared { SHARED, ALL }
 
 class ShareAdapter(
   private val context: Context,
@@ -30,7 +27,6 @@ class ShareAdapter(
   val user = FirebaseAuth.getInstance().currentUser
   val name = user?.displayName
   val email = user?.email
-  //  var sharesFiltered: List<TingXieShareIndividual> = shareIndividuals.filter { it.isShared }
   var editing = false
 
   var users = mutableListOf<NetworkGroupMember>()
@@ -51,24 +47,31 @@ class ShareAdapter(
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val user = users[position]
     holder.bind(user)
-
-    if (user.role != EnumQuizRole.OWNER.name) {
-      holder.clIdentifier.setOnClickListener {
-        val fm = (context as AppCompatActivity).supportFragmentManager
-        val selectRoleFragment: SelectRoleFragment =
-          SelectRoleFragment.newInstance(
-            user.role == EnumQuizRole.OWNER.name,
-            user,
-            position
-          )
-        selectRoleFragment.show(fm, "fragment_select_role")
-      }
-    }
-
-    if (role == EnumQuizRole.MEMBER) {
+    if (role == EnumQuizRole.OWNER || role == EnumQuizRole.MEMBER) {
       holder.ivEditRole.visibility = View.INVISIBLE
+    }
+    if (role == EnumQuizRole.MEMBER) {
       holder.ivDelete.visibility = View.INVISIBLE
     } else {
+      holder.clIdentifier.setOnClickListener {
+        if (user.role == EnumQuizRole.OWNER.name) {
+          AlertDialog.Builder(context)
+            .setTitle("Role change not allowed")
+            .setMessage("You must appoint someone else as the quiz owner before changing your own role.")
+            .setPositiveButton("Close") { dialog, _ -> dialog.dismiss() }
+            .create().show()
+        } else {
+          val fm = (context as AppCompatActivity).supportFragmentManager
+          val selectRoleFragment: SelectRoleFragment =
+            SelectRoleFragment.newInstance(
+              user.role != EnumQuizRole.OWNER.name,
+              user,
+              position
+            )
+          selectRoleFragment.show(fm, "fragment_select_role")
+        }
+      }
+
       holder.ivDelete.setOnClickListener {
         if (user.email == email && user.role == EnumQuizRole.OWNER.name) {
           AlertDialog.Builder(context)
