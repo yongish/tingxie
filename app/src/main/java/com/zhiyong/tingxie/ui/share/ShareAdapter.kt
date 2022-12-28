@@ -2,6 +2,7 @@ package com.zhiyong.tingxie.ui.share
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import com.zhiyong.tingxie.databinding.RecyclerviewShareBinding
 import com.zhiyong.tingxie.network.NetworkGroupMember
+import com.zhiyong.tingxie.ui.group_member.GroupMemberActivity
 import com.zhiyong.tingxie.ui.group_member.SelectRoleFragment
+import com.zhiyong.tingxie.ui.share.ShareFragment.Companion.EXTRA_EMAIL
 
 class ShareAdapter(
   private val context: Context,
@@ -83,7 +86,7 @@ class ShareAdapter(
           AlertDialog.Builder(context)
             .setTitle("Remove ${user.userName}?")
             .setMessage("Are you sure you want to remove ${user.userName} from this quiz?")
-            .setPositiveButton("Yes") { dialog, _ ->
+            .setPositiveButton("Yes") { _, _ ->
               viewModel.removeQuizMember(
                 quizId,
                 name,
@@ -104,58 +107,11 @@ class ShareAdapter(
       }
     }
 
-//    holder.ivDelete.setOnClickListener {
-//      val adapterPosition = holder.adapterPosition
-//      Snackbar
-//          .make(recyclerView, "Removed ${share.name}", Snackbar.LENGTH_LONG)
-//          .setAction("Undo") {
-//            viewModel.addShare(share)
-//            notifyItemInserted(adapterPosition)
-//          }
-//          .show()
-//      viewModel.deleteShare(quizId, share.email)
-//      notifyItemRemoved(adapterPosition)
-//    }
-
-//    val adapter = ArrayAdapter(
-//        context,
-//        android.R.layout.simple_spinner_item,
-//        EnumQuizRole.values().map { role -> role.toString() }
-//    )
-//    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//    holder.spRole.adapter = adapter
-//    holder.spRole.setSelection(EnumQuizRole.values().indexOf(share.role))
-//
-//    holder.cbIsShared.isChecked = share.isShared
-//    holder.cbIsShared.visibility = if (editing) View.VISIBLE else View.GONE
-//
-//    val role = sharesFiltered
-//        .first { it.email == FirebaseAuth.getInstance().currentUser?.email }.role
-//    if (role == EnumQuizRole.MEMBER) {
-//      holder.spRole.alpha = .3f
-//      holder.spRole.setOnTouchListener(OnTouchListener
-//      @SuppressLint("ClickableViewAccessbility") { _, _ ->
-//        val builder = AlertDialog.Builder(context)
-//
-//        // todo: Check if there is a pending editor request.
-//
-//        builder.setMessage("You must be an editor to edit sharing settings.")
-//            .setPositiveButton("Request editor role") {
-//              // todo: Request editor role.
-//              dialog, _ -> dialog.dismiss()
-//            }
-//            .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
-//            .create().show()
-//        true
-//      })
-//    } else {
-////      // todo: Save menu item should appear.
-////      holder.cbIsShared.setOnClickListener {
-////
-////      }
-////      // todo: Save menu item should appear.
-////      holder.spRole.setOnItemClickListener { adapterView, view, i, l ->  }
-//    }
+    holder.btnGroupMemberships.setOnClickListener {
+      val intent = Intent(context, GroupMemberActivity::class.java)
+      intent.putExtra(EXTRA_EMAIL, user.email)
+      context.startActivity(intent)
+    }
 
   }
 
@@ -165,22 +121,6 @@ class ShareAdapter(
   }
 
   override fun getItemCount(): Int = users.size
-
-//  override fun getFilter(): Filter = object : Filter() {
-//    override fun performFiltering(constraint: CharSequence?): FilterResults =
-//        FilterResults().apply {
-//          values = if (IsShared.valueOf(constraint.toString()) == IsShared.SHARED) {
-//            shareIndividuals.filter { it.isShared }
-//          } else {
-//            shareIndividuals
-//          }
-//        }
-//
-//    override fun publishResults(constraint: CharSequence?, results: FilterResults) {
-//      sharesFiltered = results.values as List<TingXieShareIndividual>
-//      notifyDataSetChanged()
-//    }
-//  }
 
   class ViewHolder(private val binding: RecyclerviewShareBinding) :
     RecyclerView.ViewHolder(binding.root) {

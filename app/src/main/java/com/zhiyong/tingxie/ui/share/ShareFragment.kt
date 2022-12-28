@@ -22,6 +22,8 @@ class ShareFragment : Fragment() {
   companion object {
     @JvmStatic
     fun newInstance() = ShareFragment()
+
+    const val EXTRA_EMAIL = "com.zhiyong.tingxie.ui.share.EXTRA_EMAIL"
   }
 
   private lateinit var adapter: ShareAdapter
