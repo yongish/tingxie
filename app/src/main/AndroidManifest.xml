@@ -19,6 +19,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ui.select_quiz_member_type.SelectQuizMemberTypeActivity"
+            android:exported="false"
+            android:label="Add person or group to quiz">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ui.group_membership.GroupMembershipActivity"
             android:exported="false">
             <meta-data
@@ -28,7 +36,7 @@
         <activity
             android:name=".ui.add_quiz_individual.AddQuizIndividualActivity"
             android:exported="false"
-            android:label="Add person or group to quiz">
+            android:label="Add person to quiz">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

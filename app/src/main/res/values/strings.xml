@@ -92,4 +92,6 @@
     <string name="error_in_shareindividualfragment">Error in ShareIndividualFragment. Please contact yongish@gmail.com.</string>
     <string name="no_group_memberships">The user is not a member of any group.</string>
     <string name="error_in_groupmembershipfragment">Error in GroupMembershipFragment. Please contact yongish@gmail.com.</string>
+    <string name="individual">Individual</string>
+    <string name="group">Group</string>
 </resources>

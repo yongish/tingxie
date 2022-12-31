@@ -30,7 +30,6 @@ class GroupMembershipViewModel(application: Application, email: String) :
   }
 
   private fun getGroups(email: String) {
-    // stopped here
     viewModelScope.launch {
       _status.value = Status.LOADING
       try {
