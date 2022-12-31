@@ -9,9 +9,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ShareCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.FragmentGroupBinding
 import com.zhiyong.tingxie.network.NetworkGroup
+import com.zhiyong.tingxie.ui.group_membership.GroupMembershipViewModel
+import com.zhiyong.tingxie.ui.group_membership.GroupMembershipViewModelFactory
 
 class GroupFragment : Fragment() {
 
@@ -19,14 +22,21 @@ class GroupFragment : Fragment() {
     fun newInstance() = GroupFragment()
   }
 
-  private lateinit var viewModel: GroupViewModel
+  private lateinit var viewModel: GroupMembershipViewModel
   private var _binding: FragmentGroupBinding? = null
   private val binding get() = _binding!!
   private lateinit var adapter: GroupAdapter
 
+  private lateinit var email: String
+  private lateinit var name: String
+
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
   ): View {
+    val currentUser = FirebaseAuth.getInstance().currentUser!!
+    email = currentUser.email!!
+    name = currentUser.displayName!!
+
     _binding = FragmentGroupBinding.inflate(inflater, container, false)
     return binding.root
   }
@@ -36,7 +46,10 @@ class GroupFragment : Fragment() {
 
     binding.fab.setOnClickListener { openAddGroupDialog() }
 
-    viewModel = ViewModelProvider(this)[GroupViewModel::class.java]
+    val viewModelFactory =
+      GroupMembershipViewModelFactory(requireActivity().application, email)
+    viewModel =
+      ViewModelProvider(this, viewModelFactory)[GroupMembershipViewModel::class.java]
     adapter = GroupAdapter(requireActivity(), viewModel, binding.recyclerviewGroups)
     binding.recyclerviewGroups.adapter = adapter
     viewModel.groups.observe(viewLifecycleOwner) {
@@ -88,7 +101,11 @@ class GroupFragment : Fragment() {
         viewModel.createGroup(name, listOf()).observe(viewLifecycleOwner) {
           val newId = it.toLongOrNull()
           if (newId == null) {
-            Toast.makeText(context, "Error. Please contact yongish@gmail.com.", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+              context,
+              "Error. Please contact yongish@gmail.com.",
+              Toast.LENGTH_LONG
+            ).show()
           } else {
             adapter.addNewGroup(NetworkGroup(newId, name, "OWNER", 1))
             binding.emptyView.visibility = View.INVISIBLE

@@ -17,11 +17,12 @@ import com.zhiyong.tingxie.network.NetworkGroup
 import com.zhiyong.tingxie.ui.EXTRA_USER_ROLE
 import com.zhiyong.tingxie.ui.UserRole
 import com.zhiyong.tingxie.ui.group_member.GroupMemberActivity
+import com.zhiyong.tingxie.ui.group_membership.GroupMembershipViewModel
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
 
 class GroupAdapter(
   private val context: Context,
-  val viewModel: GroupViewModel,
+  val viewModel: GroupMembershipViewModel,
   val recyclerView: RecyclerView
 ) : RecyclerView.Adapter<GroupAdapter.ViewHolder>() {
 

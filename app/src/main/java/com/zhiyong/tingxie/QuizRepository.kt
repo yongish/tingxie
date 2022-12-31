@@ -170,7 +170,7 @@ class QuizRepository(val context: Context) {
   suspend fun upsertCorrectRecord(wordId: Long) =
     TingXieNetwork.tingxie.upsertCorrectRecord(NetworkCorrectRecord(wordId, email))
 
-  suspend fun getGroups(): MutableList<NetworkGroup> =
+  suspend fun getGroups(email: String): MutableList<NetworkGroup> =
     TingXieNetwork.tingxie.getGroups(email)
 
   suspend fun createGroup(groupName: String, members: List<NetworkGroupMember>): String =
@@ -230,7 +230,6 @@ class QuizRepository(val context: Context) {
 
   suspend fun getGroupsOfQuiz(quizId: Long): List<NetworkGroup> =
     TingXieNetwork.tingxie.getGroupsOfQuiz(quizId)
-
 
   // Endpoints below are for Friends API, which I decided not to use.
   suspend fun checkUserExists(email: String): Boolean =
