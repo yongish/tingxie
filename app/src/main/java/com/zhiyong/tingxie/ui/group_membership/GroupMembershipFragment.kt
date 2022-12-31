@@ -17,19 +17,11 @@ class GroupMembershipFragment : Fragment() {
     fun newInstance() = GroupMembershipFragment()
   }
 
-  private lateinit var viewModel: GroupMembershipViewModel
-
   private var _binding: FragmentGroupMembershipBinding? = null
   private val binding get() = _binding!!
 
   private lateinit var email: String
   private lateinit var name: String
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    viewModel = ViewModelProvider(this).get(GroupMembershipViewModel::class.java)
-    // TODO: Use the ViewModel
-  }
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -51,5 +43,21 @@ class GroupMembershipFragment : Fragment() {
     )
     val viewModel = ViewModelProvider(this, viewModelFactory)[GroupMembershipViewModel::class.java]
     val adapter = GroupAdapter(requireActivity(), viewModel, binding.recyclerviewGroupMemberships)
+    binding.recyclerviewGroupMemberships.adapter = adapter
+    viewModel.groups.observe(viewLifecycleOwner) {
+      it?.let {
+        adapter.groups = it
+        if (it.isEmpty()) {
+          binding.emptyView.visibility = View.VISIBLE
+        } else {
+          binding.emptyView.visibility = View.INVISIBLE
+        }
+      }
+    }
+  }
+
+  override fun onDestroyView() {
+    super.onDestroyView()
+    _binding = null
   }
 }

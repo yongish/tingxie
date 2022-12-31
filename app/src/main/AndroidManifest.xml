@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".GroupMembershipActivity"
+            android:name=".ui.group_membership.GroupMembershipActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

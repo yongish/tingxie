@@ -14,8 +14,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import com.zhiyong.tingxie.databinding.RecyclerviewShareBinding
 import com.zhiyong.tingxie.network.NetworkGroupMember
-import com.zhiyong.tingxie.ui.group_member.GroupMemberActivity
 import com.zhiyong.tingxie.ui.group_member.SelectRoleFragment
+import com.zhiyong.tingxie.ui.group_membership.GroupMembershipActivity
 import com.zhiyong.tingxie.ui.share.ShareFragment.Companion.EXTRA_EMAIL
 
 class ShareAdapter(
@@ -108,7 +108,7 @@ class ShareAdapter(
     }
 
     holder.btnGroupMemberships.setOnClickListener {
-      val intent = Intent(context, GroupMemberActivity::class.java)
+      val intent = Intent(context, GroupMembershipActivity::class.java)
       intent.putExtra(EXTRA_EMAIL, user.email)
       context.startActivity(intent)
     }

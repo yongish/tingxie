@@ -5,6 +5,7 @@
     android:id="@+id/group_membership"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorScreenBackground"
     tools:context=".ui.group_membership.GroupMembershipFragment">
 
     <androidx.recyclerview.widget.RecyclerView
