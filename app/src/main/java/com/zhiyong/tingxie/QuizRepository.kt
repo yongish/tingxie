@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.db.*
 import com.zhiyong.tingxie.network.*
+import com.zhiyong.tingxie.ui.UserRole
 import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsAdapter
 import com.zhiyong.tingxie.ui.word.WordItem
@@ -230,6 +231,9 @@ class QuizRepository(val context: Context) {
 
   suspend fun getGroupsOfQuiz(quizId: Long): List<NetworkGroup> =
     TingXieNetwork.tingxie.getGroupsOfQuiz(quizId)
+
+  suspend fun addQuizGroup(groupId: Long, userRole: UserRole): String =
+    TingXieNetwork.tingxie.addQuizGroup(userRole.id, groupId, userRole.role.name)
 
   // Endpoints below are for Friends API, which I decided not to use.
   suspend fun checkUserExists(email: String): Boolean =

@@ -13,9 +13,9 @@ import com.zhiyong.tingxie.databinding.FragmentShareBinding
 import com.zhiyong.tingxie.network.NetworkGroupMember
 import com.zhiyong.tingxie.ui.EXTRA_USER_ROLE
 import com.zhiyong.tingxie.ui.UserRole
-import com.zhiyong.tingxie.ui.add_quiz_individual.AddQuizIndividualActivity
 import com.zhiyong.tingxie.ui.group_member.GroupMemberFragment
 import com.zhiyong.tingxie.ui.group_member.SelectRoleFragment.Companion.REQUEST_KEY
+import com.zhiyong.tingxie.ui.select_quiz_member_type.SelectQuizMemberTypeActivity
 
 class ShareFragment : Fragment() {
 
@@ -70,7 +70,7 @@ class ShareFragment : Fragment() {
     if (role == EnumQuizRole.ADMIN || role == EnumQuizRole.OWNER) {
       binding.fab.visibility = View.VISIBLE
       binding.fab.setOnClickListener {
-        val intent = Intent(context, AddQuizIndividualActivity::class.java)
+        val intent = Intent(context, SelectQuizMemberTypeActivity::class.java)
         intent.putExtra(EXTRA_USER_ROLE, userRole)
         startActivity(intent)
       }

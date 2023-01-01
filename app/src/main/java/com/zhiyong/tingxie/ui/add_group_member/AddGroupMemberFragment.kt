@@ -16,6 +16,7 @@ import com.zhiyong.tingxie.databinding.FragmentAddGroupMemberBinding
 import com.zhiyong.tingxie.ui.EXTRA_USER_ROLE
 import com.zhiyong.tingxie.ui.UserRole
 import com.zhiyong.tingxie.ui.group_member.GroupMemberActivity
+import com.zhiyong.tingxie.ui.share.EnumQuizRole
 
 class AddGroupMemberFragment : Fragment() {
 
@@ -73,7 +74,7 @@ class AddGroupMemberFragment : Fragment() {
         binding.tvEmailValid.visibility = View.INVISIBLE
         val groupId = userRole!!.id
         val role =
-          if (binding.radioGroup.checkedRadioButtonId == R.id.rbMember) "MEMBER" else "ADMIN"
+          if (binding.radioGroup.checkedRadioButtonId == R.id.rbMember) EnumQuizRole.MEMBER.name else EnumQuizRole.ADMIN.name
         viewModel.addGroupMemberOrReturnNoUser(groupId, etEmailString, role)
           .observe(viewLifecycleOwner) {
             if (it.email.isEmpty()) {
