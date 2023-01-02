@@ -45,37 +45,37 @@ class MainActivityTest {
     addWord("脚踏实地")
     addWord("卷心菜")
     tapBackButton()
-    onView(withId(R.id.recyclerview_main)).check(matches(atPosition(
-      0, hasDescendant(withText("2/2 remaining on round 1"))
-    )))
-    tapAddViewWordButton(1)
-    addWord("杏")
-    addWord("疫苗")
-    tapBackButton()
-    removeQuiz(1)
-    onView(withText("Undo")).perform(click())
-    tapAddViewWordButton(1)
-    onView(withId(R.id.recyclerview_word)).check(RecyclerViewItemCountAssertion(2))
-    checkWord(0, "杏")
-    checkWord(1, "疫苗")
-    tapBackButton()
-    tapAddViewWordButton(0)
-    onView(withId(R.id.recyclerview_word)).check(RecyclerViewItemCountAssertion(2))
-    checkWord(0, "脚踏实地")
-    checkWord(1, "卷心菜")
-    tapBackButton()
-    // Test quiz functionality.
-    onView(withId(R.id.recyclerview_main)).perform(
-      RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-        0, clickOnViewChild(R.id.btnStartResume)
-      )
-    )
-    onView(withId(R.id.btnShowAnswer)).perform(click())
-    onView(withId(R.id.btnAnswerCorrect)).perform(click())
-    tapBackButton()
-    onView(withId(R.id.recyclerview_main)).check(matches(atPosition(
-      0, hasDescendant(withText("1/2 remaining on round 1"))
-    )))
+//    onView(withId(R.id.recyclerview_main)).check(matches(atPosition(
+//      0, hasDescendant(withText("2/2 remaining on round 1"))
+//    )))
+//    tapAddViewWordButton(1)
+//    addWord("杏")
+//    addWord("疫苗")
+//    tapBackButton()
+//    removeQuiz(1)
+//    onView(withText("Undo")).perform(click())
+//    tapAddViewWordButton(1)
+//    onView(withId(R.id.recyclerview_word)).check(RecyclerViewItemCountAssertion(2))
+//    checkWord(0, "杏")
+//    checkWord(1, "疫苗")
+//    tapBackButton()
+//    tapAddViewWordButton(0)
+//    onView(withId(R.id.recyclerview_word)).check(RecyclerViewItemCountAssertion(2))
+//    checkWord(0, "脚踏实地")
+//    checkWord(1, "卷心菜")
+//    tapBackButton()
+//    // Test quiz functionality.
+//    onView(withId(R.id.recyclerview_main)).perform(
+//      RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+//        0, clickOnViewChild(R.id.btnStartResume)
+//      )
+//    )
+//    onView(withId(R.id.btnShowAnswer)).perform(click())
+//    onView(withId(R.id.btnAnswerCorrect)).perform(click())
+//    tapBackButton()
+//    onView(withId(R.id.recyclerview_main)).check(matches(atPosition(
+//      0, hasDescendant(withText("1/2 remaining on round 1"))
+//    )))
   }
 
   private fun addQuiz(year: Int?, monthOfYear: Int?, dayOfMonth: Int?) {

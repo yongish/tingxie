@@ -1,6 +1,7 @@
 package com.zhiyong.tingxie
 
 import android.content.Context
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.db.*
 import com.zhiyong.tingxie.network.*
@@ -33,6 +34,7 @@ class QuizRepository(val context: Context) {
     // 12/8/22. Should use the user details in the service layer rather than the
     // repository layer, but keeping this here because there is so much code that uses it
     // already.
+    FirebaseApp.initializeApp(context)
     val user = FirebaseAuth.getInstance().currentUser
     val email = user?.email
     val name = user?.displayName
