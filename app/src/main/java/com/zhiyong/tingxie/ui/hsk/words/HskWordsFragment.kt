@@ -5,12 +5,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.zhiyong.tingxie.QuizRepository
 import com.zhiyong.tingxie.R
+import com.zhiyong.tingxie.ui.group_membership.GroupMembershipViewModel
+import com.zhiyong.tingxie.ui.group_membership.GroupMembershipViewModelFactory
 import com.zhiyong.tingxie.ui.hsk.buttons.HskButtonsFragment.Companion.EXTRA_LEVEL
 import com.zhiyong.tingxie.ui.main.QuizViewModel
+import com.zhiyong.tingxie.ui.main.QuizViewModelFactory
 import xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScroller
 
 class HskWordsFragment : Fragment() {
@@ -35,8 +40,14 @@ class HskWordsFragment : Fragment() {
 
     val level = requireActivity().intent.getIntExtra(EXTRA_LEVEL, 0)
 
-    viewModel = ViewModelProvider(this).get(HskWordsViewModel::class.java)
-    quizViewModel = ViewModelProvider(this).get(QuizViewModel::class.java)
+    viewModel = ViewModelProvider(this)[HskWordsViewModel::class.java]
+    quizViewModel = ViewModelProvider(
+      this,
+      QuizViewModelFactory(
+        requireActivity().application,
+        QuizRepository(requireContext())
+      )
+    )[QuizViewModel::class.java]
 
     recyclerView = requireActivity().findViewById(R.id.recyclerview_hsk_words)
     val adapter = HskWordsAdapter(requireActivity(), viewModel, quizViewModel)
@@ -47,7 +58,8 @@ class HskWordsFragment : Fragment() {
     // need to set quizzes too, because the adapter needs the quizzes for the add to quiz buttons.
     quizViewModel.allQuizItems.observe(requireActivity()) { adapter.setQuizItems(it) }
 
-    val fastScroller: VerticalRecyclerViewFastScroller = requireActivity().findViewById(R.id.fast_scroller)
+    val fastScroller: VerticalRecyclerViewFastScroller =
+      requireActivity().findViewById(R.id.fast_scroller)
     fastScroller.setRecyclerView(recyclerView)
     recyclerView.addOnScrollListener(fastScroller.onScrollListener)
   }

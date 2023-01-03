@@ -21,7 +21,7 @@ import kotlin.collections.HashSet
 A Repository manages query threads and allows you to use multiple backends.
 In the most common example, the Repository implements the logic for deciding whether to fetch data
 from a network or use results cached in the local database. */
-class QuizRepository(val context: Context) {
+class QuizRepository(val context: Context) : QuizRepositoryInterface {
   // todo: val database: PinyinRoomDatabase instead of val context: Context.
   private val mQuizDao: QuizDao = getDatabase(context).pinyinDao
 
@@ -46,7 +46,7 @@ class QuizRepository(val context: Context) {
     }
   }
 
-  suspend fun putToken(uid: String, email: String, token: String) {
+  override suspend fun putToken(uid: String, email: String, token: String) {
     withContext(Dispatchers.IO) {
       TingXieNetwork.tingxie.putToken(
         NetworkToken(
@@ -58,7 +58,8 @@ class QuizRepository(val context: Context) {
     }
   }
 
-  suspend fun getQuizzes(): List<NetworkQuiz> = TingXieNetwork.tingxie.getQuizzes(email)
+  override suspend fun getQuizzes(): List<NetworkQuiz> =
+    TingXieNetwork.tingxie.getQuizzes(email)
 
   suspend fun getWordItemsOfQuiz(quizId: Long): List<WordItem> =
     TingXieNetwork.tingxie.getWordItemsOfQuiz(quizId)
@@ -130,11 +131,10 @@ class QuizRepository(val context: Context) {
     editor.apply()
   }
 
-  suspend fun createQuiz(title: String, date: Int): Long {
-    return TingXieNetwork.tingxie.postQuiz(NetworkCreateQuiz(title, date, name, email))
-  }
+  override suspend fun createQuiz(title: String, date: Int): Long =
+    TingXieNetwork.tingxie.postQuiz(NetworkCreateQuiz(title, date, name, email))
 
-  suspend fun updateQuiz(quiz: NetworkQuiz): Int {
+  override suspend fun updateQuiz(quiz: NetworkQuiz): Int {
     // todo: REPAIR THIS.
     return TingXieNetwork.tingxie.putQuiz(quiz)
 //      NetworkQuiz(
@@ -167,7 +167,7 @@ class QuizRepository(val context: Context) {
     mQuizDao.insert(quizPinyin)
   }
 
-  suspend fun deleteQuiz(quizId: Long) =
+  override suspend fun deleteQuiz(quizId: Long): String =
     TingXieNetwork.tingxie.deleteQuiz(quizId, name, email, email)
 
   suspend fun upsertCorrectRecord(wordId: Long) =
@@ -229,7 +229,8 @@ class QuizRepository(val context: Context) {
     requesterName: String,
     requesterEmail: String,
     email: String
-  ): String = TingXieNetwork.tingxie.deleteQuiz(quizId, requesterName, requesterEmail, email)
+  ): String =
+    TingXieNetwork.tingxie.deleteQuiz(quizId, requesterName, requesterEmail, email)
 
   suspend fun getGroupsOfQuiz(quizId: Long): List<NetworkGroup> =
     TingXieNetwork.tingxie.getGroupsOfQuiz(quizId)

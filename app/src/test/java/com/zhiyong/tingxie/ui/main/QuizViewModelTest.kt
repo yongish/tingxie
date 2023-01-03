@@ -1,12 +1,11 @@
 package com.zhiyong.tingxie.ui.main
 
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Observer
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.zhiyong.tingxie.FakeQuizRepository
+import com.zhiyong.tingxie.network.NetworkQuiz
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.`is`
-import org.junit.Assert.*
+import org.hamcrest.core.Is.`is`
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -17,12 +16,39 @@ class QuizViewModelTest {
 
   @Before
   fun setupViewModel() {
-    quizViewModel = QuizViewModel(ApplicationProvider.getApplicationContext())
+    quizViewModel = QuizViewModel(
+      ApplicationProvider.getApplicationContext(),
+      FakeQuizRepository(
+        mutableListOf(
+          NetworkQuiz(
+            0,
+            "title0",
+            20230101,
+            "email0",
+            "role0",
+            0,
+            0,
+            1
+          ),
+          NetworkQuiz(
+            1,
+            "title1",
+            20230101,
+            "email1",
+            "role0",
+            0,
+            0,
+            1
+          )
+        )
+      )
+    )
   }
 
+//  subjectUnderTest_actionOrInput_resultState
   @Test
-  fun createQuiz_draft() {
-//    quizViewModel.
-//    assertThat()
+  fun getQuizzes_initial_returns2quizzes() {
+    quizViewModel.createQuiz("title0", 20230101)
+    assertThat(quizViewModel.allQuizItems.value!!.size, `is`(2))
   }
 }

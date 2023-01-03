@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +23,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.zhiyong.tingxie.QuizRepository;
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.network.NetworkQuiz;
 import com.zhiyong.tingxie.ui.friend.FriendActivity;
@@ -61,8 +62,9 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerview_main);
 
         final TextView emptyView = findViewById(R.id.empty_view);
-        mQuizViewModel = ViewModelProviders.of(this).get(QuizViewModel.class);
-
+        mQuizViewModel = new ViewModelProvider(this,
+                new QuizViewModelFactory(getApplication(),
+                        new QuizRepository(getApplication()))).get(QuizViewModel.class);
         adapter = new QuizListAdapter(this, mQuizViewModel, recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -207,7 +209,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             mQuizViewModel.createQuiz("No title", date).observe(this,
                     newQuizId -> adapter.addQuizItem(new NetworkQuiz(newQuizId, "No " +
-                            "title", date, email, EnumQuizRole.OWNER.name(), 0, 0, 1),
+                                    "title", date, email, EnumQuizRole.OWNER.name(), 0
+                                    , 0, 1),
                             recyclerView));
         }
     }
