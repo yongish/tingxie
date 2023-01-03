@@ -22,12 +22,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.zhiyong.tingxie.QuizRepository;
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.network.NetworkQuiz;
 import com.zhiyong.tingxie.ui.main.MainActivity;
@@ -151,7 +153,8 @@ public class WordActivity extends AppCompatActivity {
                                         quizItem.setNumWords(1);
                                         mWordViewModel.updateQuiz(quizItem
 //                                                new NetworkQuiz(quizItem.getQuizId(),
-//                                                quizItem.getDate(), quizItem.getTitle(),
+//                                                quizItem.getDate(), quizItem
+//                                                .getTitle(),
 //                                                totalWords, totalWords,
 //                                                1)
                                         );
@@ -177,9 +180,9 @@ public class WordActivity extends AppCompatActivity {
             dialog.show();
         });
 
-        mWordViewModel = ViewModelProviders
-                .of(this, new WordViewModelFactory(this.getApplication(), quizId))
-                .get(WordViewModel.class);
+        mWordViewModel = new ViewModelProvider(this,
+                new WordViewModelFactory(new QuizRepository(getApplication()), quizId)
+        ).get(WordViewModel.class);
         final RecyclerView recyclerView = findViewById(R.id.recyclerview_word);
         final WordListAdapter adapter = new WordListAdapter(
                 this, mWordViewModel, recyclerView, quizItem

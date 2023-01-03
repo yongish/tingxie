@@ -1,6 +1,5 @@
 package com.zhiyong.tingxie.ui.main
 
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.zhiyong.tingxie.FakeQuizRepository
 import com.zhiyong.tingxie.network.NetworkQuiz
@@ -17,7 +16,6 @@ class QuizViewModelTest {
   @Before
   fun setupViewModel() {
     quizViewModel = QuizViewModel(
-      ApplicationProvider.getApplicationContext(),
       FakeQuizRepository(
         mutableListOf(
           NetworkQuiz(

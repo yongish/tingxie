@@ -1,14 +1,14 @@
 package com.zhiyong.tingxie.ui.word
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.zhiyong.tingxie.Repository
 import com.zhiyong.tingxie.viewmodel.CrudStatus
 import com.zhiyong.tingxie.viewmodel.UpdateQuizViewModel
 import kotlinx.coroutines.launch
 
-internal class WordViewModel(application: Application, quizId: Long) : UpdateQuizViewModel(application) {
+internal class WordViewModel(val mRepository: Repository, quizId: Long) : UpdateQuizViewModel(mRepository) {
 //    val wordItemsOfQuiz: LiveData<List<WordItem>>
 
     private var _eventNetworkError = MutableLiveData(false)

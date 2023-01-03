@@ -1,10 +1,9 @@
 package com.zhiyong.tingxie.ui.main
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.zhiyong.tingxie.QuizRepositoryInterface
+import com.zhiyong.tingxie.Repository
 import com.zhiyong.tingxie.db.QuizPinyin
 import com.zhiyong.tingxie.network.NetworkQuiz
 import com.zhiyong.tingxie.ui.word.WordItem
@@ -13,10 +12,9 @@ import com.zhiyong.tingxie.viewmodel.UpdateQuizViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class QuizViewModel(
-  application: Application,
-  private val repository: QuizRepositoryInterface
-) : UpdateQuizViewModel(application) {
+// STOPPED HERE.
+class QuizViewModel(private val mRepository: Repository) :
+  UpdateQuizViewModel(mRepository) {
   // todo: After implementing fetch from remote, use these to update remote DB.
   // Have a flag to check if remote DB has been successfully updated.
 //    val allQuizItems: LiveData<List<QuizItem>> = mRepository.quizzes
@@ -37,7 +35,7 @@ class QuizViewModel(
     token: String,
   ) {
     viewModelScope.launch {
-      repository.putToken(uid, email, token)
+      mRepository.putToken(uid, email, token)
     }
   }
 
@@ -55,7 +53,7 @@ class QuizViewModel(
     viewModelScope.launch {
       _quizzesStatus.value = Status.LOADING
       try {
-        _quizItems.value = repository.getQuizzes()
+        _quizItems.value = mRepository.getQuizzes()
         _quizzesStatus.value = Status.DONE
       } catch (e: Exception) {
         _quizzesStatus.value = Status.ERROR
@@ -67,7 +65,7 @@ class QuizViewModel(
   fun createQuiz(title: String, date: Int): LiveData<Long> {
     val result = MutableLiveData<Long>()
     viewModelScope.launch(Dispatchers.IO) {
-      val newId = repository.createQuiz(title, date)
+      val newId = mRepository.createQuiz(title, date)
       result.postValue(newId)
     }
     return result

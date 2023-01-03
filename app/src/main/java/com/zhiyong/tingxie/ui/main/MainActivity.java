@@ -63,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
 
         final TextView emptyView = findViewById(R.id.empty_view);
         mQuizViewModel = new ViewModelProvider(this,
-                new QuizViewModelFactory(getApplication(),
-                        new QuizRepository(getApplication()))).get(QuizViewModel.class);
+                new QuizViewModelFactory(new QuizRepository(getApplication()))
+        ).get(QuizViewModel.class);
         adapter = new QuizListAdapter(this, mQuizViewModel, recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

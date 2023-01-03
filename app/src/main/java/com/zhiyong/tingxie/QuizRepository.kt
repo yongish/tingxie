@@ -1,5 +1,6 @@
 package com.zhiyong.tingxie
 
+import android.app.Application
 import android.content.Context
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -21,14 +22,30 @@ import kotlin.collections.HashSet
 A Repository manages query threads and allows you to use multiple backends.
 In the most common example, the Repository implements the logic for deciding whether to fetch data
 from a network or use results cached in the local database. */
-class QuizRepository(val context: Context) : QuizRepositoryInterface {
+class QuizRepository(application: Application) : Repository {
   // todo: val database: PinyinRoomDatabase instead of val context: Context.
+  private val context = application.applicationContext
   private val mQuizDao: QuizDao = getDatabase(context).pinyinDao
 
   private val executor: ExecutorService = Executors.newSingleThreadExecutor()
 
   private lateinit var email: String
   private lateinit var name: String
+
+  companion object {
+    private const val TAG = "QuizRepository"
+
+    @Volatile
+    private var INSTANCE: QuizRepository? = null
+
+    fun getRepository(app: Application): QuizRepository {
+      return INSTANCE ?: synchronized(this) {
+        QuizRepository(app).also {
+          INSTANCE = it
+        }
+      }
+    }
+  }
 
   init {
     // 12/8/22. Should use the user details in the service layer rather than the
@@ -61,7 +78,7 @@ class QuizRepository(val context: Context) : QuizRepositoryInterface {
   override suspend fun getQuizzes(): List<NetworkQuiz> =
     TingXieNetwork.tingxie.getQuizzes(email)
 
-  suspend fun getWordItemsOfQuiz(quizId: Long): List<WordItem> =
+  override suspend fun getWordItemsOfQuiz(quizId: Long): List<WordItem> =
     TingXieNetwork.tingxie.getWordItemsOfQuiz(quizId)
       .map { it.asDomainModel(quizId) }
 
@@ -150,7 +167,7 @@ class QuizRepository(val context: Context) : QuizRepositoryInterface {
 //    )
   }
 
-  suspend fun addWord(quizId: Long, wordString: String?, pinyinString: String?): Long {
+  override suspend fun addWord(quizId: Long, wordString: String?, pinyinString: String?): Long {
     if (wordString == null || pinyinString == null) {
       throw IllegalArgumentException("Null wordString or pinyinString.")
     }
@@ -160,10 +177,10 @@ class QuizRepository(val context: Context) : QuizRepositoryInterface {
     )
   }
 
-  suspend fun deleteWord(id: Long) = TingXieNetwork.tingxie.deleteWord(id)
+  override suspend fun deleteWord(id: Long) = TingXieNetwork.tingxie.deleteWord(id)
 
   // Undo a just deleted word.
-  fun insertQuizPinyin(quizPinyin: QuizPinyin?) = executor.execute {
+  override fun insertQuizPinyin(quizPinyin: QuizPinyin?) = executor.execute {
     mQuizDao.insert(quizPinyin)
   }
 
@@ -306,7 +323,4 @@ class QuizRepository(val context: Context) : QuizRepositoryInterface {
     TingXieNetwork.tingxie.deleteShare(this.email, quizId, email)
   }
 
-  companion object {
-    private const val TAG = "QuizRepository"
-  }
 }
