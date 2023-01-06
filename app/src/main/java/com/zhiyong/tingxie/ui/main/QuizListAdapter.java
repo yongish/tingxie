@@ -112,19 +112,18 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                 @Override
                 public void onClick(View v) {
                     // Open date dialog. Pass in quiz ID and current date.
-                    DatePickerDialog.OnDateSetListener dateListener =
-                            new DatePickerDialog.OnDateSetListener() {
-                                @Override
-                                public void onDateSet(DatePicker view, int year,
-                                                      int month, int dayOfMonth) {
-                                    int newIntDate = Integer.valueOf(year +
-                                            String.format("%02d", ++month) + dayOfMonth);
-                                    Log.d("newIntDate", String.valueOf(newIntDate));
-                                    current.setDate(newIntDate);
-                                    mQuizItems.set(holder.getAdapterPosition(), current);
-                                    notifyDataSetChanged();
-                                }
-                            };
+                    new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year,
+                                              int month, int dayOfMonth) {
+                            int newIntDate = Integer.parseInt(year +
+                                    String.format("%02d", ++month) + dayOfMonth);
+                            Log.d("newIntDate", String.valueOf(newIntDate));
+                            current.setDate(newIntDate);
+                            mQuizItems.set(holder.getAdapterPosition(), current);
+                            notifyDataSetChanged();
+                        }
+                    };
 
                     Date currDate;
                     try {
