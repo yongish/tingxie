@@ -1,6 +1,8 @@
 package com.zhiyong.tingxie
 
 import com.zhiyong.tingxie.db.QuizPinyin
+import com.zhiyong.tingxie.network.NetworkAddQuizUser
+import com.zhiyong.tingxie.network.NetworkGroupMember
 import com.zhiyong.tingxie.network.NetworkQuiz
 import com.zhiyong.tingxie.ui.word.WordItem
 
@@ -16,4 +18,8 @@ interface Repository {
   fun insertQuizPinyin(quizPinyin: QuizPinyin?)
   suspend fun getWordItemsOfQuiz(quizId: Long): List<WordItem>?
   suspend fun deleteWord(id: Long): String
+  suspend fun addQuizMemberOrReturnNoUser(
+    quizId: Long,
+    addQuizUser: NetworkAddQuizUser
+  ): NetworkGroupMember
 }

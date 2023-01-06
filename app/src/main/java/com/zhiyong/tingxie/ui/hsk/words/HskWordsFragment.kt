@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zhiyong.tingxie.QuizRepository
 import com.zhiyong.tingxie.R
+import com.zhiyong.tingxie.TingXieApplication
 import com.zhiyong.tingxie.ui.hsk.buttons.HskButtonsFragment.Companion.EXTRA_LEVEL
 import com.zhiyong.tingxie.ui.main.QuizViewModel
 import com.zhiyong.tingxie.ui.main.QuizViewModelFactory
@@ -24,7 +25,7 @@ class HskWordsFragment : Fragment() {
 
   private lateinit var viewModel: HskWordsViewModel
   private val quizViewModel by viewModels<QuizViewModel> {
-    QuizViewModelFactory(QuizRepository.getRepository(requireActivity().application))
+    QuizViewModelFactory((requireContext().applicationContext as TingXieApplication).quizRepository)
   }
   private lateinit var recyclerView: RecyclerView
 

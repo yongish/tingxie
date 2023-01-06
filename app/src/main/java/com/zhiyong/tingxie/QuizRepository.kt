@@ -32,20 +32,20 @@ class QuizRepository(application: Application) : Repository {
   private lateinit var email: String
   private lateinit var name: String
 
-  companion object {
-    private const val TAG = "QuizRepository"
-
-    @Volatile
-    private var INSTANCE: QuizRepository? = null
-
-    fun getRepository(app: Application): QuizRepository {
-      return INSTANCE ?: synchronized(this) {
-        QuizRepository(app).also {
-          INSTANCE = it
-        }
-      }
-    }
-  }
+//  companion object {
+//    private const val TAG = "QuizRepository"
+//
+//    @Volatile
+//    private var INSTANCE: QuizRepository? = null
+//
+//    fun getRepository(app: Application): QuizRepository {
+//      return INSTANCE ?: synchronized(this) {
+//        QuizRepository(app).also {
+//          INSTANCE = it
+//        }
+//      }
+//    }
+//  }
 
   init {
     // 12/8/22. Should use the user details in the service layer rather than the
@@ -232,7 +232,7 @@ class QuizRepository(application: Application) : Repository {
   suspend fun getUsersOfQuiz(quizId: Long): List<NetworkGroupMember> =
     TingXieNetwork.tingxie.getUsersOfQuiz(quizId)
 
-  suspend fun addQuizMemberOrReturnNoUser(
+  override suspend fun addQuizMemberOrReturnNoUser(
     quizId: Long,
     addQuizUser: NetworkAddQuizUser
   ): NetworkGroupMember =

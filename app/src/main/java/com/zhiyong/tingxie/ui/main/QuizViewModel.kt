@@ -12,7 +12,6 @@ import com.zhiyong.tingxie.viewmodel.UpdateQuizViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-// STOPPED HERE.
 class QuizViewModel(private val mRepository: Repository) :
   UpdateQuizViewModel(mRepository) {
   // todo: After implementing fetch from remote, use these to update remote DB.

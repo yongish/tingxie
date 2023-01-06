@@ -1,5 +1,18 @@
 package com.zhiyong.tingxie
 
+import android.app.Application
+import timber.log.Timber
+
+class TingXieApplication : Application() {
+  val quizRepository: Repository
+    get() = ServiceLocator.provideQuizRepository(this)
+
+  override fun onCreate() {
+    super.onCreate()
+    if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
+  }
+}
+
 //import android.app.Application
 //import androidx.work.*
 //import kotlinx.coroutines.CoroutineScope
