@@ -17,12 +17,15 @@ import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.core.internal.deps.guava.base.Preconditions
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.zhiyong.tingxie.ui.main.MainActivity
 import org.hamcrest.*
 import org.hamcrest.Matchers.*
+import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -30,10 +33,19 @@ import org.junit.runner.RunWith
 @LargeTest
 class MainActivityTest {
 
+  @get:Rule
+  val activityRule = ActivityScenarioRule(MainActivity::class.java)
+
   @Before
   fun init() {
     getApplicationContext<Context>().deleteDatabase("pinyin_database")
-    ActivityScenario.launch(MainActivity::class.java)
+//    ActivityScenario.launch(MainActivity::class.java)
+    RecyclerViewTest.removeAllQuizzes(activityRule)
+  }
+
+  @After
+  fun after() {
+    RecyclerViewTest.removeAllQuizzes(activityRule)
   }
 
   @Test
@@ -45,9 +57,9 @@ class MainActivityTest {
     addWord("脚踏实地")
     addWord("卷心菜")
     tapBackButton()
-//    onView(withId(R.id.recyclerview_main)).check(matches(atPosition(
-//      0, hasDescendant(withText("2/2 remaining on round 1"))
-//    )))
+    onView(withId(R.id.recyclerview_main)).check(matches(atPosition(
+      0, hasDescendant(withText("2/2 remaining on round 1"))
+    )))
 //    tapAddViewWordButton(1)
 //    addWord("杏")
 //    addWord("疫苗")

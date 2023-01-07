@@ -43,7 +43,7 @@ class RecyclerViewTest {
     ApplicationProvider.getApplicationContext<Context>()
       .deleteDatabase("pinyin_database")
 //    launch(MainActivity::class.java)
-    removeAllQuizzes()
+    removeAllQuizzes(activityRule)
   }
 
   @After
@@ -122,23 +122,6 @@ class RecyclerViewTest {
   private fun addQuiz(c: Calendar) =
     addQuiz(c[Calendar.YEAR], c[Calendar.MONTH] + 1, c[Calendar.DATE])
 
-  private fun removeAllQuizzes() {
-    var count = 0
-    activityRule.scenario.onActivity {
-      val recyclerView = it.findViewById<RecyclerView>(R.id.recyclerview_main)
-      count = recyclerView.adapter?.itemCount ?: 0
-    }
-    repeat(count) {
-      onView(withId(R.id.recyclerview_main)).perform(
-        RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-          0, ViewActions.swipeLeft()
-        )
-      )
-    }
-    val recyclerView = onView(withId(R.id.recyclerview_main))
-    recyclerView.check(RecyclerViewItemCountAssertion(0))
-  }
-
   private val fAB: ViewInteraction
     get() = onView(
       Matchers.allOf(
@@ -168,6 +151,24 @@ class RecyclerViewTest {
         }
       }
     }
+
+    fun removeAllQuizzes(activityRule: ActivityScenarioRule<MainActivity>) {
+      var count = 0
+      activityRule.scenario.onActivity {
+        val recyclerView = it.findViewById<RecyclerView>(R.id.recyclerview_main)
+        count = recyclerView.adapter?.itemCount ?: 0
+      }
+      repeat(count) {
+        onView(withId(R.id.recyclerview_main)).perform(
+          RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+            0, ViewActions.swipeLeft()
+          )
+        )
+      }
+      val recyclerView = onView(withId(R.id.recyclerview_main))
+      recyclerView.check(RecyclerViewItemCountAssertion(0))
+    }
+
 
     private fun atPosition(
       position: Int, itemMatcher: Matcher<View?>
