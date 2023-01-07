@@ -55,51 +55,9 @@ class RecyclerViewTest {
   fun addQuizInFuture() {
     val c = Calendar.getInstance()
     c.add(Calendar.DATE, 1)
-    val dayOfMonth = c[Calendar.DATE]
     addQuiz(c)
-    onView(withId(R.id.recyclerview_main)).check(
-      matches(
-        atPosition(
-          0, hasDescendant(
-            withText(
-              containsString(dayOfMonth.toString())
-            )
-          )
-        )
-      )
-    )
-    onView(withId(R.id.recyclerview_main)).perform(
-      RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-        0, ViewActions.swipeLeft()
-      )
-    )
+    checkMatches(c, 0)
   }
-
-  @Test
-  fun myTest() {
-    val c = Calendar.getInstance()
-    addQuiz(c)
-
-    var count = 0
-    activityRule.scenario.onActivity {
-      val recyclerView = it.findViewById<RecyclerView>(R.id.recyclerview_main)
-      count = recyclerView.adapter?.itemCount ?: 0
-    }
-    repeat(count) {
-      removeQuiz(0)
-    }
-  }
-
-//  @Test
-//  fun mainActivityTest() {
-//    while (true) {
-//      onView(withId(R.id.recyclerview_main)).perform(
-//        RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-//          0, ViewActions.swipeLeft()
-//        )
-//      )
-//    }
-//  }
 
   @Test
   fun quizzesSortedAfterAdd() {
@@ -107,78 +65,20 @@ class RecyclerViewTest {
     addQuiz(c)
     c.add(Calendar.DATE, 1)
     addQuiz(c)
-    val format = SimpleDateFormat("EEE, dd MMM yyyy")
-    onView(withId(R.id.recyclerview_main)).check(
-      matches(
-        atPosition(
-          0,
-          hasDescendant(
-            withText(
-              containsString(
-                format.format(c.time)
-              )
-            )
-          )
-        )
-      )
-    )
+    checkMatches(c, 0)
     c.add(Calendar.DATE, -1)
-    onView(withId(R.id.recyclerview_main)).check(
-      matches(
-        atPosition(
-          1,
-          hasDescendant(
-            withText(
-              containsString(
-                format.format(c.time)
-              )
-            )
-          )
-        )
-      )
-    )
-
+    checkMatches(c, 1)
   }
 
   @Test
   fun quizzesSortedAfterEdit() {
     val c = Calendar.getInstance()
     addQuiz(c)
-//    addQuiz(2019, 3, 1)
     c.add(Calendar.DATE, 1)
     addQuiz(c)
-//    addQuiz(2019, 3, 2)
-    val format = SimpleDateFormat("EEE, dd MMM yyyy")
-    onView(withId(R.id.recyclerview_main)).check(
-      matches(
-        atPosition(
-          0, hasDescendant(
-            withText(
-              containsString(
-                format.format(c.time)
-//                "02 Mar 2019"
-              )
-            )
-          )
-        )
-      )
-    )
+    checkMatches(c, 0)
     c.add(Calendar.DATE, -1)
-    onView(withId(R.id.recyclerview_main)).check(
-      matches(
-        atPosition(
-          1, hasDescendant(
-            withText(
-              containsString(
-                format.format(c.time)
-//                "01 Mar 2019"
-              )
-            )
-          )
-        )
-      )
-    )
-
+    checkMatches(c, 1)
     onView(withId(R.id.recyclerview_main)).perform(
       RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
         0, MyViewAction.clickChildViewWithId(R.id.ivEditDate)
@@ -186,57 +86,26 @@ class RecyclerViewTest {
     )
 
     c.add(Calendar.MONTH, 1)
+    // Edit quiz date.
     onView(
       withClassName(
         Matchers.equalTo(
           DatePicker::class.java.name
         )
       )
-    ).perform(PickerActions.setDate(c[Calendar.YEAR], c[Calendar.MONTH] + 1, c[Calendar.DATE]))
-
+    ).perform(
+      PickerActions.setDate(
+        c[Calendar.YEAR],
+        c[Calendar.MONTH] + 1,
+        c[Calendar.DATE]
+      )
+    )
     onView(withId(android.R.id.button1)).perform(ViewActions.click())
-    onView(withId(R.id.recyclerview_main)).check(
-      matches(
-        atPosition(
-          0, hasDescendant(
-            withText(
-              containsString(
-                format.format(c.time)
-//                "02 Apr 2019"
-              )
-            )
-          )
-        )
-      )
-    )
-    c.add(Calendar.MONTH, -1)
-    onView(withId(R.id.recyclerview_main)).check(
-      matches(
-        atPosition(
-          1, hasDescendant(
-            withText(
-              containsString(
-                format.format(c.time)
-//                "01 Mar 2019"
-              )
-            )
-          )
-        )
-      )
-    )
-  }
 
-//  private fun addQuiz(year: Int, monthOfYear: Int, dayOfMonth: Int) {
-//    floatingActionButton.perform(ViewActions.click())
-//    onView(
-//      withClassName(
-//        Matchers.equalTo(
-//          DatePicker::class.java.name
-//        )
-//      )
-//    ).perform(PickerActions.setDate(year, monthOfYear, dayOfMonth))
-//    onView(withId(android.R.id.button1)).perform(ViewActions.click())
-//  }
+    checkMatches(c, 0)
+    c.add(Calendar.MONTH, -1)
+    checkMatches(c, 1)
+  }
 
   private fun addQuiz(year: Int, monthOfYear: Int, dayOfMonth: Int) {
     floatingActionButton.perform(ViewActions.click())
@@ -250,20 +119,8 @@ class RecyclerViewTest {
     onView(withId(android.R.id.button1)).perform(ViewActions.click())
   }
 
-  private fun addQuiz(c: Calendar) = addQuiz(c[Calendar.YEAR], c[Calendar.MONTH] + 1, c[Calendar.DATE])
-
-  private fun removeQuiz(position: Int) {
-    onView(withId(R.id.recyclerview_main)).perform(
-      RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-        position, ViewActions.swipeLeft()
-      )
-    )
-//    onView(withId(R.id.recyclerview_main)).perform(
-//      RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-//        0, ViewActions.swipeLeft()
-//      )
-//    )
-  }
+  private fun addQuiz(c: Calendar) =
+    addQuiz(c[Calendar.YEAR], c[Calendar.MONTH] + 1, c[Calendar.DATE])
 
   private fun removeAllQuizzes() {
     var count = 0
@@ -272,7 +129,11 @@ class RecyclerViewTest {
       count = recyclerView.adapter?.itemCount ?: 0
     }
     repeat(count) {
-      removeQuiz(0)
+      onView(withId(R.id.recyclerview_main)).perform(
+        RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+          0, ViewActions.swipeLeft()
+        )
+      )
     }
     val recyclerView = onView(withId(R.id.recyclerview_main))
     recyclerView.check(RecyclerViewItemCountAssertion(0))
@@ -308,7 +169,7 @@ class RecyclerViewTest {
       }
     }
 
-    fun atPosition(
+    private fun atPosition(
       position: Int, itemMatcher: Matcher<View?>
     ): BoundedMatcher<View?, RecyclerView> {
       Preconditions.checkNotNull(itemMatcher)
@@ -325,16 +186,26 @@ class RecyclerViewTest {
           return itemMatcher.matches(viewHolder.itemView)
         }
       }
-    } //        ViewInteraction textView = onView(
-    //                allOf(withId(R.id.word), withText("+ Word 20"),
-    //                        childAtPosition(
-    //                                childAtPosition(
-    //                                        withId(R.id.recyclerview_main),
-    //                                        13),
-    //                                0),
-    //                        isDisplayed()));
-    //        textView.check(matches(withText("+ Word 20")));
-    //    MainActivity activity = mActivityTestRule.getActivity();
-    //    RecyclerView recyclerView = activity.findViewById(R.id.recyclerview_main);
+    }
+
+    fun checkMatches(c: Calendar, position: Int) {
+      onView(withId(R.id.recyclerview_main)).check(
+        matches(
+          atPosition(
+            position,
+            hasDescendant(
+              withText(
+                containsString(
+                  SimpleDateFormat("EEE, dd MMM yyyy").format(c.time)
+                )
+              )
+            )
+          )
+        )
+      )
+    }
+
+//    fun checkMatchString(string: String): (Int) -> Unit =
+//      { position: Int -> checkMatches(position, string) }
   }
 }
