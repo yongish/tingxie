@@ -28,6 +28,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.*
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
@@ -50,26 +51,43 @@ class MainActivityTest {
 
   @Test
   fun twoQuizzes() {
+    val c = Calendar.getInstance()
     // Test add and remove quizzes and words.
-    addQuiz(2021, 12, 1)
-    addQuiz(2021, 12, 2)
+    addQuiz(c)
+    c.add(Calendar.DATE, 1)
+    addQuiz(c)
     tapAddViewWordButton(0)
     addWord("脚踏实地")
     addWord("卷心菜")
+
     tapBackButton()
-    onView(withId(R.id.recyclerview_main)).check(matches(atPosition(
-      0, hasDescendant(withText("2/2 remaining on round 1"))
-    )))
-//    tapAddViewWordButton(1)
-//    addWord("杏")
-//    addWord("疫苗")
-//    tapBackButton()
+    onView(withId(R.id.recyclerview_main)).check(
+      matches(
+        atPosition(
+          0, hasDescendant(withText("2/2 remaining on round 1"))
+        )
+      )
+    )
+
+    tapAddViewWordButton(1)
+    addWord("杏")
+    addWord("疫苗")
+    tapBackButton()
+    onView(withId(R.id.recyclerview_main)).check(
+      matches(
+        atPosition(
+          1, hasDescendant(withText("2/2 remaining on round 1"))
+        )
+      )
+    )
+
 //    removeQuiz(1)
 //    onView(withText("Undo")).perform(click())
 //    tapAddViewWordButton(1)
 //    onView(withId(R.id.recyclerview_word)).check(RecyclerViewItemCountAssertion(2))
 //    checkWord(0, "杏")
 //    checkWord(1, "疫苗")
+
 //    tapBackButton()
 //    tapAddViewWordButton(0)
 //    onView(withId(R.id.recyclerview_word)).check(RecyclerViewItemCountAssertion(2))
@@ -89,6 +107,9 @@ class MainActivityTest {
 //      0, hasDescendant(withText("1/2 remaining on round 1"))
 //    )))
   }
+
+  private fun addQuiz(c: Calendar) =
+    addQuiz(c[Calendar.YEAR], c[Calendar.MONTH] + 1, c[Calendar.DATE])
 
   private fun addQuiz(year: Int?, monthOfYear: Int?, dayOfMonth: Int?) {
     onView(withId(R.id.fab)).perform(click())
@@ -123,19 +144,29 @@ class MainActivityTest {
   }
 
   private fun tapBackButton() {
-    onView(allOf(instanceOf(AppCompatImageButton::class.java), withParent(withId(R.id.toolbar)))).perform(click())
+    onView(
+      allOf(
+        instanceOf(AppCompatImageButton::class.java),
+        withParent(withId(R.id.toolbar))
+      )
+    ).perform(click())
   }
 
   private fun checkWord(position: Int, word: String) {
-    onView(withId(R.id.recyclerview_word)).check(matches(atPosition(
-      position, hasDescendant(withText(word))
-    )))
+    onView(withId(R.id.recyclerview_word)).check(
+      matches(
+        atPosition(
+          position, hasDescendant(withText(word))
+        )
+      )
+    )
   }
 
   private fun clickOnViewChild(viewId: Int) = object : ViewAction {
     override fun getConstraints() = null
     override fun getDescription() = "Click on a child view with specified id."
-    override fun perform(uiController: UiController, view: View) = click().perform(uiController, view.findViewById<View>(viewId))
+    override fun perform(uiController: UiController, view: View) =
+      click().perform(uiController, view.findViewById<View>(viewId))
   }
 
   private fun atPosition(position: Int, itemMatcher: Matcher<View>): Matcher<View?>? {

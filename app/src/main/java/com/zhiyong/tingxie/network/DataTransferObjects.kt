@@ -61,10 +61,15 @@ data class NetworkCreateQuiz(
   val date: Int,
   val name: String,
   val email: String,
-//  val total_words: Int,
-//  val not_learned: Int,
-//  val round: Int,
-//  val role: String
+)
+
+@JsonClass(generateAdapter = true)
+data class NetworkRecreateQuiz(
+  val quizId: Long,
+  val title: String,
+  val date: Int,
+  val name: String,
+  val email: String,
 )
 
 @JsonClass(generateAdapter = true)

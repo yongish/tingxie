@@ -147,14 +147,10 @@ public class WordActivity extends AppCompatActivity {
                                         mWordViewModel.addWord(quizId, inputWord,
                                                 pinyin);
                                         // Update totalWords. Reset notLearned and round.
-                                        int totalWords = quizItem.getNumWords() + 1;
-                                        quizItem.setNumWords(1);
-                                        mWordViewModel.updateQuiz(quizItem
-//                                                new NetworkQuiz(quizItem.getQuizId(),
-//                                                quizItem.getDate(), quizItem.getTitle(),
-//                                                totalWords, totalWords,
-//                                                1)
-                                        );
+//                                        int totalWords = quizItem.getNumWords() + 1;
+//                                        quizItem.setNumWords(totalWords);
+//                                        mWordViewModel.updateQuiz(quizItem
+//                                        );
                                     } else {
                                         Toast.makeText(WordActivity.this,
                                                         "ERROR in pinyin lookup",

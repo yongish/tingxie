@@ -252,10 +252,11 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         final int adapterPosition = viewHolder.getAdapterPosition();
         final NetworkQuiz quizItem = mQuizItems.get(adapterPosition);
         final long quizId = quizItem.getQuizId();
-
+        // val deletedItem = viewModel.deleteQuiz(quizItem)   Look at comment below.
         Snackbar snackbar = Snackbar
                 .make(recyclerView, "Removed quiz", Snackbar.LENGTH_LONG)
                 .setAction("Undo", v -> {
+                    // viewModel.restoreQuiz(deletedItem)   Look at comment below.
                     mQuizItems.add(adapterPosition, quizItem);
                     notifyItemInserted(adapterPosition);
                     recyclerView.scrollToPosition(adapterPosition);
@@ -264,6 +265,12 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                     @Override
                     public void onDismissed(Snackbar transientBottomBar, int event) {
                         super.onDismissed(transientBottomBar, event);
+                        // 1/7/23: There may be a race condition here where changing
+                        // activity before onDismissed is triggered will cause the quiz
+                        // not to be deleted. If this is an issue in practice, 1 possible
+                        // solution is for viewModel.deleteQuiz to return
+                        // the individual_quiz_props id, and implement
+                        // viewModel.restoreQuiz(deletedItem).
                         viewModel.deleteQuiz(quizId);
                     }
                 });

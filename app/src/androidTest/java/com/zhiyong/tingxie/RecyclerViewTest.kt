@@ -19,6 +19,7 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.zhiyong.tingxie.ui.main.MainActivity
+import kotlinx.coroutines.runBlocking
 import org.hamcrest.*
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.After
@@ -154,21 +155,26 @@ class RecyclerViewTest {
 
     fun removeAllQuizzes(activityRule: ActivityScenarioRule<MainActivity>) {
       var count = 0
-      activityRule.scenario.onActivity {
-        val recyclerView = it.findViewById<RecyclerView>(R.id.recyclerview_main)
-        count = recyclerView.adapter?.itemCount ?: 0
+      runBlocking {
+        activityRule.scenario.onActivity {
+          val recyclerView = it.findViewById<RecyclerView>(R.id.recyclerview_main)
+          count = recyclerView.adapter?.itemCount ?: 0
+        }
       }
-      repeat(count) {
-        onView(withId(R.id.recyclerview_main)).perform(
-          RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-            0, ViewActions.swipeLeft()
+      try {
+        repeat(count) {
+          onView(withId(R.id.recyclerview_main)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+              0, ViewActions.swipeLeft()
+            )
           )
-        )
+        }
+      } catch (_: Exception) {
+
       }
       val recyclerView = onView(withId(R.id.recyclerview_main))
       recyclerView.check(RecyclerViewItemCountAssertion(0))
     }
-
 
     private fun atPosition(
       position: Int, itemMatcher: Matcher<View?>
