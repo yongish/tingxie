@@ -47,6 +47,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizViewHolder> {
 
@@ -252,10 +253,12 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         final int adapterPosition = viewHolder.getAdapterPosition();
         final NetworkQuiz quizItem = mQuizItems.get(adapterPosition);
         final long quizId = quizItem.getQuizId();
+        AtomicBoolean doDelete = new AtomicBoolean(true);
         // val deletedItem = viewModel.deleteQuiz(quizItem)   Look at comment below.
         Snackbar snackbar = Snackbar
                 .make(recyclerView, "Removed quiz", Snackbar.LENGTH_LONG)
                 .setAction("Undo", v -> {
+                    doDelete.set(false);
                     // viewModel.restoreQuiz(deletedItem)   Look at comment below.
                     mQuizItems.add(adapterPosition, quizItem);
                     notifyItemInserted(adapterPosition);
@@ -271,7 +274,9 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                         // solution is for viewModel.deleteQuiz to return
                         // the individual_quiz_props id, and implement
                         // viewModel.restoreQuiz(deletedItem).
-                        viewModel.deleteQuiz(quizId);
+                        if (doDelete.get()) {
+                            viewModel.deleteQuiz(quizId);
+                        }
                     }
                 });
         snackbar.show();
