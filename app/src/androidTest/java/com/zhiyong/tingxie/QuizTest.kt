@@ -5,7 +5,6 @@ import android.view.View
 import android.widget.DatePicker
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.recyclerview.widget.RecyclerView
-import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.UiController
@@ -32,7 +31,7 @@ import java.util.*
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-class MainActivityTest {
+class QuizTest {
 
   @get:Rule
   val activityRule = ActivityScenarioRule(MainActivity::class.java)
@@ -91,27 +90,27 @@ class MainActivityTest {
     onView(withText("Undo")).perform(click())
     tapAddViewWordButton(1)
     onView(withId(R.id.recyclerview_word)).check(RecyclerViewItemCountAssertion(2))
-//    checkWord(0, "杏")
-//    checkWord(1, "疫苗")
+    checkWord(0, "杏")
+    checkWord(1, "疫苗")
 
-//    tapBackButton()
-//    tapAddViewWordButton(0)
-//    onView(withId(R.id.recyclerview_word)).check(RecyclerViewItemCountAssertion(2))
-//    checkWord(0, "脚踏实地")
-//    checkWord(1, "卷心菜")
-//    tapBackButton()
-//    // Test quiz functionality.
-//    onView(withId(R.id.recyclerview_main)).perform(
-//      RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-//        0, clickOnViewChild(R.id.btnStartResume)
-//      )
-//    )
-//    onView(withId(R.id.btnShowAnswer)).perform(click())
-//    onView(withId(R.id.btnAnswerCorrect)).perform(click())
-//    tapBackButton()
-//    onView(withId(R.id.recyclerview_main)).check(matches(atPosition(
-//      0, hasDescendant(withText("1/2 remaining on round 1"))
-//    )))
+    tapBackButton()
+    tapAddViewWordButton(0)
+    onView(withId(R.id.recyclerview_word)).check(RecyclerViewItemCountAssertion(2))
+    checkWord(0, "脚踏实地")
+    checkWord(1, "卷心菜")
+    tapBackButton()
+    // Test quiz functionality.
+    onView(withId(R.id.recyclerview_main)).perform(
+      RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+        0, clickOnViewChild(R.id.btnStartResume)
+      )
+    )
+    onView(withId(R.id.btnShowAnswer)).perform(click())
+    onView(withId(R.id.btnAnswerCorrect)).perform(click())
+    tapBackButton()
+    onView(withId(R.id.recyclerview_main)).check(matches(atPosition(
+      0, hasDescendant(withText("1/2 remaining on round 1"))
+    )))
   }
 
   private fun addQuiz(c: Calendar) =
