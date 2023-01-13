@@ -19,7 +19,8 @@ class ShareActivity : AppCompatActivity() {
     setContentView(binding.root)
 
     if (savedInstanceState == null) {
-      supportFragmentManager.beginTransaction().replace(R.id.container, ShareFragment.newInstance()).commitNow()
+      supportFragmentManager.beginTransaction()
+        .replace(R.id.container, ShareFragment.newInstance()).commitNow()
     }
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
   }

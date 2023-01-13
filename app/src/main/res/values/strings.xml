@@ -73,7 +73,7 @@
     <string name="members">Members</string>
     <string name="error_in_downloading_groups">Error in downloading groups.</string>
     <string name="add_a_group">Add a group</string>
-    <string name="add_group">Add group</string>
+    <string name="add_these_people">Add these people</string>
     <string name="title_activity_group_member">Group Members</string>
     <string name="add_group_user">Add a user to a group</string>
     <string name="error_downloading_group_members">Error in downloading group members.</string>
@@ -96,4 +96,6 @@
     <string name="individual">Individual</string>
     <string name="group">Group</string>
     <string name="error_in_addquizgroupfragment">Error in AddQuizGroupFragment. Please contact yongish@gmail.com.</string>
+    <string name="single_person">Single person</string>
+    <string name="all_members_of_a_group">All members of a group</string>
 </resources>

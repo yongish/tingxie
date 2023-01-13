@@ -47,7 +47,10 @@ class AddQuizGroupFragment : Fragment() {
     if (userRole == null || email == null) {
       binding.otherErrorView.visibility = View.VISIBLE
     } else {
-      viewModel = ViewModelProvider(this, AddQuizGroupViewModelFactory(requireActivity().application, email))[AddQuizGroupViewModel::class.java]
+      viewModel = ViewModelProvider(
+        this,
+        AddQuizGroupViewModelFactory(requireActivity().application, email)
+      )[AddQuizGroupViewModel::class.java]
       adapter = AddQuizGroupAdapter(
         requireActivity(),
         viewModel,

@@ -21,7 +21,7 @@
         <activity
             android:name=".ui.add_quiz_group.AddQuizGroupActivity"
             android:exported="false"
-            android:label="Add group to quiz">
+            android:label="Add group's members to quiz">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -29,7 +29,7 @@
         <activity
             android:name=".ui.select_quiz_member_type.SelectQuizMemberTypeActivity"
             android:exported="false"
-            android:label="Add person or group to quiz">
+            android:label="Add quiz member(s)">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
