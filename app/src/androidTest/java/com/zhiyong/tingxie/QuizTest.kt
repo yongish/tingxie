@@ -32,7 +32,6 @@ import java.util.*
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 class QuizTest {
-
   @get:Rule
   val activityRule = ActivityScenarioRule(MainActivity::class.java)
 

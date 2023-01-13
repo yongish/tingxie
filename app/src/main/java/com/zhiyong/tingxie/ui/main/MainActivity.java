@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     QuizListAdapter adapter;
     String name;
     String email;
+    TextView emptyView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerview_main);
 
-        final TextView emptyView = findViewById(R.id.empty_view);
+        emptyView = findViewById(R.id.empty_view);
         mQuizViewModel = ViewModelProviders.of(this).get(QuizViewModel.class);
 
         adapter = new QuizListAdapter(this, mQuizViewModel, recyclerView);
@@ -209,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
                     newQuizId -> adapter.addQuizItem(new NetworkQuiz(newQuizId, "No " +
                             "title", date, email, EnumQuizRole.OWNER.name(), 0, 0, 1),
                             recyclerView));
+            emptyView.setVisibility(View.INVISIBLE);
         }
     }
 

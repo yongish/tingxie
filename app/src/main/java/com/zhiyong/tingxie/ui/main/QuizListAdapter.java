@@ -319,7 +319,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
             ivEditDate = itemView.findViewById(R.id.ivEditDate);
             btnAddViewWords = itemView.findViewById(R.id.btnAddViewWords);
             btnStartResume = itemView.findViewById(R.id.btnStartResume);
-            ivDelete = itemView.findViewById(R.id.btnDetails);
+            ivDelete = itemView.findViewById(R.id.btnMembers);
             ivShare = itemView.findViewById(R.id.ivShare);
         }
     }

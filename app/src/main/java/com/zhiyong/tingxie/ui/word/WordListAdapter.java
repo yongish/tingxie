@@ -169,7 +169,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
             tvPinyin = itemView.findViewById(R.id.tvPinyin);
             ivPlay = itemView.findViewById(R.id.ivPlay);
             wordLayout = itemView.findViewById(R.id.wordLayout);
-            ivDelete = itemView.findViewById(R.id.btnDetails);
+            ivDelete = itemView.findViewById(R.id.btnMembers);
         }
     }
 }

@@ -78,7 +78,7 @@ class AddQuizGroupAdapter(
 
   class ViewHolder(private val binding: RecyclerviewAddQuizGroupBinding) :
     RecyclerView.ViewHolder(binding.root) {
-    val btnDetails = binding.btnDetails
+    val btnDetails = binding.btnMembers
     val btnChooseGroup = binding.btnChooseGroup
 
     fun bind(group: NetworkGroup) = with(binding) {

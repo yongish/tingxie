@@ -94,7 +94,7 @@ class GroupFragment : Fragment() {
     frameLayout?.addView(editText)
     val builder = AlertDialog.Builder(requireActivity())
     builder.setTitle("Create group")
-      .setMessage("Create a new group.")
+      .setMessage("Name your new group.")
       .setView(frameLayout)
       .setPositiveButton(R.string.ok) { _, _ ->
         val name = editText.text.toString()

@@ -84,7 +84,7 @@ class GroupAdapter(
   class ViewHolder(private val binding: RecyclerviewGroupBinding) :
     RecyclerView.ViewHolder(binding.root) {
     val clIdentifier = binding.clIdentifier
-    val btnDetails = binding.btnDetails
+    val btnDetails = binding.btnMembers
 
     fun bind(group: NetworkGroup) = with(binding) {
       tvName.text = group.name

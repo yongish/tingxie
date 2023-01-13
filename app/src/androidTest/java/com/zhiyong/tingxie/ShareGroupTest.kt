@@ -5,7 +5,9 @@ import android.view.View
 import android.widget.DatePicker
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions
@@ -15,11 +17,15 @@ import androidx.test.espresso.contrib.PickerActions
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.core.internal.deps.guava.base.Preconditions
 import androidx.test.espresso.matcher.BoundedMatcher
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import com.zhiyong.tingxie.ui.main.MainActivity
+import org.hamcrest.CoreMatchers
+import org.hamcrest.CoreMatchers.anyOf
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
@@ -32,7 +38,7 @@ import java.util.*
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-class IndividualTest {
+class ShareGroupTest {
   @get:Rule
   val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
@@ -48,78 +54,84 @@ class IndividualTest {
   }
 
   @Test
-  fun shareQuiz() {
+  fun shareQuizWGroup() {
     // This test assumes that yongish@gmail.com and yongish@ymail.com are in Firebase.
     val c = Calendar.getInstance()
     addQuiz(c)
+
+    openActionBarOverflowOrOptionsMenu(getInstrumentation().targetContext);
+    onView(withText(R.string.groups)).perform(waitUntilVisible(10000L))
+    onView(anyOf(withText(R.string.groups), withId(R.id.action_groups))).perform(click());
+    onView(withId(R.id.fab)).perform(click())
+    onView(withClassName(CoreMatchers.endsWith("EditText"))).perform(
+      ViewActions.typeText("new group name")
+    )
+    onView(withText("OK")).perform(click())
+
+    onView(isRoot()).perform(ViewActions.pressBack());
+
     onView(withId(R.id.recyclerview_main)).perform(
       RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
         0, clickOnViewChild(R.id.ivShare)
       )
     )
-    onView(withId(R.id.recyclerview_shares)).check(
-      ViewAssertions.matches(
-        atPosition(
-          0,
-          hasDescendant(withText("Zhi Yong Tan"))
-        )
-      )
-    )
-    onView(withId(R.id.recyclerview_shares)).check(
-      ViewAssertions.matches(
-        atPosition(
-          0,
-          hasDescendant(withText("OWNER"))
-        )
-      )
-    )
+    onView(withId(R.id.recyclerview_shares)).check(ViewAssertions.matches(
+        atPosition(0, hasDescendant(withText("Zhi Yong Tan")))
+    ))
+    onView(withId(R.id.recyclerview_shares)).check(ViewAssertions.matches(
+        atPosition(0, hasDescendant(withText("OWNER")))
+    ))
     onView(withId(R.id.fab)).perform(click())
-    onView(withId(R.id.rbIndividual)).perform(click())
+    onView(withId(R.id.rbGroup)).perform(click())
     onView(withId(R.id.btnNext)).perform(click())
-    onView(withId(R.id.etEmail)).perform(ViewActions.replaceText("yongish@ymail.com"))
-    onView(withId(R.id.btnSubmit)).perform(click())
-    onView(withId(R.id.recyclerview_shares)).perform(waitUntilVisible(10000L))
-    onView(withId(R.id.recyclerview_shares)).check(
-      RecyclerViewItemCountAssertion(2)
-    )
-    onView(withId(R.id.recyclerview_shares)).check(
-      ViewAssertions.matches(
-        atPosition(1, hasDescendant(withText("Zhiyong Tan")))
-      )
-    )
-    onView(withId(R.id.recyclerview_shares)).check(
-      ViewAssertions.matches(
-        atPosition(1, hasDescendant(withText("MEMBER")))
-      )
-    )
-    onView(withId(R.id.recyclerview_shares)).perform(
-      RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-        1, clickOnViewChild(R.id.ivDelete)
-      )
-    )
-    onView(withId(android.R.id.button1)).perform(click())
-    onView(withId(R.id.recyclerview_shares)).check(
-      RecyclerViewItemCountAssertion(1)
-    )
+    onView(withId(R.id.btnChooseGroup)).perform(click())
+
+//    Espresso.onView(ViewMatchers.withId(R.id.etEmail)).perform(ViewActions.replaceText("yongish@ymail.com"))
+//    Espresso.onView(ViewMatchers.withId(R.id.btnSubmit)).perform(ViewActions.click())
+//    Espresso.onView(ViewMatchers.withId(R.id.recyclerview_shares)).perform(waitUntilVisible(10000L))
+//    Espresso.onView(ViewMatchers.withId(R.id.recyclerview_shares)).check(
+//      RecyclerViewItemCountAssertion(2)
+//    )
+//    Espresso.onView(ViewMatchers.withId(R.id.recyclerview_shares)).check(
+//      ViewAssertions.matches(
+//        atPosition(1, ViewMatchers.hasDescendant(ViewMatchers.withText("Zhiyong Tan")))
+//      )
+//    )
+//    Espresso.onView(ViewMatchers.withId(R.id.recyclerview_shares)).check(
+//      ViewAssertions.matches(
+//        atPosition(1, ViewMatchers.hasDescendant(ViewMatchers.withText("MEMBER")))
+//      )
+//    )
+//    Espresso.onView(ViewMatchers.withId(R.id.recyclerview_shares)).perform(
+//      RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+//        1, clickOnViewChild(R.id.ivDelete)
+//      )
+//    )
+//    Espresso.onView(ViewMatchers.withId(android.R.id.button1))
+//      .perform(ViewActions.click())
+//    Espresso.onView(ViewMatchers.withId(R.id.recyclerview_shares)).check(
+//      RecyclerViewItemCountAssertion(1)
+//    )
   }
 
   private fun addQuiz(c: Calendar) =
     addQuiz(c[Calendar.YEAR], c[Calendar.MONTH] + 1, c[Calendar.DATE])
 
   private fun addQuiz(year: Int?, monthOfYear: Int?, dayOfMonth: Int?) {
-    onView(withId(R.id.fab)).perform(click())
+    Espresso.onView(ViewMatchers.withId(R.id.fab)).perform(ViewActions.click())
     if (year != null && monthOfYear != null && dayOfMonth != null) {
-      onView(withClassName(Matchers.equalTo(DatePicker::class.java.name)))
+      Espresso.onView(ViewMatchers.withClassName(Matchers.equalTo(DatePicker::class.java.name)))
         .perform(PickerActions.setDate(year, monthOfYear, dayOfMonth))
     }
-    onView(withId(android.R.id.button1)).perform(click())
+    Espresso.onView(ViewMatchers.withId(android.R.id.button1))
+      .perform(ViewActions.click())
   }
 
   private fun clickOnViewChild(viewId: Int) = object : ViewAction {
     override fun getConstraints() = null
     override fun getDescription() = "Click on a child view with specified id."
     override fun perform(uiController: UiController, view: View) =
-      click().perform(uiController, view.findViewById(viewId))
+      ViewActions.click().perform(uiController, view.findViewById(viewId))
   }
 
   private fun atPosition(

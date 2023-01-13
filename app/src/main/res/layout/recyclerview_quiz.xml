@@ -80,7 +80,7 @@
         app:srcCompat="@drawable/ic_event_black_24dp" />
 
     <ImageView
-        android:id="@+id/btnDetails"
+        android:id="@+id/btnMembers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
