@@ -51,7 +51,7 @@ class AddQuizGroupAdapter(
       context.startActivity(intent)
     }
     holder.btnChooseGroup.setOnClickListener {
-      viewModel.addGroupMembersToQuiz(group.id, userRole).observe(viewLifecycleOwner) {
+      viewModel.addGroupMembersToQuiz(userRole.id, group.id).observe(viewLifecycleOwner) {
         try {
           if (Integer.valueOf(it) < 0) {
             Toast.makeText(

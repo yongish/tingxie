@@ -114,7 +114,6 @@ interface Service {
   suspend fun addGroupMembersToQuiz(
     @Path("quizId") quizId: Long,
     @Path("groupId") groupId: Long,
-    @Query("role") role: String
   ): String
 
   // todo: Not developing these endpoints below. Should clean up.

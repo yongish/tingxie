@@ -49,10 +49,10 @@ class AddQuizGroupViewModel(application: Application, email: String) : AndroidVi
     }
   }
 
-  fun addGroupMembersToQuiz(groupId: Long, userRole: UserRole): LiveData<String> {
+  fun addGroupMembersToQuiz(quizId: Long, groupId: Long): LiveData<String> {
     val result = MutableLiveData<String>()
     viewModelScope.launch(Dispatchers.IO) {
-      val numRows = repository.addGroupMembersToQuiz(groupId, userRole)
+      val numRows = repository.addGroupMembersToQuiz(quizId, groupId)
       result.postValue(numRows)
     }
     return result
