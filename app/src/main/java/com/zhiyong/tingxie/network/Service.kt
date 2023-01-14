@@ -111,7 +111,7 @@ interface Service {
   suspend fun getGroupsOfQuiz(@Path("quizId") quizId: Long): List<NetworkGroup>
 
   @PUT("quizzes/{quizId}/groups/{groupId}")
-  suspend fun addQuizGroup(
+  suspend fun addGroupMembersToQuiz(
     @Path("quizId") quizId: Long,
     @Path("groupId") groupId: Long,
     @Query("role") role: String
