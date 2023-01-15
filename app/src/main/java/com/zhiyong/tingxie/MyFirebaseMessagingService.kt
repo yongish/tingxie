@@ -7,11 +7,16 @@ import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.zhiyong.tingxie.network.NetworkToken
+import com.zhiyong.tingxie.network.TingXieNetwork
 import com.zhiyong.tingxie.ui.main.MainActivity
+import kotlinx.coroutines.runBlocking
 
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -24,20 +29,22 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
 //    p0.notification
 
-    Handler(Looper.getMainLooper()).post {
-      Toast.makeText(applicationContext, "Quiz shared with you.", Toast.LENGTH_SHORT).show()
-    }
+//    Handler(Looper.getMainLooper()).post {
+//      Toast.makeText(applicationContext, "Quiz shared with you.", Toast.LENGTH_SHORT).show()
+//    }
 
-    with (p0.notification?.title?.uppercase() ?: "") {
-      when {
-        contains("QUIZ SHARED") -> sendNotification("hello")
-        else -> ""
-      }
-
-    }
+    sendNotification(p0)
+//    with (p0.notification?.title?.uppercase() ?: "") {
+//      when {
+//        contains("QUIZ SHARED") -> sendNotification(p0.notification)
+//        else -> ""
+//      }
+//
+//    }
   }
 
-  private fun sendNotification(messageBody: String) {
+//  private fun sendNotification(messageBody: String) {
+  private fun sendNotification(p0: RemoteMessage) {
     val intent = Intent(this, MainActivity::class.java)
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
     val pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
@@ -46,9 +53,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     val channelId = "fcm_default_channel"
     val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
     val notificationBuilder = NotificationCompat.Builder(this, channelId)
-      .setContentTitle("FCM Message")
+      .setContentTitle(p0.notification?.title)
       .setSmallIcon(R.drawable.icon)
-      .setContentText(messageBody)
+      .setContentText(p0.notification?.body)
+      .setStyle(NotificationCompat.BigTextStyle().bigText(p0.notification?.body))
       .setAutoCancel(true)
       .setSound(defaultSoundUri)
       .setContentIntent(pendingIntent)
@@ -57,19 +65,21 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     notificationManager.notify(0 /* ID of notification */, notificationBuilder.build())
   }
 
-//  override fun onNewToken(p0: String) {
-//    super.onNewToken(p0)
-//
-//    val currentUser = FirebaseAuth.getInstance().currentUser
-//    val uid = currentUser?.uid
-//    val email = currentUser?.email
-//    if (uid != null && email != null) {
-//      try {
-////        TingXieNetwork.tingxie.putToken(NetworkToken(uid, email, p0))
-//      } catch (e: Exception) {
-//        // todo: Log to Crashlytics?
-//        Log.e("REFRESH TOKEN FAILED", e.message.orEmpty())
-//      }
-//    }
-//  }
+  override fun onNewToken(p0: String) {
+    super.onNewToken(p0)
+
+    val currentUser = FirebaseAuth.getInstance().currentUser
+    val uid = currentUser?.uid
+    val email = currentUser?.email
+    if (uid != null && email != null) {
+      try {
+        runBlocking {
+          TingXieNetwork.tingxie.putToken(NetworkToken(uid, email, p0))
+        }
+      } catch (e: Exception) {
+        // todo: Log to Crashlytics?
+        Log.e("REFRESH TOKEN FAILED", e.message.orEmpty())
+      }
+    }
+  }
 }
