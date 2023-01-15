@@ -9,6 +9,7 @@
         <package android:name="com.zhiyong.tingxie" />
     </queries>
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <application
         android:name="androidx.multidex.MultiDexApplication"
         android:allowBackup="true"
