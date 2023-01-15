@@ -13,6 +13,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.zhiyong.tingxie.ui.main.MainActivity
 
+
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
   override fun onMessageReceived(p0: RemoteMessage) {
@@ -46,7 +47,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
     val notificationBuilder = NotificationCompat.Builder(this, channelId)
       .setContentTitle("FCM Message")
-      .setSmallIcon(R.drawable.adaptive_icon)
+      .setSmallIcon(R.drawable.icon)
       .setContentText(messageBody)
       .setAutoCancel(true)
       .setSound(defaultSoundUri)
@@ -55,7 +56,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     notificationManager.notify(0 /* ID of notification */, notificationBuilder.build())
   }
-
 
 //  override fun onNewToken(p0: String) {
 //    super.onNewToken(p0)
