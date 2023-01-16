@@ -13,8 +13,13 @@ import com.google.firebase.messaging.RemoteMessage
 import com.zhiyong.tingxie.network.NetworkQuiz
 import com.zhiyong.tingxie.network.NetworkToken
 import com.zhiyong.tingxie.network.TingXieNetwork
+import com.zhiyong.tingxie.ui.EXTRA_USER_ROLE
+import com.zhiyong.tingxie.ui.UserRole
+import com.zhiyong.tingxie.ui.group.GroupActivity
+import com.zhiyong.tingxie.ui.group_member.GroupMemberActivity
 import com.zhiyong.tingxie.ui.main.MainActivity
 import com.zhiyong.tingxie.ui.question.RemoteQuestionActivity
+import com.zhiyong.tingxie.ui.share.EnumQuizRole
 import com.zhiyong.tingxie.ui.word.WordActivity
 import kotlinx.coroutines.runBlocking
 
@@ -27,26 +32,39 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
   }
 
   private fun sendNotification(p0: RemoteMessage) {
-    val activity = when (p0.data["action"]) {
-      "" -> MainActivity::class.java
-      else -> MainActivity::class.java
+    val intent = with(p0.data["action"]) {
+      when {
+        this?.equals("QUIZ_MEMBER_ADD") == true || this?.startsWith("QUIZ_ROLE_CHANGE") == true -> {
+          Intent(baseContext, WordActivity::class.java).putExtra(
+            RemoteQuestionActivity.EXTRA_QUIZ_ITEM,
+            NetworkQuiz(
+              p0.data["entityId"]?.toLong() ?: -1,
+              p0.data["title"] ?: "NO TITLE",
+              p0.data["date"]?.toInt() ?: -1,
+              p0.data["email"] ?: "NO EMAIL",
+              p0.data["role"] ?: "NO ROLE",
+              p0.data["numWords"]?.toInt() ?: -1,
+              p0.data["numNotCorrect"]?.toInt() ?: -1,
+              p0.data["round"]?.toInt() ?: -1
+            )
+          )
+        }
+        this?.equals("GROUP_MEMBER_ADD") == true -> {
+          Intent(baseContext, GroupMemberActivity::class.java).putExtra(
+            EXTRA_USER_ROLE,
+            UserRole(
+              p0.data["groupId"]?.toLong() ?: -1,
+              EnumQuizRole.valueOf(p0.data["role"] ?: "")
+            )
+          )
+        }
+        this?.equals("GROUP_DELETE") == true || this?.equals("GROUP_MEMBER_REMOVE") == true -> Intent(
+          baseContext,
+          GroupActivity::class.java
+        )
+        else -> Intent(baseContext, MainActivity::class.java)
+      }
     }
-//    val intent = Intent(this, activity)
-
-    val intent = Intent(this, WordActivity::class.java)
-    intent.putExtra(
-      RemoteQuestionActivity.EXTRA_QUIZ_ITEM,
-      NetworkQuiz(
-        p0.data["entityId"]?.toLong() ?: -1,
-        p0.data["title"] ?: "NO TITLE",
-        p0.data["date"]?.toInt() ?: -1,
-        p0.data["email"] ?: "NO EMAIL",
-        p0.data["role"] ?: "NO ROLE",
-        p0.data["numWords"]?.toInt() ?: -1,
-        p0.data["numNotCorrect"]?.toInt() ?: -1,
-        p0.data["round"]?.toInt() ?: -1
-      )
-    )
 
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
     val pendingIntent =
@@ -68,6 +86,46 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
       getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     notificationManager.notify(0 /* ID of notification */, notificationBuilder.build())
   }
+
+//  private fun getIntent(p0: RemoteMessage): Intent {
+//    return with(p0.data["action"]) {
+//      when {
+//        this?.equals("QUIZ_MEMBER_ADD") == true || this?.startsWith("QUIZ_ROLE_CHANGE") == true -> {
+//          val i = Intent(baseContext, WordActivity::class.java)
+//          i.putExtra(
+//            RemoteQuestionActivity.EXTRA_QUIZ_ITEM,
+//            NetworkQuiz(
+//              p0.data["entityId"]?.toLong() ?: -1,
+//              p0.data["title"] ?: "NO TITLE",
+//              p0.data["date"]?.toInt() ?: -1,
+//              p0.data["email"] ?: "NO EMAIL",
+//              p0.data["role"] ?: "NO ROLE",
+//              p0.data["numWords"]?.toInt() ?: -1,
+//              p0.data["numNotCorrect"]?.toInt() ?: -1,
+//              p0.data["round"]?.toInt() ?: -1
+//            )
+//          )
+//          return i
+//        }
+//        this?.equals("GROUP_MEMBER_ADD") == true -> {
+//          val i = Intent(baseContext, GroupMemberActivity::class.java)
+//          i.putExtra(
+//            EXTRA_USER_ROLE,
+//            UserRole(
+//              p0.data["groupId"]?.toLong() ?: -1,
+//              EnumQuizRole.valueOf(p0.data["role"] ?: "")
+//            )
+//          )
+//          return i
+//        }
+//        this?.equals("GROUP_DELETE") == true || this?.equals("GROUP_MEMBER_REMOVE") == true -> Intent(
+//          baseContext,
+//          GroupActivity::class.java
+//        )
+//        else -> Intent(baseContext, MainActivity::class.java)
+//      }
+//    }
+//  }
 
   override fun onNewToken(p0: String) {
     super.onNewToken(p0)
