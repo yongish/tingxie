@@ -23,13 +23,13 @@
         android:onClick="openGroups"
         android:icon="@drawable/ic_people_white_24dp"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/action_friends"
-        android:orderInCategory="100"
-        android:title="@string/friends"
-        android:onClick="openFriends"
-        android:icon="@drawable/ic_people_white_24dp"
-        app:showAsAction="ifRoom" />
+<!--    <item-->
+<!--        android:id="@+id/action_friends"-->
+<!--        android:orderInCategory="100"-->
+<!--        android:title="@string/friends"-->
+<!--        android:onClick="openFriends"-->
+<!--        android:icon="@drawable/ic_people_white_24dp"-->
+<!--        app:showAsAction="ifRoom" />-->
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
