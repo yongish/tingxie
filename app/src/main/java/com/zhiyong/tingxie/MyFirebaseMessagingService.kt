@@ -4,6 +4,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.media.RingtoneManager
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -75,6 +76,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
       RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
     val notificationBuilder = NotificationCompat.Builder(this, channelId)
       .setContentTitle(p0.notification?.title)
+      .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.icon))
       .setSmallIcon(R.drawable.icon)
       .setContentText(p0.notification?.body)
       .setStyle(NotificationCompat.BigTextStyle().bigText(p0.notification?.body))

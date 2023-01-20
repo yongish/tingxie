@@ -50,7 +50,8 @@ class ShareAdapter(
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val user = users[position]
     holder.bind(user)
-    if (role == EnumQuizRole.OWNER || role == EnumQuizRole.MEMBER) {
+//    if (role == EnumQuizRole.OWNER || role == EnumQuizRole.MEMBER) {
+    if (role == EnumQuizRole.OWNER) {
       holder.ivEditRole.visibility = View.INVISIBLE
     }
     if (role == EnumQuizRole.MEMBER) {
