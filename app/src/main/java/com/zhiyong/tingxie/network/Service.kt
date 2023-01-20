@@ -186,8 +186,8 @@ interface Service {
 
 object TingXieNetwork {
   private val retrofit = Retrofit.Builder()
-//    .baseUrl("http://10.0.2.2:8000/") // todo: Replace with production URL.
-    .baseUrl("http://10.0.2.2:9000/") // todo: Replace with production URL.
+//    .baseUrl("http://10.0.2.2:9000/") // todo: Replace with production URL.
+    .baseUrl("https://h1b1club.com/") // Production URL.
     .addConverterFactory(MoshiConverterFactory.create().asLenient())
     .build()
 
