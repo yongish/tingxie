@@ -58,7 +58,7 @@ class ShareAdapter(
       holder.ivDelete.visibility = View.INVISIBLE
     } else {
       holder.clIdentifier.setOnClickListener {
-        if (user.role == EnumQuizRole.OWNER.name) {
+        if (user.role == EnumQuizRole.OWNER.name && users.filter { it.role == EnumQuizRole.OWNER.name }.size == 1) {
           AlertDialog.Builder(context)
             .setTitle("Role change not allowed")
             .setMessage("You must appoint someone else as the quiz owner before changing your own role.")
