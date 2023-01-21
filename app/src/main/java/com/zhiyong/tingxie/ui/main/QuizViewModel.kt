@@ -77,6 +77,11 @@ class QuizViewModel(application: Application) : UpdateQuizViewModel(application)
         return result
     }
 
+//    fun migrate(): LiveData<Boolean> {
+//        mRepository.getLocalQuizzes()
+//
+//    }
+
     fun onNetworkErrorShown() {
         _isNetworkErrorShown.value = true
     }

@@ -1,6 +1,8 @@
 package com.zhiyong.tingxie.ui.main;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,6 +50,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Upload words to remote if not done already.
+        SharedPreferences uploaded = this.getSharedPreferences("uploaded", Context.MODE_PRIVATE);
+        if (uploaded.getBoolean("uploaded", false)) {
+            restOfOnCreate();
+        } else {
+//            mQuizViewModel.getAllQuizItems().observe(this,
+//                    // rest of onCreate function.
+//                    );
+        }
+    }
+
+    private void restOfOnCreate() {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -111,15 +126,6 @@ public class MainActivity extends AppCompatActivity {
 //        mQuizViewModel.getQuizzes().observe(this, quizzes -> {
 //            adapter.setQuizItems();
 //        });
-
-        /* todo: getAllQuestions() and getAllQuizPinyins() here may be unnecessary.
-         */
-//        mQuizViewModel.getAllQuestions().observe(this, questions ->
-//                adapter.setQuestions(questions)
-//        );
-//        mQuizViewModel.getAllQuizPinyins().observe(this, quizPinyins ->
-//                adapter.setQuizPinyins(quizPinyins)
-//        );
 
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
                 0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT
