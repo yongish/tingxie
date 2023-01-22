@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                                                         quizPinyins.stream()
                                                                 .filter(quizPinyin -> quizPinyin.getQuizId() == quiz.getId())
                                                                 .collect(Collectors.toList())
-                                                                .stream().map(quizPinyin -> new MigrateWord(quizPinyin.getPinyinString(), quizPinyin.getCharacters(), quizPinyin.getAsked())).collect(Collectors.toList()))
+                                                                .stream().map(quizPinyin -> new MigrateWord(quizPinyin.getPinyinString(), quizPinyin.getWordString(), quizPinyin.isAsked())).collect(Collectors.toList()))
                                         ).collect(Collectors.toList()))
                                 )
                         )

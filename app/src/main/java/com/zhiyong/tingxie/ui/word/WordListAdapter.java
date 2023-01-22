@@ -115,7 +115,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
                     public void onClick(View v) {
 //                        viewModel.addQuizPinyin(quizPinyin);
 
-                        viewModel.addWord(quizPinyin.getQuizId(), quizPinyin.getCharacters(), quizPinyin.getPinyinString());
+                        viewModel.addWord(quizPinyin.getQuizId(), quizPinyin.getWordString(), quizPinyin.getPinyinString());
 
                         viewModel.updateQuiz(quizItem);
 //                        mWordItems.add(adapterPosition, wordItem);
