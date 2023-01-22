@@ -14,7 +14,7 @@ interface Service {
   suspend fun getQuizzes(@Path("email") email: String): List<NetworkQuiz>
 
   @POST("migrateLocal")
-  suspend fun migrateLocal(@Body localData: MigrateLocal): String
+  suspend fun migrateLocal(@Body localData: MigrateLocal): List<NetworkQuiz>
 
   @POST("quizzes")
   suspend fun postQuiz(@Body quiz: NetworkCreateQuiz): Long

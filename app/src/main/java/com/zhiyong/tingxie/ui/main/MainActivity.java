@@ -55,6 +55,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener((View v) -> {
+            DialogFragment newFragment = new DatePickerFragment();
+            newFragment.show(getSupportFragmentManager(),
+                    getString(R.string.datepicker));
+        });
+
+        recyclerView = findViewById(R.id.recyclerview_main);
+
+        emptyView = findViewById(R.id.empty_view);
+
+        adapter = new QuizListAdapter(this, mQuizViewModel, recyclerView);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         mQuizViewModel = ViewModelProviders.of(this).get(QuizViewModel.class);
         // Upload words to remote if not done already.
@@ -81,7 +99,14 @@ public class MainActivity extends AppCompatActivity {
                                                                 .collect(Collectors.toList())
                                                                 .stream().map(quizPinyin -> new MigrateWord(quizPinyin.getPinyinString(), quizPinyin.getWordString(), quizPinyin.isAsked())).collect(Collectors.toList()))
                                         ).collect(Collectors.toList()))
-                                )
+                                ).observe(this, quizItems -> {
+                                    adapter.setQuizItems(quizItems, recyclerView);
+                                    if (quizItems.isEmpty()) {
+                                        emptyView.setVisibility(View.VISIBLE);
+                                    } else {
+                                        emptyView.setVisibility(View.INVISIBLE);
+                                    }
+                                })
                         )
                 );
 //                SharedPreferences.Editor editor = uploaded.edit();
@@ -93,34 +118,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void restOfOnCreate() {
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener((View v) -> {
-            DialogFragment newFragment = new DatePickerFragment();
-            newFragment.show(getSupportFragmentManager(),
-                    getString(R.string.datepicker));
-        });
-
-        recyclerView = findViewById(R.id.recyclerview_main);
-
-        emptyView = findViewById(R.id.empty_view);
-
-        adapter = new QuizListAdapter(this, mQuizViewModel, recyclerView);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        /**
-         * todo: After implmenting remote CRUD, fetch everything from Room
-         * here and write to remote. Have a SharedPreference flag to indicate
-         * if remote writes have been made.
-         */
-//    mQuizViewModel.getAllQuizItems().observe(this, quizItems -> {
-//
-//        });
-
         mQuizViewModel.getAllQuizItems().observe(this, quizItems -> {
             adapter.setQuizItems(quizItems, recyclerView);
             if (quizItems.isEmpty()) {

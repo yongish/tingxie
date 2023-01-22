@@ -65,7 +65,7 @@ class QuizRepository(val context: Context) {
 
   suspend fun getQuizzes(): List<NetworkQuiz> = TingXieNetwork.tingxie.getQuizzes(email)
 
-  suspend fun migrateLocal(localData: MigrateLocal): String = TingXieNetwork.tingxie.migrateLocal(localData)
+  suspend fun migrateLocal(localData: MigrateLocal): List<NetworkQuiz> = TingXieNetwork.tingxie.migrateLocal(localData)
 
   suspend fun getWordItemsOfQuiz(quizId: Long): List<WordItem> =
     TingXieNetwork.tingxie.getWordItemsOfQuiz(quizId)

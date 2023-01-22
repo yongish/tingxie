@@ -19,8 +19,13 @@ class QuizViewModel(application: Application) : UpdateQuizViewModel(application)
     // Have a flag to check if remote DB has been successfully updated.
     val localQuizzes: LiveData<List<Quiz>> = mRepository.localQuizzes
     val localQuizPinyins: LiveData<List<QuizPinyin>> = mRepository.localQuizPinyins
-    fun migrate(migrateQuizzes: MigrateLocal) = viewModelScope.launch {
-        mRepository.migrateLocal(migrateQuizzes)
+    fun migrate(migrateQuizzes: MigrateLocal): LiveData<List<NetworkQuiz>> {
+        val result = MutableLiveData<List<NetworkQuiz>>()
+        viewModelScope.launch(Dispatchers.IO) {
+            val quizzes = mRepository.migrateLocal(migrateQuizzes)
+            result.postValue(quizzes)
+        }
+        return result
     }
 
 //    val allQuestions: LiveData<List<Question>> = mRepository.allQuestions
