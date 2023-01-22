@@ -11,9 +11,9 @@ public class Word {
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "word_string")
-    private final String wordString;
+    private String wordString;
     @ColumnInfo(name = "pinyin_string")
-    private final String pinyinString;
+    private String pinyinString;
 
     public Word(@NonNull String wordString, @NonNull String pinyinString) {
         this.wordString = wordString;

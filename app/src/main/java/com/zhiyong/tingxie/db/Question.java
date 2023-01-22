@@ -16,15 +16,15 @@ public class Question {
     @NonNull
     private long id;
 
-    private final long timestamp;
+    private long timestamp;
 
-    private final long reset_time;
+    private long reset_time;
 
-    private final String pinyin_string;
+    private String pinyin_string;
 
-    private final boolean correct;
+    private boolean correct;
 
-    private final long quiz_id;
+    private long quiz_id;
 
     public Question(@NonNull long timestamp, long reset_time,
                     @NonNull String pinyin_string, @NonNull boolean correct,
@@ -97,8 +97,7 @@ public class Question {
         }
 
         public Question build() {
-            return new Question(nestedTimestamp, nestedTimestamp, nestedPinyinString,
-                    nestedCorrect,
+            return new Question(nestedTimestamp, nestedTimestamp, nestedPinyinString, nestedCorrect,
                     nestedQuizId);
         }
     }
