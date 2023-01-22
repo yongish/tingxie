@@ -26,7 +26,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.zhiyong.tingxie.R;
-import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.network.NetworkQuiz;
 import com.zhiyong.tingxie.ui.friend.FriendActivity;
 import com.zhiyong.tingxie.ui.group.GroupActivity;
@@ -35,8 +34,6 @@ import com.zhiyong.tingxie.ui.login.LoginActivity;
 import com.zhiyong.tingxie.ui.share.EnumQuizRole;
 import com.zhiyong.tingxie.viewmodel.Status;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -77,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         mQuizViewModel = ViewModelProviders.of(this).get(QuizViewModel.class);
         // Upload words to remote if not done already.
         SharedPreferences uploaded = this.getSharedPreferences("uploaded", Context.MODE_PRIVATE);
-//        if (uploaded.getBoolean("uploaded", false)) {
+        if (uploaded.getBoolean("uploaded", false)) {
             FirebaseUser user = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser());
             String email = user.getEmail();
             String name = user.getDisplayName();
@@ -106,18 +103,15 @@ public class MainActivity extends AppCompatActivity {
                                     } else {
                                         emptyView.setVisibility(View.INVISIBLE);
                                     }
+                                    SharedPreferences.Editor editor = uploaded.edit();
+                                    editor.putBoolean("uploaded", true);
+                                    editor.apply();
                                 })
                         )
                 );
-//                SharedPreferences.Editor editor = uploaded.edit();
-//                editor.putBoolean("uploaded", true);
-//                editor.apply();
             }
-//        }
-        restOfOnCreate();
-    }
+        }
 
-    private void restOfOnCreate() {
         mQuizViewModel.getAllQuizItems().observe(this, quizItems -> {
             adapter.setQuizItems(quizItems, recyclerView);
             if (quizItems.isEmpty()) {
