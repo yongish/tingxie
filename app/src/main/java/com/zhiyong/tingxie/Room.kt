@@ -10,7 +10,7 @@ import com.zhiyong.tingxie.db.*
 
 @Database(entities =
 [Question::class, Quiz::class, Word::class, QuizPinyin::class, QuizRole::class],
-        version = 9)
+        version = 6)
 abstract class PinyinRoomDatabase : RoomDatabase() {
     fun pinyinDao(): QuizDao {
         return pinyinDao
