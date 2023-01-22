@@ -26,6 +26,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.zhiyong.tingxie.R;
+import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.network.NetworkQuiz;
 import com.zhiyong.tingxie.ui.friend.FriendActivity;
 import com.zhiyong.tingxie.ui.group.GroupActivity;
@@ -34,7 +35,11 @@ import com.zhiyong.tingxie.ui.login.LoginActivity;
 import com.zhiyong.tingxie.ui.share.EnumQuizRole;
 import com.zhiyong.tingxie.viewmodel.Status;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -51,15 +56,41 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mQuizViewModel = ViewModelProviders.of(this).get(QuizViewModel.class);
         // Upload words to remote if not done already.
-        SharedPreferences uploaded = this.getSharedPreferences("uploaded", Context.MODE_PRIVATE);
+        SharedPreferences uploaded = this.getSharedPreferences("uploaded",
+                Context.MODE_PRIVATE);
         if (uploaded.getBoolean("uploaded", false)) {
-            restOfOnCreate();
-        } else {
-//            mQuizViewModel.getAllQuizItems().observe(this,
-//                    // rest of onCreate function.
-//                    );
+            FirebaseUser user = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser());
+            String email = user.getEmail();
+            String name = user.getDisplayName();
+            if (email != null) {
+                mQuizViewModel.getLocalQuizPinyins().observe(this, quizPinyins ->
+                        mQuizViewModel.getLocalQuizzes().observe(this, quizzes ->
+                                mQuizViewModel.migrate(new MigrateLocal(
+                                        email,
+                                        name,
+                                        quizzes.stream().map(quiz ->
+                                                new MigrateQuiz(
+                                                        quiz.getDate(),
+                                                        quiz.getTitle(),
+                                                        quiz.getTotalWords(),
+                                                        quiz.getNotLearned(),
+                                                        quiz.getRound(),
+                                                        quizPinyins.stream()
+                                                                .filter(quizPinyin -> quizPinyin.getQuizId() == quiz.getId())
+                                                                .collect(Collectors.toList())
+                                                                .stream().map(quizPinyin -> new MigrateWord(quizPinyin.getPinyinString(), quizPinyin.getCharacters(), quizPinyin.getAsked())).collect(Collectors.toList()))
+                                        ).collect(Collectors.toList()))
+                                )
+                        )
+                );
+//                SharedPreferences.Editor editor = uploaded.edit();
+//                editor.putBoolean("uploaded", true);
+//                editor.apply();
+            }
         }
+        restOfOnCreate();
     }
 
     private void restOfOnCreate() {
@@ -77,7 +108,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerview_main);
 
         emptyView = findViewById(R.id.empty_view);
-        mQuizViewModel = ViewModelProviders.of(this).get(QuizViewModel.class);
 
         adapter = new QuizListAdapter(this, mQuizViewModel, recyclerView);
         recyclerView.setAdapter(adapter);
@@ -214,7 +244,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             mQuizViewModel.createQuiz("No title", date).observe(this,
                     newQuizId -> adapter.addQuizItem(new NetworkQuiz(newQuizId, "No " +
-                            "title", date, email, EnumQuizRole.OWNER.name(), 0, 0, 1),
+                                    "title", date, email, EnumQuizRole.OWNER.name(), 0
+                                    , 0, 1),
                             recyclerView));
             emptyView.setVisibility(View.INVISIBLE);
         }

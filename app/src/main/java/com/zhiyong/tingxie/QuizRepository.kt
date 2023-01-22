@@ -1,13 +1,14 @@
 package com.zhiyong.tingxie
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.db.*
 import com.zhiyong.tingxie.network.*
-import com.zhiyong.tingxie.ui.UserRole
 import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
 import com.zhiyong.tingxie.ui.hsk.words.HskWordsAdapter
+import com.zhiyong.tingxie.ui.main.MigrateLocal
 import com.zhiyong.tingxie.ui.word.WordItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -24,6 +25,10 @@ from a network or use results cached in the local database. */
 class QuizRepository(val context: Context) {
   // todo: val database: PinyinRoomDatabase instead of val context: Context.
   private val mQuizDao: QuizDao = getDatabase(context).pinyinDao
+
+  // For migration. Implemented on 1/20/23. Remove these 2 lines after a few years.
+  val localQuizzes: LiveData<List<Quiz>> = mQuizDao.allQuizItems
+  val localQuizPinyins: LiveData<List<QuizPinyin>> = mQuizDao.allQuizPinyins
 
   private val executor: ExecutorService = Executors.newSingleThreadExecutor()
 
@@ -59,6 +64,8 @@ class QuizRepository(val context: Context) {
   }
 
   suspend fun getQuizzes(): List<NetworkQuiz> = TingXieNetwork.tingxie.getQuizzes(email)
+
+  suspend fun migrateLocal(localData: MigrateLocal): String = TingXieNetwork.tingxie.migrateLocal(localData)
 
   suspend fun getWordItemsOfQuiz(quizId: Long): List<WordItem> =
     TingXieNetwork.tingxie.getWordItemsOfQuiz(quizId)

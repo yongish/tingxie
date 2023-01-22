@@ -1,5 +1,6 @@
 package com.zhiyong.tingxie.network
 
+import com.zhiyong.tingxie.ui.main.MigrateLocal
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
@@ -11,6 +12,9 @@ interface Service {
 
   @GET("users/{email}/quizzes")
   suspend fun getQuizzes(@Path("email") email: String): List<NetworkQuiz>
+
+  @POST("migrateLocal")
+  suspend fun migrateLocal(@Body localData: MigrateLocal): String
 
   @POST("quizzes")
   suspend fun postQuiz(@Body quiz: NetworkCreateQuiz): Long
@@ -186,8 +190,8 @@ interface Service {
 
 object TingXieNetwork {
   private val retrofit = Retrofit.Builder()
-//    .baseUrl("http://10.0.2.2:9000/") // Emulator
-    .baseUrl("https://h1b1club.com/") // Production URL.
+    .baseUrl("http://10.0.2.2:9000/") // Emulator
+//    .baseUrl("https://h1b1club.com/") // Production URL.
     .addConverterFactory(MoshiConverterFactory.create().asLenient())
     .build()
 

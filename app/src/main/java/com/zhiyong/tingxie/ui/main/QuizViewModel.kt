@@ -1,15 +1,12 @@
 package com.zhiyong.tingxie.ui.main
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.zhiyong.tingxie.QuizRepository
-import com.zhiyong.tingxie.db.Question
 import com.zhiyong.tingxie.db.Quiz
 import com.zhiyong.tingxie.db.QuizPinyin
-import com.zhiyong.tingxie.network.NetworkCreateQuiz
 import com.zhiyong.tingxie.network.NetworkQuiz
 import com.zhiyong.tingxie.ui.word.WordItem
 import com.zhiyong.tingxie.viewmodel.Status
@@ -20,8 +17,12 @@ import kotlinx.coroutines.launch
 class QuizViewModel(application: Application) : UpdateQuizViewModel(application) {
     // todo: After implementing fetch from remote, use these to update remote DB.
     // Have a flag to check if remote DB has been successfully updated.
-//    val allQuizItems: LiveData<List<QuizItem>> = mRepository.quizzes
-//    val allQuizPinyins: LiveData<List<QuizPinyin>> = mRepository.allQuizPinyins
+    val localQuizzes: LiveData<List<Quiz>> = mRepository.localQuizzes
+    val localQuizPinyins: LiveData<List<QuizPinyin>> = mRepository.localQuizPinyins
+    fun migrate(migrateQuizzes: MigrateLocal) = viewModelScope.launch {
+        mRepository.migrateLocal(migrateQuizzes)
+    }
+
 //    val allQuestions: LiveData<List<Question>> = mRepository.allQuestions
 
     private var _eventNetworkError = MutableLiveData(false)
@@ -76,11 +77,6 @@ class QuizViewModel(application: Application) : UpdateQuizViewModel(application)
         }
         return result
     }
-
-//    fun migrate(): LiveData<Boolean> {
-//        mRepository.getLocalQuizzes()
-//
-//    }
 
     fun onNetworkErrorShown() {
         _isNetworkErrorShown.value = true
