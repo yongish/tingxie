@@ -98,4 +98,6 @@
     <string name="error_in_addquizgroupfragment">Error in AddQuizGroupFragment. Please contact yongish@gmail.com.</string>
     <string name="single_person">Single person</string>
     <string name="all_members_of_a_group">All members of a group</string>
+    <string name="error_in_exercisetypefragment_please_contact_yongish_gmail_com">Error in ExerciseTypeFragment. Please contact yongish@gmail.com.</string>
+    <string name="error_in_downloading_exercise_types">Error in downloading exercise types</string>
 </resources>

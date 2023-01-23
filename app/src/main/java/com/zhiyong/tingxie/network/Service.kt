@@ -120,6 +120,10 @@ interface Service {
     @Path("groupId") groupId: Long,
   ): String
 
+  @GET("exerciseTypes/{gradeLevel}/email/{email}")
+  suspend fun getExerciseTypes(@Path("gradeLevel") gradeLevel: Int,
+                               @Path("email") email: String): List<NetworkExerciseType>
+
   // todo: Not developing these endpoints below. Should clean up.
   @GET("shares/email/{email}/quiz_id/{quizId}")
   suspend fun getShares(

@@ -140,6 +140,17 @@ data class NetworkGroup(
   val numMembers: Int
 ) : Parcelable
 
+@Parcelize
+@JsonClass(generateAdapter = true)
+data class NetworkExerciseType(
+  val id: Long,
+  val name: String,
+  val totalCount: Int,
+  val completedCount: Int
+) : Parcelable
+
+
+
 // todo: Not using these data classes below. Should clean up.
 @JsonClass(generateAdapter = true)
 data class NetworkIndividualContainer(val individuals: List<NetworkIndividual>)

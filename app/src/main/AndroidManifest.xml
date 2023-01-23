@@ -10,6 +10,7 @@
     </queries>
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
         android:name="androidx.multidex.MultiDexApplication"
         android:allowBackup="true"
@@ -20,9 +21,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ExerciseTypeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.add_quiz_group.AddQuizGroupActivity"
             android:exported="false"
-            android:label="Add group's members to quiz">
+            android:label="Add group&apos;s members to quiz">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
