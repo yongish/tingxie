@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -78,7 +79,9 @@ public class MainActivity extends AppCompatActivity {
             FirebaseUser user = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser());
             String email = user.getEmail();
             String name = user.getDisplayName();
-            if (email != null) {
+            if (email == null) {
+                Toast.makeText(this, "Error. Your quiz data may be lost. Please contact yongish@gmail.com.", Toast.LENGTH_LONG).show();
+            } else {
                 mQuizViewModel.getLocalQuizPinyins().observe(this, quizPinyins ->
                         mQuizViewModel.getLocalQuizzes().observe(this, quizzes ->
                                 mQuizViewModel.migrate(new MigrateLocal(
@@ -106,12 +109,18 @@ public class MainActivity extends AppCompatActivity {
                                     SharedPreferences.Editor editor = uploaded.edit();
                                     editor.putBoolean("uploaded", true);
                                     editor.apply();
+
+                                    restOfOnCreate();
                                 })
                         )
                 );
             }
+        } else {
+            restOfOnCreate();
         }
+    }
 
+    private void restOfOnCreate() {
         mQuizViewModel.getAllQuizItems().observe(this, quizItems -> {
             adapter.setQuizItems(quizItems, recyclerView);
             if (quizItems.isEmpty()) {
@@ -140,13 +149,6 @@ public class MainActivity extends AppCompatActivity {
                 })
         );
 
-//        mQuizViewModel.getEventNetworkError().observe(this, isNetworkError -> {
-//            if (isNetworkError) onNetworkError();
-//        });
-//        mQuizViewModel.getQuizzes().observe(this, quizzes -> {
-//            adapter.setQuizItems();
-//        });
-
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
                 0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT
         ) {
@@ -174,6 +176,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+//        mQuizViewModel.getEventNetworkError().observe(this, isNetworkError -> {
+//            if (isNetworkError) onNetworkError();
+//        });
+//        mQuizViewModel.getQuizzes().observe(this, quizzes -> {
+//            adapter.setQuizItems();
+//        });
+
     }
 
     @Override
