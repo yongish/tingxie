@@ -51,7 +51,6 @@ class RemoteQuestionActivity : AppCompatActivity() {
 
     btnErase = findViewById(R.id.btnErase)
     btnErase.setOnClickListener {
-      Toast.makeText(this, "AAAAAAAAAAAAAAAAAAAAAAAAAAA", Toast.LENGTH_LONG).show()
       myCanvasView.erase()
     }
 
