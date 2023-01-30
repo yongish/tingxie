@@ -190,8 +190,8 @@ interface Service {
 
 object TingXieNetwork {
   private val retrofit = Retrofit.Builder()
-    .baseUrl("http://10.0.2.2:9000/") // Emulator
-//    .baseUrl("https://h1b1club.com/") // Production URL.
+//    .baseUrl("http://10.0.2.2:9000/") // Emulator
+    .baseUrl("https://h1b1club.com/") // Production URL.
     .addConverterFactory(MoshiConverterFactory.create().asLenient())
     .build()
 
