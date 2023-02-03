@@ -77,59 +77,60 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences uploaded = this.getSharedPreferences("uploaded",
                 Context.MODE_PRIVATE);
         boolean hasUploaded = uploaded.getBoolean("uploaded", false);
-//        if (hasUploaded) {
-//            mQuizViewModel.getAllQuizItems().observe(this, quizItems -> {
-//                adapter.setQuizItems(quizItems, recyclerView);
-//                if (quizItems.isEmpty()) {
-//                    emptyView.setVisibility(View.VISIBLE);
-//                } else {
-//                    emptyView.setVisibility(View.INVISIBLE);
-//                }
-//            });
-//
-//            restOfOnCreate();
-//        } else {
-        FirebaseUser user =
-                Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser());
-        String email = user.getEmail();
-        String name = user.getDisplayName();
-        if (email == null) {
-            Toast.makeText(this, "Error. Your quiz data may be lost. Please contact " +
-                    "yongish@gmail.com.", Toast.LENGTH_LONG).show();
-        } else {
-            mQuizViewModel.getLocalQuizPinyins().observe(this, quizPinyins ->
-                    mQuizViewModel.getLocalQuizzes().observe(this, quizzes ->
-                            mQuizViewModel.migrate(new MigrateLocal(
-                                    email,
-                                    name,
-                                    quizzes.stream().map(quiz ->
-                                            new MigrateQuiz(
-                                                    quiz.getDate(),
-                                                    quiz.getTitle(),
-                                                    quiz.getTotalWords(),
-                                                    quiz.getNotLearned(),
-                                                    quiz.getRound(),
-                                                    quizPinyins.stream()
-                                                            .filter(quizPinyin -> quizPinyin.getQuizId().equals(quiz.getId()))
-                                                            .collect(Collectors.toList())
-                                                            .stream().map(quizPinyin -> new MigrateWord(quizPinyin.getPinyinString(), quizPinyin.getWordString(), quizPinyin.isAsked())).collect(Collectors.toList()))
-                                    ).collect(Collectors.toList()))
-                            ).observe(this, quizItems -> {
-                                adapter.setQuizItems(quizItems, recyclerView);
-                                if (quizItems.isEmpty()) {
-                                    emptyView.setVisibility(View.VISIBLE);
-                                } else {
-                                    emptyView.setVisibility(View.INVISIBLE);
-                                }
-                                SharedPreferences.Editor editor = uploaded.edit();
-                                editor.putBoolean("uploaded", true);
-                                editor.apply();
+        if (hasUploaded) {
+            mQuizViewModel.getAllQuizItems().observe(this, quizItems -> {
+                adapter.setQuizItems(quizItems, recyclerView);
+                if (quizItems.isEmpty()) {
+                    emptyView.setVisibility(View.VISIBLE);
+                } else {
+                    emptyView.setVisibility(View.INVISIBLE);
+                }
+            });
 
-                                restOfOnCreate();
-                            })
-                    )
-            );
-//            }
+            restOfOnCreate();
+        } else {
+            FirebaseUser user =
+                    Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser());
+            String email = user.getEmail();
+            String name = user.getDisplayName();
+            if (email == null) {
+                Toast.makeText(this, "Error. Your quiz data may be lost. Please " +
+                        "contact " +
+                        "yongish@gmail.com.", Toast.LENGTH_LONG).show();
+            } else {
+                mQuizViewModel.getLocalQuizPinyins().observe(this, quizPinyins ->
+                        mQuizViewModel.getLocalQuizzes().observe(this, quizzes ->
+                                mQuizViewModel.migrate(new MigrateLocal(
+                                        email,
+                                        name,
+                                        quizzes.stream().map(quiz ->
+                                                new MigrateQuiz(
+                                                        quiz.getDate(),
+                                                        quiz.getTitle(),
+                                                        quiz.getTotalWords(),
+                                                        quiz.getNotLearned(),
+                                                        quiz.getRound(),
+                                                        quizPinyins.stream()
+                                                                .filter(quizPinyin -> quizPinyin.getQuizId().equals(quiz.getId()))
+                                                                .collect(Collectors.toList())
+                                                                .stream().map(quizPinyin -> new MigrateWord(quizPinyin.getPinyinString(), quizPinyin.getWordString(), quizPinyin.isAsked())).collect(Collectors.toList()))
+                                        ).collect(Collectors.toList()))
+                                ).observe(this, quizItems -> {
+                                    adapter.setQuizItems(quizItems, recyclerView);
+                                    if (quizItems.isEmpty()) {
+                                        emptyView.setVisibility(View.VISIBLE);
+                                    } else {
+                                        emptyView.setVisibility(View.INVISIBLE);
+                                    }
+                                    SharedPreferences.Editor editor = uploaded.edit();
+                                    editor.putBoolean("uploaded", true);
+                                    editor.apply();
+
+                                    restOfOnCreate();
+                                })
+                        )
+                );
+            }
         }
     }
 
