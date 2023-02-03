@@ -77,6 +77,15 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences uploaded = this.getSharedPreferences("uploaded", Context.MODE_PRIVATE);
         boolean hasUploaded = uploaded.getBoolean("uploaded", false);
         if (hasUploaded) {
+            mQuizViewModel.getAllQuizItems().observe(this, quizItems -> {
+                adapter.setQuizItems(quizItems, recyclerView);
+                if (quizItems.isEmpty()) {
+                    emptyView.setVisibility(View.VISIBLE);
+                } else {
+                    emptyView.setVisibility(View.INVISIBLE);
+                }
+            });
+
             restOfOnCreate();
         } else {
             FirebaseUser user = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser());
@@ -122,15 +131,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void restOfOnCreate() {
-        mQuizViewModel.getAllQuizItems().observe(this, quizItems -> {
-            adapter.setQuizItems(quizItems, recyclerView);
-            if (quizItems.isEmpty()) {
-                emptyView.setVisibility(View.VISIBLE);
-            } else {
-                emptyView.setVisibility(View.INVISIBLE);
-            }
-        });
-
         mQuizViewModel.getQuizzesStatus().observe(this, quizzesStatus -> {
             if (quizzesStatus.equals(Status.ERROR)) {
                 emptyView.setText(R.string.errorQuizDownload);
