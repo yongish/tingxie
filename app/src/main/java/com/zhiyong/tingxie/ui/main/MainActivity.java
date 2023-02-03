@@ -75,7 +75,10 @@ public class MainActivity extends AppCompatActivity {
         mQuizViewModel = ViewModelProviders.of(this).get(QuizViewModel.class);
         // Upload words to remote if not done already.
         SharedPreferences uploaded = this.getSharedPreferences("uploaded", Context.MODE_PRIVATE);
-        if (uploaded.getBoolean("uploaded", false)) {
+        boolean hasUploaded = uploaded.getBoolean("uploaded", false);
+        if (hasUploaded) {
+            restOfOnCreate();
+        } else {
             FirebaseUser user = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser());
             String email = user.getEmail();
             String name = user.getDisplayName();
@@ -115,8 +118,6 @@ public class MainActivity extends AppCompatActivity {
                         )
                 );
             }
-        } else {
-            restOfOnCreate();
         }
     }
 
