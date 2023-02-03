@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences uploaded = this.getSharedPreferences("uploaded",
                 Context.MODE_PRIVATE);
         boolean hasUploaded = uploaded.getBoolean("uploaded", false);
+//        boolean hasUploaded = false;
         if (hasUploaded) {
             mQuizViewModel.getAllQuizItems().observe(this, quizItems -> {
                 adapter.setQuizItems(quizItems, recyclerView);
