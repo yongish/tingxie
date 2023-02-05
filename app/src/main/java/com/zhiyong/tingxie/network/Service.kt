@@ -43,8 +43,7 @@ interface Service {
 
   @GET("notCorrectWordsRandomOrder")
   suspend fun notCorrectWordsRandomOrder(
-    @Query("quizId") quizId: Long,
-    @Query("email") email: String
+    @Query("quizId") quizId: Long, @Query("email") email: String
   ): List<NetworkWordItem>
 
   @PUT("questions")
@@ -93,14 +92,12 @@ interface Service {
 
   @POST("quizzes/{quizId}/users")
   suspend fun addQuizMemberOrReturnNoUser(
-    @Path("quizId") quizId: Long,
-    @Body addQuizUser: NetworkAddQuizUser
+    @Path("quizId") quizId: Long, @Body addQuizUser: NetworkAddQuizUser
   ): NetworkGroupMember
 
   @PUT("quizzes/{quizId}/users")
   suspend fun changeQuizRole(
-    @Path("quizId") quizId: Long,
-    @Body addQuizUser: NetworkAddQuizUser
+    @Path("quizId") quizId: Long, @Body addQuizUser: NetworkAddQuizUser
   ): Int
 
   @DELETE("quizzes/{quizId}/users/{email}")
@@ -120,33 +117,27 @@ interface Service {
     @Path("groupId") groupId: Long,
   ): String
 
-  @GET("exercises-completed/{gradeLevel}/email/{email}")
-  suspend fun getExercisesCompleted(
-    @Path("gradeLevel") gradeLevel: Int,
-    @Path("email") email: String
-  ): MutableList<NetworkExercisesCompleted>
+  @GET("exercises-completed/{email}")
+  suspend fun getExercisesCompleted(@Path("email") email: String):
+      MutableList<NetworkExercisesCompleted>
 
   @GET("profile/{email}")
   suspend fun getProfile(@Path("email") email: String): NetworkProfile
 
   @PUT("profile/{email}")
   suspend fun putProfile(
-    @Path("email") email: String,
-    @Body profile: NetworkProfile
+    @Path("email") email: String, @Body profile: NetworkProfile
   ): String
 
   // todo: Not developing these endpoints below. Should clean up.
   @GET("shares/email/{email}/quiz_id/{quizId}")
   suspend fun getShares(
-    @Path("email") email: String,
-    @Path("quizId") quizId: Long
+    @Path("email") email: String, @Path("quizId") quizId: Long
   ): List<NetworkShare>
 
   @POST("shares/userEmail/{email}/quizId/{quizId}")
   suspend fun postShare(
-    @Path("email") email: String,
-    @Path("quizId") quizId: Long,
-    @Body share: NetworkShare
+    @Path("email") email: String, @Path("quizId") quizId: Long, @Body share: NetworkShare
   ): NetworkShare
 
   @PUT("shares/userEmail/{userEmail}/quizzes/{quizId}/shared/{shared}")
@@ -181,8 +172,7 @@ interface Service {
 
   @DELETE("friends/{from_email}/to_email/{to_email}")
   suspend fun deleteFriend(
-    @Path("from_email") from_email: String,
-    @Path("to_email") to_email: String
+    @Path("from_email") from_email: String, @Path("to_email") to_email: String
   ): String
 //  @PUT("otherIndividualRequest/requesterEmail/{userEmail}/responderEmail/{otherEmail}/accept/{accept}")
 //  suspend fun putOtherIndividualRequest(
@@ -204,11 +194,9 @@ interface Service {
 }
 
 object TingXieNetwork {
-  private val retrofit = Retrofit.Builder()
-    .baseUrl("http://10.0.2.2:9000/") // Emulator
+  private val retrofit = Retrofit.Builder().baseUrl("http://10.0.2.2:9000/") // Emulator
 //    .baseUrl("https://h1b1club.com/") // Production URL.
-    .addConverterFactory(MoshiConverterFactory.create().asLenient())
-    .build()
+    .addConverterFactory(MoshiConverterFactory.create().asLenient()).build()
 
   val tingxie: Service = retrofit.create(Service::class.java)
 }

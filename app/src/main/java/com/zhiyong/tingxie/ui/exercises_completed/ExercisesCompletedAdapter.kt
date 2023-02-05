@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.zhiyong.tingxie.databinding.RecyclerviewExercisesCompletedBinding
 import com.zhiyong.tingxie.network.NetworkExercisesCompleted
+import com.zhiyong.tingxie.ui.read_then_write.ReadThenWriteActivity
+import java.util.*
 
 class ExercisesCompletedAdapter(
   private val context: Context,
@@ -31,8 +33,12 @@ class ExercisesCompletedAdapter(
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val exerciseType = exerciseTypes[position]
     holder.bind(exerciseType)
-//    holder.btnView.setOnClickListener {
-//    }
+
+    // stopped here. Go to ReadThenWriteActivity.
+
+    holder.btnView.setOnClickListener {
+      context.startActivity(Intent(context, ReadThenWriteActivity::class.java))
+    }
 //    holder.btnPlay.setOnClickListener(context.startActivity())
   }
 
@@ -40,12 +46,17 @@ class ExercisesCompletedAdapter(
 
   class ViewHolder(private val binding: RecyclerviewExercisesCompletedBinding) :
     RecyclerView.ViewHolder(binding.root) {
-    val tvName = binding.tvName
     val btnView = binding.btnView
     val btnPlay = binding.btnPlay
 
-    fun bind(exerciseType: NetworkExercisesCompleted) = with(binding) {
-      tvName.text = exerciseType.name
+    fun bind(exercisesCompleted: NetworkExercisesCompleted) = with(binding) {
+      tvName.text = exercisesCompleted.chineseName
+      tvCompleted.text = String.format(
+        Locale.US,
+        "%d/%d exercises complete",
+        exercisesCompleted.completedCount,
+        exercisesCompleted.totalCount
+      )
     }
   }
 }

@@ -11,7 +11,8 @@ import com.zhiyong.tingxie.network.NetworkExercisesCompleted
 import com.zhiyong.tingxie.viewmodel.Status
 import kotlinx.coroutines.launch
 
-class ExercisesCompletedViewModel(application: Application, gradeLevel: Int, email: String) : AndroidViewModel(application) {
+class ExercisesCompletedViewModel(application: Application, email: String) :
+  AndroidViewModel(application) {
   private val repository: QuizRepository = QuizRepository(application)
 
   private val _status = MutableLiveData<Status>()
@@ -23,14 +24,14 @@ class ExercisesCompletedViewModel(application: Application, gradeLevel: Int, ema
     get() = _exerciseTypes
 
   init {
-    getExercisesCompleted(gradeLevel, email)
+    getExercisesCompleted(email)
   }
 
-  private fun getExercisesCompleted(gradeLevel: Int, email: String) {
+  private fun getExercisesCompleted(email: String) {
     viewModelScope.launch {
       _status.value = Status.LOADING
       try {
-        _exerciseTypes.value = repository.getExercisesCompleted(gradeLevel, email)
+        _exerciseTypes.value = repository.getExercisesCompleted(email)
         _status.value = Status.DONE
       } catch (e: Exception) {
         _exerciseTypes.value = ArrayList()

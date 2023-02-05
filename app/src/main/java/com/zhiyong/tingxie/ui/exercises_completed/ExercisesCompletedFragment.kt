@@ -1,12 +1,16 @@
 package com.zhiyong.tingxie.ui.exercises_completed
 
+import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import com.google.firebase.auth.FirebaseAuth
+import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.FragmentExercisesCompletedBinding
+import com.zhiyong.tingxie.ui.profile.ProfileActivity
 import com.zhiyong.tingxie.ui.profile.ProfileFragment.Companion.EXTRA_EMAIL
 import com.zhiyong.tingxie.ui.profile.ProfileFragment.Companion.EXTRA_GRADE_LEVEL
 
@@ -30,14 +34,14 @@ class ExercisesCompletedFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    val email = requireActivity().intent.getStringExtra(EXTRA_EMAIL)
-    val gradeLevel = requireActivity().intent.getIntExtra(EXTRA_GRADE_LEVEL, 1)
+    // Should read from DB instead.
+//    val email = requireActivity().intent.getStringExtra(EXTRA_EMAIL)
+//    val gradeLevel = requireActivity().intent.getIntExtra(EXTRA_GRADE_LEVEL, 1)
+    val currentUser = FirebaseAuth.getInstance().currentUser!!
+    val email = currentUser.email!!
 
-    val viewModelFactory = ExercisesCompletedViewModelFactory(
-      requireActivity().application,
-      gradeLevel,
-      email ?: ""
-    )
+    val viewModelFactory =
+      ExercisesCompletedViewModelFactory(requireActivity().application, email)
     val viewModel =
       ViewModelProvider(this, viewModelFactory)[ExercisesCompletedViewModel::class.java]
     val adapter = ExercisesCompletedAdapter(
@@ -51,5 +55,17 @@ class ExercisesCompletedFragment : Fragment() {
         adapter.exerciseTypes = it
       }
     }
+
+    val menuHost: MenuHost = requireActivity()
+    menuHost.addMenuProvider(object : MenuProvider {
+      override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.menu_exercises_completed, menu)
+      }
+
+      override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        startActivity(Intent(context, ProfileActivity::class.java))
+        return true
+      }
+    })
   }
 }

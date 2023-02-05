@@ -65,7 +65,8 @@ class QuizRepository(val context: Context) {
 
   suspend fun getQuizzes(): List<NetworkQuiz> = TingXieNetwork.tingxie.getQuizzes(email)
 
-  suspend fun migrateLocal(localData: MigrateLocal): List<NetworkQuiz> = TingXieNetwork.tingxie.migrateLocal(localData)
+  suspend fun migrateLocal(localData: MigrateLocal): List<NetworkQuiz> =
+    TingXieNetwork.tingxie.migrateLocal(localData)
 
   suspend fun getWordItemsOfQuiz(quizId: Long): List<WordItem> =
     TingXieNetwork.tingxie.getWordItemsOfQuiz(quizId)
@@ -236,7 +237,8 @@ class QuizRepository(val context: Context) {
     requesterName: String,
     requesterEmail: String,
     email: String
-  ): String = TingXieNetwork.tingxie.deleteQuiz(quizId, requesterName, requesterEmail, email)
+  ): String =
+    TingXieNetwork.tingxie.deleteQuiz(quizId, requesterName, requesterEmail, email)
 
   suspend fun getGroupsOfQuiz(quizId: Long): List<NetworkGroup> =
     TingXieNetwork.tingxie.getGroupsOfQuiz(quizId)
@@ -244,10 +246,8 @@ class QuizRepository(val context: Context) {
   suspend fun addGroupMembersToQuiz(quizId: Long, groupId: Long): String =
     TingXieNetwork.tingxie.addGroupMembersToQuiz(quizId, groupId)
 
-  suspend fun getExercisesCompleted(
-    gradeLevel: Int, email: String
-  ): MutableList<NetworkExercisesCompleted> =
-    TingXieNetwork.tingxie.getExercisesCompleted(gradeLevel, email)
+  suspend fun getExercisesCompleted(email: String): MutableList<NetworkExercisesCompleted> =
+    TingXieNetwork.tingxie.getExercisesCompleted(email)
 
   suspend fun getProfile(email: String): NetworkProfile =
     TingXieNetwork.tingxie.getProfile(email)

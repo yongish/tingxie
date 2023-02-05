@@ -19,8 +19,8 @@
         tools:text="读一读，写一写" />
 
     <TextView
-        android:id="@+id/textView6"
-        style="@style/text_view_style"
+        android:id="@+id/tvCompleted"
+        style="@style/TextAppearance.AppCompat.Body2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -35,7 +35,7 @@
         android:layout_marginStart="8dp"
         android:text="View list"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        app:layout_constraintTop_toBottomOf="@+id/tvCompleted" />
 
     <Button
         android:id="@+id/btnPlay"
@@ -44,6 +44,6 @@
         android:layout_marginEnd="8dp"
         android:text="Start/resume"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        app:layout_constraintTop_toBottomOf="@+id/tvCompleted" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

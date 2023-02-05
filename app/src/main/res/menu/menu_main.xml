@@ -24,6 +24,13 @@
         android:icon="@drawable/ic_audiotrack_white_24dp"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/exercises"
+        android:orderInCategory="100"
+        android:title="@string/exercises"
+        android:onClick="openExercises"
+        android:icon="@drawable/ic_baseline_school_24"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/profile"
         android:orderInCategory="100"
         android:title="@string/profile"

@@ -34,6 +34,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.network.NetworkQuiz;
+import com.zhiyong.tingxie.ui.exercises_completed.ExercisesCompletedActivity;
 import com.zhiyong.tingxie.ui.friend.FriendActivity;
 import com.zhiyong.tingxie.ui.group.GroupActivity;
 import com.zhiyong.tingxie.ui.hsk.buttons.HskButtonsActivity;
@@ -251,6 +252,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void openSpeechSettings(MenuItem item) {
         startActivity(openSpeechSettingsHelper());
+    }
+
+    public void openExercises(MenuItem item) {
+        startActivity(new Intent(MainActivity.this, ExercisesCompletedActivity.class));
     }
 
     public void openProfile(MenuItem item) {
