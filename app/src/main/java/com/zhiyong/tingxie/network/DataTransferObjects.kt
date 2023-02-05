@@ -142,12 +142,22 @@ data class NetworkGroup(
 
 @Parcelize
 @JsonClass(generateAdapter = true)
-data class NetworkExerciseType(
+data class NetworkExercisesCompleted(
   val id: Long,
   val name: String,
   val totalCount: Int,
   val completedCount: Int
 ) : Parcelable
+
+@Parcelize
+@JsonClass(generateAdapter = true)
+data class NetworkProfile(
+  var gradeLevel: Int,
+  val allGradeLevels: List<Int>,
+  var ratio: Int,
+  val allRatios: List<Int>
+) : Parcelable
+
 
 
 

@@ -38,6 +38,7 @@ import com.zhiyong.tingxie.ui.friend.FriendActivity;
 import com.zhiyong.tingxie.ui.group.GroupActivity;
 import com.zhiyong.tingxie.ui.hsk.buttons.HskButtonsActivity;
 import com.zhiyong.tingxie.ui.login.LoginActivity;
+import com.zhiyong.tingxie.ui.profile.ProfileActivity;
 import com.zhiyong.tingxie.ui.share.EnumQuizRole;
 import com.zhiyong.tingxie.viewmodel.Status;
 
@@ -250,6 +251,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void openSpeechSettings(MenuItem item) {
         startActivity(openSpeechSettingsHelper());
+    }
+
+    public void openProfile(MenuItem item) {
+        startActivity(new Intent(MainActivity.this, ProfileActivity.class));
     }
 
     public void openHskLists(MenuItem item) {

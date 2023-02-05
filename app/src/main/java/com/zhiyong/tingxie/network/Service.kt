@@ -120,9 +120,20 @@ interface Service {
     @Path("groupId") groupId: Long,
   ): String
 
-  @GET("exerciseTypes/{gradeLevel}/email/{email}")
-  suspend fun getExerciseTypes(@Path("gradeLevel") gradeLevel: Int,
-                               @Path("email") email: String): List<NetworkExerciseType>
+  @GET("exercises-completed/{gradeLevel}/email/{email}")
+  suspend fun getExercisesCompleted(
+    @Path("gradeLevel") gradeLevel: Int,
+    @Path("email") email: String
+  ): MutableList<NetworkExercisesCompleted>
+
+  @GET("profile/{email}")
+  suspend fun getProfile(@Path("email") email: String): NetworkProfile
+
+  @PUT("profile/{email}")
+  suspend fun putProfile(
+    @Path("email") email: String,
+    @Body profile: NetworkProfile
+  ): String
 
   // todo: Not developing these endpoints below. Should clean up.
   @GET("shares/email/{email}/quiz_id/{quizId}")
@@ -194,8 +205,8 @@ interface Service {
 
 object TingXieNetwork {
   private val retrofit = Retrofit.Builder()
-//    .baseUrl("http://10.0.2.2:9000/") // Emulator
-    .baseUrl("https://h1b1club.com/") // Production URL.
+    .baseUrl("http://10.0.2.2:9000/") // Emulator
+//    .baseUrl("https://h1b1club.com/") // Production URL.
     .addConverterFactory(MoshiConverterFactory.create().asLenient())
     .build()
 

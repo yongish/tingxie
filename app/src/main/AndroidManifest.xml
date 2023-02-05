@@ -74,6 +74,14 @@
             android:exported="false"
             android:label="@string/title_activity_group" />
         <activity
+            android:name=".ui.profile.ProfileActivity"
+            android:exported="false"
+            android:label="@string/profile" />
+        <activity
+            android:name=".ui.exercises_completed.ExercisesCompletedActivity"
+            android:exported="false"
+            android:label="Exercises" />
+        <activity
             android:name=".ui.share.ShareActivity"
             android:exported="false"
             android:label="Quiz members" />

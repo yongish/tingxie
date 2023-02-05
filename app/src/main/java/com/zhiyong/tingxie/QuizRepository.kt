@@ -244,10 +244,16 @@ class QuizRepository(val context: Context) {
   suspend fun addGroupMembersToQuiz(quizId: Long, groupId: Long): String =
     TingXieNetwork.tingxie.addGroupMembersToQuiz(quizId, groupId)
 
-  suspend fun getExerciseTypes(
+  suspend fun getExercisesCompleted(
     gradeLevel: Int, email: String
-  ): List<NetworkExerciseType> =
-    TingXieNetwork.tingxie.getExerciseTypes(gradeLevel, email)
+  ): MutableList<NetworkExercisesCompleted> =
+    TingXieNetwork.tingxie.getExercisesCompleted(gradeLevel, email)
+
+  suspend fun getProfile(email: String): NetworkProfile =
+    TingXieNetwork.tingxie.getProfile(email)
+
+  suspend fun putProfile(email: String, profile: NetworkProfile): String =
+    TingXieNetwork.tingxie.putProfile(email, profile)
 
 
   // Endpoints below are for Friends API, which I decided not to use.

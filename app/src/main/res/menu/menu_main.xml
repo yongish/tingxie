@@ -3,13 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.zhiyong.tingxie.ui.main.MainActivity">
     <item
-        android:id="@+id/action_logout"
-        android:orderInCategory="100"
-        android:title="@string/logout"
-        android:onClick="logout"
-        android:icon="@drawable/ic_exit_white_24dp"
-        app:showAsAction="ifRoom" />
-    <item
         android:id="@+id/action_help"
         android:orderInCategory="100"
         android:title="@string/help"
@@ -23,13 +16,6 @@
         android:onClick="openGroups"
         android:icon="@drawable/ic_people_white_24dp"
         app:showAsAction="ifRoom" />
-<!--    <item-->
-<!--        android:id="@+id/action_friends"-->
-<!--        android:orderInCategory="100"-->
-<!--        android:title="@string/friends"-->
-<!--        android:onClick="openFriends"-->
-<!--        android:icon="@drawable/ic_people_white_24dp"-->
-<!--        app:showAsAction="ifRoom" />-->
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
@@ -38,10 +24,31 @@
         android:icon="@drawable/ic_audiotrack_white_24dp"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/profile"
+        android:orderInCategory="100"
+        android:title="@string/profile"
+        android:onClick="openProfile"
+        android:icon="@drawable/ic_baseline_person_24"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/hsk"
         android:orderInCategory="100"
         android:title="@string/hsk_lists"
         android:onClick="openHskLists"
         android:icon="@drawable/ic_baseline_view_list_24"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_logout"
+        android:orderInCategory="100"
+        android:title="@string/logout"
+        android:onClick="logout"
+        android:icon="@drawable/ic_exit_white_24dp"
+        app:showAsAction="ifRoom" />
+    <!--    <item-->
+    <!--        android:id="@+id/action_friends"-->
+    <!--        android:orderInCategory="100"-->
+    <!--        android:title="@string/friends"-->
+    <!--        android:onClick="openFriends"-->
+    <!--        android:icon="@drawable/ic_people_white_24dp"-->
+    <!--        app:showAsAction="ifRoom" />-->
 </menu>
