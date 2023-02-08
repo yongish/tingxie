@@ -3,7 +3,11 @@ package com.zhiyong.tingxie.ui.main;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,8 +15,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
@@ -128,6 +134,19 @@ public class MainActivity extends AppCompatActivity {
                                     editor.apply();
 
                                     restOfOnCreate();
+
+                                    SpannableString spannableString = new SpannableString("If you don't see your quizzes, please restart the app or restart your phone. If this doesn't work, please email Zhiyong from the help @ menu.");
+                                    Drawable d = ResourcesCompat.getDrawable(this.getResources(), R.drawable.ic_baseline_help_outline_24 ,null);
+                                    d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+                                    spannableString.setSpan(new ImageSpan(d, ImageSpan.ALIGN_BOTTOM), spannableString.toString().indexOf("@"), spannableString.toString().indexOf("@") + 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+                                    AlertDialog dialog =
+                                            new AlertDialog.Builder(MainActivity.this)
+                                            .setTitle("Upgrade complete")
+                                            .setMessage(spannableString)
+                                            .setPositiveButton("OK",
+                                                    (dialog1, i) -> dialog1.cancel())
+                                            .create();
+                                    dialog.show();
                                 })
                         )
                 );
