@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.read_then_write.CharacterFragment">
+
+    <TextView
+        android:id="@+id/tvCharacter"
+        style="@style/text_view_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="长" />
+
+    <TextView
+        android:id="@+id/tvPinyin"
+        style="@style/TextAppearance.Material3.LabelSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/tvCharacter"
+        app:layout_constraintStart_toStartOf="@+id/tvCharacter"
+        app:layout_constraintTop_toBottomOf="@+id/tvCharacter"
+        tools:text="cháng" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
