@@ -158,6 +158,24 @@ data class NetworkProfile(
   val allRatios: List<Int>
 ) : Parcelable
 
+@Parcelize
+@JsonClass(generateAdapter = true)
+data class NetworkTitle(
+  val id: Long,
+  val read: Boolean,
+  val title: String,
+  val gradeLevels: List<Int>
+) : Parcelable
+
+@Parcelize
+@JsonClass(generateAdapter = true)
+data class NetworkPassage(
+  val id: Long,
+  val title: String,
+  val gradeLevels: List<Int>,
+  val author: String,
+  val passage: String
+) : Parcelable
 
 
 

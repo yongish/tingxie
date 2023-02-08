@@ -121,6 +121,7 @@ interface Service {
   suspend fun getExercisesCompleted(@Path("email") email: String):
       MutableList<NetworkExercisesCompleted>
 
+  // todo: change to plural
   @GET("profile/{email}")
   suspend fun getProfile(@Path("email") email: String): NetworkProfile
 
@@ -128,6 +129,12 @@ interface Service {
   suspend fun putProfile(
     @Path("email") email: String, @Body profile: NetworkProfile
   ): String
+
+  @GET("reading-titles/email/{email}")
+  suspend fun getReadingTitles(@Path("email") email: String): List<NetworkTitle>
+
+  @GET("reading-passage/{id}")
+  suspend fun getReadingPassage(@Path("id") id: Long): NetworkPassage
 
   // todo: Not developing these endpoints below. Should clean up.
   @GET("shares/email/{email}/quiz_id/{quizId}")

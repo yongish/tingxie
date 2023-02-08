@@ -1,4 +1,4 @@
-package com.zhiyong.tingxie.ui.reading
+package com.zhiyong.tingxie.ui.readings
 
 import android.content.Context
 import android.util.AttributeSet

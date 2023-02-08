@@ -255,6 +255,12 @@ class QuizRepository(val context: Context) {
   suspend fun putProfile(email: String, profile: NetworkProfile): String =
     TingXieNetwork.tingxie.putProfile(email, profile)
 
+  suspend fun getReadingTitles(email: String): List<NetworkTitle> =
+    TingXieNetwork.tingxie.getReadingTitles(email)
+
+  suspend fun getReadingPassage(id: Long): NetworkPassage =
+    TingXieNetwork.tingxie.getReadingPassage(id)
+
 
   // Endpoints below are for Friends API, which I decided not to use.
   suspend fun checkUserExists(email: String): Boolean =
