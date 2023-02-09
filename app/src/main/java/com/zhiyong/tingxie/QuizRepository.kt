@@ -255,7 +255,7 @@ class QuizRepository(val context: Context) {
   suspend fun putProfile(email: String, profile: NetworkProfile): String =
     TingXieNetwork.tingxie.putProfile(email, profile)
 
-  suspend fun getReadingTitles(email: String): List<NetworkTitle> =
+  suspend fun getReadingTitles(email: String): MutableList<NetworkTitle> =
     TingXieNetwork.tingxie.getReadingTitles(email)
 
   suspend fun getReadingPassage(id: Long): NetworkPassage =

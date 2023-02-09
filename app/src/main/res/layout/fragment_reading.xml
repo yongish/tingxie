@@ -17,6 +17,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     app:flexWrap="wrap"
     android:id="@+id/reading"
-    tools:context=".ui.readings.ReadingsFragment">
+    tools:context=".ui.reading.ReadingFragment">
 
 </com.google.android.flexbox.FlexboxLayout>

@@ -131,7 +131,7 @@ interface Service {
   ): String
 
   @GET("reading-titles/email/{email}")
-  suspend fun getReadingTitles(@Path("email") email: String): List<NetworkTitle>
+  suspend fun getReadingTitles(@Path("email") email: String): MutableList<NetworkTitle>
 
   @GET("reading-passage/{id}")
   suspend fun getReadingPassage(@Path("id") id: Long): NetworkPassage

@@ -7,6 +7,7 @@ import com.zhiyong.tingxie.ui.friend.individual.TingXieIndividual
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
 import com.zhiyong.tingxie.ui.word.WordItem
 import kotlinx.parcelize.Parcelize
+import java.util.Date
 
 @JsonClass(generateAdapter = true)
 data class NetworkToken(
@@ -162,7 +163,7 @@ data class NetworkProfile(
 @JsonClass(generateAdapter = true)
 data class NetworkTitle(
   val id: Long,
-  val read: Boolean,
+  val dateOpened: Int,
   val title: String,
   val gradeLevels: List<Int>
 ) : Parcelable

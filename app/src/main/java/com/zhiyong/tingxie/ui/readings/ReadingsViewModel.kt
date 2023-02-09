@@ -18,8 +18,8 @@ class ReadingsViewModel(application: Application, email: String) : AndroidViewMo
   val status: LiveData<Status>
     get() = _status
 
-  private val _titles = MutableLiveData<List<NetworkTitle>>()
-  val titles: LiveData<List<NetworkTitle>>
+  private val _titles = MutableLiveData<MutableList<NetworkTitle>>()
+  val titles: LiveData<MutableList<NetworkTitle>>
     get() = _titles
 
   init {

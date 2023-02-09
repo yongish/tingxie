@@ -7,7 +7,6 @@
     android:layout_marginTop="10dp"
     android:background="@color/colorPrimaryLight">
 
-
     <TextView
         android:id="@+id/tvTitle"
         style="@style/text_view_style"
@@ -22,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvRead"
+        android:id="@+id/tvDateOpened"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

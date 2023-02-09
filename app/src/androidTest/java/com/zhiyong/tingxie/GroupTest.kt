@@ -1,27 +1,20 @@
 package com.zhiyong.tingxie
 
-import android.content.Context
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.*
-import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.core.internal.deps.guava.base.Preconditions
 import androidx.test.espresso.matcher.BoundedMatcher
-import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.zhiyong.tingxie.ui.group.GroupActivity
-import com.zhiyong.tingxie.ui.group.GroupAdapter
-import com.zhiyong.tingxie.ui.main.MainActivity
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.endsWith
 import org.hamcrest.Description
@@ -57,18 +50,18 @@ class GroupTest {
     var itemCount = 0
     activityRule.scenario.onActivity { activityScenarioRule ->
       val recyclerView =
-        activityScenarioRule.findViewById<RecyclerView>(R.id.recyclerview_groups)
+        activityScenarioRule.findViewById<RecyclerView>(R.id.recyclerview_readings)
       itemCount = recyclerView.adapter?.itemCount ?: 0
     }
-    onView(withId(R.id.recyclerview_groups)).check(
+    onView(withId(R.id.recyclerview_readings)).check(
       matches(
         atPosition(itemCount - 1, hasDescendant(withText("new group name")))
       )
     )
-    onView(withId(R.id.recyclerview_groups)).check(
+    onView(withId(R.id.recyclerview_readings)).check(
       matches(atPosition(itemCount - 1, hasDescendant(withText("OWNER"))))
     )
-    onView(withId(R.id.recyclerview_groups)).perform(
+    onView(withId(R.id.recyclerview_readings)).perform(
       RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
         0, MyViewAction.clickChildViewWithId(R.id.btnMembers)
       )
@@ -137,13 +130,13 @@ class GroupTest {
     var count = 0
     runBlocking {
       activityRule.scenario.onActivity {
-        val recyclerView = it.findViewById<RecyclerView>(R.id.recyclerview_groups)
+        val recyclerView = it.findViewById<RecyclerView>(R.id.recyclerview_readings)
         count = recyclerView.adapter?.itemCount ?: 0
       }
     }
     try {
       repeat(count) {
-        onView(withId(R.id.recyclerview_groups)).perform(
+        onView(withId(R.id.recyclerview_readings)).perform(
           RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
             0, MyViewAction.clickChildViewWithId(R.id.btnMembers)
           )

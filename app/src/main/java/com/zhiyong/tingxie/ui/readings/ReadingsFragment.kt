@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.zhiyong.tingxie.databinding.FragmentReadingBinding
+import com.zhiyong.tingxie.databinding.FragmentReadingsBinding
 
 class ReadingsFragment : Fragment() {
 
@@ -14,7 +14,7 @@ class ReadingsFragment : Fragment() {
     fun newInstance() = ReadingsFragment()
   }
 
-  private var _binding: FragmentReadingBinding? = null
+  private var _binding: FragmentReadingsBinding? = null
   private val binding get() = _binding!!
 
   private lateinit var viewModel: ReadingsViewModel
@@ -23,60 +23,20 @@ class ReadingsFragment : Fragment() {
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
-    _binding = FragmentReadingBinding.inflate(inflater, container, false)
+    _binding = FragmentReadingsBinding.inflate(inflater, container, false)
     return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-//    var clCharacter = requireActivity().findViewById<ConstraintLayout>(R.id.clCharacter)
-//    binding.reading.addView(clCharacter)
     viewModel = ViewModelProvider(this)[ReadingsViewModel::class.java]
+    val adapter =
+      ReadingsAdapter(requireActivity(), viewModel, binding.recyclerviewReadings)
     viewModel.titles.observe(viewLifecycleOwner) {
       it?.let {
-
+        adapter.readings = it
       }
     }
-
-    var view = CharacterView(requireContext(), "hi")
-    binding.reading.addView(view)
-    view = CharacterView(requireContext(), "有")
-    binding.reading.addView(view)
-    view = CharacterView(requireContext(), "踏")
-    binding.reading.addView(view)
-    view = CharacterView(requireContext(), "me")
-    binding.reading.addView(view)
-    view = CharacterView(requireContext(), "me")
-    binding.reading.addView(view)
-    view = CharacterView(requireContext(), "me")
-    binding.reading.addView(view)
-    view = CharacterView(requireContext(), "me")
-    binding.reading.addView(view)
-    view = CharacterView(requireContext(), "me")
-    binding.reading.addView(view)
-    view = CharacterView(requireContext(), "me")
-    binding.reading.addView(view)
-    view = CharacterView(requireContext(), "me")
-    binding.reading.addView(view)
-    view = CharacterView(requireContext(), "me")
-    binding.reading.addView(view)
-    view = CharacterView(requireContext(), "me")
-    binding.reading.addView(view)
-    view = CharacterView(requireContext(), "me")
-    binding.reading.addView(view)
-    view = CharacterView(requireContext(), "me")
-    binding.reading.addView(view)
-    view = CharacterView(requireContext(), "me")
-    binding.reading.addView(view)
-    view = CharacterView(requireContext(), "me")
-    binding.reading.addView(view)
-    view = CharacterView(requireContext(), "me")
-    binding.reading.addView(view)
-    view = CharacterView(requireContext(), "me")
-    binding.reading.addView(view)
-    view = CharacterView(requireContext(), "me")
-    binding.reading.addView(view)
-
   }
 }

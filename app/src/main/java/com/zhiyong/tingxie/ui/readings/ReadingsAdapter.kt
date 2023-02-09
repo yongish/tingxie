@@ -1,28 +1,55 @@
 package com.zhiyong.tingxie.ui.readings
 
+import android.content.Context
+import android.content.Intent
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.zhiyong.tingxie.databinding.RecyclerviewReadingsBinding
 import com.zhiyong.tingxie.network.NetworkTitle
+import com.zhiyong.tingxie.ui.reading.ReadingActivity
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
-class ReadingsAdapter : RecyclerView.Adapter<ReadingsAdapter.ViewHolder>() {
+class ReadingsAdapter(private val context: Context, val viewModel: ReadingsViewModel, val recyclerView: RecyclerView) : RecyclerView.Adapter<ReadingsAdapter.ViewHolder>() {
 
-
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-    TODO("Not yet implemented")
+  companion object {
+    const val EXTRA_ID = "com.zhiyong.tingxie.ui.readings.extra.ID"
   }
 
-  override fun getItemCount(): Int {
-    TODO("Not yet implemented")
-  }
+  var readings = mutableListOf<NetworkTitle>()
+    set(value) {
+      field = value
+      notifyDataSetChanged()
+    }
+
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(RecyclerviewReadingsBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    TODO("Not yet implemented")
+    val reading = readings[position]
+    holder.bind(reading)
+
+    holder.btnOpen.setOnClickListener {
+      val intent = Intent(context, ReadingActivity::class.java)
+      intent.putExtra(EXTRA_ID, reading.id)
+      context.startActivity(intent)
+    }
   }
 
-  class ViewHolder(private val binding: RecyclerviewReadingsBinding) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(title: NetworkTitle) = with(binding) {
+  override fun getItemCount(): Int = readings.size
 
+  class ViewHolder(private val binding: RecyclerviewReadingsBinding) :
+    RecyclerView.ViewHolder(binding.root) {
+    val btnOpen = binding.btnOpen
+
+    fun bind(title: NetworkTitle) = with(binding) {
+      tvTitle.text = title.title
+      val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+      tvDateOpened.text =
+        if (title.dateOpened == -1) "Unread" else "Opened on " + LocalDate.parse(
+          title.dateOpened.toString(),
+          formatter
+        )
     }
   }
 }
