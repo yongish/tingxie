@@ -2,6 +2,7 @@ package com.zhiyong.tingxie.ui.reading
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.zhiyong.tingxie.R
 
 class ReadingActivity : AppCompatActivity() {
 

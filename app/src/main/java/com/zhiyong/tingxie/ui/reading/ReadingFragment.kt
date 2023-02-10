@@ -32,7 +32,7 @@ class ReadingFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    val id = requireActivity().intent.getIntExtra(EXTRA_ID, -1)
+    val id = requireActivity().intent.getLongExtra(EXTRA_ID, -1)
     val viewModelFactory = ReadingViewModelFactory(requireActivity().application, id)
     val viewModel = ViewModelProvider(this, viewModelFactory)[ReadingViewModel::class.java]
     viewModel.passage.observe(viewLifecycleOwner) {
