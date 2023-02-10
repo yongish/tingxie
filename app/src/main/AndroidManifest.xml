@@ -21,16 +21,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ReadingActivity"
+            android:name=".ui.reading.ReadingActivity"
             android:exported="false" />
         <activity
             android:name=".ui.readings.ReadingsActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:exported="false">
         </activity>
         <activity
             android:name=".ui.read_then_write.ReadThenWriteActivity"

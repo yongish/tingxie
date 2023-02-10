@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.databinding.FragmentReadingsBinding
 
 class ReadingsFragment : Fragment() {
@@ -17,12 +18,15 @@ class ReadingsFragment : Fragment() {
   private var _binding: FragmentReadingsBinding? = null
   private val binding get() = _binding!!
 
-  private lateinit var viewModel: ReadingsViewModel
+  private lateinit var email: String
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
+    val currentUser = FirebaseAuth.getInstance().currentUser!!
+    email = currentUser.email!!
+
     _binding = FragmentReadingsBinding.inflate(inflater, container, false)
     return binding.root
   }
@@ -30,7 +34,8 @@ class ReadingsFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    viewModel = ViewModelProvider(this)[ReadingsViewModel::class.java]
+    val viewModelFactory = ReadingsViewModelFactory(requireActivity().application, email)
+    val viewModel = ViewModelProvider(this, viewModelFactory)[ReadingsViewModel::class.java]
     val adapter =
       ReadingsAdapter(requireActivity(), viewModel, binding.recyclerviewReadings)
     viewModel.titles.observe(viewLifecycleOwner) {
