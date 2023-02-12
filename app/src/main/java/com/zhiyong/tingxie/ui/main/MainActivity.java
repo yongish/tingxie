@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private QuizViewModel mQuizViewModel;
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
-    QuizListAdapter adapter;
+    QuizListAdapter quizListAdapter;
     String name;
     String email;
     TextView emptyView;
@@ -107,8 +107,8 @@ public class MainActivity extends AppCompatActivity {
         emptyView = findViewById(R.id.empty_view);
 
         mQuizViewModel = ViewModelProviders.of(this).get(QuizViewModel.class);
-        adapter = new QuizListAdapter(this, mQuizViewModel, recyclerView);
-        recyclerView.setAdapter(adapter);
+        quizListAdapter = new QuizListAdapter(this, mQuizViewModel, recyclerView);
+        recyclerView.setAdapter(quizListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Upload words to remote if not done already.
@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 //        boolean hasUploaded = false;
         if (hasUploaded) {
             mQuizViewModel.getAllQuizItems().observe(this, quizItems -> {
-                adapter.setQuizItems(quizItems, recyclerView);
+                quizListAdapter.setQuizItems(quizItems, recyclerView);
                 if (quizItems.isEmpty()) {
                     emptyView.setVisibility(View.VISIBLE);
                 } else {
@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                                                                 .stream().map(quizPinyin -> new MigrateWord(quizPinyin.getPinyinString(), quizPinyin.getWordString(), quizPinyin.isAsked())).collect(Collectors.toList()))
                                         ).collect(Collectors.toList()))
                                 ).observe(this, quizItems -> {
-                                    adapter.setQuizItems(quizItems, recyclerView);
+                                    quizListAdapter.setQuizItems(quizItems, recyclerView);
                                     if (quizItems.isEmpty()) {
                                         emptyView.setVisibility(View.VISIBLE);
                                     } else {
@@ -197,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(() ->
                 mQuizViewModel.getAllQuizItems().observe(this, quizItems -> {
                     swipeRefreshLayout.setRefreshing(false);
-                    adapter.setQuizItems(quizItems, recyclerView);
+                    quizListAdapter.setQuizItems(quizItems, recyclerView);
                     if (quizItems.isEmpty()) {
                         emptyView.setVisibility(View.VISIBLE);
                     } else {
@@ -218,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-                adapter.onItemRemove(viewHolder);
+                quizListAdapter.onItemRemove(viewHolder);
             }
         });
         helper.attachToRecyclerView(recyclerView);
@@ -352,11 +352,11 @@ public class MainActivity extends AppCompatActivity {
             NetworkQuiz quizItem = optionalQuizItem.get();
             quizItem.setDate(date);
             mQuizViewModel.updateQuiz(quizItem).observe(this,
-                    quizId -> adapter.replaceQuizItem(quizItem, recyclerView, position
+                    quizId -> quizListAdapter.replaceQuizItem(quizItem, recyclerView, position
                     ));
         } else {
             mQuizViewModel.createQuiz("No title", date).observe(this,
-                    newQuizId -> adapter.addQuizItem(new NetworkQuiz(newQuizId, "No " +
+                    newQuizId -> quizListAdapter.addQuizItem(new NetworkQuiz(newQuizId, "No " +
                                     "title", date, email, EnumQuizRole.OWNER.name(), 0
                                     , 0, 1),
                             recyclerView));
