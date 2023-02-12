@@ -8,18 +8,24 @@ import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -58,12 +64,36 @@ public class MainActivity extends AppCompatActivity {
     String email;
     TextView emptyView;
 
+    private ListView mDrawerList;
+    private DrawerLayout mDrawerLayout;
+    ActionBarDrawerToggle mDrawerToggle;
+    Toolbar toolbar;
+    private String[] mNavigationDrawerItemTitles;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+//        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mNavigationDrawerItemTitles= getResources().getStringArray(R.array.navigation_drawer_items_array);
+
+        DataModel[] drawerItem = new DataModel[3];
+        drawerItem[0] = new DataModel(R.drawable.connect, "Connect");
+        drawerItem[1] = new DataModel(R.drawable.fixtures, "Fixtures");
+        drawerItem[2] = new DataModel(R.drawable.table, "Table");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+//        DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this, R.layout.list_view_item_row, drawerItem);
+//        mDrawerList.setAdapter(adapter);
+//        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+//        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        mDrawerLayout.setDrawerListener(mDrawerToggle);
+//        setupDrawerToggle();
+
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener((View v) -> {
@@ -211,6 +241,54 @@ public class MainActivity extends AppCompatActivity {
 //            adapter.setQuizItems();
 //        });
 
+    }
+
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectItem(position);
+        }
+
+    }
+
+    private void selectItem(int position) {
+
+        Fragment fragment = null;
+
+        switch (position) {
+            case 0:
+                fragment = new ConnectFragment();
+                break;
+            case 1:
+                fragment = new FixturesFragment();
+                break;
+            case 2:
+                fragment = new TableFragment();
+                break;
+
+            default:
+                break;
+        }
+
+        if (fragment != null) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+
+            mDrawerList.setItemChecked(position, true);
+            mDrawerList.setSelection(position);
+            setTitle(mNavigationDrawerItemTitles[position]);
+            mDrawerLayout.closeDrawer(mDrawerList);
+
+        } else {
+            Log.e("MainActivity", "Error in creating fragment");
+        }
+    }
+
+    void setupDrawerToggle(){
+        mDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout,toolbar,R.string.app_name, R.string.app_name);
+        //This is necessary to change the icon of the Drawer Toggle upon state change.
+        mDrawerToggle.syncState();
     }
 
     @Override

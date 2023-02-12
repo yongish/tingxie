@@ -103,4 +103,9 @@
     <string name="profile">Profile</string>
     <string name="exercises">Exercises</string>
     <string name="open">Open</string>
+    <string-array name="navigation_drawer_items_array">
+        <item>Connect</item>
+        <item>Fixtures</item>
+        <item>Table</item>
+    </string-array>
 </resources>
