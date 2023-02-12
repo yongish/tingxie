@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mNavigationDrawerItemTitles= getResources().getStringArray(R.array.navigation_drawer_items_array);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
         DataModel[] drawerItem = new DataModel[3];
         drawerItem[0] = new DataModel(R.drawable.connect, "Connect");
@@ -87,12 +88,12 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-//        DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this, R.layout.list_view_item_row, drawerItem);
-//        mDrawerList.setAdapter(adapter);
-//        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-//        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        mDrawerLayout.setDrawerListener(mDrawerToggle);
-//        setupDrawerToggle();
+        DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this, R.layout.list_view_item_row, drawerItem);
+        mDrawerList.setAdapter(adapter);
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        setupDrawerToggle();
 
 
         FloatingActionButton fab = findViewById(R.id.fab);
