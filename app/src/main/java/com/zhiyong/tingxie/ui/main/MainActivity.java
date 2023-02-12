@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,7 +24,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -41,7 +39,6 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.network.NetworkQuiz;
 import com.zhiyong.tingxie.ui.exercises_completed.ExercisesCompletedActivity;
-import com.zhiyong.tingxie.ui.friend.FriendActivity;
 import com.zhiyong.tingxie.ui.group.GroupActivity;
 import com.zhiyong.tingxie.ui.hsk.buttons.HskButtonsActivity;
 import com.zhiyong.tingxie.ui.login.LoginActivity;
@@ -68,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     ActionBarDrawerToggle mDrawerToggle;
     Toolbar toolbar;
-    private String[] mNavigationDrawerItemTitles;
+//    private String[] mNavigationDrawerItemTitles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,17 +75,31 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mNavigationDrawerItemTitles= getResources().getStringArray(R.array.navigation_drawer_items_array);
+//        mNavigationDrawerItemTitles =
+//                getResources().getStringArray(R.array.navigation_drawer_items_array);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-        DataModel[] drawerItem = new DataModel[3];
-        drawerItem[0] = new DataModel(R.drawable.connect, "Connect");
-        drawerItem[1] = new DataModel(R.drawable.fixtures, "Fixtures");
-        drawerItem[2] = new DataModel(R.drawable.table, "Table");
+        DataModel[] drawerItem = new DataModel[5];
+
+        // Hamburger menu options. Help and Speech settings in menu bar of
+        // MainActivity and other 听写 (not other exercises) activities..
+        drawerItem[0] = new DataModel(R.drawable.ic_people_black_24, "Groups");
+        drawerItem[1] = new DataModel(R.drawable.ic_baseline_school_black_24,
+                "Exercises");
+        drawerItem[2] = new DataModel(R.drawable.ic_baseline_person_black_24, "Profile");
+        drawerItem[3] = new DataModel(R.drawable.ic_baseline_view_list_black_24,
+                "HSK Lists");
+        drawerItem[4] = new DataModel(R.drawable.ic_exit_black_24, "Logout");
+
+//        drawerItem[0] = new DataModel(R.drawable.connect, "Connect");
+//        drawerItem[1] = new DataModel(R.drawable.fixtures, "Fixtures");
+//        drawerItem[2] = new DataModel(R.drawable.table, "Table");
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this, R.layout.list_view_item_row, drawerItem);
+        DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this,
+                R.layout.list_view_item_row, drawerItem);
         mDrawerList.setAdapter(adapter);
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -156,7 +167,8 @@ public class MainActivity extends AppCompatActivity {
                                                                 .stream().map(quizPinyin -> new MigrateWord(quizPinyin.getPinyinString(), quizPinyin.getWordString(), quizPinyin.isAsked())).collect(Collectors.toList()))
                                         ).collect(Collectors.toList()))
                                 ).observe(this, quizItems -> {
-                                    quizListAdapter.setQuizItems(quizItems, recyclerView);
+                                    quizListAdapter.setQuizItems(quizItems,
+                                            recyclerView);
                                     if (quizItems.isEmpty()) {
                                         emptyView.setVisibility(View.VISIBLE);
                                     } else {
@@ -168,17 +180,27 @@ public class MainActivity extends AppCompatActivity {
 
                                     restOfOnCreate();
 
-                                    SpannableString spannableString = new SpannableString("If you don't see your quizzes, please restart the app or restart your phone. If this doesn't work, please email Zhiyong from the help @ menu.");
-                                    Drawable d = ResourcesCompat.getDrawable(this.getResources(), R.drawable.ic_baseline_help_outline_24 ,null);
-                                    d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-                                    spannableString.setSpan(new ImageSpan(d, ImageSpan.ALIGN_BOTTOM), spannableString.toString().indexOf("@"), spannableString.toString().indexOf("@") + 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+                                    SpannableString spannableString =
+                                            new SpannableString("If you don't see your" +
+                                                    " quizzes, please restart the app " +
+                                                    "or restart your phone. If this " +
+                                                    "doesn't work, please email " +
+                                                    "Zhiyong from the help @ menu.");
+                                    Drawable d =
+                                            ResourcesCompat.getDrawable(this.getResources(), R.drawable.ic_baseline_help_outline_24, null);
+                                    d.setBounds(0, 0, d.getIntrinsicWidth(),
+                                            d.getIntrinsicHeight());
+                                    spannableString.setSpan(new ImageSpan(d,
+                                            ImageSpan.ALIGN_BOTTOM),
+                                            spannableString.toString().indexOf("@"),
+                                            spannableString.toString().indexOf("@") + 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
                                     AlertDialog dialog =
                                             new AlertDialog.Builder(MainActivity.this)
-                                            .setTitle("Upgrade complete")
-                                            .setMessage(spannableString)
-                                            .setPositiveButton("OK",
-                                                    (dialog1, i) -> dialog1.cancel())
-                                            .create();
+                                                    .setTitle("Upgrade complete")
+                                                    .setMessage(spannableString)
+                                                    .setPositiveButton("OK",
+                                                            (dialog1, i) -> dialog1.cancel())
+                                                    .create();
                                     dialog.show();
                                 })
                         )
@@ -247,47 +269,44 @@ public class MainActivity extends AppCompatActivity {
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
 
         @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        public void onItemClick(AdapterView<?> parent, View view, int position,
+                                long id) {
             selectItem(position);
         }
 
     }
 
     private void selectItem(int position) {
-
-        Fragment fragment = null;
-
+        mDrawerLayout.closeDrawer(mDrawerList);
         switch (position) {
             case 0:
-                fragment = new ConnectFragment();
+                startActivity(new Intent(MainActivity.this, GroupActivity.class));
                 break;
             case 1:
-                fragment = new FixturesFragment();
+                startActivity(new Intent(MainActivity.this,
+                        ExercisesCompletedActivity.class));
                 break;
             case 2:
-                fragment = new TableFragment();
+                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
                 break;
-
+            case 3:
+                startActivity(new Intent(MainActivity.this, HskButtonsActivity.class));
+            case 4:
+                AuthUI.getInstance()
+                        .signOut(this)
+                        .addOnCompleteListener(task -> {
+                            startActivity(new Intent(MainActivity.this,
+                                    LoginActivity.class));
+                            finish();
+                        });
             default:
                 break;
         }
-
-        if (fragment != null) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-
-            mDrawerList.setItemChecked(position, true);
-            mDrawerList.setSelection(position);
-            setTitle(mNavigationDrawerItemTitles[position]);
-            mDrawerLayout.closeDrawer(mDrawerList);
-
-        } else {
-            Log.e("MainActivity", "Error in creating fragment");
-        }
     }
 
-    void setupDrawerToggle(){
-        mDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout,toolbar,R.string.app_name, R.string.app_name);
+    void setupDrawerToggle() {
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar,
+                R.string.app_name, R.string.app_name);
         //This is necessary to change the icon of the Drawer Toggle upon state change.
         mDrawerToggle.syncState();
     }
@@ -314,13 +333,13 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void openGroups(MenuItem item) {
-        startActivity(new Intent(MainActivity.this, GroupActivity.class));
-    }
-
-    public void openFriends(MenuItem item) {
-        startActivity(new Intent(MainActivity.this, FriendActivity.class));
-    }
+//    public void openGroups(MenuItem item) {
+//        startActivity(new Intent(MainActivity.this, GroupActivity.class));
+//    }
+//
+//    public void openFriends(MenuItem item) {
+//        startActivity(new Intent(MainActivity.this, FriendActivity.class));
+//    }
 
     public static Intent openSpeechSettingsHelper() {
         Intent intent = new Intent();
@@ -333,17 +352,17 @@ public class MainActivity extends AppCompatActivity {
         startActivity(openSpeechSettingsHelper());
     }
 
-    public void openExercises(MenuItem item) {
-        startActivity(new Intent(MainActivity.this, ExercisesCompletedActivity.class));
-    }
-
-    public void openProfile(MenuItem item) {
-        startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-    }
-
-    public void openHskLists(MenuItem item) {
-        startActivity(new Intent(MainActivity.this, HskButtonsActivity.class));
-    }
+//    public void openExercises(MenuItem item) {
+//        startActivity(new Intent(MainActivity.this, ExercisesCompletedActivity.class));
+//    }
+//
+//    public void openProfile(MenuItem item) {
+//        startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+//    }
+//
+//    public void openHskLists(MenuItem item) {
+//        startActivity(new Intent(MainActivity.this, HskButtonsActivity.class));
+//    }
 
     public void processDatePickerResult(Optional<NetworkQuiz> optionalQuizItem,
                                         int position, int year, int month, int day) {
@@ -353,11 +372,13 @@ public class MainActivity extends AppCompatActivity {
             NetworkQuiz quizItem = optionalQuizItem.get();
             quizItem.setDate(date);
             mQuizViewModel.updateQuiz(quizItem).observe(this,
-                    quizId -> quizListAdapter.replaceQuizItem(quizItem, recyclerView, position
+                    quizId -> quizListAdapter.replaceQuizItem(quizItem, recyclerView,
+                            position
                     ));
         } else {
             mQuizViewModel.createQuiz("No title", date).observe(this,
-                    newQuizId -> quizListAdapter.addQuizItem(new NetworkQuiz(newQuizId, "No " +
+                    newQuizId -> quizListAdapter.addQuizItem(new NetworkQuiz(newQuizId
+                                    , "No " +
                                     "title", date, email, EnumQuizRole.OWNER.name(), 0
                                     , 0, 1),
                             recyclerView));
@@ -371,15 +392,15 @@ public class MainActivity extends AppCompatActivity {
         fragment.show(fm, "fragment_help");
     }
 
-    public void logout(MenuItem item) {
-        AuthUI.getInstance()
-                .signOut(this)
-                .addOnCompleteListener(task -> {
-                    startActivity(new Intent(MainActivity.this,
-                            LoginActivity.class));
-                    finish();
-                });
-    }
+//    public void logout(MenuItem item) {
+//        AuthUI.getInstance()
+//                .signOut(this)
+//                .addOnCompleteListener(task -> {
+//                    startActivity(new Intent(MainActivity.this,
+//                            LoginActivity.class));
+//                    finish();
+//                });
+//    }
 
 //    private void onNetworkError() {
 //        if(!mQuizViewModel.isNetworkErrorShown().getValue()) {
