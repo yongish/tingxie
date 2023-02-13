@@ -19,8 +19,8 @@ import com.zhiyong.tingxie.ui.profile.ProfileActivity
 
 class ExercisesCompletedActivity : AppCompatActivity() {
 
-//  private var _binding: ActivityExercisesCompletedBinding? = null
-//  private val binding get() = _binding!!
+  private var _binding: ActivityExercisesCompletedBinding? = null
+  private val binding get() = _binding!!
 
   private lateinit var mDrawerList: ListView
   private lateinit var mDrawerLayout: DrawerLayout
@@ -29,24 +29,22 @@ class ExercisesCompletedActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_exercises_completed)
+//    setContentView(R.layout.activity_exercises_completed)
 
     //        Toolbar toolbar = findViewById(R.id.toolbar);
-    toolbar = findViewById(R.id.toolbar)
-    setSupportActionBar(toolbar)
-//    _binding = ActivityExercisesCompletedBinding.inflate(layoutInflater)
+//    toolbar = findViewById(R.id.toolbar)
+    _binding = ActivityExercisesCompletedBinding.inflate(layoutInflater)
+    setContentView(binding.root)
 
+//    mDrawerList = findViewById(R.id.left_drawer)
+    toolbar = binding.toolbar
+    setSupportActionBar(toolbar)
 //    if (savedInstanceState == null) {
 //      supportFragmentManager.beginTransaction()
 //        .replace(R.id.container, ExercisesCompletedFragment.newInstance())
 //        .commitNow()
 //    }
-
-    mDrawerList = findViewById(R.id.left_drawer)
-//    toolbar = binding.toolbar
-
-
-//    mDrawerList = binding.leftDrawer
+    mDrawerList = binding.leftDrawer
     val drawerItem = arrayOf(
       DataModel(R.drawable.ic_launcher_foreground, "听写"),
       DataModel(R.drawable.ic_baseline_school_black_24, "Exercises"),
@@ -58,8 +56,8 @@ class ExercisesCompletedActivity : AppCompatActivity() {
     val adapter = DrawerItemCustomAdapter(this, R.layout.list_view_item_row, drawerItem)
     mDrawerList.adapter = adapter
     mDrawerList.setOnItemClickListener { _, _, i, _ -> selectItem(i) }
-//    mDrawerLayout = binding.drawerLayout
-    mDrawerLayout = findViewById(R.id.drawer_layout)
+    mDrawerLayout = binding.drawerLayout
+//    mDrawerLayout = findViewById(R.id.drawer_layout)
     setupDrawerToggle()
     mDrawerLayout.addDrawerListener(mDrawerToggle)
   }
