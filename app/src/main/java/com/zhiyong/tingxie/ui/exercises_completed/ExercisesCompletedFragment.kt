@@ -11,8 +11,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.FragmentExercisesCompletedBinding
 import com.zhiyong.tingxie.ui.profile.ProfileActivity
-import com.zhiyong.tingxie.ui.profile.ProfileFragment.Companion.EXTRA_EMAIL
-import com.zhiyong.tingxie.ui.profile.ProfileFragment.Companion.EXTRA_GRADE_LEVEL
 
 class ExercisesCompletedFragment : Fragment() {
 
@@ -34,11 +32,9 @@ class ExercisesCompletedFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    // Should read from DB instead.
-//    val email = requireActivity().intent.getStringExtra(EXTRA_EMAIL)
-//    val gradeLevel = requireActivity().intent.getIntExtra(EXTRA_GRADE_LEVEL, 1)
-    val currentUser = FirebaseAuth.getInstance().currentUser!!
-    val email = currentUser.email!!
+//    val currentUser = FirebaseAuth.getInstance().currentUser!!
+//    val email = currentUser.email!!
+    val email = "yongish@gmail.com"
 
     val viewModelFactory =
       ExercisesCompletedViewModelFactory(requireActivity().application, email)

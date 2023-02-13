@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     ActionBarDrawerToggle mDrawerToggle;
     Toolbar toolbar;
-//    private String[] mNavigationDrawerItemTitles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,25 +74,22 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-//        mNavigationDrawerItemTitles =
-//                getResources().getStringArray(R.array.navigation_drawer_items_array);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerList = findViewById(R.id.left_drawer);
 
         DataModel[] drawerItem = new DataModel[5];
 
         // Hamburger menu options. Help and Speech settings in menu bar of
         // MainActivity and other 听写 (not other exercises) activities..
-        drawerItem[0] = new DataModel(R.drawable.ic_people_black_24, "Groups");
+
+        // todo: Need a 24dp icon.
+        drawerItem[0] = new DataModel(R.drawable.ic_launcher_foreground, "听写");
+
         drawerItem[1] = new DataModel(R.drawable.ic_baseline_school_black_24,
                 "Exercises");
         drawerItem[2] = new DataModel(R.drawable.ic_baseline_person_black_24, "Profile");
         drawerItem[3] = new DataModel(R.drawable.ic_baseline_view_list_black_24,
                 "HSK Lists");
         drawerItem[4] = new DataModel(R.drawable.ic_exit_black_24, "Logout");
-
-//        drawerItem[0] = new DataModel(R.drawable.connect, "Connect");
-//        drawerItem[1] = new DataModel(R.drawable.fixtures, "Fixtures");
-//        drawerItem[2] = new DataModel(R.drawable.table, "Table");
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -102,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                 R.layout.list_view_item_row, drawerItem);
         mDrawerList.setAdapter(adapter);
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         setupDrawerToggle();
 
@@ -267,20 +263,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
-
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
             selectItem(position);
         }
-
     }
 
     private void selectItem(int position) {
         mDrawerLayout.closeDrawer(mDrawerList);
         switch (position) {
             case 0:
-                startActivity(new Intent(MainActivity.this, GroupActivity.class));
                 break;
             case 1:
                 startActivity(new Intent(MainActivity.this,
@@ -333,10 +326,10 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-//    public void openGroups(MenuItem item) {
-//        startActivity(new Intent(MainActivity.this, GroupActivity.class));
-//    }
-//
+    public void openGroups(MenuItem item) {
+        startActivity(new Intent(MainActivity.this, GroupActivity.class));
+    }
+
 //    public void openFriends(MenuItem item) {
 //        startActivity(new Intent(MainActivity.this, FriendActivity.class));
 //    }

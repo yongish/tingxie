@@ -142,21 +142,7 @@ class QuizRepository(val context: Context) {
     return TingXieNetwork.tingxie.postQuiz(NetworkCreateQuiz(title, date, name, email))
   }
 
-  suspend fun updateQuiz(quiz: NetworkQuiz): Int {
-    // todo: REPAIR THIS.
-    return TingXieNetwork.tingxie.putQuiz(quiz)
-//      NetworkQuiz(
-//        quiz.id,
-//        quiz.title,
-//        quiz.date,
-//        email,
-//        "STUB. REPLACE THIS",
-//        quiz.numWords,
-//        quiz.numNotCorrect,
-//        quiz.round
-//      )
-//    )
-  }
+  suspend fun updateQuiz(quiz: NetworkQuiz): Int = TingXieNetwork.tingxie.putQuiz(quiz)
 
   suspend fun addWord(quizId: Long, wordString: String?, pinyinString: String?): Long {
     if (wordString == null || pinyinString == null) {

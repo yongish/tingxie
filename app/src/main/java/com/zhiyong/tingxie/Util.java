@@ -3,6 +3,9 @@ package com.zhiyong.tingxie;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 

@@ -7,16 +7,15 @@ import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ShareCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.R
 import com.zhiyong.tingxie.databinding.FragmentGroupBinding
 import com.zhiyong.tingxie.network.NetworkGroup
+import com.zhiyong.tingxie.ui.CommonFragment
 import com.zhiyong.tingxie.ui.group_membership.GroupMembershipViewModel
 import com.zhiyong.tingxie.ui.group_membership.GroupMembershipViewModelFactory
 
-class GroupFragment : Fragment() {
+class GroupFragment : CommonFragment() {
 
   companion object {
     fun newInstance() = GroupFragment()
@@ -27,15 +26,13 @@ class GroupFragment : Fragment() {
   private val binding get() = _binding!!
   private lateinit var adapter: GroupAdapter
 
-  private lateinit var email: String
-  private lateinit var name: String
+  private lateinit var user: User
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
   ): View {
-    val currentUser = FirebaseAuth.getInstance().currentUser!!
-    email = currentUser.email!!
-    name = currentUser.displayName!!
+    // todo: test if this works. If yes, replicate it on all Fragments.
+    user = getFirebaseUser()
 
     _binding = FragmentGroupBinding.inflate(inflater, container, false)
     return binding.root
@@ -47,7 +44,7 @@ class GroupFragment : Fragment() {
     binding.fab.setOnClickListener { openAddGroupDialog() }
 
     val viewModelFactory =
-      GroupMembershipViewModelFactory(requireActivity().application, email)
+      GroupMembershipViewModelFactory(requireActivity().application, user.email)
     viewModel =
       ViewModelProvider(this, viewModelFactory)[GroupMembershipViewModel::class.java]
     adapter = GroupAdapter(requireActivity(), viewModel, binding.recyclerviewGroups)

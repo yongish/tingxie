@@ -15,8 +15,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class QuizViewModel(application: Application) : UpdateQuizViewModel(application) {
-    // todo: After implementing fetch from remote, use these to update remote DB.
-    // Have a flag to check if remote DB has been successfully updated.
     val localQuizzes: LiveData<List<Quiz>> = mRepository.localQuizzes
     val localQuizPinyins: LiveData<List<QuizPinyin>> = mRepository.localQuizPinyins
     fun migrate(migrateQuizzes: MigrateLocal): LiveData<List<NetworkQuiz>> {
