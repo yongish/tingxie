@@ -14,12 +14,13 @@ import com.zhiyong.tingxie.ui.hsk.buttons.HskButtonsActivity
 import com.zhiyong.tingxie.ui.login.LoginActivity
 import com.zhiyong.tingxie.ui.main.DataModel
 import com.zhiyong.tingxie.ui.main.DrawerItemCustomAdapter
+import com.zhiyong.tingxie.ui.main.MainActivity
 import com.zhiyong.tingxie.ui.profile.ProfileActivity
 
 class ExercisesCompletedActivity : AppCompatActivity() {
 
-  private var _binding: ActivityExercisesCompletedBinding? = null
-  private val binding get() = _binding!!
+//  private var _binding: ActivityExercisesCompletedBinding? = null
+//  private val binding get() = _binding!!
 
   private lateinit var mDrawerList: ListView
   private lateinit var mDrawerLayout: DrawerLayout
@@ -29,15 +30,23 @@ class ExercisesCompletedActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_exercises_completed)
-    if (savedInstanceState == null) {
-      supportFragmentManager.beginTransaction()
-        .replace(R.id.container, ExercisesCompletedFragment.newInstance())
-        .commitNow()
-    }
 
-    toolbar = binding.toolbar
+    //        Toolbar toolbar = findViewById(R.id.toolbar);
+    toolbar = findViewById(R.id.toolbar)
+    setSupportActionBar(toolbar)
+//    _binding = ActivityExercisesCompletedBinding.inflate(layoutInflater)
 
-    mDrawerList = binding.leftDrawer
+//    if (savedInstanceState == null) {
+//      supportFragmentManager.beginTransaction()
+//        .replace(R.id.container, ExercisesCompletedFragment.newInstance())
+//        .commitNow()
+//    }
+
+    mDrawerList = findViewById(R.id.left_drawer)
+//    toolbar = binding.toolbar
+
+
+//    mDrawerList = binding.leftDrawer
     val drawerItem = arrayOf(
       DataModel(R.drawable.ic_launcher_foreground, "听写"),
       DataModel(R.drawable.ic_baseline_school_black_24, "Exercises"),
@@ -49,21 +58,17 @@ class ExercisesCompletedActivity : AppCompatActivity() {
     val adapter = DrawerItemCustomAdapter(this, R.layout.list_view_item_row, drawerItem)
     mDrawerList.adapter = adapter
     mDrawerList.setOnItemClickListener { _, _, i, _ -> selectItem(i) }
-    mDrawerLayout = binding.drawerLayout
-    mDrawerLayout.addDrawerListener(mDrawerToggle)
+//    mDrawerLayout = binding.drawerLayout
+    mDrawerLayout = findViewById(R.id.drawer_layout)
     setupDrawerToggle()
+    mDrawerLayout.addDrawerListener(mDrawerToggle)
   }
 
   private fun selectItem(position: Int) {
     mDrawerLayout.closeDrawer(mDrawerList)
     when (position) {
-      0 -> {}
-      1 -> startActivity(
-        Intent(
-          this,
-          ExercisesCompletedActivity::class.java
-        )
-      )
+      0 -> startActivity(Intent(this, MainActivity::class.java))
+      1 -> startActivity(Intent(this, ExercisesCompletedActivity::class.java))
       2 -> startActivity(Intent(this, ProfileActivity::class.java))
       3 -> {
         startActivity(Intent(this, HskButtonsActivity::class.java))
@@ -88,6 +93,7 @@ class ExercisesCompletedActivity : AppCompatActivity() {
       else -> {}
     }
   }
+
   private fun setupDrawerToggle() {
     mDrawerToggle = ActionBarDrawerToggle(
       this, mDrawerLayout, toolbar,

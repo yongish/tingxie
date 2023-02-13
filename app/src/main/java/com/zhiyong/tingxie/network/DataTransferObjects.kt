@@ -163,9 +163,10 @@ data class NetworkProfile(
 @JsonClass(generateAdapter = true)
 data class NetworkTitle(
   val id: Long,
-  val dateOpened: Int,
   val title: String,
-  val gradeLevels: List<Int>
+  val dateOpened: Int,
+//  val gradeLevels: List<Int>
+// Have pagination in the future.
 ) : Parcelable
 
 @Parcelize
@@ -173,8 +174,8 @@ data class NetworkTitle(
 data class NetworkPassage(
   val id: Long,
   val title: String,
-  val gradeLevels: List<Int>,
-  val author: String,
+//  val gradeLevels: List<Int>,
+//  val author: String,
   val passage: String
 ) : Parcelable
 

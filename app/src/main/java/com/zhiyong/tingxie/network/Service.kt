@@ -121,11 +121,10 @@ interface Service {
   suspend fun getExercisesCompleted(@Path("email") email: String):
       MutableList<NetworkExercisesCompleted>
 
-  // todo: change to plural
-  @GET("profile/{email}")
+  @GET("profiles/{email}")
   suspend fun getProfile(@Path("email") email: String): NetworkProfile
 
-  @PUT("profile/{email}")
+  @PUT("profiles/{email}")
   suspend fun putProfile(
     @Path("email") email: String, @Body profile: NetworkProfile
   ): String
