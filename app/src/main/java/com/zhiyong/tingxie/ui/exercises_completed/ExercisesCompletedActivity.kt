@@ -29,21 +29,16 @@ class ExercisesCompletedActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-//    setContentView(R.layout.activity_exercises_completed)
-
-    //        Toolbar toolbar = findViewById(R.id.toolbar);
-//    toolbar = findViewById(R.id.toolbar)
     _binding = ActivityExercisesCompletedBinding.inflate(layoutInflater)
     setContentView(binding.root)
 
-//    mDrawerList = findViewById(R.id.left_drawer)
     toolbar = binding.toolbar
     setSupportActionBar(toolbar)
-//    if (savedInstanceState == null) {
-//      supportFragmentManager.beginTransaction()
-//        .replace(R.id.container, ExercisesCompletedFragment.newInstance())
-//        .commitNow()
-//    }
+    if (savedInstanceState == null) {
+      supportFragmentManager.beginTransaction()
+        .replace(R.id.container, ExercisesCompletedFragment.newInstance())
+        .commitNow()
+    }
     mDrawerList = binding.leftDrawer
     val drawerItem = arrayOf(
       DataModel(R.drawable.ic_launcher_foreground, "听写"),
@@ -57,7 +52,6 @@ class ExercisesCompletedActivity : AppCompatActivity() {
     mDrawerList.adapter = adapter
     mDrawerList.setOnItemClickListener { _, _, i, _ -> selectItem(i) }
     mDrawerLayout = binding.drawerLayout
-//    mDrawerLayout = findViewById(R.id.drawer_layout)
     setupDrawerToggle()
     mDrawerLayout.addDrawerListener(mDrawerToggle)
   }
