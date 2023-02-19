@@ -29,10 +29,11 @@ class ExercisesCompletedActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+
     _binding = ActivityExercisesCompletedBinding.inflate(layoutInflater)
     setContentView(binding.root)
-
     toolbar = binding.toolbar
+
     setSupportActionBar(toolbar)
     if (savedInstanceState == null) {
       supportFragmentManager.beginTransaction()

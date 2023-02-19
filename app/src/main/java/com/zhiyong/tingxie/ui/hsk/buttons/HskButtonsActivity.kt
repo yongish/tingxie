@@ -17,9 +17,10 @@ class HskButtonsActivity : AppCompatActivity() {
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
   }
 
-  override fun onSupportNavigateUp(): Boolean {
-    onBackPressed()
-    return true
-  }
+  // To replace with hamburger.
+//  override fun onSupportNavigateUp(): Boolean {
+//    onBackPressed()
+//    return true
+//  }
 
 }

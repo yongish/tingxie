@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.zhiyong.tingxie.ui.reading.ReadingActivity">
+
+    <item
+        android:id="@+id/action_toggle_pinyin"
+        android:orderInCategory="100"
+        android:title="@string/toggle_pinyin"
+        android:icon="@drawable/ic_baseline_abc_white_24"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_underline"
+        android:orderInCategory="100"
+        android:title="@string/underline_characters"
+        android:icon="@drawable/ic_baseline_format_underlined_white_24"
+        app:showAsAction="ifRoom" />
+
+</menu>

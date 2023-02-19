@@ -11,7 +11,11 @@ import com.zhiyong.tingxie.ui.reading.ReadingActivity
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class ReadingsAdapter(private val context: Context, val viewModel: ReadingsViewModel, val recyclerView: RecyclerView) : RecyclerView.Adapter<ReadingsAdapter.ViewHolder>() {
+class ReadingsAdapter(
+  private val context: Context,
+  val viewModel: ReadingsViewModel,
+  val recyclerView: RecyclerView
+) : RecyclerView.Adapter<ReadingsAdapter.ViewHolder>() {
 
   companion object {
     const val EXTRA_ID = "com.zhiyong.tingxie.ui.readings.extra.ID"
@@ -23,7 +27,14 @@ class ReadingsAdapter(private val context: Context, val viewModel: ReadingsViewM
       notifyDataSetChanged()
     }
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(RecyclerviewReadingsBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
+    ViewHolder(
+      RecyclerviewReadingsBinding.inflate(
+        LayoutInflater.from(parent.context),
+        parent,
+        false
+      )
+    )
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val reading = readings[position]

@@ -11,7 +11,8 @@ import com.zhiyong.tingxie.network.NetworkTitle
 import com.zhiyong.tingxie.viewmodel.Status
 import kotlinx.coroutines.launch
 
-class ReadingsViewModel(application: Application, email: String) : AndroidViewModel(application) {
+class ReadingsViewModel(application: Application, email: String) :
+  AndroidViewModel(application) {
   private val repository: QuizRepository = QuizRepository(application)
 
   private val _status = MutableLiveData<Status>()
