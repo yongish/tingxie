@@ -80,6 +80,7 @@
             android:label="@string/title_activity_group" />
         <activity
             android:name=".ui.profile.ProfileActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:exported="false"
             android:label="@string/profile" />
         <activity
