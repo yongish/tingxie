@@ -22,9 +22,8 @@ class DrawerItemCustomAdapter(
   }
 
   override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-    var listItem = convertView
     val inflater = (mContext as Activity).layoutInflater
-    listItem = inflater.inflate(layoutResourceId, parent, false)
+    val listItem = inflater.inflate(layoutResourceId, parent, false)
     val imageViewIcon = listItem.findViewById<View>(R.id.imageViewIcon) as ImageView
     val textViewName = listItem.findViewById<View>(R.id.textViewName) as TextView
     val folder = data!![position]

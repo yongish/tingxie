@@ -32,9 +32,8 @@ class ExercisesCompletedFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-//    val currentUser = FirebaseAuth.getInstance().currentUser!!
-//    val email = currentUser.email!!
-    val email = "yongish@gmail.com"
+    val currentUser = FirebaseAuth.getInstance().currentUser!!
+    val email = currentUser.email!!
 
     val viewModelFactory =
       ExercisesCompletedViewModelFactory(requireActivity().application, email)
