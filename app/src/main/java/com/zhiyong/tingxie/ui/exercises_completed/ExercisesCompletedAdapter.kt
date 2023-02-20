@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.zhiyong.tingxie.databinding.RecyclerviewExercisesCompletedBinding
 import com.zhiyong.tingxie.network.NetworkExercisesCompleted
 import com.zhiyong.tingxie.ui.read_then_write.ReadThenWriteActivity
+import com.zhiyong.tingxie.ui.readings.ReadingsActivity
 import java.util.*
 
 class ExercisesCompletedAdapter(
@@ -34,12 +35,17 @@ class ExercisesCompletedAdapter(
     val exerciseType = exerciseTypes[position]
     holder.bind(exerciseType)
 
-    // stopped here. Go to ReadThenWriteActivity.
-
     holder.btnView.setOnClickListener {
-      context.startActivity(Intent(context, ReadThenWriteActivity::class.java))
+      context.startActivity(
+        Intent(
+          context, when (exerciseType.englishName) {
+            "readThenWrite" -> ReadThenWriteActivity::class.java
+            "reading" -> ReadingsActivity::class.java
+            else -> ReadThenWriteActivity::class.java
+          }
+        )
+      )
     }
-//    holder.btnPlay.setOnClickListener(context.startActivity())
   }
 
   override fun getItemCount(): Int = exerciseTypes.size
