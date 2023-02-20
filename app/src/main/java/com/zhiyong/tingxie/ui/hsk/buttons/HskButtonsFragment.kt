@@ -27,28 +27,39 @@ class HskButtonsFragment : Fragment() {
   }
 
   private fun assignBtnsView(view: View): (Array<Int>, Class<*>) -> Unit {
-    return fun (btnIdArray: Array<Int>, clazz: Class<*>) {
-      btnIdArray.forEachIndexed { i, id -> run {
-        val btn: Button = view.findViewById(id)
-        btn.setOnClickListener {
-          val intent = Intent(activity, clazz)
-          intent.putExtra(EXTRA_LEVEL, i + 1)
-          startActivity(intent)
+    return fun(btnIdArray: Array<Int>, clazz: Class<*>) {
+      btnIdArray.forEachIndexed { i, id ->
+        run {
+          val btn: Button = view.findViewById(id)
+          btn.setOnClickListener {
+            val intent = Intent(activity, clazz)
+            intent.putExtra(EXTRA_LEVEL, i + 1)
+            startActivity(intent)
+          }
         }
-      } }
+      }
     }
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     val assignBtns = assignBtnsView(view)
-    assignBtns(arrayOf(
-      R.id.btnHsk1, R.id.btnHsk2, R.id.btnHsk3, R.id.btnHsk4, R.id.btnHsk5, R.id.btnHsk6
-    ), HskWordsActivity::class.java)
-    assignBtns(arrayOf(
-      R.id.btnStartHsk1, R.id.btnStartHsk2, R.id.btnStartHsk3,
-      R.id.btnStartHsk4, R.id.btnStartHsk5, R.id.btnStartHsk6
-    ), HskQuestionActivity::class.java)
+    assignBtns(
+      arrayOf(
+        R.id.btnHsk1,
+        R.id.btnHsk2,
+        R.id.btnHsk3,
+        R.id.btnHsk4,
+        R.id.btnHsk5,
+        R.id.btnHsk6
+      ), HskWordsActivity::class.java
+    )
+    assignBtns(
+      arrayOf(
+        R.id.btnStartHsk1, R.id.btnStartHsk2, R.id.btnStartHsk3,
+        R.id.btnStartHsk4, R.id.btnStartHsk5, R.id.btnStartHsk6
+      ), HskQuestionActivity::class.java
+    )
 
     buttonsViewModel = ViewModelProvider(this).get(HskButtonsViewModel::class.java)
     // TODO: Use the ViewModel

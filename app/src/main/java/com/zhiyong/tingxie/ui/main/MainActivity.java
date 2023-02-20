@@ -273,8 +273,6 @@ public class MainActivity extends AppCompatActivity {
     private void selectItem(int position) {
         mDrawerLayout.closeDrawer(mDrawerList);
         switch (position) {
-            case 0:
-                break;
             case 1:
                 startActivity(new Intent(MainActivity.this,
                         ExercisesCompletedActivity.class));
@@ -284,6 +282,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 3:
                 startActivity(new Intent(MainActivity.this, HskButtonsActivity.class));
+                break;
             case 4:
                 AuthUI.getInstance()
                         .signOut(this)

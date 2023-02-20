@@ -60,26 +60,11 @@ abstract class DrawerActivity : AppCompatActivity() {
       0 -> startActivity(Intent(this, MainActivity::class.java))
       1 -> startActivity(Intent(this, ExercisesCompletedActivity::class.java))
       2 -> startActivity(Intent(this, ProfileActivity::class.java))
-      3 -> {
-        startActivity(Intent(this, HskButtonsActivity::class.java))
-        AuthUI.getInstance()
-          .signOut(this)
-          .addOnCompleteListener {
-            startActivity(
-              Intent(
-                this,
-                LoginActivity::class.java
-              )
-            )
-            finish()
-          }
+      3 -> startActivity(Intent(this, HskButtonsActivity::class.java))
+      4 -> AuthUI.getInstance().signOut(this).addOnCompleteListener {
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
       }
-      4 -> AuthUI.getInstance()
-        .signOut(this)
-        .addOnCompleteListener {
-          startActivity(Intent(this, LoginActivity::class.java))
-          finish()
-        }
       else -> {}
     }
   }
