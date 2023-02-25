@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.zhiyong.tingxie.databinding.RecyclerviewReadingsBinding
 import com.zhiyong.tingxie.network.NetworkTitle
 import com.zhiyong.tingxie.ui.reading.ReadingActivity
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import java.time.Instant
+import java.time.ZoneId
 
 class ReadingsAdapter(
   private val context: Context,
@@ -55,12 +55,10 @@ class ReadingsAdapter(
 
     fun bind(title: NetworkTitle) = with(binding) {
       tvTitle.text = title.title
-      val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
       tvDateOpened.text =
-        if (title.dateOpened == -1) "Unread" else "Opened on " + LocalDate.parse(
-          title.dateOpened.toString(),
-          formatter
-        )
+        if (title.timestampOpened == -1) "Unread" else "Opened on " + Instant.ofEpochMilli(
+          title.timestampOpened.toLong()
+        ).atZone(ZoneId.systemDefault()).toLocalDateTime().toString()
     }
   }
 }

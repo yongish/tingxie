@@ -25,6 +25,7 @@
             android:exported="false" />
         <activity
             android:name=".ui.readings.ReadingsActivity"
+            android:label="阅读"
             android:exported="false">
         </activity>
         <activity

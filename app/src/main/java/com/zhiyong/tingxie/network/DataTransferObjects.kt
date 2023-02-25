@@ -164,7 +164,7 @@ data class NetworkProfile(
 data class NetworkTitle(
   val id: Long,
   val title: String,
-  val dateOpened: Int,
+  val timestampOpened: Int,
 //  val gradeLevels: List<Int>
 // Have pagination in the future.
 ) : Parcelable

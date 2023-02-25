@@ -129,11 +129,11 @@ interface Service {
     @Path("email") email: String, @Body profile: NetworkProfile
   ): String
 
-  @GET("reading-titles/email/{email}")
-  suspend fun getReadingTitles(@Path("email") email: String): MutableList<NetworkTitle>
+  @GET("reading-titles")
+  suspend fun getReadingTitles(@Query("email") email: String): MutableList<NetworkTitle>
 
-  @GET("reading-passage/{id}")
-  suspend fun getReadingPassage(@Path("id") id: Long): NetworkPassage
+  @GET("reading-titles")
+  suspend fun getReadingPassage(@Query("id") id: Long): NetworkPassage
 
   // todo: Not developing these endpoints below. Should clean up.
   @GET("shares/email/{email}/quiz_id/{quizId}")
