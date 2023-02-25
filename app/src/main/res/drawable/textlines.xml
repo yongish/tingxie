@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--        android:right="5dp"-->
     <item
-        android:right="5dp"
         android:top="14dp"
         >
         <shape android:shape="line">

@@ -177,6 +177,7 @@ data class NetworkPassage(
 //  val gradeLevels: List<Int>,
 //  val author: String,
   val passage: String
+//  val passage: List<String>
 ) : Parcelable
 
 

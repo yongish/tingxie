@@ -43,7 +43,6 @@ class ReadingsFragment : Fragment() {
     viewModel.titles.observe(viewLifecycleOwner) {
       it?.let {
         adapter.readings = it
-        Toast.makeText(context, it.toString(), Toast.LENGTH_LONG).show()
       }
     }
   }

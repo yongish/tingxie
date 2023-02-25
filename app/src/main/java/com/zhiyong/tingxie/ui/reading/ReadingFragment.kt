@@ -45,17 +45,30 @@ class ReadingFragment : Fragment() {
         // Each character has a CharacterView.
 //        it.passage
 
+        var view = CharacterView(requireContext(), '你', 0, Position.FIRST)
+//        var view = CharacterView(requireContext(), "hi", 0)
+        binding.reading.addView(view)
+        view = CharacterView(requireContext(), '有', 0, Position.INSIDE)
+        binding.reading.addView(view)
+        view = CharacterView(requireContext(), '踏', 0, Position.LAST)
+        binding.reading.addView(view)
+        // Array of words.
+        // Use character_first.xml for 1st character.
+        // Use character_last.xml for last character.
+        // Use character_middle.xml for the other characters.
+//        it.passage.forEach { word -> {
+//          word.toCharArray().forEach { character -> {
+//            var view = CharacterView(requireContext(), character, 0)
+//            binding.reading.addView(view)
+//          } }
+//        } }
+
+
       }
     }
 
-    var view = CharacterView(requireContext(), "hi", 0)
 //    view.groupIndex
 
-//    binding.reading.addView(view)
-//    view = CharacterView(requireContext(), "有")
-//    binding.reading.addView(view)
-//    view = CharacterView(requireContext(), "踏")
-//    binding.reading.addView(view)
 //    view = CharacterView(requireContext(), "me")
 //    binding.reading.addView(view)
 //    view = CharacterView(requireContext(), "me")
@@ -89,25 +102,25 @@ class ReadingFragment : Fragment() {
 //    view = CharacterView(requireContext(), "me")
 //    binding.reading.addView(view)
 
-    val menuHost: MenuHost = requireActivity()
-    menuHost.addMenuProvider(object : MenuProvider {
-      override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.menu_reading, menu)
-      }
-
-      override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        return when (menuItem.itemId) {
-          R.id.action_toggle_pinyin -> {
-            wordList.forEach { view -> view.togglePinyin() }
-            true
-          }
-          R.id.action_underline -> {
-
-            true
-          }
-          else -> false
-        }
-      }
-    })
+//    val menuHost: MenuHost = requireActivity()
+//    menuHost.addMenuProvider(object : MenuProvider {
+//      override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+//        menuInflater.inflate(R.menu.menu_reading, menu)
+//      }
+//
+//      override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+//        return when (menuItem.itemId) {
+//          R.id.action_toggle_pinyin -> {
+//            wordList.forEach { view -> view.togglePinyin() }
+//            true
+//          }
+//          R.id.action_underline -> {
+//
+//            true
+//          }
+//          else -> false
+//        }
+//      }
+//    })
   }
 }
