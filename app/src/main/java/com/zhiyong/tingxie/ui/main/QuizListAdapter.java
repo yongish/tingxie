@@ -86,10 +86,11 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
 
     @Override
     public void onBindViewHolder(final QuizViewHolder holder, int i) {
-        final NetworkQuiz quizItem = mQuizItems.get(i);
+        int position = holder.getAdapterPosition();
+        final NetworkQuiz quizItem = mQuizItems.get(position);
 
         if (mQuizItems != null) {
-            final NetworkQuiz current = mQuizItems.get(i);
+            final NetworkQuiz current = mQuizItems.get(position);
 
             String displayDate = String.valueOf(current.getDate());
             try {
@@ -138,7 +139,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                     DialogFragment newFragment = DatePickerFragment.newInstance(
 //                            current.getId(),
                             current,
-                            i,
+                            position,
                             c.get(Calendar.YEAR),
                             c.get(Calendar.MONTH),
                             c.get(Calendar.DAY_OF_MONTH)
