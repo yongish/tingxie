@@ -45,13 +45,14 @@ class ReadingFragment : Fragment() {
         // Each character has a CharacterView.
 //        it.passage
 
-        var view = CharacterView(requireContext(), '你', 0, Position.FIRST)
+        var view = CharacterView(requireContext(), "你", 0, Position.FIRST)
 //        var view = CharacterView(requireContext(), "hi", 0)
         binding.reading.addView(view)
-        view = CharacterView(requireContext(), '有', 0, Position.INSIDE)
+        view = CharacterView(requireContext(), "有", 0, Position.INSIDE)
         binding.reading.addView(view)
-        view = CharacterView(requireContext(), '踏', 0, Position.LAST)
+        view = CharacterView(requireContext(), "踏", 0, Position.LAST)
         binding.reading.addView(view)
+
         // Array of words.
         // Use character_first.xml for 1st character.
         // Use character_last.xml for last character.

@@ -32,27 +32,26 @@ class CharacterView : ConstraintLayout {
   var groupIndex = 0
   var position = "FIRST"
 
-  //  constructor(context: Context, character: String, groupIndex: Int) : super(context) {
-  constructor(context: Context, character: Char, groupIndex: Int, position: Position) : super(context) {
+    constructor(context: Context, character: String, groupIndex: Int, position: Position) : super(context) {
     inflate(context, R.layout.fragment_character, this)
 
     // Need group index to highlight/lookup entire word on click.
     this.groupIndex = groupIndex
 
     val textView = findViewById<TextView>(R.id.tvCharacter)
-    textView.text = character.toString()
+    textView.text = character
 
     val format = HanyuPinyinOutputFormat()
     format.vCharType = HanyuPinyinVCharType.WITH_U_UNICODE
     format.toneType = HanyuPinyinToneType.WITH_TONE_MARK
     pinyinView = findViewById(R.id.tvPinyin)
-    pinyinView.text = PinyinHelper.toHanYuPinyinString(character + "a", format, " ", true)
+    pinyinView.text = PinyinHelper.toHanYuPinyinString(character, format, " ", true)
 
-//    when (position) {
-//      Position.FIRST -> pinyinView.setBackgroundResource(R.drawable.character_first)
-//      Position.INSIDE -> pinyinView.setBackgroundResource(R.drawable.character_middle)
-//      else -> pinyinView.setBackgroundResource(R.drawable.character_last)
-//    }
+    when (position) {
+      Position.FIRST -> pinyinView.setBackgroundResource(R.drawable.character_first)
+      Position.INSIDE -> pinyinView.setBackgroundResource(R.drawable.character_middle)
+      else -> pinyinView.setBackgroundResource(R.drawable.character_last)
+    }
 
     // How to underline pinyinView?
     // How to partially underline pinyinView?

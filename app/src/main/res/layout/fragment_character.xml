@@ -20,9 +20,10 @@
     <TextView
         android:id="@+id/tvPinyin"
         style="@style/TextAppearance.Material3.LabelSmall"
-        android:layout_width="100dp"
+        android:layout_width="0dp"
         android:layout_height="20dp"
         android:background="@drawable/textlines"
+        android:gravity="center"
         android:text="c"
         app:layout_constraintEnd_toEndOf="@+id/tvCharacter"
         app:layout_constraintStart_toStartOf="@+id/tvCharacter"
