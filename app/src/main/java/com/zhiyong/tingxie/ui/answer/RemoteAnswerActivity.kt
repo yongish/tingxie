@@ -89,7 +89,9 @@ class RemoteAnswerActivity : AppCompatActivity() {
         if (quizItem != null) {
           quizItem.numNotCorrect = quizItem.numWords
           quizItem.round += 1
-          mAnswerViewModel.updateQuiz(quizItem)
+          // Server also updates numNotCorrect.
+          // Should not send PUT request to reset numNotCorrect the server.
+//          mAnswerViewModel.updateQuiz(quizItem)
         }
         AlertDialog.Builder(this)
           .setTitle("Round Completed.")
