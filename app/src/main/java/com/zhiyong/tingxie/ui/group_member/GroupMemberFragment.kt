@@ -71,6 +71,7 @@ class GroupMemberFragment : Fragment() {
     if (role == EnumQuizRole.MEMBER) {
       binding.fab.visibility = View.INVISIBLE
     } else {
+      binding.fab.visibility = View.VISIBLE
       binding.fab.setOnClickListener {
         val intent = Intent(context, AddGroupMemberActivity::class.java)
         intent.putExtra(EXTRA_USER_ROLE, userRole)

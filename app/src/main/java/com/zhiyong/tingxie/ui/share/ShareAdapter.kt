@@ -26,7 +26,7 @@ class ShareAdapter(
   val recyclerView: RecyclerView,
   private val viewLifecycleOwner: LifecycleOwner,
   private val quizId: Long,
-  private val role: EnumQuizRole
+  private var role: EnumQuizRole
 ) : RecyclerView.Adapter<ShareAdapter.ViewHolder>() {
 
   val user = FirebaseAuth.getInstance().currentUser
@@ -49,25 +49,14 @@ class ShareAdapter(
   }
 
   private fun shouldShowOwner(): Boolean =
-    users.find { user -> user.email == email }?.role != EnumQuizRole.OWNER.name
+    users.find { user -> user.email == email }?.role == EnumQuizRole.OWNER.name
 
   @SuppressLint("ClickableViewAccessibility")
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val user = users[position]
     holder.bind(user)
 
-    Log.d("SHAREADAPTER position: ", position.toString())
-    Log.d("SHAREADAPTER role: ", role.toString() )
-//    if (role == EnumQuizRole.OWNER || role == EnumQuizRole.MEMBER) {
-
-    if (user.role == EnumQuizRole.OWNER.name) {
-      holder.ivEditRole.visibility = View.INVISIBLE
-    }
-
-    if (role == EnumQuizRole.MEMBER) {
-      holder.ivEditRole.visibility = View.INVISIBLE
-      holder.ivDelete.visibility = View.INVISIBLE
-    } else {
+    if (role == EnumQuizRole.ADMIN || role == EnumQuizRole.OWNER) {
       holder.clIdentifier.setOnClickListener {
         if (user.role == EnumQuizRole.OWNER.name && users.filter { it.role == EnumQuizRole.OWNER.name }.size == 1) {
           AlertDialog.Builder(context)
@@ -79,7 +68,6 @@ class ShareAdapter(
           val fm = (context as AppCompatActivity).supportFragmentManager
           val selectRoleFragment: SelectRoleFragment =
             SelectRoleFragment.newInstance(
-//              user.role != EnumQuizRole.OWNER.name,
               ::shouldShowOwner,
               user,
               position
@@ -87,7 +75,14 @@ class ShareAdapter(
           selectRoleFragment.show(fm, "fragment_select_role")
         }
       }
-
+      holder.ivEditRole.visibility = View.VISIBLE
+      holder.ivDelete.visibility = View.VISIBLE
+    }
+    if (user.role == EnumQuizRole.OWNER.name || role == EnumQuizRole.MEMBER) {
+      holder.clIdentifier.setOnClickListener {}
+      holder.ivEditRole.visibility = View.INVISIBLE
+      holder.ivDelete.visibility = View.INVISIBLE
+    } else {
       holder.ivDelete.setOnClickListener {
         if (user.email == email && user.role == EnumQuizRole.OWNER.name) {
           AlertDialog.Builder(context)
@@ -110,9 +105,10 @@ class ShareAdapter(
                   // Backend returns -1 if there is no token found for user, but the user
                   // is removed anyway.
                   users.removeAt(position)
-                  notifyItemChanged(position)
                   if (user.email == email) {
                     context.startActivity(Intent(context, MainActivity::class.java))
+                  } else {
+                    notifyItemChanged(position)
                   }
                 }
               }
@@ -128,12 +124,15 @@ class ShareAdapter(
       intent.putExtra(EXTRA_EMAIL, user.email)
       context.startActivity(intent)
     }
-
   }
 
   fun changeRole(networkGroupMember: NetworkGroupMember, i: Int) {
+    if (networkGroupMember.email == email) {
+      role = EnumQuizRole.valueOf(networkGroupMember.role)
+    }
+
     users[i] = networkGroupMember
-    notifyItemChanged(i)
+    notifyDataSetChanged()
   }
 
   fun changeCurrentUserToAdmin() {

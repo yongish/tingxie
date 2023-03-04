@@ -2,7 +2,6 @@ package com.zhiyong.tingxie.ui.group_member
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,10 +51,6 @@ class GroupMemberAdapter(
     val groupMember = groupMembers[position]
     holder.bind(groupMember)
 
-//    if (groupMember.role != EnumQuizRole.OWNER.name) {
-//      // Non-owner roles can be changed anytime. The owner must assign someone else as
-//      // owner, before he can change her own role.
-//    }
     if (role == EnumQuizRole.ADMIN || role == EnumQuizRole.OWNER) {
       holder.clIdentifier.setOnClickListener {
         val fm = (context as AppCompatActivity).supportFragmentManager
