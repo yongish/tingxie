@@ -1,6 +1,8 @@
 package com.zhiyong.tingxie.ui.group_member
 
 import android.content.Context
+import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.zhiyong.tingxie.databinding.RecyclerviewGroupMemberBinding
 import com.zhiyong.tingxie.network.NetworkGroupMember
+import com.zhiyong.tingxie.ui.group.GroupActivity
 import com.zhiyong.tingxie.ui.share.EnumQuizRole
 
 class GroupMemberAdapter(
@@ -19,7 +22,7 @@ class GroupMemberAdapter(
   val recyclerView: RecyclerView,
   private val viewLifecycleOwner: LifecycleOwner,
   private val groupId: Long,
-  val role: EnumQuizRole
+  var role: EnumQuizRole
 ) : RecyclerView.Adapter<GroupMemberAdapter.ViewHolder>() {
 
   val user = FirebaseAuth.getInstance().currentUser
@@ -40,26 +43,31 @@ class GroupMemberAdapter(
       )
     )
 
-  override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+  private fun shouldShowOwner(): Boolean {
+    val currMember = groupMembers.find { groupMember -> groupMember.email == email }
+    return currMember?.role == EnumQuizRole.OWNER.name
+  }
 
+  override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val groupMember = groupMembers[position]
     holder.bind(groupMember)
 
-    if (groupMember.role != EnumQuizRole.OWNER.name) {
-      // Non-owner roles can be changed anytime. The owner must assign someone else as
-      // owner, before he can change her own role.
+//    if (groupMember.role != EnumQuizRole.OWNER.name) {
+//      // Non-owner roles can be changed anytime. The owner must assign someone else as
+//      // owner, before he can change her own role.
+//    }
+    if (role == EnumQuizRole.ADMIN || role == EnumQuizRole.OWNER) {
       holder.clIdentifier.setOnClickListener {
         val fm = (context as AppCompatActivity).supportFragmentManager
         val selectRoleFragment: SelectRoleFragment =
-          SelectRoleFragment.newInstance(role == EnumQuizRole.OWNER, groupMember, position)
+          SelectRoleFragment.newInstance(::shouldShowOwner, groupMember, position)
         selectRoleFragment.show(fm, "fragment_select_role")
       }
+      holder.ivEditRole.visibility = View.VISIBLE
+      holder.ivDelete.visibility = View.VISIBLE
     }
-    if (groupMember.role == EnumQuizRole.OWNER.name) {
-      holder.ivEditRole.visibility = View.INVISIBLE
-    }
-
-    if (role == EnumQuizRole.MEMBER) {
+    if (groupMember.role == EnumQuizRole.OWNER.name || role == EnumQuizRole.MEMBER) {
+      holder.clIdentifier.setOnClickListener {}
       holder.ivEditRole.visibility = View.INVISIBLE
       holder.ivDelete.visibility = View.INVISIBLE
     } else {
@@ -83,7 +91,11 @@ class GroupMemberAdapter(
               ).observe(viewLifecycleOwner) {
                 if (it > 0) {
                   groupMembers.removeAt(position)
-                  notifyItemChanged(position)
+                  if (groupMember.email == email) {
+                    context.startActivity(Intent(context, GroupActivity::class.java))
+                  } else {
+                    notifyItemChanged(position)
+                  }
                 }
               }
             }
@@ -95,13 +107,22 @@ class GroupMemberAdapter(
   }
 
   fun changeRole(networkGroupMember: NetworkGroupMember, i: Int) {
+    if (networkGroupMember.email == email) {
+      role = EnumQuizRole.valueOf(networkGroupMember.role)
+    }
+
     groupMembers[i] = networkGroupMember
-    notifyItemChanged(i)
+    notifyDataSetChanged()
   }
 
-  fun addGroupMember(networkGroupMember: NetworkGroupMember) {
-    groupMembers.add(networkGroupMember)
-    notifyItemInserted(groupMembers.size)
+  fun changeCurrentUserToAdmin() {
+    role = EnumQuizRole.OWNER
+
+    // Find owner position in adapter.
+    val ownerIndex =
+      groupMembers.indexOfFirst { networkGroupMember -> networkGroupMember.email == email }
+    groupMembers[ownerIndex].role = EnumQuizRole.ADMIN.name
+    notifyItemChanged(ownerIndex)
   }
 
   override fun getItemCount(): Int = groupMembers.size

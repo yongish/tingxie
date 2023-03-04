@@ -88,6 +88,7 @@ class GroupFragment : Fragment() {
     params.leftMargin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
     params.rightMargin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
     editText.layoutParams = params
+    editText.requestFocus()
     val frameLayout = context?.let { it1 ->
       FrameLayout(it1)
     }

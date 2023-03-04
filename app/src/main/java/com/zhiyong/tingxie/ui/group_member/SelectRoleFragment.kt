@@ -3,6 +3,7 @@ package com.zhiyong.tingxie.ui.group_member
 import android.app.AlertDialog
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import com.zhiyong.tingxie.network.NetworkGroupMember
 import com.zhiyong.tingxie.ui.group_member.GroupMemberFragment.Companion.EXTRA_GROUP_MEMBER
 import com.zhiyong.tingxie.ui.group_member.GroupMemberFragment.Companion.EXTRA_POSITION
 import com.zhiyong.tingxie.ui.group_member.GroupMemberFragment.Companion.EXTRA_SHOW_OWNER_OPTION
+import com.zhiyong.tingxie.ui.share.EnumQuizRole
 
 class SelectRoleFragment : DialogFragment() {
 
@@ -48,6 +50,7 @@ class SelectRoleFragment : DialogFragment() {
       binding.rbMember.isChecked = false
     }
 
+    Log.d("SelectRoleFragment onViewCreated: ", showOwnerOption.toString())
     if (showOwnerOption == true) binding.rbOwner.visibility = View.VISIBLE
 
     binding.clRole.setOnClickListener {
@@ -82,10 +85,14 @@ class SelectRoleFragment : DialogFragment() {
     const val REQUEST_KEY = "com.zhiyong.tingxie.ui.group_member.REQUEST_KEY"
 
     @JvmStatic
-    fun newInstance(showOwnerOption: Boolean, groupMember: NetworkGroupMember, position: Int) =
+    fun newInstance(
+      shouldShowOwner: () -> Boolean,
+      groupMember: NetworkGroupMember,
+      position: Int
+    ) =
       SelectRoleFragment().apply {
         arguments = Bundle().apply {
-          putBoolean(EXTRA_SHOW_OWNER_OPTION, showOwnerOption)
+          putBoolean(EXTRA_SHOW_OWNER_OPTION, shouldShowOwner())
           putParcelable(EXTRA_GROUP_MEMBER, groupMember)
           putInt(EXTRA_POSITION, position)
         }

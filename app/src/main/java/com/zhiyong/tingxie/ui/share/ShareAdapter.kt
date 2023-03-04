@@ -3,6 +3,7 @@ package com.zhiyong.tingxie.ui.share
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ import com.zhiyong.tingxie.databinding.RecyclerviewShareBinding
 import com.zhiyong.tingxie.network.NetworkGroupMember
 import com.zhiyong.tingxie.ui.group_member.SelectRoleFragment
 import com.zhiyong.tingxie.ui.group_membership.GroupMembershipActivity
+import com.zhiyong.tingxie.ui.main.MainActivity
 import com.zhiyong.tingxie.ui.share.ShareFragment.Companion.EXTRA_EMAIL
 
 class ShareAdapter(
@@ -46,15 +48,24 @@ class ShareAdapter(
     )
   }
 
+  private fun shouldShowOwner(): Boolean =
+    users.find { user -> user.email == email }?.role != EnumQuizRole.OWNER.name
+
   @SuppressLint("ClickableViewAccessibility")
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val user = users[position]
     holder.bind(user)
+
+    Log.d("SHAREADAPTER position: ", position.toString())
+    Log.d("SHAREADAPTER role: ", role.toString() )
 //    if (role == EnumQuizRole.OWNER || role == EnumQuizRole.MEMBER) {
-    if (role == EnumQuizRole.OWNER) {
+
+    if (user.role == EnumQuizRole.OWNER.name) {
       holder.ivEditRole.visibility = View.INVISIBLE
     }
+
     if (role == EnumQuizRole.MEMBER) {
+      holder.ivEditRole.visibility = View.INVISIBLE
       holder.ivDelete.visibility = View.INVISIBLE
     } else {
       holder.clIdentifier.setOnClickListener {
@@ -68,7 +79,8 @@ class ShareAdapter(
           val fm = (context as AppCompatActivity).supportFragmentManager
           val selectRoleFragment: SelectRoleFragment =
             SelectRoleFragment.newInstance(
-              user.role != EnumQuizRole.OWNER.name,
+//              user.role != EnumQuizRole.OWNER.name,
+              ::shouldShowOwner,
               user,
               position
             )
@@ -99,6 +111,9 @@ class ShareAdapter(
                   // is removed anyway.
                   users.removeAt(position)
                   notifyItemChanged(position)
+                  if (user.email == email) {
+                    context.startActivity(Intent(context, MainActivity::class.java))
+                  }
                 }
               }
             }
@@ -119,6 +134,13 @@ class ShareAdapter(
   fun changeRole(networkGroupMember: NetworkGroupMember, i: Int) {
     users[i] = networkGroupMember
     notifyItemChanged(i)
+  }
+
+  fun changeCurrentUserToAdmin() {
+    // Find owner position in adapter.
+    val ownerIndex = users.indexOfFirst { user -> user.email == email }
+    users[ownerIndex].role = EnumQuizRole.ADMIN.name
+    notifyItemChanged(ownerIndex)
   }
 
   override fun getItemCount(): Int = users.size

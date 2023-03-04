@@ -88,7 +88,6 @@ class ShareFragment : Fragment() {
     val viewModel =
       ViewModelProvider(this, viewModelFactory)[ShareViewModel::class.java]
 
-    // todo: Pass role into ShareAdapter to fix duplication.
     adapter = ShareAdapter(
       requireActivity(),
       viewModel,
@@ -124,6 +123,7 @@ class ShareFragment : Fragment() {
               if (it > 0) adapter.changeRole(user, position)
               if (role == EnumQuizRole.OWNER && user.role == EnumQuizRole.OWNER.name) {
                 viewModel.changeRole(userRole.id, email, "ADMIN")
+                adapter.changeCurrentUserToAdmin()
               }
             }
       }

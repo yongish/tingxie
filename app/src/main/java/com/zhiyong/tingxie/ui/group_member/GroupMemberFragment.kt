@@ -66,7 +66,7 @@ class GroupMemberFragment : Fragment() {
     if (userRole == null) {
       binding.otherErrorView.visibility = View.VISIBLE
     }
-    val role = userRole?.role ?: EnumQuizRole.MEMBER
+    var role = userRole?.role ?: EnumQuizRole.MEMBER
 
     if (role == EnumQuizRole.MEMBER) {
       binding.fab.visibility = View.INVISIBLE
@@ -115,7 +115,9 @@ class GroupMemberFragment : Fragment() {
           .observe(viewLifecycleOwner) {
             if (it > 0) adapter.changeRole(groupMember, position)
             if (role == EnumQuizRole.OWNER && groupMember.role == EnumQuizRole.OWNER.name) {
+              role = EnumQuizRole.ADMIN
               viewModel.changeRole(userRole?.id, email, "ADMIN")
+              adapter.changeCurrentUserToAdmin()
             }
           }
       }
@@ -157,6 +159,7 @@ class GroupMemberFragment : Fragment() {
                     .observe(viewLifecycleOwner) {
                       if (it > 0) {
                         dialog.dismiss()
+                        startActivity(Intent(context, GroupActivity::class.java))
                       }
                     }
                 }
