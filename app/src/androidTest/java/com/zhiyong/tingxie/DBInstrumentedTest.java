@@ -13,7 +13,6 @@ import com.zhiyong.tingxie.db.Question;
 import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.db.Word;
-import com.zhiyong.tingxie.ui.main.QuizItem;
 
 import org.junit.After;
 import org.junit.Before;
@@ -58,7 +57,7 @@ public class DBInstrumentedTest {
 
     @Test
     public void blankTest() throws InterruptedException {
-        QuizItem result = LiveDataTestUtil.getValue(mDao.getAllQuizItems()).get(0);
+        Quiz result = LiveDataTestUtil.getValue(mDao.getAllQuizItems()).get(0);
         assertEquals(testDate, result.getDate());
         assertEquals(0, result.getTotalWords());
         assertEquals(0, result.getNotLearned());
@@ -165,7 +164,7 @@ public class DBInstrumentedTest {
 
     @Test
     public void updateQuizDate() throws InterruptedException {
-        QuizItem quizItem = LiveDataTestUtil.getValue(mDao.getAllQuizItems()).get(0);
+        Quiz quizItem = LiveDataTestUtil.getValue(mDao.getAllQuizItems()).get(0);
         assertEquals(testDate, quizItem.getDate());
         int updatedDate = 20190501;
         Quiz updatedQuiz = new Quiz(updatedDate);

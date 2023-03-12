@@ -11,11 +11,11 @@ import com.zhiyong.tingxie.db.Question;
 import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.db.QuizPinyin;
 import com.zhiyong.tingxie.db.Word;
-import com.zhiyong.tingxie.ui.main.QuizItem;
 import com.zhiyong.tingxie.ui.word.WordItem;
 
 import java.util.List;
 
+// todo: 12/2/22. Delete this file after finish porting from local to remote.
 @Dao
 public interface QuizDao {
     @Insert
@@ -61,6 +61,7 @@ public interface QuizDao {
     LiveData<Integer> getCorrectCount(long quizId, String pinyin);
 
     @Query("SELECT DISTINCT q.id AS quizId,\n" +
+            "                qp.id AS id,\n" +
             "                qp.word_string AS wordString,\n" +
             "                qp.pinyin_string AS pinyinString,\n" +
             "                qp.asked\n" +
@@ -72,15 +73,23 @@ public interface QuizDao {
 //            "ORDER BY w.pinyin_string")
     LiveData<List<WordItem>> getWordItemsOfQuiz(long quizId);
 
-    @Query("SELECT id, date, title, total_words AS totalWords, not_learned AS notLearned, round " +
+    @Query("SELECT id, date, title, total_words, not_learned, round " +
             "FROM quiz ORDER BY date DESC")
-    LiveData<List<QuizItem>> getAllQuizItems();
+    LiveData<List<Quiz>> getAllQuizItems();
 
-    @Query("SELECT id, date, title, total_words AS totalWords, not_learned AS notLearned, round " +
-            "FROM quiz WHERE id = :id")
-    LiveData<QuizItem> getQuizItem(long id);
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertAll(List<Quiz> quizzes);
 
-    @Query("SELECT :quizId AS quizId, word_string AS wordString, pinyin_string AS pinyinString, asked " +
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertQuizPinyins(List<QuizPinyin> quizPinyins);
+
+//    @Query("SELECT id, date, title, total_words AS numWords, not_learned AS numNotCorrect, round " +
+//            "FROM quiz WHERE id = :id")
+//    LiveData<QuizItem> getQuizItem(long id);
+
+    @Query("SELECT :quizId AS quizId," +
+            "qp.id AS id," +
+            "word_string AS wordString, pinyin_string AS pinyinString, asked " +
             "FROM quiz_pinyin qp WHERE qp.asked = 0 AND qp.quiz_id = :quizId")
     LiveData<List<WordItem>> getRemainingQuestions(long quizId);
 }

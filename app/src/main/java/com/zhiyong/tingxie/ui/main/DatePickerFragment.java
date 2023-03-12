@@ -8,11 +8,15 @@ import androidx.fragment.app.DialogFragment;
 import android.app.DatePickerDialog;
 import android.widget.DatePicker;
 
+import com.zhiyong.tingxie.network.NetworkQuiz;
+
 import java.util.Calendar;
+import java.util.Optional;
 
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
-    private long quizId;
+    private NetworkQuiz quizItem;
+    private int position;
 
     @NonNull
     @Override
@@ -20,9 +24,9 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         // Use the current date as the default date in the picker.
         final Calendar c = Calendar.getInstance();
         try {
-            quizId = getArguments().getLong("quizId");
-        } catch (NullPointerException e) {
-            quizId = -1;
+            quizItem = getArguments().getParcelable("quizItem");
+            position = getArguments().getInt("position");
+        } catch (NullPointerException ignored) {
         }
         int year;
         try {
@@ -45,12 +49,12 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         return new DatePickerDialog(getActivity(), this, year, month, day);
     }
 
-    static DatePickerFragment newInstance(long quizId, int year, int month, int day) {
+    static DatePickerFragment newInstance(NetworkQuiz quizItem, int position, int year, int month, int day) {
         DatePickerFragment f = new DatePickerFragment();
 
-        // Supply num input as an argument.
         Bundle args = new Bundle();
-        args.putLong("quizId", quizId);
+        args.putParcelable("quizItem", quizItem);
+        args.putInt("position", position);
         args.putInt("year", year);
         args.putInt("month", month);
         args.putInt("day", day);
@@ -62,6 +66,6 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         MainActivity activity = (MainActivity) getActivity();
-        activity.processDatePickerResult(quizId, year, month, dayOfMonth);
+        activity.processDatePickerResult(Optional.ofNullable(quizItem), position, year, month, dayOfMonth);
     }
 }

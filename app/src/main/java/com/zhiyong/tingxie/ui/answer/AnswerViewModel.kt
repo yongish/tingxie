@@ -1,16 +1,33 @@
 package com.zhiyong.tingxie.ui.answer
 
 import android.app.Application
-import com.zhiyong.tingxie.db.Question
-import com.zhiyong.tingxie.db.QuizPinyin
-import com.zhiyong.tingxie.ui.word.WordItem
-import com.zhiyong.tingxie.viewmodel.UpdateQuizViewModel
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.zhiyong.tingxie.QuizRepository
+import com.zhiyong.tingxie.network.NetworkQuiz
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class AnswerViewModel(application: Application) : UpdateQuizViewModel(application) {
-    fun resetAsked(quizId: Long) = mRepository.resetAsked(quizId)
+class AnswerViewModel(application: Application) : AndroidViewModel(application) {
+  private val repository = QuizRepository(application)
 
-    fun onAnswer(question: Question, wordItem: WordItem) {
-      mRepository.insertQuestion(question)
-      mRepository.updateQuizPinyin(QuizPinyin(wordItem.quizId, wordItem.pinyinString, wordItem.wordString, wordItem.isAsked))
+  fun upsertCorrectRecord(wordId: Long): LiveData<Int> {
+    val result = MutableLiveData<Int>()
+    viewModelScope.launch(Dispatchers.IO) {
+      val numRecords = repository.upsertCorrectRecord(wordId)
+      result.postValue(numRecords)
     }
+    return result
+  }
+
+  fun updateQuiz(quizItem: NetworkQuiz): LiveData<Int> {
+    val result = MutableLiveData<Int>()
+    viewModelScope.launch(Dispatchers.IO) {
+      val numRecords = repository.updateQuiz(quizItem)
+      result.postValue(numRecords)
+    }
+    return result
+  }
 }

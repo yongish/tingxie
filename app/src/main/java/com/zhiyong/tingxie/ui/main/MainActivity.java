@@ -1,33 +1,60 @@
 package com.zhiyong.tingxie.ui.main;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.zhiyong.tingxie.R;
-import com.zhiyong.tingxie.db.Quiz;
+import com.zhiyong.tingxie.network.NetworkQuiz;
+import com.zhiyong.tingxie.ui.friend.FriendActivity;
+import com.zhiyong.tingxie.ui.group.GroupActivity;
 import com.zhiyong.tingxie.ui.hsk.buttons.HskButtonsActivity;
 import com.zhiyong.tingxie.ui.login.LoginActivity;
+import com.zhiyong.tingxie.ui.share.EnumQuizRole;
+import com.zhiyong.tingxie.viewmodel.Status;
+
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 
 public class MainActivity extends AppCompatActivity {
 
     private QuizViewModel mQuizViewModel;
     RecyclerView recyclerView;
+    SwipeRefreshLayout swipeRefreshLayout;
+    QuizListAdapter adapter;
+    String name;
+    String email;
+    TextView emptyView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,30 +72,106 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerview_main);
 
-        final TextView emptyView = findViewById(R.id.empty_view);
-        mQuizViewModel = ViewModelProviders.of(this).get(QuizViewModel.class);
+        emptyView = findViewById(R.id.empty_view);
 
-        final QuizListAdapter adapter = new QuizListAdapter(this, mQuizViewModel,
-                recyclerView);
+        mQuizViewModel = ViewModelProviders.of(this).get(QuizViewModel.class);
+        adapter = new QuizListAdapter(this, mQuizViewModel, recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        mQuizViewModel.getAllQuizItems().observe(this, quizItems -> {
-            adapter.setQuizItems(quizItems, recyclerView);
-            if (quizItems.isEmpty()) {
-                emptyView.setVisibility(View.VISIBLE);
+        // Upload words to remote if not done already.
+        SharedPreferences uploaded = this.getSharedPreferences("uploaded",
+                Context.MODE_PRIVATE);
+        boolean hasUploaded = uploaded.getBoolean("uploaded", false);
+//        boolean hasUploaded = false;
+        if (hasUploaded) {
+            mQuizViewModel.getAllQuizItems().observe(this, quizItems -> {
+                adapter.setQuizItems(quizItems, recyclerView);
+                if (quizItems.isEmpty()) {
+                    emptyView.setVisibility(View.VISIBLE);
+                } else {
+                    emptyView.setVisibility(View.INVISIBLE);
+                }
+            });
+
+            restOfOnCreate();
+        } else {
+            FirebaseUser user =
+                    Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser());
+            String email = user.getEmail();
+            String name = user.getDisplayName();
+            if (email == null) {
+                Toast.makeText(this, "Error. Your quiz data may be lost. Please " +
+                        "contact " +
+                        "yongish@gmail.com.", Toast.LENGTH_LONG).show();
             } else {
-                emptyView.setVisibility(View.INVISIBLE);
+                mQuizViewModel.getLocalQuizPinyins().observe(this, quizPinyins ->
+                        mQuizViewModel.getLocalQuizzes().observe(this, quizzes ->
+                                mQuizViewModel.migrate(new MigrateLocal(
+                                        email,
+                                        name,
+                                        quizzes.stream().map(quiz ->
+                                                new MigrateQuiz(
+                                                        quiz.getDate(),
+                                                        quiz.getTitle(),
+                                                        quiz.getTotalWords(),
+                                                        quiz.getNotLearned(),
+                                                        quiz.getRound(),
+                                                        quizPinyins.stream()
+                                                                .filter(quizPinyin -> quizPinyin.getQuizId().equals(quiz.getId()))
+                                                                .collect(Collectors.toList())
+                                                                .stream().map(quizPinyin -> new MigrateWord(quizPinyin.getPinyinString(), quizPinyin.getWordString(), quizPinyin.isAsked())).collect(Collectors.toList()))
+                                        ).collect(Collectors.toList()))
+                                ).observe(this, quizItems -> {
+                                    adapter.setQuizItems(quizItems, recyclerView);
+                                    if (quizItems.isEmpty()) {
+                                        emptyView.setVisibility(View.VISIBLE);
+                                    } else {
+                                        emptyView.setVisibility(View.INVISIBLE);
+                                    }
+                                    SharedPreferences.Editor editor = uploaded.edit();
+                                    editor.putBoolean("uploaded", true);
+                                    editor.apply();
+
+                                    restOfOnCreate();
+
+                                    SpannableString spannableString = new SpannableString("If you don't see your quizzes, please restart the app or restart your phone. If this doesn't work, please email Zhiyong from the help @ menu.");
+                                    Drawable d = ResourcesCompat.getDrawable(this.getResources(), R.drawable.ic_baseline_help_outline_24 ,null);
+                                    d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+                                    spannableString.setSpan(new ImageSpan(d, ImageSpan.ALIGN_BOTTOM), spannableString.toString().indexOf("@"), spannableString.toString().indexOf("@") + 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+                                    AlertDialog dialog =
+                                            new AlertDialog.Builder(MainActivity.this)
+                                            .setTitle("Upgrade complete")
+                                            .setMessage(spannableString)
+                                            .setPositiveButton("OK",
+                                                    (dialog1, i) -> dialog1.cancel())
+                                            .create();
+                                    dialog.show();
+                                })
+                        )
+                );
+            }
+        }
+    }
+
+    private void restOfOnCreate() {
+        mQuizViewModel.getQuizzesStatus().observe(this, quizzesStatus -> {
+            if (quizzesStatus.equals(Status.ERROR)) {
+                emptyView.setText(R.string.errorQuizDownload);
             }
         });
 
-        /* todo: getAllQuestions() and getAllQuizPinyins() here may be unnecessary.
-         */
-        mQuizViewModel.getAllQuestions().observe(this, questions ->
-                adapter.setQuestions(questions)
-        );
-        mQuizViewModel.getAllQuizPinyins().observe(this, quizPinyins ->
-                adapter.setQuizPinyins(quizPinyins)
+        swipeRefreshLayout = findViewById(R.id.swipe_layout);
+        swipeRefreshLayout.setOnRefreshListener(() ->
+                mQuizViewModel.getAllQuizItems().observe(this, quizItems -> {
+                    swipeRefreshLayout.setRefreshing(false);
+                    adapter.setQuizItems(quizItems, recyclerView);
+                    if (quizItems.isEmpty()) {
+                        emptyView.setVisibility(View.VISIBLE);
+                    } else {
+                        emptyView.setVisibility(View.INVISIBLE);
+                    }
+                })
         );
 
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
@@ -87,6 +190,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         helper.attachToRecyclerView(recyclerView);
+
+        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(token -> {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null && user.getEmail() != null) {
+                name = user.getDisplayName();
+                email = user.getEmail();
+                if (email != null) {
+                    mQuizViewModel.putToken(user.getUid(), email, token);
+                }
+            }
+        });
+
+//        mQuizViewModel.getEventNetworkError().observe(this, isNetworkError -> {
+//            if (isNetworkError) onNetworkError();
+//        });
+//        mQuizViewModel.getQuizzes().observe(this, quizzes -> {
+//            adapter.setQuizItems();
+//        });
+
     }
 
     @Override
@@ -111,8 +233,12 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void openGroups(MenuItem item) {
+        startActivity(new Intent(MainActivity.this, GroupActivity.class));
+    }
+
     public void openFriends(MenuItem item) {
-//        this.startActivity(new Intent(getApplicationContext(), ))
+        startActivity(new Intent(MainActivity.this, FriendActivity.class));
     }
 
     public static Intent openSpeechSettingsHelper() {
@@ -130,16 +256,24 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, HskButtonsActivity.class));
     }
 
-    public void processDatePickerResult(long quizId, int year, int month, int day) {
+    public void processDatePickerResult(Optional<NetworkQuiz> optionalQuizItem,
+                                        int position, int year, int month, int day) {
         int date = Integer.valueOf(year + String.format("%02d", ++month) +
                 String.format("%02d", day));
-        Quiz quiz = new Quiz(date);
-        if (quizId != -1) {
-            quiz.setId(quizId);
-            mQuizViewModel.updateQuiz(quiz);
-            return;
+        if (optionalQuizItem.isPresent()) {
+            NetworkQuiz quizItem = optionalQuizItem.get();
+            quizItem.setDate(date);
+            mQuizViewModel.updateQuiz(quizItem).observe(this,
+                    quizId -> adapter.replaceQuizItem(quizItem, recyclerView, position
+                    ));
+        } else {
+            mQuizViewModel.createQuiz("No title", date).observe(this,
+                    newQuizId -> adapter.addQuizItem(new NetworkQuiz(newQuizId, "No " +
+                                    "title", date, email, EnumQuizRole.OWNER.name(), 0
+                                    , 0, 1),
+                            recyclerView));
+            emptyView.setVisibility(View.INVISIBLE);
         }
-        mQuizViewModel.insertQuiz(quiz);
     }
 
     public void openHelp(MenuItem item) {
@@ -157,4 +291,11 @@ public class MainActivity extends AppCompatActivity {
                     finish();
                 });
     }
+
+//    private void onNetworkError() {
+//        if(!mQuizViewModel.isNetworkErrorShown().getValue()) {
+//            Toast.makeText(this, "Network Error", Toast.LENGTH_LONG).show();
+//            mQuizViewModel.onNetworkErrorShown();
+//        }
+//    }
 }

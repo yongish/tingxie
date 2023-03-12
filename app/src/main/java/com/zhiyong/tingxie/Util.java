@@ -25,7 +25,7 @@ public class Util {
             for (char c : input.toCharArray()) {
 //                sb.append(processPinyin(getPinyinWrapper(BAIDU_DICT_URL_LOOKUP + String.valueOf(c))));
                 sb.append(processPinyin(
-                        new GetPinyin().execute(BAIDU_DICT_URL_LOOKUP + String.valueOf(c)).get()
+                        new GetPinyin().execute(BAIDU_DICT_URL_LOOKUP + c).get()
                 ));
             }
             result = sb.toString();

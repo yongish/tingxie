@@ -19,9 +19,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zhiyong.tingxie.R;
-import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.db.QuizPinyin;
-import com.zhiyong.tingxie.ui.main.QuizItem;
+import com.zhiyong.tingxie.network.NetworkQuiz;
 
 import java.util.List;
 import java.util.Locale;
@@ -34,12 +33,12 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
 
     private List<WordItem> mWordItems;
 
-    private WordViewModel viewModel;
-    private RecyclerView recyclerView;
-    private QuizItem quizItem;
+    private final WordViewModel viewModel;
+    private final RecyclerView recyclerView;
+    private final NetworkQuiz quizItem;
 
     WordListAdapter(final Context context, WordViewModel viewModel,
-                    RecyclerView recyclerView, QuizItem quizItem) {
+                    RecyclerView recyclerView, NetworkQuiz quizItem) {
         mInflater = LayoutInflater.from(context);
         textToSpeech = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
             @Override
@@ -104,36 +103,40 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
     void onItemRemove(RecyclerView.ViewHolder viewHolder) {
         final int adapterPosition = viewHolder.getAdapterPosition();
         final WordItem wordItem = mWordItems.get(adapterPosition);
-        final QuizPinyin quizPinyin = new QuizPinyin(wordItem.getQuizId(),
-                wordItem.getPinyinString(), wordItem.getWordString(), wordItem.isAsked());
 
-        final Quiz quizCopy = new Quiz(
-                quizItem.getId(), quizItem.getDate(), quizItem.getTitle(),
-                quizItem.getTotalWords(), quizItem.getNotLearned(), quizItem.getRound()
-        );
+        // todo: 12/1/22 Stubbed out asked with false. To correct this.
+        final QuizPinyin quizPinyin = new QuizPinyin(wordItem.getQuizId(),
+                wordItem.getPinyinString(), wordItem.getWordString(), false);
+
         Snackbar snackbar = Snackbar
                 .make(recyclerView, "Removed word", Snackbar.LENGTH_LONG)
                 .setAction("Undo", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mWordItems.add(adapterPosition, wordItem);
-                        notifyItemInserted(adapterPosition);
-                        viewModel.addQuizPinyin(quizPinyin);
-                        viewModel.updateQuiz(quizCopy);
+//                        viewModel.addQuizPinyin(quizPinyin);
+
+                        viewModel.addWord(quizPinyin.getQuizId(), quizPinyin.getWordString(), quizPinyin.getPinyinString());
+
+                        viewModel.updateQuiz(quizItem);
+//                        mWordItems.add(adapterPosition, wordItem);
+//                        notifyItemInserted(adapterPosition);
                         recyclerView.scrollToPosition(adapterPosition);
                     }
                 });
         snackbar.show();
+
+        viewModel.deleteWord(wordItem);
         mWordItems.remove(adapterPosition);
-        viewModel.deleteWord(quizPinyin);
-        int totalWords = quizItem.getTotalWords() - 1;
-        quizItem.setTotalWords(totalWords);
-        quizItem.setNotLearned(totalWords);
+
+        int totalWords = quizItem.getNumWords() - 1;
+        quizItem.setNumWords(totalWords);
+        quizItem.setNumNotCorrect(totalWords);
         quizItem.setRound(1);
-        viewModel.updateQuiz(new Quiz(
-                quizItem.getId(), quizItem.getDate(), quizItem.getTitle(),
-                quizItem.getTotalWords(), quizItem.getNotLearned(), quizItem.getRound()
-        ));
+        viewModel.updateQuiz(quizItem);
+//                new QuizItem(
+//                quizItem.getId(), quizItem.getDate(), quizItem.getTitle(),
+//                quizItem.getNumWords(), quizItem.getNumNotCorrect(), quizItem.getRound()
+
         notifyItemRemoved(adapterPosition);
     }
 
@@ -166,7 +169,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
             tvPinyin = itemView.findViewById(R.id.tvPinyin);
             ivPlay = itemView.findViewById(R.id.ivPlay);
             wordLayout = itemView.findViewById(R.id.wordLayout);
-            ivDelete = itemView.findViewById(R.id.ivDelete);
+            ivDelete = itemView.findViewById(R.id.btnMembers);
         }
     }
 }

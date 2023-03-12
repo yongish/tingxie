@@ -1,40 +1,96 @@
 package com.zhiyong.tingxie.ui.word
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import com.zhiyong.tingxie.QuizRepository
-import com.zhiyong.tingxie.db.Quiz
-import com.zhiyong.tingxie.db.QuizPinyin
-import com.zhiyong.tingxie.ui.main.QuizItem
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.zhiyong.tingxie.viewmodel.CrudStatus
+import com.zhiyong.tingxie.viewmodel.UpdateQuizViewModel
+import kotlinx.coroutines.launch
 
-internal class WordViewModel(application: Application, quizId: Long) : AndroidViewModel(application) {
-    val wordItemsOfQuiz: LiveData<List<WordItem>>
-    val quizItem: LiveData<QuizItem>
-    private val mRepository: QuizRepository = QuizRepository(application)
+internal class WordViewModel(application: Application, quizId: Long) : UpdateQuizViewModel(application) {
+//    val wordItemsOfQuiz: LiveData<List<WordItem>>
 
-    fun addWord(quizId: Long, word: String?, pinyin: String?) {
-        mRepository.addWord(quizId, word, pinyin)
-    }
+    private var _eventNetworkError = MutableLiveData(false)
+    val eventNetworkError: LiveData<Boolean>
+        get() = _eventNetworkError
 
-    fun deleteWord(quizPinyin: QuizPinyin?) {
-        mRepository.deleteWord(quizPinyin)
-    }
+    private var _isNetworkErrorShown = MutableLiveData(false)
+    val isNetworkErrorShown: LiveData<Boolean>
+        get() = _isNetworkErrorShown
 
-    fun addQuizPinyin(quizPinyin: QuizPinyin?) {
-        mRepository.insertQuizPinyin(quizPinyin)
-    }
+    private val _wordItemsOfQuiz = MutableLiveData<List<WordItem>>()
+    val wordItemsOfQuiz: LiveData<List<WordItem>> = _wordItemsOfQuiz
 
-    fun updateQuestions(quizId: Long) {
-        mRepository.updateQuestions(quizId)
-    }
-
-    fun updateQuiz(quiz: Quiz) {
-        mRepository.updateQuiz(quiz)
-    }
+    private val _wordItemsOfQuizStatus = MutableLiveData<CrudStatus>()
+    val wordItemsOfQuizStatus: LiveData<CrudStatus> = _wordItemsOfQuizStatus
 
     init {
-        wordItemsOfQuiz = mRepository.getWordItemsOfQuiz(quizId)
-        quizItem = mRepository.getQuizItem(quizId)
+        getWordItemsOfQuiz(quizId)
     }
+
+    private fun getWordItemsOfQuiz(quizId: Long) {
+        viewModelScope.launch {
+            _wordItemsOfQuizStatus.value = CrudStatus.LOADING
+            try {
+                _wordItemsOfQuiz.value = mRepository.getWordItemsOfQuiz(quizId)
+                _wordItemsOfQuizStatus.value = CrudStatus.DONE
+            } catch (e: Exception) {
+                _wordItemsOfQuizStatus.value = CrudStatus.ERROR
+                _wordItemsOfQuiz.value = listOf()
+            }
+        }
+    }
+
+    fun addWord(quizId: Long, word: String?, pinyin: String?) {
+        viewModelScope.launch {
+            _wordItemsOfQuizStatus.value = CrudStatus.LOADING
+            try {
+
+                val id = mRepository.addWord(quizId, word, pinyin)
+                _wordItemsOfQuiz.value =
+                    _wordItemsOfQuiz.value?.plus(WordItem(id, quizId, word, pinyin))
+
+                _wordItemsOfQuizStatus.value = CrudStatus.DONE
+            } catch (e: Exception) {
+                _wordItemsOfQuizStatus.value = CrudStatus.ERROR_CREATE
+                _wordItemsOfQuiz.value = listOf()
+            }
+        }
+
+    }
+
+    fun deleteWord(wordItem: WordItem) {
+        viewModelScope.launch {
+            _wordItemsOfQuizStatus.value = CrudStatus.LOADING
+            try {
+                mRepository.deleteWord(wordItem.id)
+                _wordItemsOfQuiz.value = _wordItemsOfQuiz.value?.minus(wordItem)
+            } catch (e: Exception) {
+                _wordItemsOfQuizStatus.value = CrudStatus.ERROR_DELETE
+            }
+        }
+    }
+
+//    fun addQuizPinyin(quizPinyin: QuizPinyin?) {
+//        mRepository.insertQuizPinyin(quizPinyin)
+//    }
+
+//    fun updateQuestions(quizId: Long) {
+//        mRepository.updateQuestions(quizId)
+//    }
+
+//    fun refreshWordItemsOfQuiz(quizId: Long, wordItems: List<WordItem>) {
+//        viewModelScope.launch {
+//            try {
+//                mRepository.refreshWordItemsOfQuiz(quizId, wordItems)
+//                _eventNetworkError.value = false
+//                _isNetworkErrorShown.value = false
+//            } catch (networkError: IOException) {
+//                if (wordItemsOfQuiz.value.isNullOrEmpty()) {
+//                    _eventNetworkError.value = true
+//                }
+//            }
+//        }
+//    }
 }

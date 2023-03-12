@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.annotation.NonNull;
 
 public class WordViewModelFactory implements ViewModelProvider.Factory {
-    private Application mApplication;
-    private long mQuizId;
+    private final Application mApplication;
+    private final long mQuizId;
 
     public WordViewModelFactory(Application application, long quizId) {
         mApplication = application;

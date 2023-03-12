@@ -29,11 +29,11 @@ class HskWordsActivity : AppCompatActivity() {
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
     // Inflate the menu; this adds items to the action bar if it is present.
-    menuInflater.inflate(R.menu.menu_hsk_list, menu)
+    menuInflater.inflate(R.menu.menu_help, menu)
     return true
   }
 
-  fun openHelpHsk(item: android.view.MenuItem) {
+  fun openHelp(item: android.view.MenuItem) {
     val builder: AlertDialog.Builder = this.let {
       AlertDialog.Builder(it)
     }
@@ -45,7 +45,7 @@ class HskWordsActivity : AppCompatActivity() {
     )
       .setTitle("Tips")
       .setPositiveButton("Open phone speech settings") {
-          _, _ -> startActivity(MainActivity.openSpeechSettingsHelper());
+          _, _ -> startActivity(MainActivity.openSpeechSettingsHelper())
       }
       .setNegativeButton("No need. I can heard the words.") {
           dialog, _ -> dialog.dismiss()

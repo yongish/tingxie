@@ -14,8 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        tools:listitem="@layout/recyclerview_word"
-        />
+        tools:listitem="@layout/recyclerview_word" />
 
     <TextView
         android:id="@+id/empty_view"

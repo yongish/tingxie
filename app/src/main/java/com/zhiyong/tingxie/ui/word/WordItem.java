@@ -1,16 +1,20 @@
 package com.zhiyong.tingxie.ui.word;
 
 public class WordItem {
-    private long quizId;
-    private String wordString;
-    private String pinyinString;
-    private boolean asked;
+    private final long id;
+    private final long quizId;
+    private final String wordString;
+    private final String pinyinString;
 
-    public WordItem(long quizId, String wordString, String pinyinString, boolean asked) {
+    public WordItem(long id, long quizId, String wordString, String pinyinString) {
+        this.id = id;
         this.quizId = quizId;
         this.wordString = wordString;
         this.pinyinString = pinyinString;
-        this.asked = asked;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public long getQuizId() {
@@ -23,9 +27,5 @@ public class WordItem {
 
     public String getPinyinString() {
         return pinyinString;
-    }
-
-    public boolean isAsked() {
-        return asked;
     }
 }

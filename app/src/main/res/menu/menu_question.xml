@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.zhiyong.tingxie.ui.question.QuestionActivity">
+    tools:context="com.zhiyong.tingxie.ui.question.HskQuestionActivity">
     <item
         android:id="@+id/action_missing_sound_dialog"
         android:onClick="openMissingSoundDialog"

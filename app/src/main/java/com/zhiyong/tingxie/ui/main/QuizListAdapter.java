@@ -1,13 +1,17 @@
 package com.zhiyong.tingxie.ui.main;
 
-import static com.zhiyong.tingxie.ui.question.QuestionActivity.EXTRA_QUIZ_ITEM;
+import static com.zhiyong.tingxie.ui.UserRoleKt.EXTRA_USER_ROLE;
+import static com.zhiyong.tingxie.ui.question.RemoteQuestionActivity.EXTRA_QUIZ_ITEM;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+
 import androidx.annotation.NonNull;
+
 import com.google.android.material.snackbar.Snackbar;
+
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,11 +33,13 @@ import android.widget.Toast;
 import com.zhiyong.tingxie.R;
 import com.zhiyong.tingxie.Util;
 import com.zhiyong.tingxie.db.Question;
-import com.zhiyong.tingxie.db.Quiz;
 import com.zhiyong.tingxie.db.QuizPinyin;
-import com.zhiyong.tingxie.ui.question.QuestionActivity;
+import com.zhiyong.tingxie.network.NetworkQuiz;
+import com.zhiyong.tingxie.ui.UserRole;
+import com.zhiyong.tingxie.ui.question.RemoteQuestionActivity;
+import com.zhiyong.tingxie.ui.share.EnumQuizRole;
+import com.zhiyong.tingxie.ui.share.ShareActivity;
 import com.zhiyong.tingxie.ui.word.WordActivity;
-import com.zhiyong.tingxie.ui.word.WordItem;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -41,6 +47,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizViewHolder> {
 
@@ -51,17 +58,19 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
     private final LayoutInflater mInflater;
     private final Context context;
 
-    private List<QuizItem> mQuizItems;
+    private List<NetworkQuiz> mQuizItems;
 
-    private QuizViewModel viewModel;
-    private RecyclerView recyclerView;
+    private final QuizViewModel viewModel;
+    private final RecyclerView recyclerView;
 
-    // All question and quiz_pinyin rows (for undo deletes). May be suboptimal to get all rows, but
+    // All question and quiz_pinyin rows (for undo deletes). May be suboptimal to get
+    // all rows, but
     // getting only question and quiz_pinyin is tricky and may be overengineering.
     private List<Question> mQuestions;
     private List<QuizPinyin> mQuizPinyins;
 
-    QuizListAdapter(Context context, QuizViewModel viewModel, RecyclerView recyclerView) {
+    QuizListAdapter(Context context, QuizViewModel viewModel,
+                    RecyclerView recyclerView) {
         mInflater = LayoutInflater.from(context);
         this.context = context;
         this.viewModel = viewModel;
@@ -77,14 +86,15 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
 
     @Override
     public void onBindViewHolder(final QuizViewHolder holder, int i) {
+        final NetworkQuiz quizItem = mQuizItems.get(i);
+
         if (mQuizItems != null) {
-            final QuizItem current = mQuizItems.get(i);
-            QuizItem quizItem = new QuizItem(current.getId(), current.getDate(), current.getTitle(),
-                    current.getTotalWords(), current.getNotLearned(), current.getRound());
+            final NetworkQuiz current = mQuizItems.get(i);
 
             String displayDate = String.valueOf(current.getDate());
             try {
-                displayDate = Util.DISPLAY_FORMAT.format(Util.DB_FORMAT.parse(displayDate));
+                displayDate =
+                        Util.DISPLAY_FORMAT.format(Util.DB_FORMAT.parse(displayDate));
             } catch (ParseException e) {
                 // todo: Error log API in future.
             }
@@ -96,42 +106,46 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
 //                    "%d words",
 //                    current.getTotalWords()));
                     "%d/%d remaining on round %d",
-                    current.getNotLearned(), current.getTotalWords(), current.getRound()));
+                    current.getNumNotCorrect(), current.getNumWords(),
+                    current.getRound()));
 
             holder.ivEditDate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // Open date dialog. Pass in quiz ID and current date.
-                    DatePickerDialog.OnDateSetListener dateListener = new DatePickerDialog.OnDateSetListener() {
+                    new DatePickerDialog.OnDateSetListener() {
                         @Override
-                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                            QuizItem newItem = current;
-
-                            int newIntDate = Integer.valueOf(String.valueOf(year) +
-                                    String.format("%02d", ++month) + String.valueOf(dayOfMonth));
+                        public void onDateSet(DatePicker view, int year,
+                                              int month, int dayOfMonth) {
+                            int newIntDate = Integer.parseInt(year +
+                                    String.format("%02d", ++month) + dayOfMonth);
                             Log.d("newIntDate", String.valueOf(newIntDate));
-                            newItem.setDate(newIntDate);
-                            mQuizItems.set(i, newItem);
+                            current.setDate(newIntDate);
+                            mQuizItems.set(holder.getAdapterPosition(), current);
                             notifyDataSetChanged();
                         }
                     };
 
                     Date currDate;
                     try {
-                        currDate = Util.DB_FORMAT.parse(String.valueOf(current.getDate()));
+                        currDate =
+                                Util.DB_FORMAT.parse(String.valueOf(current.getDate()));
                         c.setTime(currDate);
                     } catch (ParseException e) {
                         // todo: Error logging API.
                     }
 
                     DialogFragment newFragment = DatePickerFragment.newInstance(
-                            current.getId(),
+//                            current.getId(),
+                            current,
+                            i,
                             c.get(Calendar.YEAR),
                             c.get(Calendar.MONTH),
                             c.get(Calendar.DAY_OF_MONTH)
                     );
                     newFragment.show(
-                            ((FragmentActivity)context).getSupportFragmentManager(), "datePicker"
+                            ((FragmentActivity) context).getSupportFragmentManager(),
+                            "datePicker"
                     );
                 }
             });
@@ -139,15 +153,12 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        QuizItem newItem = current;
+                        NetworkQuiz newItem = current;
                         newItem.setTitle(v.getText().toString());
-                        mQuizItems.set(i, newItem);
+                        mQuizItems.set(holder.getAdapterPosition(), newItem);
                         notifyDataSetChanged();
 
-                        viewModel.updateQuiz(new Quiz(
-                                newItem.getId(), newItem.getDate(), newItem.getTitle(),
-                                newItem.getTotalWords(), newItem.getNotLearned(), newItem.getRound()
-                        ));
+                        viewModel.updateQuiz(newItem);
 
                         InputMethodManager inputManager = (InputMethodManager)
                                 context.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -168,25 +179,25 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                     );
                 }
             });
-            holder.btnStartResume.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (current.getTotalWords() > 0) {
-                        Intent intent = new Intent(context, QuestionActivity.class);
-                        intent.putExtra(EXTRA_QUIZ_ITEM, quizItem);
-                        ((Activity) context).startActivityForResult(
-                                intent, QUESTION_ACTIVITY_REQUEST_CODE
-                        );
-                    } else {
-                        Toast.makeText(context, "No words in quiz", Toast.LENGTH_SHORT).show();
-                    }
+            holder.btnStartResume.setOnClickListener(v -> {
+                if (current.getNumWords() > 0) {
+                    Intent intent = new Intent(context,
+                            RemoteQuestionActivity.class);
+                    intent.putExtra(EXTRA_QUIZ_ITEM, quizItem);
+                    ((Activity) context).startActivityForResult(
+                            intent, QUESTION_ACTIVITY_REQUEST_CODE
+                    );
+                } else {
+                    Toast.makeText(context, "No words in quiz",
+                            Toast.LENGTH_SHORT).show();
                 }
             });
-            holder.ivDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onItemRemove(holder);
-                }
+            holder.ivDelete.setOnClickListener(v -> onItemRemove(holder));
+            holder.ivShare.setOnClickListener(v -> {
+                Intent intent = new Intent(context, ShareActivity.class);
+                intent.putExtra(EXTRA_USER_ROLE, new UserRole(quizItem.getQuizId(),
+                        EnumQuizRole.valueOf(quizItem.getRole())));
+                context.startActivity(intent);
             });
         } else {
             holder.tvDate.setText("No Date");
@@ -194,14 +205,15 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         }
     }
 
-    void setQuizItems(List<QuizItem> quizItems, final RecyclerView mRecyclerView) {
+    void setQuizItems(List<NetworkQuiz> quizItems, final RecyclerView mRecyclerView) {
         mQuizItems = quizItems;
         // Scroll to 1 position before next quiz.
         int scrollPosition = 0;
         Date today = new Date();
         for (int i = 1; i < quizItems.size(); i++) {
             try {
-                Date quizDate = Util.DB_FORMAT.parse(String.valueOf(quizItems.get(i).getDate()));
+                Date quizDate =
+                        Util.DB_FORMAT.parse(String.valueOf(quizItems.get(i).getDate()));
                 if (quizDate.compareTo(today) >= 0) {
                     scrollPosition = i - 1;
                     break;
@@ -214,12 +226,19 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         final int position = scrollPosition;
         Log.d("SCROLL POSITION: ", String.valueOf(scrollPosition));
         notifyDataSetChanged();
-        mRecyclerView.post(new Runnable() {
-            @Override
-            public void run() {
-                mRecyclerView.smoothScrollToPosition(position);
-            }
-        });
+        mRecyclerView.post(() -> mRecyclerView.smoothScrollToPosition(position));
+    }
+
+    void addQuizItem(NetworkQuiz newQuizItem, RecyclerView recyclerView) {
+        mQuizItems.add(0, newQuizItem);
+        notifyItemInserted(0);
+        recyclerView.post(() -> recyclerView.smoothScrollToPosition(0));
+    }
+
+    void replaceQuizItem(NetworkQuiz newQuizItem, RecyclerView recyclerView, int i) {
+        mQuizItems.set(i, newQuizItem);
+        notifyItemChanged(i);
+        recyclerView.post(() -> recyclerView.smoothScrollToPosition(i));
     }
 
     void setQuestions(List<Question> questions) {
@@ -232,39 +251,37 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
 
     void onItemRemove(RecyclerView.ViewHolder viewHolder) {
         final int adapterPosition = viewHolder.getAdapterPosition();
-        final QuizItem quizItem = mQuizItems.get(adapterPosition);
-        // Get question and quiz_pinyin rows to be deleted (from all question and quiz_pinyin rows).
-        final long quizId = quizItem.getId();
-        final List<WordItem> deletedWordItems = new ArrayList<>();
-        for (QuizPinyin quizPinyin : mQuizPinyins) {
-            if (quizPinyin.getQuizId() == quizId) {
-                deletedWordItems.add(new WordItem(quizId, quizPinyin.getWordString(),
-                        quizPinyin.getPinyinString(), quizPinyin.isAsked()));
-            }
-        }
-
+        final NetworkQuiz quizItem = mQuizItems.get(adapterPosition);
+        final long quizId = quizItem.getQuizId();
+        AtomicBoolean doDelete = new AtomicBoolean(true);
+        // val deletedItem = viewModel.deleteQuiz(quizItem)   Look at comment below.
         Snackbar snackbar = Snackbar
                 .make(recyclerView, "Removed quiz", Snackbar.LENGTH_LONG)
-                .setAction("Undo", new View.OnClickListener() {
+                .setAction("Undo", v -> {
+                    doDelete.set(false);
+                    // viewModel.restoreQuiz(deletedItem)   Look at comment below.
+                    mQuizItems.add(adapterPosition, quizItem);
+                    notifyItemInserted(adapterPosition);
+                    recyclerView.scrollToPosition(adapterPosition);
+                })
+                .addCallback(new Snackbar.Callback() {
                     @Override
-                    public void onClick(View v) {
-                        mQuizItems.add(adapterPosition, quizItem);
-                        notifyItemInserted(adapterPosition);
-
-                        // Reinsert deleted quiz, question, quiz_pinyin rows.
-                        Quiz quiz = new Quiz(quizId, quizItem.getDate(), quizItem.getTitle(),
-                                quizItem.getTotalWords(), quizItem.getNotLearned(),
-                                quizItem.getRound());
-                        viewModel.insertQuiz(quiz);
-                        viewModel.insertQuestions(getQuestionsOfQuiz(quizId));
-                        viewModel.addWords(quizId, deletedWordItems);
-
-                        recyclerView.scrollToPosition(adapterPosition);
+                    public void onDismissed(Snackbar transientBottomBar, int event) {
+                        super.onDismissed(transientBottomBar, event);
+                        // 1/7/23: There may be a race condition here where changing
+                        // activity before onDismissed is triggered will cause the quiz
+                        // not to be deleted. If this is an issue in practice, 1 possible
+                        // solution is for viewModel.deleteQuiz to return
+                        // the individual_quiz_props id, and implement
+                        // viewModel.restoreQuiz(deletedItem).
+                        if (doDelete.get()) {
+                            viewModel.deleteQuiz(quizId);
+                        }
                     }
                 });
         snackbar.show();
+
         mQuizItems.remove(adapterPosition);
-        viewModel.deleteQuiz(quizId);
         notifyItemRemoved(adapterPosition);
     }
 
@@ -292,6 +309,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
         private final Button btnAddViewWords;
         private final Button btnStartResume;
         private final ImageView ivDelete;
+        private final ImageView ivShare;
 
         private QuizViewHolder(View itemView) {
             super(itemView);
@@ -301,7 +319,8 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
             ivEditDate = itemView.findViewById(R.id.ivEditDate);
             btnAddViewWords = itemView.findViewById(R.id.btnAddViewWords);
             btnStartResume = itemView.findViewById(R.id.btnStartResume);
-            ivDelete = itemView.findViewById(R.id.ivDelete);
+            ivDelete = itemView.findViewById(R.id.btnMembers);
+            ivShare = itemView.findViewById(R.id.ivShare);
         }
     }
 }

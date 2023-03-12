@@ -1,6 +1,6 @@
 package com.zhiyong.tingxie.ui.word;
 
-import static com.zhiyong.tingxie.ui.question.QuestionActivity.EXTRA_QUIZ_ITEM;
+import static com.zhiyong.tingxie.ui.question.RemoteQuestionActivity.EXTRA_QUIZ_ITEM;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,11 +19,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,9 +29,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.zhiyong.tingxie.R;
-import com.zhiyong.tingxie.db.Quiz;
+import com.zhiyong.tingxie.network.NetworkQuiz;
 import com.zhiyong.tingxie.ui.main.MainActivity;
-import com.zhiyong.tingxie.ui.main.QuizItem;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -50,6 +47,7 @@ import java.util.Objects;
 public class WordActivity extends AppCompatActivity {
 
     private WordViewModel mWordViewModel;
+    private List<WordItem> wordItems = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,8 +78,8 @@ public class WordActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
         });
 
-        QuizItem quizItem = getIntent().getParcelableExtra(EXTRA_QUIZ_ITEM);
-        long quizId = quizItem.getId();
+        NetworkQuiz quizItem = getIntent().getParcelableExtra(EXTRA_QUIZ_ITEM);
+        long quizId = quizItem.getQuizId();
 
         final AutoCompleteTextView textView = findViewById(R.id.autoCompleteTextView1);
         textView.setThreshold(1);
@@ -148,23 +146,15 @@ public class WordActivity extends AppCompatActivity {
                                         // Add word to current quizId.
                                         mWordViewModel.addWord(quizId, inputWord,
                                                 pinyin);
-                                        mWordViewModel.updateQuestions(quizId);
-
                                         // Update totalWords. Reset notLearned and round.
-                                        int totalWords = quizItem.getTotalWords() + 1;
-                                        quizItem.setTotalWords(totalWords);
-                                        quizItem.setNotLearned(totalWords);
-                                        quizItem.setRound(1);
-                                        mWordViewModel.updateQuiz(new Quiz(quizItem.getId(), quizItem.getDate(), quizItem.getTitle(), quizItem.getTotalWords(), quizItem.getNotLearned(), quizItem.getRound()));
-                                        // 10/10/21. Using this line and removing the
-                                        // quizItem.set... calls above cause the word to
-                                        // not be added. I don't know why. Seems to work
-                                        // in Kotlin.
-//                                        mWordViewModel.updateQuiz(new Quiz(quizItem.getId(), quizItem.getDate(), quizItem.getTitle(), totalWords, totalWords, 1));
+//                                        int totalWords = quizItem.getNumWords() + 1;
+//                                        quizItem.setNumWords(totalWords);
+//                                        mWordViewModel.updateQuiz(quizItem
+//                                        );
                                     } else {
                                         Toast.makeText(WordActivity.this,
-                                                "ERROR in pinyin lookup",
-                                                Toast.LENGTH_LONG)
+                                                        "ERROR in pinyin lookup",
+                                                        Toast.LENGTH_LONG)
                                                 .show();
                                         dialog.cancel();
                                     }
@@ -193,22 +183,41 @@ public class WordActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-//        ContentWordBinding binding = ContentWordBinding.inflate(getLayoutInflater());
-//        final TextView emptyView = binding.emptyView;
         final TextView emptyView = findViewById(R.id.empty_view);
-        mWordViewModel.getWordItemsOfQuiz().observe(this,
-                new Observer<List<WordItem>>() {
-                    @Override
-                    public void onChanged(@Nullable List<WordItem> wordItems) {
-                        adapter.setWordItems(wordItems);
-                        if (wordItems == null || wordItems.isEmpty()) {
-                            emptyView.setVisibility(View.VISIBLE);
-                        } else {
-                            emptyView.setVisibility(View.INVISIBLE);
-                        }
-                    }
-                });
+        mWordViewModel.getWordItemsOfQuiz().observe(this, wordItems -> {
+            adapter.setWordItems(wordItems);
+            if (wordItems == null || wordItems.isEmpty()) {
+                emptyView.setVisibility(View.VISIBLE);
+            } else {
+                emptyView.setVisibility(View.INVISIBLE);
+            }
+        });
 
+        mWordViewModel.getWordItemsOfQuizStatus().observe(this, wordItemsStatus -> {
+            switch (wordItemsStatus) {
+                case ERROR:
+                    emptyView.setText(R.string.errorWordsDownload);
+                    break;
+                case ERROR_CREATE:
+                    Toast.makeText(
+                            this,
+                            "Error in creating a word. Check your Internet connection " +
+                                    "or email " +
+                                    "yongish@gmail.com for help.",
+                            Toast.LENGTH_LONG
+                    ).show();
+                    break;
+                case ERROR_DELETE:
+                    Toast.makeText(
+                            this,
+                            "Error in deleting a word. Check your Internet connection " +
+                                    "or email " +
+                                    "yongish@gmail.com for help.",
+                            Toast.LENGTH_LONG
+                    ).show();
+                    break;
+            }
+        });
 
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
                 0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT
@@ -222,7 +231,10 @@ public class WordActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+//                if (quizItem.getRole())
+
                 adapter.onItemRemove(viewHolder);
+
             }
         });
         helper.attachToRecyclerView(recyclerView);
@@ -231,14 +243,14 @@ public class WordActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_hsk_list, menu);
+        getMenuInflater().inflate(R.menu.menu_help, menu);
         return true;
     }
 
-    public void openHelpHsk(MenuItem item) {
+    public void openHelp(MenuItem item) {
         new AlertDialog.Builder(WordActivity.this)
                 .setTitle("Words are tappable")
                 .setMessage("Tap on a word to search for it in Baidu dictionary.")
-                .show();
+                .create().show();
     }
 }
